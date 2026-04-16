@@ -1,0 +1,164 @@
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+
+const formSchema = z.object({
+  fullName: z.string().min(2, "Name is required."),
+  email: z.string().email("Invalid email."),
+  phone: z.string().min(5, "Phone is required."),
+  country: z.string().min(2, "Country is required."),
+  city: z.string().min(2, "City is required."),
+  primarySkill: z.string().min(1, "Skill is required."),
+  yearsOfExperience: z.string().min(1, "Experience is required."),
+  portfolioLink: z.string().url("Must be a valid URL."),
+  workSamples: z.string().min(10, "Please provide some context or links."),
+  toolsUsed: z.string().min(2, "Please list your tools."),
+  expectedRate: z.string().min(2, "Expected rate is required."),
+});
+
+type FormValues = z.infer<typeof formSchema>;
+
+export default function Freelancers() {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      fullName: "", email: "", phone: "", country: "", city: "",
+      primarySkill: "", yearsOfExperience: "", portfolioLink: "",
+      workSamples: "", toolsUsed: "", expectedRate: "",
+    },
+  });
+
+  const onSubmit = async (data: FormValues) => {
+    setIsSubmitting(true);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setIsSubmitting(false);
+    toast({
+      title: "Application Received!",
+      description: "Our talent team will review your portfolio.",
+    });
+    form.reset();
+  };
+
+  return (
+    <div className="w-full pt-10 pb-24">
+      <div className="container mx-auto px-4 md:px-8 max-w-4xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-16"
+        >
+          <div className="inline-block mb-6 px-4 py-1.5 bg-accent/20 text-foreground font-semibold text-sm rounded-full tracking-wide">
+            Talent Network
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold mb-6">Join the Roster.</h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            We are always looking for world-class editors, writers, and designers to partner with on premium client projects.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bg-white border border-gray-100 shadow-sm rounded-3xl p-8 md:p-12"
+        >
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              
+              <div className="space-y-6">
+                <h3 className="text-2xl font-bold border-b pb-2">Personal Info</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FormField control={form.control} name="fullName" render={({ field }) => (
+                    <FormItem><FormLabel>Full Name</FormLabel><FormControl><Input placeholder="John Doe" {...field} /></FormControl><FormMessage /></FormItem>
+                  )} />
+                  <FormField control={form.control} name="email" render={({ field }) => (
+                    <FormItem><FormLabel>Email</FormLabel><FormControl><Input placeholder="john@example.com" type="email" {...field} /></FormControl><FormMessage /></FormItem>
+                  )} />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <FormField control={form.control} name="phone" render={({ field }) => (
+                    <FormItem><FormLabel>Phone</FormLabel><FormControl><Input placeholder="+1..." {...field} /></FormControl><FormMessage /></FormItem>
+                  )} />
+                  <FormField control={form.control} name="country" render={({ field }) => (
+                    <FormItem><FormLabel>Country</FormLabel><FormControl><Input placeholder="UK" {...field} /></FormControl><FormMessage /></FormItem>
+                  )} />
+                  <FormField control={form.control} name="city" render={({ field }) => (
+                    <FormItem><FormLabel>City</FormLabel><FormControl><Input placeholder="London" {...field} /></FormControl><FormMessage /></FormItem>
+                  )} />
+                </div>
+              </div>
+
+              <div className="space-y-6 pt-6">
+                <h3 className="text-2xl font-bold border-b pb-2">Professional Profile</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FormField control={form.control} name="primarySkill" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Primary Skill</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl><SelectTrigger><SelectValue placeholder="Select skill" /></SelectTrigger></FormControl>
+                        <SelectContent>
+                          <SelectItem value="editor">Video Editor</SelectItem>
+                          <SelectItem value="writer">Ghostwriter / Copywriter</SelectItem>
+                          <SelectItem value="designer">Designer</SelectItem>
+                          <SelectItem value="strategist">Content Strategist</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                  <FormField control={form.control} name="yearsOfExperience" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Years of Experience</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl><SelectTrigger><SelectValue placeholder="Select duration" /></SelectTrigger></FormControl>
+                        <SelectContent>
+                          <SelectItem value="0-2">0-2 years</SelectItem>
+                          <SelectItem value="3-5">3-5 years</SelectItem>
+                          <SelectItem value="5-10">5-10 years</SelectItem>
+                          <SelectItem value="10+">10+ years</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                </div>
+
+                <FormField control={form.control} name="portfolioLink" render={({ field }) => (
+                  <FormItem><FormLabel>Portfolio URL</FormLabel><FormControl><Input placeholder="https://..." {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+
+                <FormField control={form.control} name="workSamples" render={({ field }) => (
+                  <FormItem><FormLabel>Additional Links / Work Context</FormLabel><FormControl><Textarea className="min-h-[100px]" placeholder="Link to specific videos, articles, or campaigns you are most proud of..." {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FormField control={form.control} name="toolsUsed" render={({ field }) => (
+                    <FormItem><FormLabel>Tools Used (e.g. Premiere, Figma)</FormLabel><FormControl><Input placeholder="Premiere Pro, After Effects..." {...field} /></FormControl><FormMessage /></FormItem>
+                  )} />
+                  <FormField control={form.control} name="expectedRate" render={({ field }) => (
+                    <FormItem><FormLabel>Expected Rate (Hourly/Project)</FormLabel><FormControl><Input placeholder="$50/hr or $500/video" {...field} /></FormControl><FormMessage /></FormItem>
+                  )} />
+                </div>
+              </div>
+
+              <Button type="submit" size="lg" className="w-full md:w-auto h-14 px-10 text-lg bg-foreground text-background" disabled={isSubmitting}>
+                {isSubmitting ? "Submitting..." : "Submit Application"}
+              </Button>
+            </form>
+          </Form>
+        </motion.div>
+      </div>
+    </div>
+  );
+}

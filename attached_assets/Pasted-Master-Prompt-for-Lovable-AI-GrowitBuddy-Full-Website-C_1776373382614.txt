@@ -1,0 +1,414 @@
+Master Prompt for Lovable AI (GrowitBuddy Full Website)
+
+Create a premium, modern, minimal, highly engaging website for a brand called GrowitBuddy.
+
+The website must feel like a global authority agency that helps founders and creators build influence through content and distribution systems.
+
+The design must be clean, professional, minimal, and easy to understand so visitors can quickly know what the company does.
+
+Avoid confusing layouts.
+Focus on clarity, hierarchy, and engagement.
+
+Brand Information
+
+Brand Name: GrowitBuddy
+
+Category: Content & Distribution Studio
+
+Core Positioning:
+
+GrowitBuddy helps founders and creators turn expertise into authority, influence, and inbound demand through strategic content systems and distribution.
+
+Target audience:
+
+• founders
+• creators
+• educators
+• consultants
+• coaches
+• startups
+
+They want:
+
+• authority
+• visibility
+• inbound leads
+• brand positioning
+
+Design Style
+
+Use a premium white minimal theme.
+
+Primary colors:
+
+Background: White (#FFFFFF)
+Text: Black (#111111)
+Accent: Soft Yellow (#F5E663)
+
+Secondary sections:
+
+Light grey backgrounds for contrast.
+
+Optional highlight sections:
+
+Dark grey or black sections for CTA areas.
+
+Design principles:
+
+• large bold typography
+• lots of whitespace
+• modern layout
+• subtle animations
+• clean grid system
+
+The website should feel similar to high-end SaaS or strategy agencies.
+
+Navigation Structure
+
+Sticky top navigation with:
+
+Home
+Work
+Services
+Framework
+Insights
+Creators
+Freelancers
+Resources
+About
+Contact
+
+Primary CTA button in navigation:
+
+Book Strategy Call
+
+Hero Section
+
+Large clean hero section.
+
+Headline:
+
+We Help Founders & Creators
+Build Authority That Compounds
+Through Content & Distribution
+
+Subheadline:
+
+GrowitBuddy builds strategic content systems that turn expertise into influence, recognition, and inbound demand.
+
+Buttons:
+
+Book Strategy Call
+Explore Our Work
+
+Add subtle visual motion or abstract graphic elements.
+
+Authority Problem Section
+
+Headline:
+
+Most Content Is Optimized For Views
+We Optimize For Authority
+
+Description:
+
+Most creators chase short-term attention.
+GrowitBuddy builds content systems that generate long-term recognition, trust, and inbound opportunities.
+
+Supporting line:
+
+Content should not just be seen once.
+It should be remembered, referenced, and searched.
+
+GrowitBuddy Framework Section
+
+Headline:
+
+The GrowitBuddy Authority Framework
+
+Show 4 steps visually:
+
+Positioning
+Define your expertise and narrative.
+Content System
+Build scalable authority-driven content.
+Strategic Distribution
+Ensure your ideas reach the right people.
+Authority Compounding
+Turn visibility into trust and inbound demand.
+
+Each step includes icon and short explanation.
+
+Case Studies Section
+
+Grid layout showing projects.
+
+Example cards:
+
+Creator Authority System
+Founder Personal Brand Growth
+Content Distribution Engine
+Inbound Demand Strategy
+
+Clicking opens detailed case study pages.
+
+Case study page sections:
+
+• Problem
+• Strategy
+• Execution
+• Results
+
+Social Proof Section
+
+Headline:
+
+Trusted by Founders and Creators
+
+Display logos or placeholders of brands and creators.
+
+Grid layout.
+
+Services Section
+
+Headline:
+
+What We Do
+
+Service cards:
+
+Authority Strategy
+Content Production
+Video Editing Systems
+Distribution Strategy
+Personal Brand Growth
+
+Each service opens a dedicated page.
+
+Creator Network Page
+
+Create a page where creators can join the GrowitBuddy network.
+
+Headline:
+
+Join the GrowitBuddy Creator Network
+
+Description:
+
+Connect with brands, grow your authority, and collaborate on meaningful campaigns.
+
+Creator onboarding form fields:
+
+Full Name
+Email
+Phone
+Country
+City
+Instagram Link
+YouTube Link
+LinkedIn Link
+Follower Count
+Primary Niche
+Secondary Niche
+Audience Location
+Content Type
+
+Optional:
+
+Media Kit Upload
+
+Form submissions must automatically save data into a database or spreadsheet.
+
+Freelancer Network Page
+
+Create a page for freelancers.
+
+Headline:
+
+Join the GrowitBuddy Freelancer Network
+
+Description:
+
+Work with creators and brands through GrowitBuddy’s content production ecosystem.
+
+Freelancer form fields:
+
+Full Name
+Email
+Phone
+Country
+City
+Primary Skill (Editor / Designer / Writer)
+Years of Experience
+Portfolio Link
+Work Samples
+Tools Used
+Expected Rate
+
+Data must automatically be stored in a freelancer database.
+
+Authority Score Tool
+
+Create an interactive tool.
+
+Page:
+
+Authority Audit
+
+Users submit:
+
+Name
+Email
+LinkedIn Profile
+Instagram / YouTube
+Niche
+Followers
+Posting Frequency
+Goal
+
+System calculates Authority Score out of 100.
+
+Example output:
+
+Authority Score: 47 / 100
+
+Strengths:
+Strong niche focus
+
+Weaknesses:
+Low distribution
+Weak positioning
+
+CTA after result:
+
+Get Full Authority Strategy
+
+Creator Directory
+
+Create searchable creator database.
+
+Filters:
+
+Niche
+Followers
+Platform
+Country
+
+Freelancer Talent Pool
+
+Create searchable freelancer directory.
+
+Filters:
+
+Editors
+Motion Designers
+Thumbnail Designers
+Script Writers
+
+Insights / Blog Section
+
+Headline:
+
+Insights on Authority and Content Systems
+
+Examples:
+
+How Founders Build Authority Online
+Why Most Content Fails
+Distribution Strategies for Creators
+Authority vs Virality
+
+Enable CMS.
+
+Resource Library
+
+Page where visitors can download resources.
+
+Examples:
+
+Content strategy templates
+Script frameworks
+Distribution playbooks
+Creator growth guides
+
+Require email signup.
+
+Founder Section
+
+Headline:
+
+Built by Creators Who Understand Content
+
+Founder:
+
+Suraj Sharma
+Founder of GrowitBuddy
+
+Short bio describing experience building content systems and helping creators grow authority.
+
+Include social links.
+
+Final CTA Section
+
+Dark background.
+
+Headline:
+
+Build Your Authority System
+
+Subtext:
+
+If you are a founder or creator ready to turn expertise into influence and inbound demand, let’s talk.
+
+Button:
+
+Book Strategy Call
+
+Footer
+
+Sections:
+
+Company
+Work
+Services
+Framework
+Insights
+
+Creators
+Freelancers
+Resources
+
+Contact
+Email
+Social Links
+
+Required Features
+
+Responsive design
+SEO optimization
+CMS for blogs
+Case study templates
+Creator onboarding database
+Freelancer onboarding database
+Authority score tool
+Contact forms
+Call booking integration
+
+UX Requirements
+
+The website must be:
+
+• visually premium
+• engaging
+• easy to navigate
+• conversion focused
+
+Avoid:
+
+• complex navigation
+• heavy animations
+• confusing layouts
+
+Final Goal
+
+The website must position GrowitBuddy as a premium authority agency and creator ecosystem platform, helping founders and creators build long-term influence through content and distribution systems.
