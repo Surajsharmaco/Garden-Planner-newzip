@@ -55,18 +55,18 @@ export default function Creators() {
   };
 
   return (
-    <div className="w-full pt-10 pb-24">
-      <div className="container mx-auto px-4 md:px-8 max-w-4xl">
+    <div className="w-full pt-20 md:pt-24 pb-16 md:pb-24 lg:pb-32 px-5 md:px-8">
+      <div className="container mx-auto max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
+          className="text-center mb-12 md:mb-16"
         >
           <div className="inline-block mb-6 px-4 py-1.5 bg-accent/20 text-foreground font-semibold text-sm rounded-full tracking-wide">
             Creator Network
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">Join the Ecosystem.</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">Join the Ecosystem.</h1>
+          <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
             We partner with high-potential creators to build unignorable authority and multi-channel distribution. Tell us about yourself.
           </p>
         </motion.div>
@@ -75,64 +75,64 @@ export default function Creators() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white border border-gray-100 shadow-sm rounded-3xl p-8 md:p-12"
+          className="bg-white border border-gray-100 shadow-sm rounded-3xl p-6 md:p-12"
         >
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               
               <div className="space-y-6">
-                <h3 className="text-2xl font-bold border-b pb-2">Personal Details</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <h3 className="text-xl md:text-2xl font-bold border-b pb-2">Personal Details</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   <FormField control={form.control} name="fullName" render={({ field }) => (
-                    <FormItem><FormLabel>Full Name</FormLabel><FormControl><Input placeholder="Jane Doe" {...field} /></FormControl><FormMessage /></FormItem>
+                    <FormItem><FormLabel>Full Name</FormLabel><FormControl><Input className="h-12" placeholder="Jane Doe" {...field} /></FormControl><FormMessage /></FormItem>
                   )} />
                   <FormField control={form.control} name="email" render={({ field }) => (
-                    <FormItem><FormLabel>Email</FormLabel><FormControl><Input placeholder="jane@example.com" type="email" {...field} /></FormControl><FormMessage /></FormItem>
-                  )} />
-                  <FormField control={form.control} name="phone" render={({ field }) => (
-                    <FormItem><FormLabel>Phone Number</FormLabel><FormControl><Input placeholder="+1..." {...field} /></FormControl><FormMessage /></FormItem>
+                    <FormItem><FormLabel>Email</FormLabel><FormControl><Input className="h-12" placeholder="jane@example.com" type="email" {...field} /></FormControl><FormMessage /></FormItem>
                   )} />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                  <FormField control={form.control} name="phone" render={({ field }) => (
+                    <FormItem><FormLabel>Phone Number</FormLabel><FormControl><Input className="h-12" placeholder="+1..." {...field} /></FormControl><FormMessage /></FormItem>
+                  )} />
                   <FormField control={form.control} name="country" render={({ field }) => (
-                    <FormItem><FormLabel>Country</FormLabel><FormControl><Input placeholder="United States" {...field} /></FormControl><FormMessage /></FormItem>
+                    <FormItem><FormLabel>Country</FormLabel><FormControl><Input className="h-12" placeholder="United States" {...field} /></FormControl><FormMessage /></FormItem>
                   )} />
                   <FormField control={form.control} name="city" render={({ field }) => (
-                    <FormItem><FormLabel>City</FormLabel><FormControl><Input placeholder="New York" {...field} /></FormControl><FormMessage /></FormItem>
+                    <FormItem><FormLabel>City</FormLabel><FormControl><Input className="h-12" placeholder="New York" {...field} /></FormControl><FormMessage /></FormItem>
                   )} />
                 </div>
               </div>
 
               <div className="space-y-6 pt-6">
-                <h3 className="text-2xl font-bold border-b pb-2">Social Profiles</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <h3 className="text-xl md:text-2xl font-bold border-b pb-2">Social Profiles</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                   <FormField control={form.control} name="instagramLink" render={({ field }) => (
-                    <FormItem><FormLabel>Instagram URL</FormLabel><FormControl><Input placeholder="https://instagram.com/..." {...field} /></FormControl><FormMessage /></FormItem>
+                    <FormItem><FormLabel>Instagram URL</FormLabel><FormControl><Input className="h-12" placeholder="https://instagram.com/..." {...field} /></FormControl><FormMessage /></FormItem>
                   )} />
                   <FormField control={form.control} name="youtubeLink" render={({ field }) => (
-                    <FormItem><FormLabel>YouTube URL</FormLabel><FormControl><Input placeholder="https://youtube.com/..." {...field} /></FormControl><FormMessage /></FormItem>
+                    <FormItem><FormLabel>YouTube URL</FormLabel><FormControl><Input className="h-12" placeholder="https://youtube.com/..." {...field} /></FormControl><FormMessage /></FormItem>
                   )} />
                   <FormField control={form.control} name="linkedinLink" render={({ field }) => (
-                    <FormItem><FormLabel>LinkedIn URL</FormLabel><FormControl><Input placeholder="https://linkedin.com/..." {...field} /></FormControl><FormMessage /></FormItem>
+                    <FormItem><FormLabel>LinkedIn URL</FormLabel><FormControl><Input className="h-12" placeholder="https://linkedin.com/..." {...field} /></FormControl><FormMessage /></FormItem>
                   )} />
                 </div>
               </div>
 
               <div className="space-y-6 pt-6">
-                <h3 className="text-2xl font-bold border-b pb-2">Content Profile</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <h3 className="text-xl md:text-2xl font-bold border-b pb-2">Content Profile</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   <FormField control={form.control} name="primaryNiche" render={({ field }) => (
-                    <FormItem><FormLabel>Primary Niche</FormLabel><FormControl><Input placeholder="e.g. B2B SaaS, Fitness" {...field} /></FormControl><FormMessage /></FormItem>
+                    <FormItem><FormLabel>Primary Niche</FormLabel><FormControl><Input className="h-12" placeholder="e.g. B2B SaaS, Fitness" {...field} /></FormControl><FormMessage /></FormItem>
                   )} />
                   <FormField control={form.control} name="secondaryNiche" render={({ field }) => (
-                    <FormItem><FormLabel>Secondary Niche (Optional)</FormLabel><FormControl><Input placeholder="..." {...field} /></FormControl><FormMessage /></FormItem>
+                    <FormItem><FormLabel>Secondary Niche (Optional)</FormLabel><FormControl><Input className="h-12" placeholder="..." {...field} /></FormControl><FormMessage /></FormItem>
                   )} />
                   
                   <FormField control={form.control} name="followerCount" render={({ field }) => (
                     <FormItem>
                       <FormLabel>Total Follower Count</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl><SelectTrigger><SelectValue placeholder="Select range" /></SelectTrigger></FormControl>
+                        <FormControl><SelectTrigger className="h-12"><SelectValue placeholder="Select range" /></SelectTrigger></FormControl>
                         <SelectContent>
                           <SelectItem value="under-10k">&lt; 10,000</SelectItem>
                           <SelectItem value="10k-50k">10,000 - 50,000</SelectItem>
@@ -149,7 +149,7 @@ export default function Creators() {
                     <FormItem>
                       <FormLabel>Primary Content Type</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl><SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger></FormControl>
+                        <FormControl><SelectTrigger className="h-12"><SelectValue placeholder="Select type" /></SelectTrigger></FormControl>
                         <SelectContent>
                           <SelectItem value="video-short">Short-form Video</SelectItem>
                           <SelectItem value="video-long">Long-form Video</SelectItem>
@@ -163,7 +163,7 @@ export default function Creators() {
                   )} />
                 </div>
                 <FormField control={form.control} name="audienceLocation" render={({ field }) => (
-                  <FormItem><FormLabel>Primary Audience Location</FormLabel><FormControl><Input placeholder="e.g. US, Europe, Global" {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Primary Audience Location</FormLabel><FormControl><Input className="h-12" placeholder="e.g. US, Europe, Global" {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
               </div>
 

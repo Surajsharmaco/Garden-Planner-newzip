@@ -16,6 +16,29 @@ const NAV_LINKS = [
   { href: "/about", label: "About" },
 ];
 
+const mobileNavVariants = {
+  hidden: { opacity: 0, x: "-100%" },
+  visible: { 
+    opacity: 1, 
+    x: 0,
+    transition: { type: "spring", bounce: 0, duration: 0.4 }
+  },
+  exit: { 
+    opacity: 0, 
+    x: "-100%",
+    transition: { type: "spring", bounce: 0, duration: 0.4 }
+  }
+};
+
+const linkVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: (custom: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: { delay: custom * 0.05 + 0.2, duration: 0.3 }
+  })
+};
+
 export function Navbar() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +64,7 @@ export function Navbar() {
       }`}
     >
       <div className="container mx-auto px-4 md:px-8 flex items-center justify-between">
-        <Link href="/" className="text-2xl font-bold tracking-tight z-50 flex items-center gap-2">
+        <Link href="/" className={`text-2xl font-bold tracking-tight z-[60] flex items-center gap-2 ${isOpen ? 'text-white' : ''}`}>
           GrowitBuddy<span className="text-accent">.</span>
         </Link>
 
@@ -71,47 +94,61 @@ export function Navbar() {
 
         {/* Mobile Toggle */}
         <button
-          className="lg:hidden z-50 text-foreground"
+          className={`lg:hidden z-[60] ${isOpen ? 'text-white' : 'text-foreground'}`}
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle menu"
           data-testid="button-mobile-menu"
         >
-          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          {isOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
         </button>
 
         {/* Mobile Nav */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="fixed inset-0 bg-white z-40 flex flex-col pt-24 px-6 pb-6 overflow-y-auto"
+              variants={mobileNavVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="fixed inset-0 bg-black/95 z-50 flex flex-col pt-28 px-8 pb-8 overflow-y-auto backdrop-blur-sm"
             >
-              <nav className="flex flex-col gap-6 text-xl">
-                <Link
-                  href="/"
-                  className={`font-semibold ${location === "/" ? "text-accent" : "text-foreground"}`}
-                >
-                  Home
-                </Link>
-                {NAV_LINKS.map((link) => (
+              <nav className="flex flex-col gap-6 flex-1">
+                <motion.div custom={0} variants={linkVariants} initial="hidden" animate="visible">
                   <Link
-                    key={link.href}
-                    href={link.href}
-                    className={`font-semibold ${location === link.href ? "text-accent" : "text-foreground"}`}
+                    href="/"
+                    className={`text-2xl font-bold flex items-center gap-3 ${location === "/" ? "text-accent" : "text-white"}`}
                   >
-                    {link.label}
+                    Home
+                    {location === "/" && <span className="w-2 h-2 rounded-full bg-accent" />}
                   </Link>
+                </motion.div>
+                
+                {NAV_LINKS.map((link, idx) => (
+                  <motion.div key={link.href} custom={idx + 1} variants={linkVariants} initial="hidden" animate="visible">
+                    <Link
+                      href={link.href}
+                      className={`text-2xl font-bold flex items-center gap-3 ${location === link.href ? "text-accent" : "text-gray-300 hover:text-white transition-colors"}`}
+                    >
+                      {link.label}
+                      {location === link.href && <span className="w-2 h-2 rounded-full bg-accent" />}
+                    </Link>
+                  </motion.div>
                 ))}
-                <div className="mt-8">
-                  <Link href="/contact">
-                    <Button className="w-full text-lg py-6 bg-foreground text-background">
-                      Book Strategy Call
-                    </Button>
-                  </Link>
-                </div>
               </nav>
+              
+              <motion.div 
+                custom={NAV_LINKS.length + 1} 
+                variants={linkVariants} 
+                initial="hidden" 
+                animate="visible"
+                className="mt-8 pt-8 border-t border-gray-800"
+              >
+                <Link href="/contact">
+                  <Button className="w-full text-lg py-7 bg-accent text-foreground hover:bg-accent/90 font-bold">
+                    Book Strategy Call
+                  </Button>
+                </Link>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
