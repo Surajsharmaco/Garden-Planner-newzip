@@ -1,330 +1,364 @@
-import { motion } from "framer-motion";
-import { ArrowRight, TrendingUp, Users, Zap, BarChart3, Star, ExternalLink } from "lucide-react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { ArrowRight, ArrowUpRight, TrendingUp, Users, Zap, BarChart3 } from "lucide-react";
 import { Link } from "wouter";
-import { Button } from "@/components/ui/button";
-import { HeroScene } from "@/components/HeroScene";
-import { TiltCard } from "@/components/TiltCard";
 
+/* ─── animation helpers ─────────────────────────────────── */
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } }
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
 };
+const stagger = { visible: { transition: { staggerChildren: 0.12 } } };
 
-const stagger = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.1 } }
-};
-
-const FRAMEWORK_STEPS = [
-  {
-    num: "01",
-    title: "Positioning",
-    desc: "Define your unique narrative and category entry point. Own a corner of the market before anyone else can.",
-    icon: <Zap className="w-5 h-5" />
-  },
-  {
-    num: "02",
-    title: "Content System",
-    desc: "Scalable, expert-led content that speaks to the right people and builds compounding trust over time.",
-    icon: <BarChart3 className="w-5 h-5" />
-  },
-  {
-    num: "03",
-    title: "Distribution",
-    desc: "Precision syndication across high-leverage channels. The right content, reaching the right audience.",
-    icon: <TrendingUp className="w-5 h-5" />
-  },
-  {
-    num: "04",
-    title: "Compounding",
-    desc: "Turn visibility into inbound demand. A flywheel that accelerates the longer it runs.",
-    icon: <Users className="w-5 h-5" />
-  }
+/* ─── data ──────────────────────────────────────────────── */
+const SERVICES = [
+  { icon: <Zap className="w-5 h-5" />, title: "Authority Strategy", desc: "Positioning, narrative & long-term influence planning." },
+  { icon: <BarChart3 className="w-5 h-5" />, title: "Content Production", desc: "Scalable creation systems for consistent authority building." },
+  { icon: <TrendingUp className="w-5 h-5" />, title: "Distribution Strategy", desc: "Multi-channel precision reach to audiences that matter." },
+  { icon: <Users className="w-5 h-5" />, title: "Personal Brand Growth", desc: "Transform your presence into a trust-building machine." },
 ];
 
 const CASE_STUDIES = [
-  {
-    tag1: "B2B SaaS", tag2: "LinkedIn",
-    title: "Tech Founder to Industry Voice",
-    desc: "14M organic impressions and 42 enterprise leads in 90 days.",
-    metric: "14M impressions"
-  },
-  {
-    tag1: "Coaching", tag2: "YouTube",
-    title: "Creator Authority System",
-    desc: "Grew from 0 to 85K subscribers with a pure long-form strategy.",
-    metric: "85K subscribers"
-  },
-  {
-    tag1: "Consulting", tag2: "Multi-channel",
-    title: "Inbound Demand Engine",
-    desc: "Replaced cold outreach entirely — 3× revenue from content alone.",
-    metric: "3× revenue"
-  },
-  {
-    tag1: "Startup", tag2: "X / Twitter",
-    title: "Personal Brand Growth",
-    desc: "Founder went from anonymous to top-5 voice in their niche in 6 months.",
-    metric: "Top 5 in niche"
-  }
+  { tag: "B2B SaaS · LinkedIn", title: "Tech Founder to Industry Voice", metric: "14M impressions", desc: "14M organic impressions and 42 enterprise leads in 90 days." },
+  { tag: "Coaching · YouTube", title: "Creator Authority System", metric: "85K subscribers", desc: "0 to 85K subscribers on a long-form content-only strategy." },
+  { tag: "Consulting · Multi-channel", title: "Inbound Demand Engine", metric: "3× revenue", desc: "Replaced cold outreach entirely with inbound content alone." },
+  { tag: "Startup · X / Twitter", title: "Personal Brand Growth", metric: "Top 5 in niche", desc: "Anonymous founder to top-5 voice in niche within 6 months." },
 ];
 
-const SERVICES = [
-  { title: "Authority Strategy", desc: "Positioning, narrative, and long-term influence planning." },
-  { title: "Content Production", desc: "Scalable creation systems for consistent authority building." },
-  { title: "Video Editing Systems", desc: "End-to-end workflows for creators and founders." },
-  { title: "Distribution Strategy", desc: "Multi-channel reach to the audiences that matter." },
-  { title: "Personal Brand Growth", desc: "Transform your presence into a trust-building machine." }
+const STATS = [
+  { value: "200+", label: "Founders & creators served" },
+  { value: "10K+", label: "Content pieces produced" },
+  { value: "4.2×", label: "Average authority growth" },
+  { value: "6+", label: "Years building systems" },
 ];
 
+/* ─── Orbital rings component ───────────────────────────── */
+function OrbitalRings() {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const sX = useSpring(mouseX, { stiffness: 30, damping: 20 });
+  const sY = useSpring(mouseY, { stiffness: 30, damping: 20 });
+  const rX = useTransform(sY, [-1, 1], [8, -8]);
+  const rY = useTransform(sX, [-1, 1], [-8, 8]);
+
+  useEffect(() => {
+    const move = (e: MouseEvent) => {
+      mouseX.set((e.clientX / window.innerWidth) * 2 - 1);
+      mouseY.set((e.clientY / window.innerHeight) * 2 - 1);
+    };
+    window.addEventListener("mousemove", move);
+    return () => window.removeEventListener("mousemove", move);
+  }, []);
+
+  return (
+    <motion.div
+      style={{ rotateX: rX, rotateY: rY, transformStyle: "preserve-3d" }}
+      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+    >
+      {/* Ring 1 - outermost */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 36, repeat: Infinity, ease: "linear" }}
+        className="absolute rounded-full border border-white/8"
+        style={{ width: "min(76vw, 76vh)", height: "min(76vw, 76vh)" }}
+      >
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-accent/60" />
+      </motion.div>
+
+      {/* Ring 2 */}
+      <motion.div
+        animate={{ rotate: -360 }}
+        transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+        className="absolute rounded-full border border-accent/12"
+        style={{ width: "min(58vw, 58vh)", height: "min(58vw, 58vh)" }}
+      >
+        <div className="absolute bottom-0 right-4 translate-y-1/2 w-1.5 h-1.5 rounded-full bg-white/30" />
+        <div className="absolute top-0 left-8 -translate-y-1/2 w-1 h-1 rounded-full bg-accent/50" />
+      </motion.div>
+
+      {/* Ring 3 */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+        className="absolute rounded-full border border-white/5"
+        style={{ width: "min(42vw, 42vh)", height: "min(42vw, 42vh)" }}
+      >
+        <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-accent/40" />
+      </motion.div>
+
+      {/* Ring 4 - innermost dashed */}
+      <motion.div
+        animate={{ rotate: -360 }}
+        transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+        className="absolute rounded-full"
+        style={{
+          width: "min(26vw, 26vh)",
+          height: "min(26vw, 26vh)",
+          border: "1px dashed rgba(245,230,99,0.15)"
+        }}
+      />
+
+      {/* Dot accents scattered */}
+      <div className="absolute w-1 h-1 rounded-full bg-accent/50" style={{ top: "28%", left: "18%" }} />
+      <div className="absolute w-1 h-1 rounded-full bg-white/20" style={{ bottom: "22%", right: "22%" }} />
+      <div className="absolute w-1.5 h-1.5 rounded-full bg-accent/30" style={{ top: "62%", left: "14%" }} />
+      <div className="absolute w-1 h-1 rounded-full bg-white/15" style={{ top: "20%", right: "16%" }} />
+    </motion.div>
+  );
+}
+
+/* ─── Page ──────────────────────────────────────────────── */
 export default function Home() {
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full bg-[#0D0D0D]">
 
-      {/* ─── HERO ─────────────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex items-center overflow-hidden bg-white">
+      {/* ══════════════════════════════════════════════
+          HERO — full screen, cinematic, centered
+      ══════════════════════════════════════════════ */}
+      <section className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden px-6">
 
-        {/* subtle background gradient */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_70%_40%,_#f5e66320,_transparent)] pointer-events-none" />
+        {/* Yellow radial glow — the main cinematic effect */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "min(90vw, 700px)",
+            height: "min(90vw, 700px)",
+            background: "radial-gradient(ellipse at center, rgba(245,230,99,0.13) 0%, rgba(245,230,99,0.04) 40%, transparent 70%)",
+            borderRadius: "50%",
+          }}
+        />
+        {/* Second softer glow layer */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "min(120vw, 1100px)",
+            height: "min(120vw, 1100px)",
+            background: "radial-gradient(ellipse at center, rgba(245,230,99,0.04) 0%, transparent 60%)",
+            borderRadius: "50%",
+          }}
+        />
 
-        {/* soft floating orbs */}
-        <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-accent/8 rounded-full blur-3xl animate-float-slow pointer-events-none" />
-        <div className="absolute bottom-1/3 left-1/6 w-80 h-80 bg-accent/5 rounded-full blur-3xl animate-float-slow-reverse pointer-events-none" />
+        {/* Orbital rings */}
+        <OrbitalRings />
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-10 lg:px-16 pt-28 pb-20">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-
-            {/* ── Left: copy ── */}
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={stagger}
-              className="flex flex-col items-start"
-            >
-              <motion.span
-                variants={fadeUp}
-                className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 bg-accent/15 border border-accent/30 text-foreground font-semibold text-xs rounded-full tracking-widest uppercase"
-              >
-                Global Authority Agency
-              </motion.span>
-
-              <motion.h1
-                variants={fadeUp}
-                className="text-[2.6rem] leading-[1.08] sm:text-5xl lg:text-[3.6rem] xl:text-[4.2rem] font-black tracking-tight mb-6"
-              >
-                We Help Founders&nbsp;&amp;&nbsp;Creators Build{" "}
-                <span className="relative inline-block whitespace-nowrap">
-                  <span className="relative z-10">Authority</span>
-                  <span className="absolute bottom-1 left-0 w-full h-[10px] bg-accent -z-10 skew-x-[-8deg] rounded-sm" />
-                </span>{" "}
-                That&nbsp;Compounds.
-              </motion.h1>
-
-              <motion.p
-                variants={fadeUp}
-                className="text-base sm:text-lg text-gray-500 leading-relaxed mb-10 max-w-lg"
-              >
-                GrowitBuddy builds strategic content systems that turn your
-                expertise into influence, recognition, and inbound demand —
-                without chasing vanity metrics.
-              </motion.p>
-
-              <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                <Link href="/contact">
-                  <Button
-                    size="lg"
-                    data-testid="button-book-strategy-call-hero"
-                    className="w-full sm:w-auto h-12 px-7 text-base font-semibold bg-foreground text-background hover:bg-foreground/85 group rounded-xl"
-                  >
-                    Book Strategy Call
-                    <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
-                <Link href="/work">
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    data-testid="button-explore-work-hero"
-                    className="w-full sm:w-auto h-12 px-7 text-base font-semibold border-2 rounded-xl hover:bg-accent/10 hover:border-accent/50"
-                  >
-                    Explore Our Work
-                  </Button>
-                </Link>
-              </motion.div>
-
-              {/* Social proof strip */}
-              <motion.div
-                variants={fadeUp}
-                className="flex items-center gap-3 mt-10 text-sm text-gray-400"
-              >
-                <div className="flex -space-x-2">
-                  {["#111","#333","#555","#888"].map((c, i) => (
-                    <div
-                      key={i}
-                      className="w-7 h-7 rounded-full border-2 border-white flex items-center justify-center text-white text-xs font-bold"
-                      style={{ background: c }}
-                    >
-                      {["S","A","R","M"][i]}
-                    </div>
-                  ))}
-                </div>
-                <span>Trusted by <strong className="text-foreground">200+ founders</strong> &amp; creators</span>
-              </motion.div>
-            </motion.div>
-
-            {/* ── Right: 3D scene ── */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.92 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="hidden lg:flex items-center justify-center"
-            >
-              <div className="relative w-full max-w-[480px] aspect-square">
-                <HeroScene />
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── AUTHORITY PROBLEM ──────────────────────────────────────── */}
-      <section className="py-20 md:py-28 px-6 md:px-10 lg:px-16 bg-foreground text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-            variants={stagger}
+        {/* Content */}
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={stagger}
+          className="relative z-10 flex flex-col items-center"
+        >
+          <motion.p
+            variants={fadeUp}
+            className="text-accent/80 text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase mb-8"
           >
-            <motion.p variants={fadeUp} className="text-accent text-sm font-semibold tracking-widest uppercase mb-4">
-              The real problem
-            </motion.p>
-            <motion.h2 variants={fadeUp} className="text-3xl sm:text-4xl md:text-5xl font-bold leading-[1.15] mb-8">
-              Most content is optimized for views.
-              <br />
-              <span className="text-accent">We optimize for authority.</span>
-            </motion.h2>
-            <motion.p variants={fadeUp} className="text-base md:text-lg text-gray-400 leading-relaxed max-w-2xl mx-auto">
-              Views don't close deals — trust does. We engineer content systems
-              that build compounding credibility, so you're already the obvious
-              choice before a call is ever booked.
-            </motion.p>
+            Global Authority Agency
+          </motion.p>
+
+          <motion.h1
+            variants={fadeUp}
+            className="text-[2.8rem] leading-[1.06] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] font-black tracking-tight mb-8 max-w-5xl"
+          >
+            <span className="text-white">Build Authority</span>
+            <br />
+            <span className="text-white">That</span>{" "}
+            <span className="text-accent">Compounds.</span>
+          </motion.h1>
+
+          <motion.p
+            variants={fadeUp}
+            className="text-white/50 text-base sm:text-lg md:text-xl leading-relaxed max-w-xl mb-12"
+          >
+            You're not just a content creator — you're a category leader in the making.
+            We engineer the systems that make authority inevitable.
+          </motion.p>
+
+          {/* Pill CTA — vivafox overlapping style */}
+          <motion.div variants={fadeUp} className="relative inline-flex items-center">
+            <Link href="/contact">
+              <button
+                data-testid="button-book-call-hero"
+                className="flex items-center gap-3 pl-5 pr-2 py-2 rounded-full bg-accent text-black font-bold text-sm sm:text-base hover:bg-accent/85 transition-all duration-200 shadow-2xl shadow-accent/20"
+              >
+                Book a strategy call
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-black/15">
+                  <ArrowRight className="w-4 h-4" />
+                </span>
+              </button>
+            </Link>
+            <Link href="/work">
+              <button
+                data-testid="button-our-work-hero"
+                className="-ml-3 flex items-center gap-3 pl-5 pr-2 py-2 rounded-full border border-white/15 bg-white/6 backdrop-blur-sm text-white font-semibold text-sm sm:text-base hover:bg-white/10 hover:border-white/25 transition-all duration-200"
+              >
+                Explore our work
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10">
+                  <ArrowUpRight className="w-4 h-4" />
+                </span>
+              </button>
+            </Link>
           </motion.div>
+
+          {/* Scroll hint */}
+          <motion.div
+            variants={fadeUp}
+            className="mt-16 flex flex-col items-center gap-2 text-white/30"
+          >
+            <span className="text-xs tracking-widest uppercase">Scroll</span>
+            <motion.div
+              animate={{ y: [0, 6, 0] }}
+              transition={{ duration: 1.6, repeat: Infinity }}
+              className="w-px h-8 bg-gradient-to-b from-white/30 to-transparent"
+            />
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* ══════════════════════════════════════════════
+          STATS STRIP
+      ══════════════════════════════════════════════ */}
+      <section className="border-t border-b border-white/6 py-10 px-6 md:px-10">
+        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+          {STATS.map((s, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.07 }}
+              className="flex flex-col gap-1 text-center md:text-left"
+            >
+              <span className="text-3xl sm:text-4xl font-black text-white">{s.value}</span>
+              <span className="text-sm text-white/40 leading-snug">{s.label}</span>
+            </motion.div>
+          ))}
         </div>
       </section>
 
-      {/* ─── FRAMEWORK ──────────────────────────────────────────────── */}
-      <section className="py-20 md:py-28 px-6 md:px-10 lg:px-16 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-3">How we work</p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">The GrowitBuddy Framework</h2>
-            <p className="text-gray-500 text-lg max-w-xl mx-auto">
-              A four-step system for engineering category authority.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {FRAMEWORK_STEPS.map((step, i) => (
-              <TiltCard key={i} className="h-full">
-                <motion.div
-                  initial={{ opacity: 0, y: 28 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08, duration: 0.5 }}
-                  className="bg-white p-7 rounded-2xl border border-gray-100 hover:border-accent/30 hover:shadow-lg transition-all duration-300 h-full flex flex-col"
-                >
-                  <div className="flex items-center justify-between mb-5">
-                    <span className="text-3xl font-black text-gray-100">{step.num}</span>
-                    <span className="p-2 bg-accent/10 rounded-lg text-foreground">{step.icon}</span>
-                  </div>
-                  <h3 className="text-lg font-bold mb-3">{step.title}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed flex-1">{step.desc}</p>
-                </motion.div>
-              </TiltCard>
-            ))}
-          </div>
+      {/* ══════════════════════════════════════════════
+          AUTHORITY STATEMENT
+      ══════════════════════════════════════════════ */}
+      <section className="py-24 md:py-36 px-6 md:px-10 relative overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(245,230,99,0.04) 0%, transparent 70%)"
+          }}
+        />
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-accent/70 text-xs font-semibold tracking-[0.2em] uppercase mb-6"
+          >
+            The real problem
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] mb-8 text-white"
+          >
+            Most content chases views.
+            <br />
+            <span className="text-accent">We chase authority.</span>
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-white/45 text-lg leading-relaxed max-w-2xl mx-auto"
+          >
+            Views don't close deals — trust does. We build content systems that compound
+            over time, making you the undeniable choice before any conversation begins.
+          </motion.p>
         </div>
       </section>
 
-      {/* ─── CASE STUDIES ───────────────────────────────────────────── */}
-      <section className="py-20 md:py-28 px-6 md:px-10 lg:px-16 bg-white">
+      {/* ══════════════════════════════════════════════
+          CASE STUDIES
+      ══════════════════════════════════════════════ */}
+      <section className="py-20 md:py-28 px-6 md:px-10">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
             <div>
-              <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-2">Results</p>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold">Proof of Work</h2>
+              <p className="text-accent/70 text-xs font-semibold tracking-[0.2em] uppercase mb-3">Results</p>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white">Proof of Work</h2>
             </div>
             <Link href="/work">
-              <Button variant="outline" className="shrink-0 h-10 px-5 rounded-xl border-2 hover:border-foreground text-sm font-semibold">
-                View All Case Studies
-                <ExternalLink className="ml-2 w-4 h-4" />
-              </Button>
+              <button className="shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/12 text-white/70 text-sm font-semibold hover:text-white hover:border-white/25 hover:bg-white/5 transition-all">
+                All case studies <ArrowUpRight className="w-4 h-4" />
+              </button>
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {CASE_STUDIES.map((cs, i) => (
-              <TiltCard key={i} className="h-full">
-                <motion.div
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.07, duration: 0.45 }}
-                  className="group h-full border border-gray-100 rounded-2xl p-8 hover:border-accent/30 hover:shadow-lg transition-all duration-300 flex flex-col"
-                >
-                  {/* Metric highlight */}
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex gap-2">
-                      <span className="px-2.5 py-1 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full">{cs.tag1}</span>
-                      <span className="px-2.5 py-1 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full">{cs.tag2}</span>
-                    </div>
-                    <span className="text-xs font-bold text-accent bg-accent/10 px-3 py-1 rounded-full">{cs.metric}</span>
-                  </div>
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.07 }}
+                className="group relative border border-white/8 rounded-2xl p-8 bg-white/3 hover:bg-white/5 hover:border-white/15 transition-all duration-300 cursor-pointer overflow-hidden"
+              >
+                {/* hover glow */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{ background: "radial-gradient(ellipse 60% 60% at 30% 30%, rgba(245,230,99,0.05) 0%, transparent 70%)" }} />
 
-                  {/* Visual placeholder */}
-                  <div className="w-full h-40 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl mb-6 flex items-center justify-center overflow-hidden relative group-hover:from-accent/5 group-hover:to-accent/10 transition-colors duration-300">
-                    <div className="flex gap-1 items-end h-12">
-                      {[40, 65, 52, 80, 68, 90, 75].map((h, j) => (
-                        <div
-                          key={j}
-                          className="w-3 bg-gray-300 group-hover:bg-accent/50 rounded-t transition-colors duration-300"
-                          style={{ height: `${h}%` }}
-                        />
-                      ))}
-                    </div>
-                  </div>
+                {/* bar chart visual */}
+                <div className="flex gap-1 items-end h-14 mb-6">
+                  {[40, 65, 52, 80, 68, 90, 75, 95].map((h, j) => (
+                    <div
+                      key={j}
+                      className="flex-1 bg-white/8 group-hover:bg-accent/30 rounded-t transition-colors duration-300"
+                      style={{ height: `${h}%` }}
+                    />
+                  ))}
+                </div>
 
-                  <h3 className="text-xl font-bold mb-2 group-hover:text-accent transition-colors">{cs.title}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed flex-1">{cs.desc}</p>
-
-                  <div className="flex items-center gap-1.5 mt-5 text-sm font-semibold text-foreground group-hover:text-accent transition-colors">
-                    Read case study <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </motion.div>
-              </TiltCard>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-white/35 text-xs font-medium">{cs.tag}</span>
+                  <span className="text-accent text-xs font-bold bg-accent/10 px-3 py-1 rounded-full">{cs.metric}</span>
+                </div>
+                <h3 className="text-white text-xl font-bold mb-2 group-hover:text-accent transition-colors">{cs.title}</h3>
+                <p className="text-white/40 text-sm leading-relaxed">{cs.desc}</p>
+                <div className="flex items-center gap-1.5 mt-5 text-white/30 group-hover:text-accent text-sm font-semibold transition-colors">
+                  Read case study <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── SERVICES OVERVIEW ──────────────────────────────────────── */}
-      <section className="py-20 md:py-28 px-6 md:px-10 lg:px-16 bg-gray-50">
+      {/* ══════════════════════════════════════════════
+          SERVICES
+      ══════════════════════════════════════════════ */}
+      <section className="py-20 md:py-28 px-6 md:px-10 border-t border-white/6">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
-              <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-3">What we do</p>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-6">
-                Five ways we build your authority
+              <p className="text-accent/70 text-xs font-semibold tracking-[0.2em] uppercase mb-4">What we do</p>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-6">
+                Four ways we build your authority
               </h2>
-              <p className="text-gray-500 text-lg leading-relaxed mb-8">
-                Each service is a module in a larger system. Use one, combine several, or let us architect the whole thing.
+              <p className="text-white/40 text-lg leading-relaxed mb-8">
+                Each service is a module in a larger system. Combine them or let us architect the whole engine.
               </p>
               <Link href="/services">
-                <Button className="h-11 px-6 rounded-xl bg-foreground text-background hover:bg-foreground/85 text-sm font-semibold group">
-                  See All Services
-                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                <button className="flex items-center gap-2 px-6 py-3 rounded-full bg-accent text-black text-sm font-bold hover:bg-accent/85 transition-all shadow-lg shadow-accent/15 group">
+                  See all services
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                </button>
               </Link>
             </div>
 
@@ -335,15 +369,15 @@ export default function Home() {
                   initial={{ opacity: 0, x: 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.06, duration: 0.4 }}
-                  className="flex items-center gap-5 p-5 bg-white rounded-xl border border-gray-100 hover:border-accent/40 hover:shadow-sm transition-all duration-200 group"
+                  transition={{ delay: i * 0.07 }}
+                  className="flex items-start gap-4 p-5 rounded-xl border border-white/8 bg-white/3 hover:border-accent/25 hover:bg-white/5 transition-all group"
                 >
-                  <div className="w-9 h-9 rounded-lg bg-accent/10 flex items-center justify-center shrink-0 group-hover:bg-accent/20 transition-colors">
-                    <span className="text-sm font-black text-foreground">0{i + 1}</span>
+                  <div className="w-9 h-9 rounded-lg bg-accent/10 flex items-center justify-center shrink-0 text-accent group-hover:bg-accent/20 transition-colors">
+                    {s.icon}
                   </div>
                   <div>
-                    <p className="font-bold text-sm">{s.title}</p>
-                    <p className="text-gray-500 text-sm mt-0.5">{s.desc}</p>
+                    <p className="text-white font-semibold text-sm mb-0.5">{s.title}</p>
+                    <p className="text-white/40 text-sm leading-relaxed">{s.desc}</p>
                   </div>
                 </motion.div>
               ))}
@@ -352,54 +386,36 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── SOCIAL PROOF ───────────────────────────────────────────── */}
-      <section className="py-16 md:py-20 px-6 md:px-10 lg:px-16 bg-white border-y border-gray-100">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-center text-xs text-gray-400 font-semibold tracking-widest uppercase mb-10">
-            Trusted by founders and creators
-          </p>
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-6">
-            {["Brand A", "Creator Co", "Studio X", "Agency Z", "Founder Labs", "Scale HQ"].map((name, i) => (
-              <div
-                key={i}
-                className="flex items-center justify-center h-10 rounded-lg bg-gray-50 border border-gray-100 text-gray-400 text-xs font-semibold tracking-wide"
-              >
-                {name}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── FOUNDER SECTION ────────────────────────────────────────── */}
-      <section className="py-20 md:py-28 px-6 md:px-10 lg:px-16 bg-white">
+      {/* ══════════════════════════════════════════════
+          FOUNDER SECTION
+      ══════════════════════════════════════════════ */}
+      <section className="py-20 md:py-28 px-6 md:px-10 border-t border-white/6">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div className="flex flex-col gap-6">
-              <p className="text-accent text-sm font-semibold tracking-widest uppercase">Built by creators</p>
-              <h2 className="text-3xl sm:text-4xl font-bold leading-tight">
+            <div>
+              <p className="text-accent/70 text-xs font-semibold tracking-[0.2em] uppercase mb-4">Built by creators</p>
+              <h2 className="text-3xl sm:text-4xl font-black text-white leading-tight mb-5">
                 We've lived the problem we're solving
               </h2>
-              <p className="text-gray-500 leading-relaxed">
-                GrowitBuddy was built by Suraj Sharma after spending years helping
-                founders and creators grow their influence. We don't sell theory —
-                we run the same systems for our clients that we run for ourselves.
+              <p className="text-white/40 leading-relaxed mb-8">
+                GrowitBuddy was built after years helping founders and creators grow their
+                influence. We run the same systems for our clients that we use ourselves.
               </p>
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full bg-foreground flex items-center justify-center text-white font-black text-xl">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-full bg-accent flex items-center justify-center text-black font-black text-xl">
                   S
                 </div>
                 <div>
-                  <p className="font-bold">Suraj Sharma</p>
-                  <p className="text-gray-400 text-sm">Founder, GrowitBuddy</p>
+                  <p className="text-white font-bold">Suraj Sharma</p>
+                  <p className="text-white/35 text-sm">Founder, GrowitBuddy</p>
                 </div>
               </div>
-              <div className="flex gap-3">
+              <div className="flex gap-2">
                 {["LinkedIn", "Twitter / X", "Instagram"].map((s) => (
                   <a
                     key={s}
                     href="#"
-                    className="text-xs font-semibold text-gray-400 hover:text-foreground border border-gray-200 hover:border-foreground rounded-full px-3 py-1.5 transition-colors"
+                    className="text-xs font-semibold text-white/35 hover:text-accent border border-white/10 hover:border-accent/30 rounded-full px-3 py-1.5 transition-all"
                   >
                     {s}
                   </a>
@@ -408,22 +424,17 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              {[
-                { label: "Founders served", value: "200+" },
-                { label: "Content pieces produced", value: "10K+" },
-                { label: "Avg. authority growth", value: "4.2×" },
-                { label: "Years in the game", value: "6+" }
-              ].map((stat, i) => (
+              {STATS.map((stat, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.08 }}
-                  className="p-6 rounded-2xl bg-gray-50 border border-gray-100 flex flex-col gap-2"
+                  className="p-6 rounded-2xl border border-white/8 bg-white/3 flex flex-col gap-2"
                 >
-                  <span className="text-3xl font-black">{stat.value}</span>
-                  <span className="text-sm text-gray-500 leading-snug">{stat.label}</span>
+                  <span className="text-3xl font-black text-white">{stat.value}</span>
+                  <span className="text-sm text-white/40 leading-snug">{stat.label}</span>
                 </motion.div>
               ))}
             </div>
@@ -431,39 +442,48 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── FINAL CTA ──────────────────────────────────────────────── */}
-      <section className="py-20 md:py-28 px-6 md:px-10 lg:px-16 bg-foreground text-white">
-        <div className="max-w-3xl mx-auto text-center">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={stagger}
-          >
-            <motion.p variants={fadeUp} className="text-accent text-sm font-semibold tracking-widest uppercase mb-4">
-              Ready to start?
-            </motion.p>
-            <motion.h2 variants={fadeUp} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-              Build Your Authority System.
-            </motion.h2>
-            <motion.p variants={fadeUp} className="text-gray-400 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
-              If you're a founder or creator ready to turn expertise into influence
-              and inbound demand — let's talk.
-            </motion.p>
-            <motion.div variants={fadeUp}>
-              <Link href="/contact">
-                <Button
-                  size="lg"
-                  data-testid="button-book-strategy-call-cta"
-                  className="h-13 px-10 text-base font-semibold bg-accent text-foreground hover:bg-accent/85 hover:scale-105 transition-all duration-200 rounded-xl"
-                >
-                  Book Strategy Call
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </Link>
-            </motion.div>
+      {/* ══════════════════════════════════════════════
+          FINAL CTA — vivafox-style centered
+      ══════════════════════════════════════════════ */}
+      <section className="relative py-28 md:py-40 px-6 text-center overflow-hidden border-t border-white/6">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(245,230,99,0.08) 0%, transparent 65%)"
+          }}
+        />
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={stagger}
+          className="relative z-10 max-w-3xl mx-auto"
+        >
+          <motion.p variants={fadeUp} className="text-accent/70 text-xs font-semibold tracking-[0.2em] uppercase mb-6">
+            Ready to start?
+          </motion.p>
+          <motion.h2 variants={fadeUp} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.06] mb-6">
+            Build Your
+            <br />
+            <span className="text-accent">Authority System.</span>
+          </motion.h2>
+          <motion.p variants={fadeUp} className="text-white/40 text-lg leading-relaxed mb-12 max-w-xl mx-auto">
+            If you're a founder or creator ready to turn expertise into influence and inbound demand — let's talk.
+          </motion.p>
+          <motion.div variants={fadeUp} className="inline-flex items-center">
+            <Link href="/contact">
+              <button
+                data-testid="button-book-call-cta"
+                className="flex items-center gap-3 pl-6 pr-2 py-2.5 rounded-full bg-accent text-black font-bold text-base hover:bg-accent/85 transition-all shadow-2xl shadow-accent/25"
+              >
+                Book a strategy call
+                <span className="flex items-center justify-center w-9 h-9 rounded-full bg-black/15">
+                  <ArrowRight className="w-4 h-4" />
+                </span>
+              </button>
+            </Link>
           </motion.div>
-        </div>
+        </motion.div>
       </section>
 
     </div>

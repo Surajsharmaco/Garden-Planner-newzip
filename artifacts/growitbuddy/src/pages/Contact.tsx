@@ -51,7 +51,7 @@ export default function Contact() {
             className="md:col-span-2"
           >
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Let's build<br/>your system.</h1>
-            <p className="text-xl text-gray-600 mb-12">
+            <p className="text-xl text-white/45 mb-12">
               Ready to stop renting attention and start owning your category? We partner with ambitious founders and creators.
             </p>
 
@@ -62,19 +62,19 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="font-bold text-lg mb-1">Email Us</h4>
-                  <a href="mailto:hello@growitbuddy.com" className="text-gray-600 hover:text-accent transition-colors">
+                  <a href="mailto:hello@growitbuddy.com" className="text-white/45 hover:text-accent transition-colors">
                     hello@growitbuddy.com
                   </a>
                 </div>
               </div>
               
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center shrink-0">
-                  <MapPin className="w-5 h-5 text-gray-500" />
+                <div className="w-12 h-12 bg-white/6 rounded-full flex items-center justify-center shrink-0">
+                  <MapPin className="w-5 h-5 text-white/40" />
                 </div>
                 <div>
                   <h4 className="font-bold text-lg mb-1">Global Team</h4>
-                  <p className="text-gray-600">Operating asynchronously<br/>across 4 timezones.</p>
+                  <p className="text-white/45">Operating asynchronously<br/>across 4 timezones.</p>
                 </div>
               </div>
             </div>
@@ -85,7 +85,7 @@ export default function Contact() {
             animate={{ opacity: 1, x: 0 }}
             className="md:col-span-3"
           >
-            <div className="bg-white border border-gray-100 shadow-xl rounded-3xl p-8 md:p-12">
+            <div className="bg-white/5 border border-white/8 shadow-xl rounded-3xl p-8 md:p-12">
               <h3 className="text-2xl font-bold mb-8">Book a Strategy Call</h3>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

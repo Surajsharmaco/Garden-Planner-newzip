@@ -51,7 +51,7 @@ export default function Work() {
           className="max-w-3xl mb-16 md:mb-20"
         >
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6">Our Work.</h1>
-          <p className="text-lg md:text-xl text-gray-600">
+          <p className="text-lg md:text-xl text-white/45">
             We build authority that translates to measurable business outcomes. Here's how we've engineered dominance for category leaders.
           </p>
         </motion.div>
@@ -66,19 +66,19 @@ export default function Work() {
                 transition={{ delay: idx * 0.1 }}
                 className="group cursor-pointer block h-full"
               >
-                <div className="bg-gray-100 rounded-3xl aspect-[4/3] mb-6 overflow-hidden relative flex items-center justify-center p-6 md:p-8">
+                <div className="bg-white/6 rounded-3xl aspect-[4/3] mb-6 overflow-hidden relative flex items-center justify-center p-6 md:p-8">
                   <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/5 transition-colors z-10" />
                   <div className="text-center z-20">
                     <div className="text-5xl sm:text-6xl md:text-8xl font-black text-foreground mb-2 tracking-tighter">
                       {item.metric}
                     </div>
-                    <div className="text-sm sm:text-base md:text-lg font-medium text-gray-600 uppercase tracking-widest">
+                    <div className="text-sm sm:text-base md:text-lg font-medium text-white/45 uppercase tracking-widest">
                       {item.metricLabel}
                     </div>
                   </div>
                 </div>
                 <h3 className="text-2xl md:text-3xl font-bold mb-3 group-hover:text-accent transition-colors">{item.title}</h3>
-                <div className="inline-block px-4 py-1.5 bg-gray-100 text-sm font-medium rounded-full">
+                <div className="inline-block px-4 py-1.5 bg-white/6 text-sm font-medium rounded-full">
                   {item.category}
                 </div>
               </motion.div>

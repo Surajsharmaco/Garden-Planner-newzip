@@ -44,14 +44,14 @@ export default function Framework() {
             Our Methodology
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6">The Authority Framework.</h1>
-          <p className="text-lg md:text-xl text-gray-600">
+          <p className="text-lg md:text-xl text-white/45">
             A battle-tested, 4-step systematic approach to engineering category dominance and building a compounding personal brand.
           </p>
         </motion.div>
 
         <div className="relative">
           {/* Vertical line connecting steps */}
-          <div className="absolute left-[39px] md:left-1/2 top-0 bottom-0 w-0.5 bg-gray-200 -translate-x-1/2 hidden md:block"></div>
+          <div className="absolute left-[39px] md:left-1/2 top-0 bottom-0 w-0.5 bg-white/10 -translate-x-1/2 hidden md:block"></div>
 
           <div className="flex flex-col gap-12 md:gap-32">
             {steps.map((step, idx) => (
@@ -63,19 +63,19 @@ export default function Framework() {
                 className={`flex flex-col md:flex-row gap-6 md:gap-16 items-center relative ${idx % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}
               >
                 {/* Number circle in the middle */}
-                <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-white border-4 border-accent rounded-full items-center justify-center text-2xl font-black z-10">
+                <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-white/5 border-4 border-accent rounded-full items-center justify-center text-2xl font-black z-10">
                   {step.num}
                 </div>
 
                 <div className={`w-full md:w-1/2 ${idx % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
-                  <div className="text-5xl font-black text-gray-200 mb-4 md:hidden">{step.num}</div>
+                  <div className="text-5xl font-black text-white/20 mb-4 md:hidden">{step.num}</div>
                   <h3 className="text-2xl md:text-3xl font-bold mb-2">{step.title}</h3>
                   <p className="text-accent font-semibold text-base md:text-lg mb-4">{step.subtitle}</p>
                 </div>
                 
                 <div className="w-full md:w-1/2">
                   <TiltCard>
-                    <div className="bg-gray-50 p-6 md:p-8 rounded-3xl h-full">
+                    <div className="bg-white/3 p-6 md:p-8 rounded-3xl h-full">
                       <p className="text-gray-700 text-base md:text-lg leading-relaxed">{step.content}</p>
                     </div>
                   </TiltCard>

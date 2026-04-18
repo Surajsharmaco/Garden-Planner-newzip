@@ -71,7 +71,7 @@ export default function Resources() {
           className="max-w-3xl mb-16 md:mb-20"
         >
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6">Resource Library.</h1>
-          <p className="text-lg md:text-xl text-gray-600">
+          <p className="text-lg md:text-xl text-white/45">
             Open-sourced frameworks, templates, and guides from our internal agency playbook.
           </p>
         </motion.div>
@@ -83,13 +83,13 @@ export default function Resources() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
-              className="bg-white border border-gray-100 p-6 md:p-8 rounded-3xl shadow-sm hover:shadow-md transition-all flex flex-col"
+              className="bg-white/5 border border-white/8 p-6 md:p-8 rounded-3xl shadow-none hover:shadow-md transition-all flex flex-col"
             >
-              <div className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">
+              <div className="text-xs font-bold uppercase tracking-wider text-white/35 mb-4">
                 {item.type}
               </div>
               <h3 className="text-xl md:text-2xl font-bold mb-4">{item.title}</h3>
-              <p className="text-gray-600 text-base mb-8 flex-1">{item.desc}</p>
+              <p className="text-white/45 text-base mb-8 flex-1">{item.desc}</p>
               
               {downloaded[item.title] ? (
                 <Button variant="outline" className="w-full h-12 text-green-700 bg-green-50 border-green-200 cursor-default">
@@ -98,7 +98,7 @@ export default function Resources() {
               ) : (
                 <Button 
                   onClick={() => setSelectedResource(item.title)}
-                  className="w-full h-12 bg-foreground text-white hover:bg-accent hover:text-foreground transition-colors"
+                  className="w-full h-12 bg-[#111] text-white hover:bg-accent hover:text-foreground transition-colors"
                 >
                   <Download className="w-4 h-4 mr-2" /> Get Access
                 </Button>
@@ -112,7 +112,7 @@ export default function Resources() {
         <DialogContent className="sm:max-w-md p-6 md:p-8">
           <DialogHeader>
             <DialogTitle className="text-xl md:text-2xl mb-2">Get the {selectedResource}</DialogTitle>
-            <DialogDescription className="text-base text-gray-600">
+            <DialogDescription className="text-base text-white/45">
               Enter your email below and we'll send it straight to your inbox.
             </DialogDescription>
           </DialogHeader>
@@ -131,7 +131,7 @@ export default function Resources() {
             <Button type="submit" className="w-full h-12 text-base bg-accent text-foreground hover:bg-accent/90" disabled={isSubmitting}>
               {isSubmitting ? "Sending..." : "Send it to me"}
             </Button>
-            <p className="text-xs text-center text-gray-400 mt-4">
+            <p className="text-xs text-center text-white/35 mt-4">
               We respect your inbox. No spam, ever.
             </p>
           </form>

@@ -81,7 +81,7 @@ export default function AuthorityAudit() {
               className="text-center mb-16"
             >
               <h1 className="text-5xl md:text-6xl font-bold mb-6">Authority Audit.</h1>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-xl text-white/45 max-w-2xl mx-auto">
                 Discover your true market influence. Answer 8 questions to get your Authority Score and a breakdown of your current leverage.
               </p>
             </motion.div>
@@ -90,7 +90,7 @@ export default function AuthorityAudit() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-white border border-gray-100 shadow-lg rounded-3xl p-8 md:p-12"
+              className="bg-white/5 border border-white/8 shadow-lg rounded-3xl p-8 md:p-12"
             >
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(calculateScore)} className="space-y-8">
@@ -165,18 +165,18 @@ export default function AuthorityAudit() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white border border-gray-100 shadow-xl rounded-3xl p-8 md:p-16 text-center"
+            className="bg-white/5 border border-white/8 shadow-xl rounded-3xl p-8 md:p-16 text-center"
           >
             <h2 className="text-3xl font-bold mb-12">Your Authority Profile</h2>
             
-            <div className="relative w-64 h-64 mx-auto mb-12 flex items-center justify-center rounded-full border-[16px] border-gray-100 shadow-inner">
+            <div className="relative w-64 h-64 mx-auto mb-12 flex items-center justify-center rounded-full border-[16px] border-white/8 shadow-inner">
               <div 
                 className="absolute inset-[-16px] rounded-full border-[16px] border-accent border-l-transparent border-b-transparent -rotate-45"
                 style={{ transform: `rotate(${result.score * 3.6 - 135}deg)`, transition: "transform 1s ease-out" }}
               />
               <div className="text-center">
                 <span className="text-6xl font-black">{result.score}</span>
-                <span className="text-gray-400 block text-lg font-medium">/ 100</span>
+                <span className="text-white/35 block text-lg font-medium">/ 100</span>
               </div>
             </div>
 
@@ -203,9 +203,9 @@ export default function AuthorityAudit() {
               </div>
             </div>
 
-            <div className="bg-foreground text-white p-8 rounded-2xl">
+            <div className="bg-[#111] text-white p-8 rounded-2xl">
               <h3 className="text-2xl font-bold mb-4">Ready to level up?</h3>
-              <p className="text-gray-400 mb-8 max-w-lg mx-auto">Your score indicates you have the baseline expertise, but lack the distribution engine. Let's fix that.</p>
+              <p className="text-white/35 mb-8 max-w-lg mx-auto">Your score indicates you have the baseline expertise, but lack the distribution engine. Let's fix that.</p>
               <Link href="/contact">
                 <Button className="bg-accent text-foreground hover:bg-accent/90 h-12 px-8 text-lg">
                   Get Full Authority Strategy
@@ -213,7 +213,7 @@ export default function AuthorityAudit() {
               </Link>
             </div>
             
-            <button onClick={() => setResult(null)} className="mt-8 text-gray-500 hover:text-foreground font-medium underline underline-offset-4">
+            <button onClick={() => setResult(null)} className="mt-8 text-white/40 hover:text-foreground font-medium underline underline-offset-4">
               Retake Audit
             </button>
           </motion.div>
