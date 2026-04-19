@@ -42,7 +42,7 @@ export default function Insights() {
           className="max-w-3xl mb-20"
         >
           <h1 className="text-5xl md:text-7xl font-bold mb-6">Insights.</h1>
-          <p className="text-xl text-[#0B0B0B]/50">
+          <p className="text-xl text-white/45">
             Thoughts, frameworks, and strategies on building unignorable authority in a noisy world.
           </p>
         </motion.div>
@@ -56,16 +56,16 @@ export default function Insights() {
               transition={{ delay: idx * 0.1 }}
               className="group cursor-pointer flex flex-col h-full"
             >
-              <div className="bg-[#F7F7F5] aspect-[16/9] rounded-2xl mb-6 overflow-hidden">
+              <div className="bg-white/6 aspect-[16/9] rounded-2xl mb-6 overflow-hidden">
                 <div className="w-full h-full bg-white/10 transition-transform duration-700 group-hover:scale-105" />
               </div>
               <div className="flex items-center gap-4 mb-3">
-                <span className="text-[#0B0B0B] font-semibold text-sm uppercase tracking-wider">{post.category}</span>
-                <span className="text-[#0B0B0B]/40 text-sm">{post.date}</span>
-                <span className="text-[#0B0B0B]/40 text-sm">• {post.readTime}</span>
+                <span className="text-accent font-semibold text-sm uppercase tracking-wider">{post.category}</span>
+                <span className="text-white/35 text-sm">{post.date}</span>
+                <span className="text-white/35 text-sm">• {post.readTime}</span>
               </div>
-              <h2 className="text-2xl font-bold mb-3 group-hover:text-[#0B0B0B] transition-colors">{post.title}</h2>
-              <p className="text-[#0B0B0B]/50 line-clamp-2">{post.desc}</p>
+              <h2 className="text-2xl font-bold mb-3 group-hover:text-accent transition-colors">{post.title}</h2>
+              <p className="text-white/45 line-clamp-2">{post.desc}</p>
             </motion.div>
           ))}
         </div>

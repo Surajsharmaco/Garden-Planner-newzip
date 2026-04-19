@@ -41,7 +41,7 @@ export default function Services() {
           className="max-w-3xl mb-16 md:mb-20"
         >
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6">Our Services.</h1>
-          <p className="text-lg md:text-xl text-[#0B0B0B]/50">
+          <p className="text-lg md:text-xl text-white/45">
             We don't just create content. We build end-to-end authority systems designed to make you the undeniable category leader.
           </p>
         </motion.div>
@@ -53,18 +53,18 @@ export default function Services() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="bg-white border border-[#0B0B0B]/[0.08] p-6 md:p-8 rounded-3xl shadow-none hover:shadow-lg transition-shadow group flex flex-col h-full"
+                className="bg-white/5 border border-white/8 p-6 md:p-8 rounded-3xl shadow-none hover:shadow-lg transition-shadow group flex flex-col h-full"
               >
-                <div className="text-[#0B0B0B] text-lg font-bold mb-4">0{idx + 1}</div>
+                <div className="text-accent text-lg font-bold mb-4">0{idx + 1}</div>
                 <h2 className="text-2xl md:text-3xl font-bold mb-4">{service.title}</h2>
-                <p className="text-[#0B0B0B]/50 text-base md:text-lg mb-8 flex-grow">{service.description}</p>
-                <div className="bg-[#F7F7F5] rounded-2xl p-6 mt-auto">
-                  <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-[#0B0B0B]/45">What's included:</h4>
+                <p className="text-white/45 text-base md:text-lg mb-8 flex-grow">{service.description}</p>
+                <div className="bg-white/3 rounded-2xl p-6 mt-auto">
+                  <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-white/40">What's included:</h4>
                   <ul className="flex flex-col gap-3">
                     {service.features.map((feature, fIdx) => (
                       <li key={fIdx} className="flex items-center gap-3">
                         <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
-                        <span className="text-[#0B0B0B]/75 text-sm">{feature}</span>
+                        <span className="text-gray-700 text-sm">{feature}</span>
                       </li>
                     ))}
                   </ul>
@@ -78,14 +78,14 @@ export default function Services() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-16 md:mt-24 p-8 md:p-12 bg-[#F7F7F5] text-[#0B0B0B] rounded-3xl text-center"
+          className="mt-16 md:mt-24 p-8 md:p-12 bg-[#111] text-white rounded-3xl text-center"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to scale your influence?</h2>
-          <p className="text-lg md:text-xl text-[#0B0B0B]/40 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-white/35 mb-8 max-w-2xl mx-auto">
             Let's discuss how our systems can build your authority and drive inbound demand.
           </p>
           <Link href="/contact">
-            <Button size="lg" className="w-full sm:w-auto bg-accent text-[#0B0B0B] hover:bg-[#FFD84D]/90 h-14 px-8 text-lg">
+            <Button size="lg" className="w-full sm:w-auto bg-accent text-foreground hover:bg-accent/90 h-14 px-8 text-lg">
               Book a Strategy Call
             </Button>
           </Link>
