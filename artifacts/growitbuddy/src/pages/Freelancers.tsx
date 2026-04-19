@@ -58,11 +58,11 @@ export default function Freelancers() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12 md:mb-16"
         >
-          <div className="inline-block mb-6 px-4 py-1.5 bg-accent/20 text-foreground font-semibold text-sm rounded-full tracking-wide">
+          <div className="inline-block mb-6 px-4 py-1.5 bg-black/[0.05] text-foreground font-semibold text-sm rounded-full tracking-wide">
             Talent Network
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">Join the Roster.</h1>
-          <p className="text-lg md:text-xl text-white/45 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-black/45 max-w-2xl mx-auto">
             We are always looking for world-class editors, writers, and designers to partner with on premium client projects.
           </p>
         </motion.div>
@@ -71,7 +71,7 @@ export default function Freelancers() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white/5 border border-white/8 shadow-none rounded-3xl p-6 md:p-12"
+          className="bg-[#F7F7F7] border border-black/8 shadow-none rounded-3xl p-6 md:p-12"
         >
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

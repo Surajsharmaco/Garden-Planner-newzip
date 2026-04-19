@@ -43,15 +43,15 @@ const cases = [
 
 export default function Work() {
   return (
-    <div className="w-full pt-20 md:pt-24 pb-16 md:pb-24 lg:pb-32 px-5 md:px-8">
+    <div className="w-full pt-20 md:pt-24 pb-16 md:pb-24 lg:pb-32 px-5 md:px-8 bg-white">
       <div className="container mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="max-w-3xl mb-16 md:mb-20"
         >
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6">Our Work.</h1>
-          <p className="text-lg md:text-xl text-white/45">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 text-[#0B0B0B]">Our Work.</h1>
+          <p className="text-lg md:text-xl text-black/45">
             We build authority that translates to measurable business outcomes. Here's how we've engineered dominance for category leaders.
           </p>
         </motion.div>
@@ -66,19 +66,19 @@ export default function Work() {
                 transition={{ delay: idx * 0.1 }}
                 className="group cursor-pointer block h-full"
               >
-                <div className="bg-white/6 rounded-3xl aspect-[4/3] mb-6 overflow-hidden relative flex items-center justify-center p-6 md:p-8">
-                  <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/5 transition-colors z-10" />
+                <div className="bg-[#F5F5F5] rounded-3xl aspect-[4/3] mb-6 overflow-hidden relative flex items-center justify-center p-6 md:p-8 border border-black/6">
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/[0.03] transition-colors z-10" />
                   <div className="text-center z-20">
-                    <div className="text-5xl sm:text-6xl md:text-8xl font-black text-foreground mb-2 tracking-tighter">
+                    <div className="text-5xl sm:text-6xl md:text-8xl font-black text-[#0B0B0B] mb-2 tracking-tighter">
                       {item.metric}
                     </div>
-                    <div className="text-sm sm:text-base md:text-lg font-medium text-white/45 uppercase tracking-widest">
+                    <div className="text-sm sm:text-base md:text-lg font-medium text-black/40 uppercase tracking-widest">
                       {item.metricLabel}
                     </div>
                   </div>
                 </div>
-                <h3 className="text-2xl md:text-3xl font-bold mb-3 group-hover:text-accent transition-colors">{item.title}</h3>
-                <div className="inline-block px-4 py-1.5 bg-white/6 text-sm font-medium rounded-full">
+                <h3 className="text-2xl md:text-3xl font-bold mb-3 text-[#0B0B0B] group-hover:text-black/70 transition-colors">{item.title}</h3>
+                <div className="inline-block px-4 py-1.5 bg-black/[0.05] text-sm font-medium rounded-full text-black/55">
                   {item.category}
                 </div>
               </motion.div>
