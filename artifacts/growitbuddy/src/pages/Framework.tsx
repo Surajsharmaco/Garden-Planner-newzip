@@ -40,11 +40,11 @@ export default function Framework() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center max-w-4xl mx-auto mb-16 md:mb-24"
         >
-          <div className="inline-block mb-6 px-4 py-1.5 bg-accent/20 text-foreground font-semibold text-sm rounded-full tracking-wide">
+          <div className="inline-block mb-6 px-4 py-1.5 bg-accent/20 text-[#0B0B0B] font-semibold text-sm rounded-full tracking-wide">
             Our Methodology
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6">The Authority Framework.</h1>
-          <p className="text-lg md:text-xl text-white/45">
+          <p className="text-lg md:text-xl text-[#0B0B0B]/50">
             A battle-tested, 4-step systematic approach to engineering category dominance and building a compounding personal brand.
           </p>
         </motion.div>
@@ -63,20 +63,20 @@ export default function Framework() {
                 className={`flex flex-col md:flex-row gap-6 md:gap-16 items-center relative ${idx % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}
               >
                 {/* Number circle in the middle */}
-                <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-white/5 border-4 border-accent rounded-full items-center justify-center text-2xl font-black z-10">
+                <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-white border-4 border-accent rounded-full items-center justify-center text-2xl font-black z-10">
                   {step.num}
                 </div>
 
                 <div className={`w-full md:w-1/2 ${idx % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
-                  <div className="text-5xl font-black text-white/20 mb-4 md:hidden">{step.num}</div>
+                  <div className="text-5xl font-black text-[#0B0B0B]/25 mb-4 md:hidden">{step.num}</div>
                   <h3 className="text-2xl md:text-3xl font-bold mb-2">{step.title}</h3>
-                  <p className="text-accent font-semibold text-base md:text-lg mb-4">{step.subtitle}</p>
+                  <p className="text-[#0B0B0B] font-semibold text-base md:text-lg mb-4">{step.subtitle}</p>
                 </div>
                 
                 <div className="w-full md:w-1/2">
                   <TiltCard>
-                    <div className="bg-white/3 p-6 md:p-8 rounded-3xl h-full">
-                      <p className="text-gray-700 text-base md:text-lg leading-relaxed">{step.content}</p>
+                    <div className="bg-[#F7F7F5] p-6 md:p-8 rounded-3xl h-full">
+                      <p className="text-[#0B0B0B]/75 text-base md:text-lg leading-relaxed">{step.content}</p>
                     </div>
                   </TiltCard>
                 </div>
@@ -87,7 +87,7 @@ export default function Framework() {
 
         <div className="mt-20 md:mt-32 text-center">
           <Link href="/contact">
-            <Button size="lg" className="w-full sm:w-auto h-16 px-10 text-xl bg-foreground text-background hover:bg-foreground/90 group">
+            <Button size="lg" className="w-full sm:w-auto h-16 px-10 text-xl bg-[#0B0B0B] text-[#F7F7F5] hover:bg-[#0B0B0B]/90 group">
               Implement The Framework
               <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>

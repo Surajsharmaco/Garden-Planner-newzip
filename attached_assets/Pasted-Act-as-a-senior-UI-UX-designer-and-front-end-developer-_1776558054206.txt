@@ -1,0 +1,176 @@
+Act as a senior UI/UX designer and front-end developer.
+
+I already have a website built, but I want to transform it into a premium, high-authority agency website using a LIGHT theme instead of dark.
+
+Brand: GrowitBuddy  
+Positioning: Authority + Content + Distribution Systems  
+Target: Founders, creators, high-ticket clients  
+
+GOAL:
+Make the website look like a global, category-leading strategy agency — clean, minimal, and memorable.
+
+--------------------------------------------------
+
+🎨 COLOR SYSTEM (CRITICAL)
+
+- Use OFF-WHITE background (NOT pure white)
+  Example: #F7F7F5 or #FAFAF8
+
+- Primary text: deep black (#0B0B0B)
+- Accent color: ONE consistent yellow (#FFD84D or similar)
+
+Rules:
+- Yellow only for:
+  • key words (Authority, Growth, Systems)
+  • buttons (CTA)
+  • highlights
+
+- No random color usage
+- Keep palette minimal
+
+--------------------------------------------------
+
+🧠 DESIGN FEEL
+
+The design should feel:
+
+- minimal  
+- structured  
+- intelligent  
+- premium  
+- system-driven  
+
+NOT:
+
+- flashy  
+- cluttered  
+- template-like  
+
+--------------------------------------------------
+
+🔤 TYPOGRAPHY
+
+- Use modern font (Inter / Satoshi / Geist)
+- Strong hierarchy:
+
+H1:
+- Large, bold, tight spacing
+
+H2:
+- Clean and structured
+
+Body:
+- minimal and readable
+
+- Reduce text length
+- Make copy sharp and direct
+
+--------------------------------------------------
+
+🧩 VISUAL IDENTITY (MAKE IT UNIQUE)
+
+Add subtle but consistent elements:
+
+- very light grid pattern in background
+- soft radial highlights (very subtle)
+- clean underline highlights in yellow
+- structured layout (not decorative)
+
+REMOVE:
+- random dots
+- unnecessary gradients
+- noisy backgrounds
+
+Goal:
+Make it feel engineered, not designed
+
+--------------------------------------------------
+
+📐 LAYOUT & SPACING
+
+- Increase whitespace
+- Clean section separation
+- Grid-based alignment
+
+- Every section should breathe
+
+--------------------------------------------------
+
+🔥 HERO SECTION
+
+Headline:
+“Build Authority That Compounds.”
+
+- Make it dominant
+- Highlight ONLY one word in yellow
+
+Subtext:
+Short and sharp
+
+CTA:
+Primary → yellow button  
+Secondary → outline/minimal
+
+Add:
+- subtle background pattern
+- center alignment
+
+--------------------------------------------------
+
+🧱 COMPONENTS
+
+Buttons:
+- clean rounded
+- yellow primary CTA
+- subtle hover effect
+
+Cards:
+- soft shadow
+- slight hover lift
+- minimal border
+
+Sections:
+- consistent spacing
+- no clutter
+
+--------------------------------------------------
+
+✨ MICRO INTERACTIONS
+
+- smooth hover transitions
+- light animations (fade/slide)
+- no flashy effects
+
+--------------------------------------------------
+
+🚫 REMOVE GENERIC FEEL
+
+Avoid:
+
+- SaaS-style gradients
+- heavy shadows
+- over-designed UI
+
+Everything should feel:
+
+👉 intentional  
+👉 minimal  
+👉 premium  
+
+--------------------------------------------------
+
+⚡ PERFORMANCE
+
+- keep it fast
+- optimized animations
+- responsive
+
+--------------------------------------------------
+
+OUTPUT:
+
+Refine the entire website UI into a light-theme, premium, high-authority design.
+
+Do NOT redesign structure — improve design quality, clarity, and branding.
+
+--------------------------------------------------

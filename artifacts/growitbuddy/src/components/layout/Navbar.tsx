@@ -36,18 +36,18 @@ export function Navbar() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-1.5 z-[60]">
-          <span className="text-lg font-black tracking-tight text-white">
-            Growit<span className="text-accent">Buddy</span>
+          <span className="text-lg font-black tracking-tight text-[#0B0B0B]">
+            Growit<span className="text-[#FFD84D]">Buddy</span>
           </span>
-          <span className="w-1.5 h-1.5 rounded-full bg-accent mt-0.5" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#FFD84D] mt-0.5" />
         </Link>
 
         {/* Desktop floating pill nav */}
         <nav
-          className={`hidden lg:flex items-center gap-1 px-4 py-2 rounded-full border border-white/10 transition-all duration-300 ${
+          className={`hidden lg:flex items-center gap-1 px-4 py-2 rounded-full border transition-all duration-300 ${
             scrolled
-              ? "bg-white/6 backdrop-blur-xl shadow-lg shadow-black/30"
-              : "bg-white/4 backdrop-blur-md"
+              ? "bg-white/90 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] border-[#0B0B0B]/10"
+              : "bg-white/70 backdrop-blur-md border-[#0B0B0B]/8"
           }`}
         >
           {NAV_SHORT.map((link) => (
@@ -56,22 +56,22 @@ export function Navbar() {
               href={link.href}
               className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
                 location === link.href
-                  ? "bg-accent text-black"
-                  : "text-white/70 hover:text-white hover:bg-white/8"
+                  ? "bg-[#FFD84D] text-[#0B0B0B]"
+                  : "text-[#0B0B0B]/60 hover:text-[#0B0B0B] hover:bg-[#0B0B0B]/[0.05]"
               }`}
             >
               {link.label}
             </Link>
           ))}
-          <span className="w-px h-4 bg-white/15 mx-1" />
+          <span className="w-px h-4 bg-[#0B0B0B]/12 mx-1" />
           {NAV_LINKS.slice(5).map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
                 location === link.href
-                  ? "bg-accent text-black"
-                  : "text-white/70 hover:text-white hover:bg-white/8"
+                  ? "bg-[#FFD84D] text-[#0B0B0B]"
+                  : "text-[#0B0B0B]/60 hover:text-[#0B0B0B] hover:bg-[#0B0B0B]/[0.05]"
               }`}
             >
               {link.label}
@@ -82,13 +82,13 @@ export function Navbar() {
         {/* Desktop right CTA */}
         <div className="hidden lg:flex items-center gap-2 z-[60]">
           <Link href="/contact">
-            <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/15 text-sm font-medium text-white/80 hover:text-white hover:border-white/30 hover:bg-white/6 transition-all duration-200 backdrop-blur-sm">
+            <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-[#0B0B0B]/12 text-sm font-medium text-[#0B0B0B]/65 hover:text-[#0B0B0B] hover:border-[#0B0B0B]/22 hover:bg-[#0B0B0B]/[0.04] transition-all duration-200 backdrop-blur-sm bg-white/60">
               Get In Touch
               <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
           </Link>
           <Link href="/contact">
-            <button className="flex items-center gap-2 px-5 py-2 rounded-full bg-accent text-black text-sm font-bold hover:bg-accent/85 transition-all duration-200 shadow-lg shadow-accent/20">
+            <button className="flex items-center gap-2 px-5 py-2 rounded-full bg-[#FFD84D] text-[#0B0B0B] text-sm font-bold hover:shadow-[0_0_20px_rgba(255,216,77,0.4)] hover:scale-[1.02] transition-all duration-200">
               Book a call
               <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
@@ -97,7 +97,7 @@ export function Navbar() {
 
         {/* Mobile toggle */}
         <button
-          className="lg:hidden z-[60] text-white p-2 rounded-full border border-white/15 backdrop-blur-sm"
+          className="lg:hidden z-[60] text-[#0B0B0B] p-2 rounded-full border border-[#0B0B0B]/12 backdrop-blur-sm bg-white/70"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle menu"
           data-testid="button-mobile-menu"
@@ -114,24 +114,24 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-40 bg-[#0D0D0D]/97 backdrop-blur-xl flex flex-col pt-24 px-8 pb-10"
+            className="fixed inset-0 z-40 bg-[#F7F7F5]/97 backdrop-blur-xl flex flex-col pt-24 px-8 pb-10"
           >
             <nav className="flex flex-col gap-5 flex-1">
-              <Link href="/" className={`text-3xl font-black ${location === "/" ? "text-accent" : "text-white/80"}`}>
+              <Link href="/" className={`text-3xl font-black ${location === "/" ? "text-[#FFD84D]" : "text-[#0B0B0B]/75"}`}>
                 Home
               </Link>
               {NAV_LINKS.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`text-3xl font-black ${location === link.href ? "text-accent" : "text-white/80 hover:text-white"}`}
+                  className={`text-3xl font-black ${location === link.href ? "text-[#FFD84D]" : "text-[#0B0B0B]/75 hover:text-[#0B0B0B]"}`}
                 >
                   {link.label}
                 </Link>
               ))}
             </nav>
             <Link href="/contact">
-              <button className="w-full py-4 rounded-2xl bg-accent text-black text-lg font-black mt-6">
+              <button className="w-full py-4 rounded-2xl bg-[#FFD84D] text-[#0B0B0B] text-lg font-black mt-6">
                 Book a call
               </button>
             </Link>
