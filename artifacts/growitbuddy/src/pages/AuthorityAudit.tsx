@@ -62,7 +62,7 @@ export default function AuthorityAudit() {
   };
 
   return (
-    <div className="w-full pt-10 pb-24 bg-white">
+    <div className="w-full pt-10 pb-24 bg-[#F8F5EF]">
       <div className="container mx-auto px-4 md:px-8 max-w-4xl">
         {!result ? (
           <>
@@ -71,8 +71,8 @@ export default function AuthorityAudit() {
               animate={{ opacity: 1, y: 0 }}
               className="text-center mb-16"
             >
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 text-[#0B0B0B]">Authority Audit.</h1>
-              <p className="text-xl text-black/45 max-w-2xl mx-auto">
+              <h1 className="text-5xl md:text-6xl font-bold mb-6 text-[#0E0D0B]">Authority Audit.</h1>
+              <p className="text-xl text-[#6B6760] max-w-2xl mx-auto">
                 Discover your true market influence. Answer 8 questions to get your Authority Score and a breakdown of your current leverage.
               </p>
             </motion.div>
@@ -81,7 +81,7 @@ export default function AuthorityAudit() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-[#F7F7F7] border border-black/8 shadow-sm rounded-3xl p-8 md:p-12"
+              className="bg-[#EDE9DF] border border-[#0E0D0B]/8 shadow-sm rounded-3xl p-8 md:p-12"
             >
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(calculateScore)} className="space-y-8">
@@ -145,7 +145,7 @@ export default function AuthorityAudit() {
                     )} />
                   </div>
 
-                  <Button type="submit" size="lg" className="w-full h-14 text-lg bg-[#0B0B0B] text-white" disabled={isCalculating}>
+                  <Button type="submit" size="lg" className="w-full h-14 text-lg bg-[#0E0D0B] text-white" disabled={isCalculating}>
                     {isCalculating ? "Calculating Score..." : "Calculate My Authority Score"}
                   </Button>
                 </form>
@@ -156,18 +156,18 @@ export default function AuthorityAudit() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-[#F7F7F7] border border-black/8 shadow-sm rounded-3xl p-8 md:p-16 text-center"
+            className="bg-[#EDE9DF] border border-[#0E0D0B]/8 shadow-sm rounded-3xl p-8 md:p-16 text-center"
           >
-            <h2 className="text-3xl font-bold mb-12 text-[#0B0B0B]">Your Authority Profile</h2>
+            <h2 className="text-3xl font-bold mb-12 text-[#0E0D0B]">Your Authority Profile</h2>
 
-            <div className="relative w-64 h-64 mx-auto mb-12 flex items-center justify-center rounded-full border-[16px] border-black/8 shadow-inner">
+            <div className="relative w-64 h-64 mx-auto mb-12 flex items-center justify-center rounded-full border-[16px] border-[#0E0D0B]/8 shadow-inner">
               <div
                 className="absolute inset-[-16px] rounded-full border-[16px] border-[#0B0B0B] border-l-transparent border-b-transparent -rotate-45"
                 style={{ transform: `rotate(${result.score * 3.6 - 135}deg)`, transition: "transform 1s ease-out" }}
               />
               <div className="text-center">
-                <span className="text-6xl font-black text-[#0B0B0B]">{result.score}</span>
-                <span className="text-black/35 block text-lg font-medium">/ 100</span>
+                <span className="text-6xl font-black text-[#0E0D0B]">{result.score}</span>
+                <span className="text-[#8A8680] block text-lg font-medium">/ 100</span>
               </div>
             </div>
 
@@ -194,18 +194,18 @@ export default function AuthorityAudit() {
               </div>
             </div>
 
-            <div className="bg-[#0B0B0B] text-white p-8 rounded-2xl">
+            <div className="bg-[#0E0D0B] text-white p-8 rounded-2xl">
               <h3 className="text-2xl font-bold mb-4">Ready to level up?</h3>
               <p className="text-white/40 mb-8 max-w-lg mx-auto">Your score indicates you have the baseline expertise, but lack the distribution engine. Let's fix that.</p>
               <Link href="/contact">
-                <button className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-[#F5E663] text-black font-bold text-lg
+                <button className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-[#0E0D0B] text-black font-bold text-lg
                                    hover:shadow-[0_0_24px_rgba(245,230,99,0.4)] transition-all duration-300">
                   Get Full Authority Strategy
                 </button>
               </Link>
             </div>
 
-            <button onClick={() => setResult(null)} className="mt-8 text-black/40 hover:text-black font-medium underline underline-offset-4">
+            <button onClick={() => setResult(null)} className="mt-8 text-[#706C64] hover:text-black font-medium underline underline-offset-4">
               Retake Audit
             </button>
           </motion.div>

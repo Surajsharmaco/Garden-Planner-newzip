@@ -3,14 +3,22 @@ import { useEffect } from "react";
 import { ArrowRight, ArrowUpRight, TrendingUp, Users, Zap, BarChart3 } from "lucide-react";
 import { Link } from "wouter";
 
-/* ─── animation ─────────────────────────────────────────── */
+/* ─── Palette ──────────────────────────────────────────────
+   bg:      #F8F5EF  (warm parchment)
+   surface: #EDE9DF  (deeper cream)
+   dark:    #0E0D0B  (warm near-black)
+   body:    #6B6760  (warm readable charcoal)
+   muted:   #9C9890  (warm light grey)
+   amber:   #B07D2A  (premium amber gold — only on "Authority" text)
+   CTAs:    #0E0D0B bg + #F8F5EF text (elegant black button)
+──────────────────────────────────────────────────────────── */
+
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } }
 };
 const stagger = { visible: { transition: { staggerChildren: 0.1 } } };
 
-/* ─── data ──────────────────────────────────────────────── */
 const SERVICES = [
   { icon: <Zap className="w-4 h-4" />, title: "Authority Strategy", desc: "Positioning, narrative and long-term influence planning." },
   { icon: <BarChart3 className="w-4 h-4" />, title: "Content Production", desc: "Scalable creation systems for consistent authority building." },
@@ -32,7 +40,6 @@ const STATS = [
   { value: "6+", label: "Years building systems" },
 ];
 
-/* ─── Orbital rings ─────────────────────────────────────── */
 function OrbitalRings() {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -55,113 +62,78 @@ function OrbitalRings() {
       style={{ rotateX: rX, rotateY: rY, transformStyle: "preserve-3d" }}
       className="absolute inset-0 flex items-center justify-center pointer-events-none"
     >
-      {/* Outermost ring */}
       <motion.div
         animate={{ rotate: 360 }}
         transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
         className="absolute rounded-full"
-        style={{
-          width: "min(78vw, 78vh)",
-          height: "min(78vw, 78vh)",
-          border: "1px solid rgba(0,0,0,0.07)"
-        }}
+        style={{ width: "min(78vw,78vh)", height: "min(78vw,78vh)", border: "1px solid rgba(14,13,11,0.09)" }}
       >
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-black/20" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[#B07D2A]/40" />
       </motion.div>
-
-      {/* Mid ring */}
       <motion.div
         animate={{ rotate: -360 }}
         transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
         className="absolute rounded-full"
-        style={{
-          width: "min(56vw, 56vh)",
-          height: "min(56vw, 56vh)",
-          border: "1px solid rgba(0,0,0,0.05)"
-        }}
+        style={{ width: "min(56vw,56vh)", height: "min(56vw,56vh)", border: "1px solid rgba(14,13,11,0.06)" }}
       >
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-1 h-1 rounded-full bg-black/15" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-1 h-1 rounded-full bg-[#0E0D0B]/20" />
       </motion.div>
-
-      {/* Inner ring — dashed */}
       <motion.div
         animate={{ rotate: 360 }}
         transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
         className="absolute rounded-full"
-        style={{
-          width: "min(36vw, 36vh)",
-          height: "min(36vw, 36vh)",
-          border: "1px dashed rgba(0,0,0,0.06)"
-        }}
+        style={{ width: "min(36vw,36vh)", height: "min(36vw,36vh)", border: "1px dashed rgba(14,13,11,0.06)" }}
       />
     </motion.div>
   );
 }
 
-/* ─── Page ──────────────────────────────────────────────── */
 export default function Home() {
   return (
-    <div className="flex flex-col w-full bg-white">
+    <div className="flex flex-col w-full bg-[#F8F5EF]">
 
-      {/* ══════════════════════════════════════════════════════
+      {/* ══════════════════════════════════
           HERO
-      ══════════════════════════════════════════════════════ */}
+      ══════════════════════════════════ */}
       <section className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden px-6">
-
-        {/* Subtle light gradient behind headline */}
         <div className="absolute pointer-events-none" style={{
           top: "50%", left: "50%",
           transform: "translate(-50%, -56%)",
-          width: "clamp(400px, 70vw, 800px)",
-          height: "clamp(400px, 70vw, 800px)",
-          background: "radial-gradient(ellipse at center, rgba(0,0,0,0.025) 0%, rgba(0,0,0,0.008) 45%, transparent 70%)",
+          width: "clamp(400px, 70vw, 800px)", height: "clamp(400px, 70vw, 800px)",
+          background: "radial-gradient(ellipse at center, rgba(176,125,42,0.07) 0%, rgba(176,125,42,0.02) 45%, transparent 70%)",
           borderRadius: "50%",
         }} />
 
         <OrbitalRings />
 
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={stagger}
-          className="relative z-10 flex flex-col items-center max-w-5xl"
-        >
-          <motion.p
-            variants={fadeUp}
-            className="text-black/30 text-xs font-semibold tracking-[0.22em] uppercase mb-10"
-          >
+        <motion.div initial="hidden" animate="visible" variants={stagger} className="relative z-10 flex flex-col items-center max-w-5xl">
+          <motion.p variants={fadeUp} className="text-[#9C9890] text-xs font-semibold tracking-[0.22em] uppercase mb-10">
             Global Authority Agency
           </motion.p>
 
-          {/* H1 — ONLY "Authority" in yellow */}
           <motion.h1
             variants={fadeUp}
-            className="text-[2.75rem] leading-[1.05] sm:text-[3.5rem] md:text-[4.5rem] lg:text-[5.5rem] xl:text-[6.5rem] font-black tracking-[-0.03em] mb-7"
+            className="text-[2.75rem] leading-[1.05] sm:text-[3.5rem] md:text-[4.5rem] lg:text-[5.5rem] xl:text-[6.5rem] font-black tracking-[-0.03em] mb-7 text-[#0E0D0B]"
           >
-            <span className="text-[#0B0B0B]">Build </span>
-            <span className="text-[#F5E663]">Authority</span>
-            <span className="text-[#0B0B0B]"> That Compounds.</span>
+            Build{" "}
+            <span className="text-[#B07D2A]">Authority</span>
+            {" "}That Compounds.
           </motion.h1>
 
-          <motion.p
-            variants={fadeUp}
-            className="text-black/45 text-base sm:text-lg leading-[1.75] max-w-[42ch] mb-12"
-          >
+          <motion.p variants={fadeUp} className="text-[#6B6760] text-base sm:text-lg leading-[1.8] max-w-[44ch] mb-12">
             We engineer content systems that turn your expertise into category
             dominance — compounding trust, reach, and inbound demand.
           </motion.p>
 
-          {/* CTA pill pair */}
-          <motion.div variants={fadeUp} className="inline-flex items-center">
+          <motion.div variants={fadeUp} className="inline-flex items-center gap-2">
             <Link href="/contact">
               <button
                 data-testid="button-book-call-hero"
-                className="flex items-center gap-3 pl-6 pr-2 py-2.5 rounded-full bg-[#F5E663] text-black font-bold text-sm sm:text-base
-                           transition-all duration-300
-                           hover:shadow-[0_0_28px_rgba(245,230,99,0.5)] hover:scale-[1.02]"
+                className="flex items-center gap-3 pl-6 pr-2 py-2.5 rounded-full bg-[#0E0D0B] text-[#F8F5EF] font-bold text-sm sm:text-base
+                           transition-all duration-300 hover:shadow-[0_8px_30px_rgba(14,13,11,0.25)] hover:scale-[1.02]"
               >
                 Book a strategy call
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-black/10">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#F8F5EF]/12">
                   <ArrowRight className="w-4 h-4" />
                 </span>
               </button>
@@ -169,38 +141,33 @@ export default function Home() {
             <Link href="/work">
               <button
                 data-testid="button-our-work-hero"
-                className="-ml-3 flex items-center gap-3 pl-6 pr-2 py-2.5 rounded-full border border-black/10 bg-black/[0.03] backdrop-blur-sm
-                           text-black/55 font-semibold text-sm sm:text-base
-                           transition-all duration-300
-                           hover:text-black hover:border-black/18 hover:bg-black/[0.06]"
+                className="flex items-center gap-3 pl-6 pr-2 py-2.5 rounded-full border border-[#0E0D0B]/15 bg-[#0E0D0B]/4
+                           text-[#6B6760] font-semibold text-sm sm:text-base
+                           transition-all duration-300 hover:text-[#0E0D0B] hover:border-[#0E0D0B]/22 hover:bg-[#0E0D0B]/8"
               >
                 Explore our work
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-black/[0.06]">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#0E0D0B]/6">
                   <ArrowUpRight className="w-4 h-4" />
                 </span>
               </button>
             </Link>
           </motion.div>
 
-          {/* Scroll indicator */}
-          <motion.div
-            variants={fadeUp}
-            className="mt-20 flex flex-col items-center gap-2.5"
-          >
-            <span className="text-[10px] text-black/20 tracking-[0.25em] uppercase">Scroll</span>
+          <motion.div variants={fadeUp} className="mt-20 flex flex-col items-center gap-2.5">
+            <span className="text-[10px] text-[#ACA8A0] tracking-[0.25em] uppercase">Scroll</span>
             <motion.div
               animate={{ y: [0, 7, 0] }}
               transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-              className="w-px h-9 bg-gradient-to-b from-black/15 to-transparent"
+              className="w-px h-9 bg-gradient-to-b from-[#0E0D0B]/20 to-transparent"
             />
           </motion.div>
         </motion.div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════
+      {/* ══════════════════════════════════
           STATS STRIP
-      ══════════════════════════════════════════════════════ */}
-      <section className="border-t border-black/[0.06] py-14 px-6 md:px-16">
+      ══════════════════════════════════ */}
+      <section className="border-t border-[#0E0D0B]/8 py-14 px-6 md:px-16 bg-[#EDE9DF]">
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
           {STATS.map((s, i) => (
             <motion.div
@@ -211,43 +178,37 @@ export default function Home() {
               transition={{ delay: i * 0.07, duration: 0.5 }}
               className="flex flex-col gap-1"
             >
-              <span className="text-3xl sm:text-4xl font-black text-[#0B0B0B] tracking-[-0.03em]">{s.value}</span>
-              <span className="text-xs text-black/35 leading-relaxed tracking-wide">{s.label}</span>
+              <span className="text-3xl sm:text-4xl font-black text-[#0E0D0B] tracking-[-0.03em]">{s.value}</span>
+              <span className="text-xs text-[#9C9890] leading-relaxed tracking-wide">{s.label}</span>
             </motion.div>
           ))}
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════
+      {/* ══════════════════════════════════
           AUTHORITY STATEMENT
-      ══════════════════════════════════════════════════════ */}
-      <section className="py-28 md:py-40 px-6 md:px-16 relative overflow-hidden bg-[#F7F7F7]">
-        <div className="max-w-4xl mx-auto text-center relative z-10">
+      ══════════════════════════════════ */}
+      <section className="py-28 md:py-40 px-6 md:px-16 bg-[#F8F5EF]">
+        <div className="max-w-4xl mx-auto text-center">
           <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-black/25 text-[10px] font-semibold tracking-[0.25em] uppercase mb-8"
+            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
+            className="text-[#ACA8A0] text-[10px] font-semibold tracking-[0.25em] uppercase mb-8"
           >
             The real problem
           </motion.p>
           <motion.h2
-            initial={{ opacity: 0, y: 22 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-black tracking-[-0.03em] leading-[1.12] mb-8 text-[#0B0B0B]"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-black tracking-[-0.03em] leading-[1.12] mb-8 text-[#0E0D0B]"
           >
-            Most content is optimized for views.
+            Most content is optimised for views.
             <br />
-            We optimize for <span className="italic text-[#0B0B0B]">authority</span>.
+            We optimise for <span className="italic text-[#B07D2A]">authority</span>.
           </motion.h2>
           <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             transition={{ delay: 0.12, duration: 0.6 }}
-            className="text-black/45 text-base md:text-lg leading-[1.8] max-w-[52ch] mx-auto"
+            className="text-[#6B6760] text-base md:text-lg leading-[1.85] max-w-[52ch] mx-auto"
           >
             Views don't close deals — trust does. We build content systems that compound
             over time, making you the undeniable choice before any conversation begins.
@@ -255,20 +216,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════
+      {/* ══════════════════════════════════
           CASE STUDIES
-      ══════════════════════════════════════════════════════ */}
-      <section className="py-24 md:py-32 px-6 md:px-16 bg-white">
+      ══════════════════════════════════ */}
+      <section className="py-24 md:py-32 px-6 md:px-16 bg-[#EDE9DF] border-t border-[#0E0D0B]/6">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-16">
             <div>
-              <p className="text-black/25 text-[10px] font-semibold tracking-[0.25em] uppercase mb-4">Results</p>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-[-0.03em] text-[#0B0B0B]">Proof of Work</h2>
+              <p className="text-[#ACA8A0] text-[10px] font-semibold tracking-[0.25em] uppercase mb-4">Results</p>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-[-0.03em] text-[#0E0D0B]">Proof of Work</h2>
             </div>
             <Link href="/work">
-              <button className="shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-full border border-black/10
-                                 text-black/40 text-sm font-medium
-                                 transition-all duration-300 hover:text-black hover:border-black/20 hover:bg-black/[0.03]">
+              <button className="shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#0E0D0B]/12
+                                 text-[#6B6760] text-sm font-medium
+                                 transition-all duration-300 hover:text-[#0E0D0B] hover:border-[#0E0D0B]/22 hover:bg-[#0E0D0B]/4">
                 All case studies <ArrowUpRight className="w-3.5 h-3.5" />
               </button>
             </Link>
@@ -283,32 +244,24 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.07, duration: 0.55 }}
                 whileHover={{ y: -4 }}
-                className="group relative border border-black/[0.07] rounded-2xl p-8 bg-[#F9F9F9]
+                className="group relative border border-[#0E0D0B]/8 rounded-2xl p-8 bg-[#F8F5EF]
                            cursor-pointer overflow-hidden
-                           transition-[border-color,background,box-shadow] duration-300
-                           hover:border-black/12 hover:bg-[#F5F5F5]
-                           hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)]"
+                           transition-all duration-300
+                           hover:border-[#0E0D0B]/14 hover:shadow-[0_12px_40px_rgba(14,13,11,0.10)]"
               >
-                {/* Bar chart visual */}
                 <div className="flex gap-1 items-end h-12 mb-8">
                   {[38, 62, 50, 78, 66, 88, 72, 95].map((h, j) => (
-                    <div
-                      key={j}
-                      className="flex-1 bg-black/[0.07] rounded-t transition-colors duration-500 group-hover:bg-black/15"
-                      style={{ height: `${h}%` }}
-                    />
+                    <div key={j} className="flex-1 bg-[#0E0D0B]/8 rounded-t group-hover:bg-[#B07D2A]/25 transition-colors duration-500" style={{ height: `${h}%` }} />
                   ))}
                 </div>
 
                 <div className="flex items-center justify-between mb-5">
-                  <span className="text-black/30 text-xs font-medium tracking-wide">{cs.tag}</span>
-                  <span className="text-[#0B0B0B] text-[11px] font-bold bg-black/8 px-3 py-1 rounded-full">{cs.metric}</span>
+                  <span className="text-[#9C9890] text-xs font-medium tracking-wide">{cs.tag}</span>
+                  <span className="text-[#0E0D0B] text-[11px] font-bold bg-[#0E0D0B]/8 px-3 py-1 rounded-full">{cs.metric}</span>
                 </div>
-                <h3 className="text-[#0B0B0B] text-lg font-bold mb-2 tracking-[-0.01em]">
-                  {cs.title}
-                </h3>
-                <p className="text-black/40 text-sm leading-[1.7]">{cs.desc}</p>
-                <div className="flex items-center gap-1.5 mt-6 text-black/28 group-hover:text-black text-xs font-semibold tracking-wide transition-colors duration-300">
+                <h3 className="text-[#0E0D0B] text-lg font-bold mb-2 tracking-[-0.01em]">{cs.title}</h3>
+                <p className="text-[#6B6760] text-sm leading-[1.75]">{cs.desc}</p>
+                <div className="flex items-center gap-1.5 mt-6 text-[#9C9890] group-hover:text-[#0E0D0B] text-xs font-semibold tracking-wide transition-colors duration-300">
                   Read case study
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" />
                 </div>
@@ -318,24 +271,23 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════
+      {/* ══════════════════════════════════
           SERVICES
-      ══════════════════════════════════════════════════════ */}
-      <section className="py-24 md:py-32 px-6 md:px-16 border-t border-black/[0.06] bg-[#F7F7F7]">
+      ══════════════════════════════════ */}
+      <section className="py-24 md:py-32 px-6 md:px-16 bg-[#F8F5EF] border-t border-[#0E0D0B]/6">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-16 items-start">
             <div>
-              <p className="text-black/25 text-[10px] font-semibold tracking-[0.25em] uppercase mb-6">What we do</p>
-              <h2 className="text-3xl sm:text-4xl md:text-[2.75rem] font-black tracking-[-0.03em] text-[#0B0B0B] leading-[1.12] mb-6">
+              <p className="text-[#ACA8A0] text-[10px] font-semibold tracking-[0.25em] uppercase mb-6">What we do</p>
+              <h2 className="text-3xl sm:text-4xl md:text-[2.75rem] font-black tracking-[-0.03em] text-[#0E0D0B] leading-[1.12] mb-6">
                 Four ways we build your authority
               </h2>
-              <p className="text-black/40 text-base leading-[1.8] mb-10 max-w-[40ch]">
+              <p className="text-[#6B6760] text-base leading-[1.85] mb-10 max-w-[40ch]">
                 Each service is a module in a larger system. Combine them or let us architect the whole engine.
               </p>
               <Link href="/services">
-                <button className="flex items-center gap-2.5 px-6 py-3 rounded-full border border-black/18 text-[#0B0B0B] text-sm font-semibold
-                                   transition-all duration-300
-                                   hover:bg-black/[0.04] hover:border-black/25 group">
+                <button className="flex items-center gap-2.5 px-6 py-3 rounded-full border border-[#0E0D0B]/18 text-[#0E0D0B] text-sm font-semibold
+                                   transition-all duration-300 hover:bg-[#0E0D0B]/5 hover:border-[#0E0D0B]/28 group">
                   See all services
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                 </button>
@@ -351,17 +303,16 @@ export default function Home() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.07, duration: 0.5 }}
                   whileHover={{ y: -2 }}
-                  className="flex items-start gap-4 p-5 rounded-xl border border-black/[0.07] bg-white
-                             transition-all duration-300
-                             hover:border-black/12 hover:shadow-sm group"
+                  className="flex items-start gap-4 p-5 rounded-xl border border-[#0E0D0B]/8 bg-[#EDE9DF]
+                             transition-all duration-300 hover:border-[#0E0D0B]/14 hover:shadow-sm group"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-black/[0.05] flex items-center justify-center shrink-0 text-black/40
-                                  group-hover:bg-black/[0.08] group-hover:text-black transition-all duration-300">
+                  <div className="w-8 h-8 rounded-lg bg-[#0E0D0B]/8 flex items-center justify-center shrink-0 text-[#706C64]
+                                  group-hover:bg-[#B07D2A]/15 group-hover:text-[#B07D2A] transition-all duration-300">
                     {s.icon}
                   </div>
                   <div>
-                    <p className="text-[#0B0B0B] text-sm font-semibold mb-1 tracking-[-0.01em]">{s.title}</p>
-                    <p className="text-black/40 text-sm leading-[1.65]">{s.desc}</p>
+                    <p className="text-[#0E0D0B] text-sm font-semibold mb-1 tracking-[-0.01em]">{s.title}</p>
+                    <p className="text-[#6B6760] text-sm leading-[1.7]">{s.desc}</p>
                   </div>
                 </motion.div>
               ))}
@@ -370,38 +321,35 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════
+      {/* ══════════════════════════════════
           FOUNDER
-      ══════════════════════════════════════════════════════ */}
-      <section className="py-24 md:py-32 px-6 md:px-16 border-t border-black/[0.06] bg-white">
+      ══════════════════════════════════ */}
+      <section className="py-24 md:py-32 px-6 md:px-16 bg-[#EDE9DF] border-t border-[#0E0D0B]/6">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
             <div>
-              <p className="text-black/25 text-[10px] font-semibold tracking-[0.25em] uppercase mb-6">Built by creators</p>
-              <h2 className="text-3xl sm:text-[2.25rem] font-black tracking-[-0.03em] text-[#0B0B0B] leading-[1.15] mb-5">
+              <p className="text-[#ACA8A0] text-[10px] font-semibold tracking-[0.25em] uppercase mb-6">Built by creators</p>
+              <h2 className="text-3xl sm:text-[2.25rem] font-black tracking-[-0.03em] text-[#0E0D0B] leading-[1.15] mb-5">
                 We've lived the problem<br />we're solving.
               </h2>
-              <p className="text-black/40 text-base leading-[1.8] mb-9">
+              <p className="text-[#6B6760] text-base leading-[1.85] mb-9">
                 GrowitBuddy was built after years helping founders and creators grow their
                 influence. We run the same systems for our clients that we use ourselves.
               </p>
               <div className="flex items-center gap-4 mb-7">
-                <div className="w-11 h-11 rounded-full bg-black/8 border border-black/12 flex items-center justify-center text-[#0B0B0B] font-black text-lg shrink-0">
+                <div className="w-11 h-11 rounded-full bg-[#0E0D0B]/10 border border-[#0E0D0B]/15 flex items-center justify-center text-[#0E0D0B] font-black text-lg shrink-0">
                   S
                 </div>
                 <div>
-                  <p className="text-[#0B0B0B] font-bold text-sm">Suraj Sharma</p>
-                  <p className="text-black/35 text-xs mt-0.5">Founder, GrowitBuddy</p>
+                  <p className="text-[#0E0D0B] font-bold text-sm">Suraj Sharma</p>
+                  <p className="text-[#9C9890] text-xs mt-0.5">Founder, GrowitBuddy</p>
                 </div>
               </div>
               <div className="flex gap-2">
                 {["LinkedIn", "Twitter / X", "Instagram"].map((sn) => (
-                  <a
-                    key={sn}
-                    href="#"
-                    className="text-[11px] font-semibold text-black/30 border border-black/8 rounded-full px-3.5 py-1.5
-                               transition-all duration-200 hover:text-black/70 hover:border-black/18"
-                  >
+                  <a key={sn} href="#"
+                    className="text-[11px] font-semibold text-[#9C9890] border border-[#0E0D0B]/10 rounded-full px-3.5 py-1.5
+                               transition-all duration-200 hover:text-[#0E0D0B] hover:border-[#0E0D0B]/22">
                     {sn}
                   </a>
                 ))}
@@ -416,10 +364,10 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.08, duration: 0.5 }}
-                  className="p-7 rounded-2xl border border-black/[0.07] bg-[#F7F7F7] flex flex-col gap-2"
+                  className="p-7 rounded-2xl border border-[#0E0D0B]/8 bg-[#F8F5EF] flex flex-col gap-2"
                 >
-                  <span className="text-3xl font-black text-[#0B0B0B] tracking-[-0.03em]">{stat.value}</span>
-                  <span className="text-xs text-black/35 leading-relaxed">{stat.label}</span>
+                  <span className="text-3xl font-black text-[#0E0D0B] tracking-[-0.03em]">{stat.value}</span>
+                  <span className="text-xs text-[#9C9890] leading-relaxed">{stat.label}</span>
                 </motion.div>
               ))}
             </div>
@@ -427,10 +375,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════
-          FINAL CTA
-      ══════════════════════════════════════════════════════ */}
-      <section className="relative py-32 md:py-48 px-6 text-center overflow-hidden border-t border-black/[0.06] bg-[#0B0B0B]">
+      {/* ══════════════════════════════════
+          FINAL CTA — dark contrast
+      ══════════════════════════════════ */}
+      <section className="relative py-32 md:py-48 px-6 text-center overflow-hidden bg-[#0E0D0B]">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -438,42 +386,39 @@ export default function Home() {
           variants={stagger}
           className="relative z-10 max-w-3xl mx-auto"
         >
-          <motion.p variants={fadeUp} className="text-white/25 text-[10px] font-semibold tracking-[0.25em] uppercase mb-8">
+          <motion.p variants={fadeUp} className="text-[#F8F5EF]/25 text-[10px] font-semibold tracking-[0.25em] uppercase mb-8">
             Ready to start?
           </motion.p>
           <motion.h2
             variants={fadeUp}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-[-0.04em] leading-[1.05] mb-7 text-white"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-[-0.04em] leading-[1.05] mb-7 text-[#F8F5EF]"
           >
-            Build Your <span className="text-[#F5E663]">Authority</span> System.
+            Build Your{" "}
+            <span className="text-[#B07D2A]">Authority</span> System.
           </motion.h2>
-          <motion.p variants={fadeUp} className="text-white/40 text-base md:text-lg leading-[1.8] mb-14 max-w-[44ch] mx-auto">
+          <motion.p variants={fadeUp} className="text-[#F8F5EF]/45 text-base md:text-lg leading-[1.85] mb-14 max-w-[44ch] mx-auto">
             One strategy call. We'll map out exactly how to turn your expertise into
             authority that generates clients on autopilot.
           </motion.p>
-          <motion.div variants={fadeUp} className="inline-flex items-center">
+          <motion.div variants={fadeUp} className="inline-flex items-center gap-3">
             <Link href="/contact">
               <button
                 data-testid="button-book-call-cta"
-                className="flex items-center gap-3 pl-6 pr-2 py-2.5 rounded-full bg-[#F5E663] text-black font-bold text-base
-                           transition-all duration-300
-                           hover:shadow-[0_0_32px_rgba(245,230,99,0.40)] hover:scale-[1.02]"
+                className="flex items-center gap-3 pl-6 pr-2 py-2.5 rounded-full bg-[#B07D2A] text-[#0E0D0B] font-black text-base
+                           transition-all duration-300 hover:bg-[#C48D30] hover:shadow-[0_0_30px_rgba(176,125,42,0.35)] hover:scale-[1.02]"
               >
                 Book a free strategy call
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-black/12">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#0E0D0B]/15">
                   <ArrowRight className="w-4 h-4" />
                 </span>
               </button>
             </Link>
             <Link href="/work">
-              <button
-                className="-ml-3 flex items-center gap-3 pl-6 pr-2 py-2.5 rounded-full border border-white/12 bg-white/4
-                           text-white/50 font-semibold text-base
-                           transition-all duration-300
-                           hover:text-white hover:border-white/22 hover:bg-white/7"
-              >
+              <button className="flex items-center gap-3 pl-6 pr-2 py-2.5 rounded-full border border-[#F8F5EF]/12 bg-[#F8F5EF]/5
+                                 text-[#F8F5EF]/50 font-semibold text-base
+                                 transition-all duration-300 hover:text-[#F8F5EF] hover:border-[#F8F5EF]/22 hover:bg-[#F8F5EF]/8">
                 See our work
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-white/8">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#F8F5EF]/8">
                   <ArrowUpRight className="w-4 h-4" />
                 </span>
               </button>

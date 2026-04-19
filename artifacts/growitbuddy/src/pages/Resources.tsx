@@ -63,15 +63,15 @@ export default function Resources() {
   };
 
   return (
-    <div className="w-full pt-20 md:pt-24 pb-16 md:pb-24 lg:pb-32 px-5 md:px-8 bg-white">
+    <div className="w-full pt-20 md:pt-24 pb-16 md:pb-24 lg:pb-32 px-5 md:px-8 bg-[#F8F5EF]">
       <div className="container mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="max-w-3xl mb-16 md:mb-20"
         >
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 text-[#0B0B0B]">Resource Library.</h1>
-          <p className="text-lg md:text-xl text-black/45">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 text-[#0E0D0B]">Resource Library.</h1>
+          <p className="text-lg md:text-xl text-[#6B6760]">
             Open-sourced frameworks, templates, and guides from our internal agency playbook.
           </p>
         </motion.div>
@@ -83,13 +83,13 @@ export default function Resources() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
-              className="bg-[#F7F7F7] border border-black/8 p-6 md:p-8 rounded-3xl shadow-none hover:shadow-md transition-all flex flex-col"
+              className="bg-[#EDE9DF] border border-[#0E0D0B]/8 p-6 md:p-8 rounded-3xl shadow-none hover:shadow-md transition-all flex flex-col"
             >
-              <div className="text-xs font-bold uppercase tracking-wider text-black/30 mb-4">
+              <div className="text-xs font-bold uppercase tracking-wider text-[#9C9890] mb-4">
                 {item.type}
               </div>
-              <h3 className="text-xl md:text-2xl font-bold mb-4 text-[#0B0B0B]">{item.title}</h3>
-              <p className="text-black/45 text-base mb-8 flex-1">{item.desc}</p>
+              <h3 className="text-xl md:text-2xl font-bold mb-4 text-[#0E0D0B]">{item.title}</h3>
+              <p className="text-[#6B6760] text-base mb-8 flex-1">{item.desc}</p>
 
               {downloaded[item.title] ? (
                 <Button variant="outline" className="w-full h-12 text-green-700 bg-green-50 border-green-200 cursor-default">
@@ -98,7 +98,7 @@ export default function Resources() {
               ) : (
                 <Button
                   onClick={() => setSelectedResource(item.title)}
-                  className="w-full h-12 bg-[#0B0B0B] text-white hover:bg-black/85 transition-colors"
+                  className="w-full h-12 bg-[#0E0D0B] text-white hover:bg-black/85 transition-colors"
                 >
                   <Download className="w-4 h-4 mr-2" /> Get Access
                 </Button>
@@ -112,7 +112,7 @@ export default function Resources() {
         <DialogContent className="sm:max-w-md p-6 md:p-8">
           <DialogHeader>
             <DialogTitle className="text-xl md:text-2xl mb-2">Get the {selectedResource}</DialogTitle>
-            <DialogDescription className="text-base text-black/45">
+            <DialogDescription className="text-base text-[#6B6760]">
               Enter your email below and we'll send it straight to your inbox.
             </DialogDescription>
           </DialogHeader>
@@ -128,10 +128,10 @@ export default function Resources() {
                 className="h-12 text-base"
               />
             </div>
-            <Button type="submit" className="w-full h-12 text-base bg-[#F5E663] text-black hover:bg-[#F5E663]/90 font-bold" disabled={isSubmitting}>
+            <Button type="submit" className="w-full h-12 text-base bg-[#0E0D0B] text-black hover:bg-[#0E0D0B]/90 font-bold" disabled={isSubmitting}>
               {isSubmitting ? "Sending..." : "Send it to me"}
             </Button>
-            <p className="text-xs text-center text-black/30 mt-4">
+            <p className="text-xs text-center text-[#9C9890] mt-4">
               We respect your inbox. No spam, ever.
             </p>
           </form>
