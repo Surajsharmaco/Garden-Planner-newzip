@@ -8,9 +8,9 @@ export function Footer() {
           <div className="lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-1.5 mb-6">
               <span className="text-xl font-black text-white tracking-tight">
-                Growit<span className="text-accent">Buddy</span>
+                GrowitBuddy
               </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+              <span className="w-1.5 h-1.5 rounded-full bg-white/35" />
             </Link>
             <p className="text-white/35 text-sm leading-relaxed max-w-xs mb-7">
               A premium content and distribution studio helping founders and creators build authority that compounds.
@@ -20,7 +20,7 @@ export function Footer() {
                 <a
                   key={i}
                   href="#"
-                  className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-accent hover:border-accent/30 transition-all text-xs font-bold"
+                  className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white/25 transition-all text-xs font-bold"
                   data-testid={["link-twitter","link-linkedin","link-instagram"][i]}
                 >
                   {label}
@@ -30,7 +30,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white font-semibold text-sm tracking-widest uppercase mb-6">Company</h4>
+            <h4 className="text-white/50 font-semibold text-xs tracking-widest uppercase mb-6">Company</h4>
             <ul className="flex flex-col gap-3.5">
               {[
                 { href: "/work", label: "Work" },
@@ -46,7 +46,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white font-semibold text-sm tracking-widest uppercase mb-6">Network</h4>
+            <h4 className="text-white/50 font-semibold text-xs tracking-widest uppercase mb-6">Network</h4>
             <ul className="flex flex-col gap-3.5">
               {[
                 { href: "/creators", label: "Creators" },
@@ -62,7 +62,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white font-semibold text-sm tracking-widest uppercase mb-6">Contact</h4>
+            <h4 className="text-white/50 font-semibold text-xs tracking-widest uppercase mb-6">Contact</h4>
             <ul className="flex flex-col gap-3.5">
               {[
                 { href: "mailto:hello@growitbuddy.com", label: "hello@growitbuddy.com", external: true },
@@ -79,11 +79,11 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-white/6 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/25">
+        <div className="border-t border-white/6 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/20">
           <p>&copy; {new Date().getFullYear()} GrowitBuddy. All rights reserved.</p>
           <div className="flex gap-6">
-            <Link href="#" className="hover:text-white/60 transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-white/60 transition-colors">Terms of Service</Link>
+            <Link href="#" className="hover:text-white/50 transition-colors">Privacy Policy</Link>
+            <Link href="#" className="hover:text-white/50 transition-colors">Terms of Service</Link>
           </div>
         </div>
       </div>
