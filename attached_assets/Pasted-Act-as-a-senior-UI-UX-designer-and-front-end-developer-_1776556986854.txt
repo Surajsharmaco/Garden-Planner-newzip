@@ -1,0 +1,170 @@
+Act as a senior UI/UX designer and front-end developer.
+
+I already have a website built with a dark theme (black + yellow accent). Your task is NOT to redesign from scratch, but to upgrade and refine it into a premium, high-authority, globally competitive agency website.
+
+Brand: GrowitBuddy  
+Positioning: Authority + Content + Distribution Systems  
+Target audience: Founders, creators, high-ticket clients  
+
+GOAL:
+Make the design feel like a category leader, not a generic agency template.
+
+--------------------------------------------------
+
+🎨 DESIGN SYSTEM IMPROVEMENTS
+
+1. COLOR SYSTEM (VERY IMPORTANT)
+- Keep black background (#0B0B0B or similar)
+- Define ONE consistent yellow accent (no multiple shades)
+- Use yellow ONLY for:
+  • key words (like “Authority”, “Compounds”)
+  • primary CTA buttons
+  • highlights / micro accents
+
+- Remove random yellow usage
+- Maintain strict color discipline
+
+--------------------------------------------------
+
+2. TYPOGRAPHY UPGRADE
+
+- Use strong, modern sans-serif (Inter / Satoshi / Geist)
+- Increase headline impact:
+  • tighter letter spacing
+  • larger font size
+  • stronger contrast
+
+- Maintain clear hierarchy:
+  H1 → Bold, dominant  
+  H2 → Structured  
+  Body → minimal & readable  
+
+- Reduce unnecessary text
+- Make content sharper and more direct
+
+--------------------------------------------------
+
+3. VISUAL IDENTITY (CRITICAL FOR 10/10)
+
+Add a signature “system + authority” visual layer:
+
+- Subtle radial/orbit lines behind hero section
+- Light grid system or circular pattern (very subtle)
+- Soft glow around CTA buttons (controlled, not flashy)
+- Remove random dots and noise
+
+Goal:
+Make it feel engineered, not decorated
+
+--------------------------------------------------
+
+4. SPACING & LAYOUT
+
+- Increase whitespace globally
+- Improve section separation
+- Align all elements to a clean grid
+
+- Avoid clutter
+- Give breathing space to headings and CTAs
+
+--------------------------------------------------
+
+5. COMPONENT REFINEMENT
+
+Buttons:
+- Rounded but sharp (not too soft)
+- Yellow primary CTA with subtle hover glow
+- Secondary buttons minimal outline
+
+Cards (Proof of Work):
+- Add subtle hover interaction
+- Slight lift (translateY)
+- Soft shadow or glow
+
+Sections:
+- Smooth transitions between sections
+- Consistent padding
+
+--------------------------------------------------
+
+6. HERO SECTION (MOST IMPORTANT)
+
+Refine hero:
+
+Headline:
+“Build Authority That Compounds.”
+
+- Make it visually dominant
+- Highlight ONE key word in yellow (not multiple)
+
+Subtext:
+Keep minimal and sharp
+
+CTA:
+- Primary: Book a strategy call
+- Secondary: Explore work
+
+Add:
+- subtle radial glow behind headline
+- center focus alignment
+
+--------------------------------------------------
+
+7. REMOVE GENERIC TEMPLATE FEEL
+
+- Remove unnecessary UI elements that feel “Webflow template”
+- Avoid overused gradients
+- Avoid cluttered visuals
+
+Everything should feel:
+minimal, intentional, premium
+
+--------------------------------------------------
+
+8. MICRO INTERACTIONS
+
+- Smooth hover effects
+- Slight motion on scroll (fade/slide)
+- Button hover glow
+- Card hover lift
+
+Keep it subtle — no flashy animations
+
+--------------------------------------------------
+
+9. BRAND FEEL
+
+The final output should feel like:
+
+- A high-end strategy agency
+- A system-driven company
+- A category leader in authority building
+
+NOT:
+- freelancer portfolio
+- generic agency template
+- overdesigned SaaS UI
+
+--------------------------------------------------
+
+10. PERFORMANCE
+
+- Keep animations lightweight
+- Optimize for fast loading
+- Maintain responsiveness
+
+--------------------------------------------------
+
+OUTPUT:
+
+Refactor the current UI with improved:
+- spacing
+- typography
+- color consistency
+- component design
+- visual identity
+
+Do NOT change structure drastically.
+Focus on refinement, not redesign.
+
+--------------------------------------------------
