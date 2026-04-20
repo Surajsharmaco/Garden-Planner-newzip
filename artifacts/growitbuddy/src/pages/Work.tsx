@@ -1,91 +1,69 @@
 import { motion } from "framer-motion";
-import { Link } from "wouter";
-import { TiltCard } from "@/components/TiltCard";
+import { ArrowRight } from "lucide-react";
 
 const cases = [
-  {
-    title: "Tech Founder to Industry Voice",
-    metric: "14M",
-    metricLabel: "Organic Impressions",
-    category: "B2B SaaS"
-  },
-  {
-    title: "Agency Owner Authority",
-    metric: "$2.4M",
-    metricLabel: "Pipeline Generated",
-    category: "Services"
-  },
-  {
-    title: "Creator Monetization",
-    metric: "250K",
-    metricLabel: "New Followers",
-    category: "Creator Economy"
-  },
-  {
-    title: "Executive Personal Brand",
-    metric: "15+",
-    metricLabel: "Tier-1 Podcast Bookings",
-    category: "Leadership"
-  },
-  {
-    title: "E-com Founder Growth",
-    metric: "400%",
-    metricLabel: "Increase in Brand Search",
-    category: "E-commerce"
-  },
-  {
-    title: "Venture Capital Authority",
-    metric: "3x",
-    metricLabel: "Deal Flow Increase",
-    category: "Finance"
-  }
+  { title: "Tech Founder to Industry Voice", metric: "14M", unit: "impressions", category: "B2B SaaS", bg: "linear-gradient(135deg, #0F0F0F, #1C1C1C)" },
+  { title: "Agency Owner Authority", metric: "$2.4M", unit: "pipeline", category: "Services", bg: "linear-gradient(135deg, #111118, #1A1A28)" },
+  { title: "Creator Monetization", metric: "250K", unit: "followers", category: "Creator Economy", bg: "linear-gradient(135deg, #0E0E0E, #1C1814)" },
+  { title: "Executive Personal Brand", metric: "15+", unit: "podcast bookings", category: "Leadership", bg: "linear-gradient(135deg, #101010, #181818)" },
+  { title: "E-com Founder Growth", metric: "400%", unit: "brand search", category: "E-commerce", bg: "linear-gradient(135deg, #0F0F12, #1A1A22)" },
+  { title: "Venture Capital Authority", metric: "3×", unit: "deal flow", category: "Finance", bg: "linear-gradient(135deg, #0D0D10, #181620)" },
 ];
 
 export default function Work() {
   return (
-    <div className="w-full pt-20 md:pt-24 pb-16 md:pb-24 lg:pb-32 px-5 md:px-8 bg-[#FAFAFA]">
-      <div className="container mx-auto max-w-6xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-3xl mb-16 md:mb-20"
-        >
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 text-[#0A0A0A]">Our Work.</h1>
-          <p className="text-lg md:text-xl text-[#525252]">
-            We build authority that translates to measurable business outcomes. Here's how we've engineered dominance for category leaders.
-          </p>
-        </motion.div>
+    <div className="w-full bg-white">
+      {/* Page hero */}
+      <section className="relative pt-40 pb-20 px-8 md:px-12 overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[600px] rounded-full bg-black/[0.03] blur-[140px] pointer-events-none" />
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-black/25 text-xs font-bold tracking-[0.22em] uppercase mb-6">Work</motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="text-5xl sm:text-6xl md:text-7xl font-normal tracking-[-0.025em] leading-[1.08] text-[#0A0A0A] mb-8"
+          >
+            Work work work<br />work work work.
+          </motion.h1>
+          <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+            className="text-black/45 text-lg leading-[1.85] max-w-[46ch] mx-auto">
+            We measure success by outcomes. Here's proof that authority engineering translates to real business results.
+          </motion.p>
+        </div>
+      </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-          {cases.map((item, idx) => (
-            <TiltCard key={idx}>
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="group cursor-pointer block h-full"
-              >
-                <div className="bg-[#EEEEEE] rounded-3xl aspect-[4/3] mb-6 overflow-hidden relative flex items-center justify-center p-6 md:p-8 border border-black/6">
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/[0.03] transition-colors z-10" />
-                  <div className="text-center z-20">
-                    <div className="text-5xl sm:text-6xl md:text-8xl font-black text-[#0A0A0A] mb-2 tracking-tighter">
-                      {item.metric}
-                    </div>
-                    <div className="text-sm sm:text-base md:text-lg font-medium text-[#525252] uppercase tracking-widest">
-                      {item.metricLabel}
-                    </div>
-                  </div>
+      {/* Grid */}
+      <section className="pb-24 px-8 md:px-12">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {cases.map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.06, duration: 0.6 }}
+              whileHover={{ scale: 1.015 }}
+              className="group relative rounded-2xl overflow-hidden aspect-[3/4] flex flex-col justify-end p-8 cursor-pointer"
+              style={{ background: item.bg }}
+            >
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400"
+                style={{ background: "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,255,255,0.04) 0%, transparent 70%)" }} />
+              <div className="relative z-10">
+                <span className="text-white/30 text-xs font-medium tracking-wide block mb-3">{item.category}</span>
+                <h3 className="text-white text-xl font-semibold tracking-[-0.015em] leading-[1.25] mb-4">{item.title}</h3>
+                <div className="flex items-baseline gap-2 mb-5">
+                  <span className="text-white text-3xl font-semibold tracking-tight">{item.metric}</span>
+                  <span className="text-white/35 text-sm">{item.unit}</span>
                 </div>
-                <h3 className="text-2xl md:text-3xl font-bold mb-3 text-[#0A0A0A] group-hover:text-black/70 transition-colors">{item.title}</h3>
-                <div className="inline-block px-4 py-1.5 bg-black/[0.05] text-sm font-medium rounded-full text-[#525252]">
-                  {item.category}
+                <div className="flex items-center gap-2 text-white/25 group-hover:text-white/60 text-xs font-medium transition-colors duration-300">
+                  View case study <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                 </div>
-              </motion.div>
-            </TiltCard>
+              </div>
+            </motion.div>
           ))}
         </div>
-      </div>
+      </section>
     </div>
   );
 }

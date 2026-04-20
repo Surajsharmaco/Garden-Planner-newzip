@@ -1,58 +1,63 @@
 import { Link } from "wouter";
+import { ArrowRight } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer
-      style={{
-        background: "linear-gradient(to bottom, #0A0A0A, #141414)",
-        borderTop: "1px solid rgba(255,255,255,0.05)"
-      }}
-      className="pt-20 pb-10"
-    >
-      <div className="max-w-6xl mx-auto px-6 md:px-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          <div className="lg:col-span-1">
-            <Link href="/" className="inline-flex items-center gap-1.5 mb-6">
-              <span className="text-xl font-black text-white tracking-tight">GrowitBuddy</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-white/20" />
-            </Link>
-            <p className="text-white/35 text-sm leading-relaxed max-w-xs mb-7">
-              A premium content and distribution studio helping founders and creators build authority that compounds.
+    <footer className="bg-[#0A0A0A] pt-20 pb-12">
+      <div className="max-w-7xl mx-auto px-8 md:px-12">
+
+        {/* Top row */}
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-16 pb-16 border-b border-white/8">
+          <div className="max-w-xs">
+            <span className="text-white text-xl font-bold tracking-tight block mb-4">GrowitBuddy</span>
+            <p className="text-white/35 text-sm leading-relaxed">
+              A premium content and distribution studio helping founders build authority that compounds.
             </p>
-            <div className="flex gap-3">
-              {["X", "IN", "IG"].map((label, i) => (
-                <a key={i} href="#"
-                  className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/30 hover:text-white hover:border-white/25 transition-all text-xs font-bold"
-                  data-testid={["link-twitter","link-linkedin","link-instagram"][i]}>
-                  {label}
-                </a>
-              ))}
-            </div>
           </div>
 
-          {[
-            { title: "Company", links: [{ href: "/work", label: "Work" }, { href: "/services", label: "Services" }, { href: "/framework", label: "Framework" }, { href: "/insights", label: "Insights" }] },
-            { title: "Network", links: [{ href: "/creators", label: "Creators" }, { href: "/freelancers", label: "Freelancers" }, { href: "/resources", label: "Resources" }, { href: "/authority-audit", label: "Authority Audit" }] },
-            { title: "Contact", links: [{ href: "/about", label: "About Us" }, { href: "/contact", label: "Get in touch" }] },
-          ].map((col) => (
-            <div key={col.title}>
-              <h4 className="text-white/25 font-semibold text-xs tracking-widest uppercase mb-6">{col.title}</h4>
-              <ul className="flex flex-col gap-3.5">
-                {col.links.map((l) => (
-                  <li key={l.href}>
-                    <Link href={l.href} className="text-white/35 hover:text-white text-sm transition-colors">{l.label}</Link>
-                  </li>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-10">
+            <div>
+              <h5 className="text-white/20 text-[10px] font-bold tracking-[0.2em] uppercase mb-5">Company</h5>
+              <ul className="flex flex-col gap-3">
+                {[["Work","/work"],["Services","/services"],["Framework","/framework"],["Insights","/insights"]].map(([l,h]) => (
+                  <li key={h}><Link href={h} className="text-white/40 hover:text-white text-sm transition-colors">{l}</Link></li>
                 ))}
               </ul>
             </div>
-          ))}
+            <div>
+              <h5 className="text-white/20 text-[10px] font-bold tracking-[0.2em] uppercase mb-5">More</h5>
+              <ul className="flex flex-col gap-3">
+                {[["Creators","/creators"],["Freelancers","/freelancers"],["Resources","/resources"],["Audit","/authority-audit"],["About","/about"]].map(([l,h]) => (
+                  <li key={h}><Link href={h} className="text-white/40 hover:text-white text-sm transition-colors">{l}</Link></li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h5 className="text-white/20 text-[10px] font-bold tracking-[0.2em] uppercase mb-5">Contact</h5>
+              <ul className="flex flex-col gap-3">
+                <li><a href="mailto:hello@growitbuddy.com" className="text-white/40 hover:text-white text-sm transition-colors">hello@growitbuddy.com</a></li>
+                <li>
+                  <Link href="/contact" className="inline-flex items-center gap-2 text-white/40 hover:text-white text-sm transition-colors group">
+                    Get in touch
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
+                </li>
+              </ul>
+              <div className="flex gap-3 mt-6">
+                {["X","IN","IG"].map((s,i) => (
+                  <a key={i} href="#" className="text-white/25 hover:text-white text-xs font-bold border border-white/10 rounded-full w-8 h-8 flex items-center justify-center hover:border-white/25 transition-all"
+                    data-testid={["link-twitter","link-linkedin","link-instagram"][i]}>{s}</a>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="border-t border-white/6 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/18">
+        <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/18">
           <p>&copy; {new Date().getFullYear()} GrowitBuddy. All rights reserved.</p>
           <div className="flex gap-6">
-            <Link href="#" className="hover:text-white/50 transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-white/50 transition-colors">Terms of Service</Link>
+            <Link href="#" className="hover:text-white/50 transition-colors">Privacy</Link>
+            <Link href="#" className="hover:text-white/50 transition-colors">Terms</Link>
           </div>
         </div>
       </div>

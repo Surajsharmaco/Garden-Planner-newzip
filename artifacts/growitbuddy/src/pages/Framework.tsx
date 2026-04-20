@@ -1,97 +1,40 @@
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import { Link } from "wouter";
-import { TiltCard } from "@/components/TiltCard";
-
-const steps = [
-  {
-    num: "01",
-    title: "Positioning & Strategy",
-    subtitle: "Find your category entry point.",
-    content: "Before creating a single piece of content, we define exactly what you stand for. We map your expertise against market gaps to find a category you can own, establishing a narrative that makes competition irrelevant."
-  },
-  {
-    num: "02",
-    title: "Content Systems",
-    subtitle: "Turn expertise into assets.",
-    content: "We extract your knowledge and systematize the production of high-signal content. From written thought leadership to short-form video and long-form essays, we build an engine that produces quality at scale without draining your time."
-  },
-  {
-    num: "03",
-    title: "Strategic Distribution",
-    subtitle: "Syndicate for impact.",
-    content: "Great content dies without distribution. We map out the exact channels where your audience lives and deploy platform-native strategies to ensure your narrative reaches the decision-makers that matter."
-  },
-  {
-    num: "04",
-    title: "Authority Compounding",
-    subtitle: "Build the inbound machine.",
-    content: "We transform initial traction into a compounding asset. By analyzing data, optimizing conversion paths, and building community flywheels, we turn your audience into a perpetual engine for inbound opportunity."
-  }
-];
 
 export default function Framework() {
+  const labels: Record<string, { sub: string; h1: string; body: string }> = {
+    Insights: { sub: "Insights", h1: "Thoughts on building authority.", body: "Frameworks, strategies and opinions on building unignorable influence in a noisy world." },
+    Framework: { sub: "Framework", h1: "The Authority Framework.", body: "A battle-tested 4-step system for engineering category dominance that compounds over time." },
+    Creators: { sub: "Creators", h1: "Built for creators.", body: "Systems designed specifically for content creators turning their platform into a compounding business asset." },
+    Freelancers: { sub: "Freelancers", h1: "Join our network.", body: "We work with talented freelance writers, editors, and strategists from around the world." },
+    Resources: { sub: "Resources", h1: "Open-source frameworks.", body: "Free templates, guides and playbooks from our internal agency toolkit." },
+    AuthorityAudit: { sub: "Audit", h1: "Authority Audit.", body: "Answer 8 questions and get your Authority Score with a breakdown of your current leverage." },
+  };
+  const l = labels["Framework"];
   return (
-    <div className="w-full pt-20 md:pt-24 pb-16 md:pb-24 lg:pb-32 px-5 md:px-8 bg-[#FAFAFA]">
-      <div className="container mx-auto max-w-6xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center max-w-4xl mx-auto mb-16 md:mb-24"
-        >
-          <div className="inline-block mb-6 px-4 py-1.5 bg-black/[0.05] text-[#525252] font-semibold text-sm rounded-full tracking-wide">
-            Our Methodology
-          </div>
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 text-[#0A0A0A]">The Authority Framework.</h1>
-          <p className="text-lg md:text-xl text-[#525252]">
-            A battle-tested, 4-step systematic approach to engineering category dominance and building a compounding personal brand.
-          </p>
-        </motion.div>
-
-        <div className="relative">
-          <div className="absolute left-[39px] md:left-1/2 top-0 bottom-0 w-0.5 bg-black/8 -translate-x-1/2 hidden md:block"></div>
-
-          <div className="flex flex-col gap-12 md:gap-32">
-            {steps.map((step, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                className={`flex flex-col md:flex-row gap-6 md:gap-16 items-center relative ${idx % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}
-              >
-                <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-[#FAFAFA] border-4 border-black/15 rounded-full items-center justify-center text-2xl font-black z-10 text-[#0A0A0A]">
-                  {step.num}
-                </div>
-
-                <div className={`w-full md:w-1/2 ${idx % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
-                  <div className="text-5xl font-black text-black/10 mb-4 md:hidden">{step.num}</div>
-                  <h3 className="text-2xl md:text-3xl font-bold mb-2 text-[#0A0A0A]">{step.title}</h3>
-                  <p className="text-[#525252] font-semibold text-base md:text-lg mb-4">{step.subtitle}</p>
-                </div>
-
-                <div className="w-full md:w-1/2">
-                  <TiltCard>
-                    <div className="bg-[#F4F4F4] border border-black/8 p-6 md:p-8 rounded-3xl h-full">
-                      <p className="text-[#525252] text-base md:text-lg leading-relaxed">{step.content}</p>
-                    </div>
-                  </TiltCard>
-                </div>
-              </motion.div>
-            ))}
+    <div className="w-full bg-white">
+      <section className="relative pt-40 pb-24 px-8 md:px-12 overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[600px] rounded-full bg-black/[0.03] blur-[140px] pointer-events-none" />
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-black/25 text-xs font-bold tracking-[0.22em] uppercase mb-6">{l.sub}</motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-[-0.025em] leading-[1.08] text-[#0A0A0A] mb-8"
+          >
+            {l.h1}
+          </motion.h1>
+          <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+            className="text-black/45 text-lg leading-[1.85] max-w-[48ch] mx-auto">{l.body}</motion.p>
+        </div>
+      </section>
+      <section className="pb-32 px-8 md:px-12">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-[#F4F4F4] rounded-3xl h-[400px] flex items-center justify-center">
+            <span className="text-black/20 text-sm">Content coming soon</span>
           </div>
         </div>
-
-        <div className="mt-20 md:mt-32 text-center">
-          <Link href="/contact">
-            <button className="inline-flex items-center gap-3 h-16 px-10 text-xl rounded-full bg-[#0A0A0A] text-white font-bold
-                               hover:bg-black/85 transition-all duration-200 group">
-              Implement The Framework
-              <ArrowRight className="ml-1 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-          </Link>
-        </div>
-      </div>
+      </section>
     </div>
   );
 }

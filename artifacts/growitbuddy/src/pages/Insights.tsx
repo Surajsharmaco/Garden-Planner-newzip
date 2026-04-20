@@ -1,75 +1,40 @@
 import { motion } from "framer-motion";
-import { Link } from "wouter";
-
-const posts = [
-  {
-    title: "Why Content Volume Is Killing Your Authority",
-    category: "Strategy",
-    date: "Oct 12, 2023",
-    readTime: "5 min read",
-    desc: "Posting 3x a day on every platform isn't building a brand. It's building noise. Here's what to do instead."
-  },
-  {
-    title: "The Architecture of a 7-Figure Personal Brand",
-    category: "Branding",
-    date: "Sep 28, 2023",
-    readTime: "8 min read",
-    desc: "Deconstructing the exact funnel and content hierarchy used by top creators to generate inbound leads."
-  },
-  {
-    title: "LinkedIn Algorithm Changes: What Actually Matters",
-    category: "Distribution",
-    date: "Sep 15, 2023",
-    readTime: "4 min read",
-    desc: "Stop trying to hack the feed. Focus on these three core signals that LinkedIn actually rewards."
-  },
-  {
-    title: "From Founder to Category Leader: A Playbook",
-    category: "Positioning",
-    date: "Aug 30, 2023",
-    readTime: "12 min read",
-    desc: "How B2B SaaS founders can leverage their unique insights to own their niche."
-  }
-];
 
 export default function Insights() {
+  const labels: Record<string, { sub: string; h1: string; body: string }> = {
+    Insights: { sub: "Insights", h1: "Thoughts on building authority.", body: "Frameworks, strategies and opinions on building unignorable influence in a noisy world." },
+    Framework: { sub: "Framework", h1: "The Authority Framework.", body: "A battle-tested 4-step system for engineering category dominance that compounds over time." },
+    Creators: { sub: "Creators", h1: "Built for creators.", body: "Systems designed specifically for content creators turning their platform into a compounding business asset." },
+    Freelancers: { sub: "Freelancers", h1: "Join our network.", body: "We work with talented freelance writers, editors, and strategists from around the world." },
+    Resources: { sub: "Resources", h1: "Open-source frameworks.", body: "Free templates, guides and playbooks from our internal agency toolkit." },
+    AuthorityAudit: { sub: "Audit", h1: "Authority Audit.", body: "Answer 8 questions and get your Authority Score with a breakdown of your current leverage." },
+  };
+  const l = labels["Insights"];
   return (
-    <div className="w-full pt-10 pb-24 bg-[#FAFAFA]">
-      <div className="container mx-auto px-4 md:px-8 max-w-6xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-3xl mb-20"
-        >
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-[#0A0A0A]">Insights.</h1>
-          <p className="text-xl text-[#525252]">
-            Thoughts, frameworks, and strategies on building unignorable authority in a noisy world.
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {posts.map((post, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
-              className="group cursor-pointer flex flex-col h-full"
-            >
-              <div className="bg-[#EEEEEE] border border-black/6 aspect-[16/9] rounded-2xl mb-6 overflow-hidden">
-                <div className="w-full h-full bg-black/[0.04] transition-transform duration-700 group-hover:scale-105" />
-              </div>
-              <div className="flex items-center gap-4 mb-3">
-                <span className="text-[#525252] font-semibold text-sm uppercase tracking-wider">{post.category}</span>
-                <span className="text-[#9E9E9E] text-sm">{post.date}</span>
-                <span className="text-[#9E9E9E] text-sm">• {post.readTime}</span>
-              </div>
-              <h2 className="text-2xl font-bold mb-3 text-[#0A0A0A] group-hover:text-black/70 transition-colors">{post.title}</h2>
-              <p className="text-[#525252] line-clamp-2">{post.desc}</p>
-            </motion.div>
-          ))}
+    <div className="w-full bg-white">
+      <section className="relative pt-40 pb-24 px-8 md:px-12 overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[600px] rounded-full bg-black/[0.03] blur-[140px] pointer-events-none" />
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-black/25 text-xs font-bold tracking-[0.22em] uppercase mb-6">{l.sub}</motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-[-0.025em] leading-[1.08] text-[#0A0A0A] mb-8"
+          >
+            {l.h1}
+          </motion.h1>
+          <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+            className="text-black/45 text-lg leading-[1.85] max-w-[48ch] mx-auto">{l.body}</motion.p>
         </div>
-      </div>
+      </section>
+      <section className="pb-32 px-8 md:px-12">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-[#F4F4F4] rounded-3xl h-[400px] flex items-center justify-center">
+            <span className="text-black/20 text-sm">Content coming soon</span>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
