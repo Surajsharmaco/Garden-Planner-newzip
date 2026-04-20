@@ -1,67 +1,106 @@
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { Link } from "wouter";
 
 const cases = [
-  { title: "Tech Founder to Industry Voice", metric: "14M", unit: "impressions", category: "B2B SaaS", bg: "linear-gradient(135deg, #0F0F0F, #1C1C1C)" },
-  { title: "Agency Owner Authority", metric: "$2.4M", unit: "pipeline", category: "Services", bg: "linear-gradient(135deg, #111118, #1A1A28)" },
-  { title: "Creator Monetization", metric: "250K", unit: "followers", category: "Creator Economy", bg: "linear-gradient(135deg, #0E0E0E, #1C1814)" },
-  { title: "Executive Personal Brand", metric: "15+", unit: "podcast bookings", category: "Leadership", bg: "linear-gradient(135deg, #101010, #181818)" },
-  { title: "E-com Founder Growth", metric: "400%", unit: "brand search", category: "E-commerce", bg: "linear-gradient(135deg, #0F0F12, #1A1A22)" },
-  { title: "Venture Capital Authority", metric: "3×", unit: "deal flow", category: "Finance", bg: "linear-gradient(135deg, #0D0D10, #181620)" },
+  { name: "Tech Founder to Industry Voice", category: "B2B SaaS · LinkedIn", metric: "14M", unit: "impressions in 90 days", dark: true, bg: "#1D1D1F" },
+  { name: "Agency Owner Authority", category: "Services · Multi-channel", metric: "$2.4M", unit: "new pipeline attributed", dark: true, bg: "#2C2C2E" },
+  { name: "Creator Monetization", category: "Creator Economy · YouTube", metric: "250K", unit: "subscribers in 12 months", dark: false, bg: "#F5F5F7" },
+  { name: "Executive Personal Brand", category: "Leadership · Podcast", metric: "15+", unit: "speaking invites / quarter", dark: false, bg: "#fff" },
+  { name: "E-commerce Founder Growth", category: "E-commerce · X / Twitter", metric: "400%", unit: "branded search increase", dark: true, bg: "#1D1D1F" },
+  { name: "VC Authority Engine", category: "Finance · LinkedIn", metric: "3×", unit: "qualified deal flow", dark: false, bg: "#F5F5F7" },
 ];
 
 export default function Work() {
   return (
-    <div className="w-full bg-white">
-      {/* Page hero */}
-      <section className="relative pt-40 pb-20 px-8 md:px-12 overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[600px] rounded-full bg-black/[0.03] blur-[140px] pointer-events-none" />
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-black/25 text-xs font-bold tracking-[0.22em] uppercase mb-6">Work</motion.p>
+    <div className="w-full">
+      {/* Hero */}
+      <section className="pt-28 pb-20 px-5 text-center" style={{ background: "#F5F5F7" }}>
+        <div className="max-w-[680px] mx-auto mt-8">
+          <p className="text-[12px] font-semibold uppercase tracking-widest mb-4" style={{ color: "#6E6E73" }}>Work</p>
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="text-5xl sm:text-6xl md:text-7xl font-normal tracking-[-0.025em] leading-[1.08] text-[#0A0A0A] mb-8"
+            className="font-bold mb-5"
+            style={{ fontSize: "clamp(40px, 6vw, 80px)", lineHeight: "1.06", letterSpacing: "-0.025em", color: "#1D1D1F" }}
           >
             Work work work<br />work work work.
           </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-            className="text-black/45 text-lg leading-[1.85] max-w-[46ch] mx-auto">
-            We measure success by outcomes. Here's proof that authority engineering translates to real business results.
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-[19px] leading-[1.55]"
+            style={{ color: "#6E6E73" }}
+          >
+            We measure success by outcomes. Our all-time client satisfaction score is 9.4/10. Here's proof.
           </motion.p>
         </div>
       </section>
 
-      {/* Grid */}
-      <section className="pb-24 px-8 md:px-12">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {cases.map((item, i) => (
+      {/* Case grid */}
+      <section className="px-5 py-12" style={{ background: "#fff" }}>
+        <div className="max-w-[980px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {cases.map((c, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.06, duration: 0.6 }}
-              whileHover={{ scale: 1.015 }}
-              className="group relative rounded-2xl overflow-hidden aspect-[3/4] flex flex-col justify-end p-8 cursor-pointer"
-              style={{ background: item.bg }}
+              transition={{ delay: i * 0.06, duration: 0.55 }}
+              className="p-8 rounded-[20px] aspect-square flex flex-col justify-between cursor-pointer hover:scale-[1.02] transition-transform duration-200"
+              style={{ background: c.bg, border: !c.dark ? "1px solid rgba(0,0,0,0.08)" : "none" }}
             >
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400"
-                style={{ background: "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,255,255,0.04) 0%, transparent 70%)" }} />
-              <div className="relative z-10">
-                <span className="text-white/30 text-xs font-medium tracking-wide block mb-3">{item.category}</span>
-                <h3 className="text-white text-xl font-semibold tracking-[-0.015em] leading-[1.25] mb-4">{item.title}</h3>
-                <div className="flex items-baseline gap-2 mb-5">
-                  <span className="text-white text-3xl font-semibold tracking-tight">{item.metric}</span>
-                  <span className="text-white/35 text-sm">{item.unit}</span>
+              <p
+                className="text-[12px] font-semibold uppercase tracking-widest"
+                style={{ color: c.dark ? "rgba(255,255,255,0.35)" : "#6E6E73" }}
+              >
+                {c.category}
+              </p>
+              <div>
+                <div className="mb-4">
+                  <span
+                    className="font-bold block"
+                    style={{
+                      fontSize: "clamp(36px, 4vw, 52px)",
+                      letterSpacing: "-0.025em",
+                      lineHeight: "1",
+                      color: c.dark ? "#fff" : "#1D1D1F",
+                    }}
+                  >
+                    {c.metric}
+                  </span>
+                  <span className="text-[15px] mt-1 block" style={{ color: c.dark ? "rgba(255,255,255,0.45)" : "#6E6E73" }}>
+                    {c.unit}
+                  </span>
                 </div>
-                <div className="flex items-center gap-2 text-white/25 group-hover:text-white/60 text-xs font-medium transition-colors duration-300">
-                  View case study <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                </div>
+                <h3
+                  className="font-semibold text-[17px] leading-[1.3] mb-4"
+                  style={{ color: c.dark ? "rgba(255,255,255,0.75)" : "#1D1D1F" }}
+                >
+                  {c.name}
+                </h3>
+                <Link href="/contact">
+                  <span className="text-[15px] cursor-pointer hover:underline" style={{ color: "#0071E3" }}>Learn more ›</span>
+                </Link>
               </div>
             </motion.div>
           ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-24 px-5 text-center" style={{ background: "#F5F5F7" }}>
+        <div className="max-w-[560px] mx-auto">
+          <h2 className="font-bold mb-4" style={{ fontSize: "clamp(28px, 4vw, 48px)", letterSpacing: "-0.022em", color: "#1D1D1F" }}>
+            Your results, next.
+          </h2>
+          <p className="text-[17px] mb-8 leading-[1.6]" style={{ color: "#6E6E73" }}>
+            Ready to be in this list? Book a free strategy call and let's scope your authority system.
+          </p>
+          <Link href="/contact">
+            <span className="text-[17px] cursor-pointer hover:underline" style={{ color: "#0071E3" }}>Book a strategy call ›</span>
+          </Link>
         </div>
       </section>
     </div>

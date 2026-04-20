@@ -3,101 +3,147 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight } from "lucide-react";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 
-const formSchema = z.object({
+const schema = z.object({
   name: z.string().min(2, "Name is required"),
-  email: z.string().email("Invalid email address"),
-  company: z.string().min(2, "Company is required"),
+  email: z.string().email("Enter a valid email"),
+  company: z.string().min(1, "Company is required"),
   message: z.string().min(10, "Tell us about your goals"),
 });
 
-type FormValues = z.infer<typeof formSchema>;
+type F = z.infer<typeof schema>;
 
 export default function Contact() {
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const form = useForm<F>({ resolver: zodResolver(schema), defaultValues: { name: "", email: "", company: "", message: "" } });
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: { name: "", email: "", company: "", message: "" }
-  });
-
-  const onSubmit = async (data: FormValues) => {
-    setIsSubmitting(true);
-    await new Promise(r => setTimeout(r, 1000));
-    setIsSubmitting(false);
+  const onSubmit = async (data: F) => {
+    setSubmitting(true);
+    await new Promise(r => setTimeout(r, 900));
+    setSubmitting(false);
     toast({ title: "Message sent", description: "We'll be in touch within 24 hours." });
     form.reset();
   };
 
   return (
-    <div className="w-full bg-white">
+    <div className="w-full">
       {/* Hero */}
-      <section className="relative pt-40 pb-16 px-8 md:px-12 overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[600px] rounded-full bg-black/[0.03] blur-[140px] pointer-events-none" />
-        <div className="max-w-4xl mx-auto relative z-10">
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-black/25 text-xs font-bold tracking-[0.22em] uppercase mb-6">Contact</motion.p>
+      <section className="pt-28 pb-16 px-5" style={{ background: "#F5F5F7" }}>
+        <div className="max-w-[980px] mx-auto mt-8">
+          <p className="text-[12px] font-semibold uppercase tracking-widest mb-4" style={{ color: "#6E6E73" }}>Contact</p>
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-[-0.025em] leading-[1.08] text-[#0A0A0A]"
+            className="font-bold"
+            style={{ fontSize: "clamp(36px, 5.5vw, 72px)", lineHeight: "1.07", letterSpacing: "-0.025em", color: "#1D1D1F" }}
           >
             Let's build your<br />authority system.
           </motion.h1>
         </div>
       </section>
 
-      {/* Form + info */}
-      <section className="pb-24 px-8 md:px-12">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-[1fr_1.4fr] gap-16 md:gap-24">
+      {/* Form */}
+      <section className="py-16 px-5 pb-24" style={{ background: "#fff" }}>
+        <div className="max-w-[980px] mx-auto grid grid-cols-1 md:grid-cols-[1fr_1.5fr] gap-16">
+          {/* Left — info */}
           <div>
-            <p className="text-black/45 text-base leading-[1.85] mb-10">
-              Ready to stop renting attention and start owning your category? We partner with ambitious founders and creators who are serious about authority.
+            <p className="text-[19px] leading-[1.65] mb-10" style={{ color: "#6E6E73" }}>
+              We partner with ambitious founders and creators who are serious about building earned authority and inbound revenue.
             </p>
-            <div className="flex flex-col gap-6">
-              <div>
-                <p className="text-[#0A0A0A] font-semibold text-sm mb-1">Email</p>
-                <a href="mailto:hello@growitbuddy.com" className="text-black/40 hover:text-black text-sm transition-colors">hello@growitbuddy.com</a>
-              </div>
-              <div>
-                <p className="text-[#0A0A0A] font-semibold text-sm mb-1">Location</p>
-                <p className="text-black/40 text-sm">Global — async across 4 timezones</p>
-              </div>
+            <div className="flex flex-col gap-5">
+              {[
+                { label: "Email", value: "hello@growitbuddy.com", href: "mailto:hello@growitbuddy.com" },
+                { label: "Response time", value: "Within 24 hours" },
+                { label: "Location", value: "Global — async across 4 timezones" },
+              ].map((item, i) => (
+                <div key={i} className="p-5 rounded-[14px]" style={{ background: "#F5F5F7" }}>
+                  <p className="text-[12px] font-semibold uppercase tracking-widest mb-1" style={{ color: "#6E6E73" }}>{item.label}</p>
+                  {item.href
+                    ? <a href={item.href} className="text-[17px] font-medium hover:underline" style={{ color: "#0071E3" }}>{item.value}</a>
+                    : <p className="text-[17px]" style={{ color: "#1D1D1F" }}>{item.value}</p>
+                  }
+                </div>
+              ))}
             </div>
           </div>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+          {/* Right — form */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+                <div className="grid grid-cols-2 gap-4">
                   <FormField control={form.control} name="name" render={({ field }) => (
-                    <FormItem><FormLabel className="text-[#0A0A0A] text-sm font-medium">Name</FormLabel><FormControl><Input className="h-12 rounded-xl border-black/10 bg-[#F9F9F9]" {...field} /></FormControl><FormMessage /></FormItem>
+                    <FormItem>
+                      <FormLabel className="text-[13px] font-semibold" style={{ color: "#1D1D1F" }}>Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="h-12 rounded-[12px] text-[17px]"
+                          style={{ background: "#F5F5F7", border: "1px solid rgba(0,0,0,0.1)" }}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )} />
                   <FormField control={form.control} name="email" render={({ field }) => (
-                    <FormItem><FormLabel className="text-[#0A0A0A] text-sm font-medium">Email</FormLabel><FormControl><Input type="email" className="h-12 rounded-xl border-black/10 bg-[#F9F9F9]" {...field} /></FormControl><FormMessage /></FormItem>
+                    <FormItem>
+                      <FormLabel className="text-[13px] font-semibold" style={{ color: "#1D1D1F" }}>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          className="h-12 rounded-[12px] text-[17px]"
+                          style={{ background: "#F5F5F7", border: "1px solid rgba(0,0,0,0.1)" }}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )} />
                 </div>
                 <FormField control={form.control} name="company" render={({ field }) => (
-                  <FormItem><FormLabel className="text-[#0A0A0A] text-sm font-medium">Company / Brand</FormLabel><FormControl><Input className="h-12 rounded-xl border-black/10 bg-[#F9F9F9]" {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem>
+                    <FormLabel className="text-[13px] font-semibold" style={{ color: "#1D1D1F" }}>Company / Brand</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="h-12 rounded-[12px] text-[17px]"
+                        style={{ background: "#F5F5F7", border: "1px solid rgba(0,0,0,0.1)" }}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )} />
                 <FormField control={form.control} name="message" render={({ field }) => (
-                  <FormItem><FormLabel className="text-[#0A0A0A] text-sm font-medium">What are you looking to achieve?</FormLabel><FormControl><Textarea className="min-h-[140px] rounded-xl border-black/10 bg-[#F9F9F9] resize-none" {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem>
+                    <FormLabel className="text-[13px] font-semibold" style={{ color: "#1D1D1F" }}>What are you looking to achieve?</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        className="min-h-[140px] rounded-[12px] text-[17px] resize-none"
+                        style={{ background: "#F5F5F7", border: "1px solid rgba(0,0,0,0.1)" }}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )} />
                 <button
                   type="submit"
-                  disabled={isSubmitting}
-                  className="flex items-center justify-center gap-3 w-full h-14 rounded-full bg-[#0A0A0A] text-white font-semibold text-base hover:bg-black/85 transition-all duration-200 hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] group mt-2"
+                  disabled={submitting}
+                  className="h-12 rounded-full font-semibold text-[17px] mt-2 transition-all duration-200 hover:opacity-90 active:scale-[0.99]"
+                  style={{ background: "#0071E3", color: "#fff" }}
+                  data-testid="button-book-call-cta"
                 >
-                  {isSubmitting ? "Sending..." : "Send message"}
-                  <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </span>
+                  {submitting ? "Sending..." : "Send message"}
                 </button>
               </form>
             </Form>
