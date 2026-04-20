@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -64,45 +64,44 @@
 :root {
   --button-outline: rgba(0,0,0,.10);
   --badge-outline: rgba(0,0,0,.06);
-
   --opaque-button-border-intensity: 9;
 
   --elevate-1: rgba(0,0,0,.03);
   --elevate-2: rgba(0,0,0,.06);
 
-  /* Premium warm cream theme */
-  --background: 40 35% 96%;       /* #F8F5EF warm cream/parchment */
-  --foreground: 38 18% 6%;        /* #0E0D0B warm near-black */
-  --border: 40 18% 84%;           /* warm cream border */
+  /* Premium monochrome */
+  --background: 0 0% 98%;
+  --foreground: 0 0% 5%;
+  --border: 0 0% 90%;
 
-  --card: 40 22% 91%;             /* #EDE9DF deeper warm cream */
-  --card-foreground: 38 18% 6%;
-  --card-border: 40 18% 84%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 5%;
+  --card-border: 0 0% 90%;
 
-  --sidebar: 40 22% 91%;
-  --sidebar-foreground: 38 18% 6%;
-  --sidebar-border: 40 18% 84%;
-  --sidebar-primary: 38 18% 6%;
-  --sidebar-primary-foreground: 40 35% 96%;
-  --sidebar-accent: 40 20% 87%;
-  --sidebar-accent-foreground: 38 18% 6%;
-  --sidebar-ring: 38 18% 6%;
+  --sidebar: 0 0% 98%;
+  --sidebar-foreground: 0 0% 5%;
+  --sidebar-border: 0 0% 88%;
+  --sidebar-primary: 0 0% 5%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 0 0% 94%;
+  --sidebar-accent-foreground: 0 0% 5%;
+  --sidebar-ring: 0 0% 5%;
 
-  --popover: 40 35% 96%;
-  --popover-foreground: 38 18% 6%;
-  --popover-border: 40 18% 84%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 5%;
+  --popover-border: 0 0% 88%;
 
-  --primary: 38 18% 6%;           /* #0E0D0B */
-  --primary-foreground: 40 35% 96%;
+  --primary: 0 0% 5%;
+  --primary-foreground: 0 0% 98%;
 
-  --secondary: 40 22% 91%;
-  --secondary-foreground: 38 18% 6%;
+  --secondary: 0 0% 95%;
+  --secondary-foreground: 0 0% 10%;
 
-  --muted: 40 20% 88%;
-  --muted-foreground: 38 8% 42%;  /* warm readable body grey */
+  --muted: 0 0% 95%;
+  --muted-foreground: 0 0% 40%;
 
-  --accent: 38 8% 42%;
-  --accent-foreground: 38 18% 6%;
+  --accent: 0 0% 40%;
+  --accent-foreground: 0 0% 5%;
 
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
@@ -124,7 +123,6 @@
   --shadow-xl:  0px 16px 24px rgba(0,0,0,0.09), 0px 8px 10px rgba(0,0,0,0.05);
   --shadow-2xl: 0px 24px 48px rgba(0,0,0,0.10);
 
-  /* Fallbacks */
   --sidebar-primary-border: hsl(var(--sidebar-primary));
   --sidebar-primary-border: hsl(from hsl(var(--sidebar-primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
   --sidebar-accent-border: hsl(var(--sidebar-accent));
@@ -142,19 +140,27 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
+  * { @apply border-border; }
+  body { @apply font-sans antialiased bg-background text-foreground; }
+}
 
-  body {
-    @apply font-sans antialiased bg-background text-foreground;
-  }
+/* Gradient text utility */
+.text-gradient-silver {
+  background: linear-gradient(135deg, #1A1A1A 0%, #888888 48%, #1A1A1A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-white {
+  background: linear-gradient(135deg, #FFFFFF 0%, #AAAAAA 50%, #FFFFFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 @layer utilities {
-  input[type="search"]::-webkit-search-cancel-button {
-    @apply hidden;
-  }
+  input[type="search"]::-webkit-search-cancel-button { @apply hidden; }
   [contenteditable][data-placeholder]:empty::before {
     content: attr(data-placeholder);
     color: hsl(var(--muted-foreground));
@@ -171,12 +177,8 @@
     border-radius: inherit;
     z-index: -1;
   }
-  .toggle-elevate.toggle-elevated::before {
-    background-color: var(--elevate-2);
-  }
-  .border.toggle-elevate::before {
-    inset: -1px;
-  }
+  .toggle-elevate.toggle-elevated::before { background-color: var(--elevate-2); }
+  .border.toggle-elevate::before { inset: -1px; }
   .hover-elevate:not(.no-default-hover-elevate),
   .active-elevate:not(.no-default-active-elevate),
   .hover-elevate-2:not(.no-default-hover-elevate),
@@ -196,20 +198,14 @@
     z-index: 999;
   }
   .hover-elevate:hover:not(.no-default-hover-elevate)::after,
-  .active-elevate:active:not(.no-default-active-elevate)::after {
-    background-color: var(--elevate-1);
-  }
+  .active-elevate:active:not(.no-default-active-elevate)::after { background-color: var(--elevate-1); }
   .hover-elevate-2:hover:not(.no-default-hover-elevate)::after,
-  .active-elevate-2:active:not(.no-default-active-elevate)::after {
-    background-color: var(--elevate-2);
-  }
+  .active-elevate-2:active:not(.no-default-active-elevate)::after { background-color: var(--elevate-2); }
   .border.hover-elevate:not(.no-hover-interaction-elevate)::after,
   .border.active-elevate:not(.no-active-interaction-elevate)::after,
   .border.hover-elevate-2:not(.no-hover-interaction-elevate)::after,
   .border.active-elevate-2:not(.no-active-interaction-elevate)::after,
-  .border.hover-elevate:not(.no-hover-interaction-elevate)::after {
-    inset: -1px;
-  }
+  .border.hover-elevate:not(.no-hover-interaction-elevate)::after { inset: -1px; }
 }
 
 @keyframes float-slow {
@@ -217,12 +213,23 @@
   33% { transform: translate(20px, -30px) scale(1.05); }
   66% { transform: translate(-15px, 15px) scale(0.97); }
 }
-
 @keyframes float-slow-reverse {
   0%, 100% { transform: translate(0, 0) scale(1); }
   33% { transform: translate(-20px, 20px) scale(0.95); }
   66% { transform: translate(15px, -15px) scale(1.03); }
 }
-
 .animate-float-slow { animation: float-slow 12s ease-in-out infinite; }
 .animate-float-slow-reverse { animation: float-slow-reverse 15s ease-in-out infinite; }
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.text-shimmer {
+  background: linear-gradient(90deg, #1A1A1A 0%, #9A9A9A 40%, #1A1A1A 60%, #9A9A9A 80%, #1A1A1A 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}

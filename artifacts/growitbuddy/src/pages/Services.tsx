@@ -33,15 +33,15 @@ const services = [
 
 export default function Services() {
   return (
-    <div className="w-full pt-20 md:pt-24 pb-16 md:pb-24 lg:pb-32 px-5 md:px-8 bg-[#F8F5EF]">
+    <div className="w-full pt-20 md:pt-24 pb-16 md:pb-24 lg:pb-32 px-5 md:px-8 bg-[#FAFAFA]">
       <div className="container mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="max-w-3xl mb-16 md:mb-20"
         >
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 text-[#0E0D0B]">Our Services.</h1>
-          <p className="text-lg md:text-xl text-[#6B6760]">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 text-[#0A0A0A]">Our Services.</h1>
+          <p className="text-lg md:text-xl text-[#525252]">
             We don't just create content. We build end-to-end authority systems designed to make you the undeniable category leader.
           </p>
         </motion.div>
@@ -53,13 +53,13 @@ export default function Services() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="bg-[#EDE9DF] border border-[#0E0D0B]/8 p-6 md:p-8 rounded-3xl shadow-none hover:shadow-md transition-shadow group flex flex-col h-full"
+                className="bg-[#F4F4F4] border border-black/8 p-6 md:p-8 rounded-3xl shadow-none hover:shadow-md transition-shadow group flex flex-col h-full"
               >
-                <div className="text-[#706C64] text-lg font-bold mb-4">0{idx + 1}</div>
-                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[#0E0D0B]">{service.title}</h2>
-                <p className="text-[#6B6760] text-base md:text-lg mb-8 flex-grow">{service.description}</p>
+                <div className="text-[#525252] text-lg font-bold mb-4">0{idx + 1}</div>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[#0A0A0A]">{service.title}</h2>
+                <p className="text-[#525252] text-base md:text-lg mb-8 flex-grow">{service.description}</p>
                 <div className="bg-black/[0.03] rounded-2xl p-6 mt-auto">
-                  <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-[#706C64]">What's included:</h4>
+                  <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-[#525252]">What's included:</h4>
                   <ul className="flex flex-col gap-3">
                     {service.features.map((feature, fIdx) => (
                       <li key={fIdx} className="flex items-center gap-3">
@@ -78,14 +78,14 @@ export default function Services() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-16 md:mt-24 p-8 md:p-12 bg-[#0E0D0B] text-white rounded-3xl text-center"
+          className="mt-16 md:mt-24 p-8 md:p-12 bg-[#0A0A0A] text-white rounded-3xl text-center"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to scale your influence?</h2>
           <p className="text-lg md:text-xl text-white/40 mb-8 max-w-2xl mx-auto">
             Let's discuss how our systems can build your authority and drive inbound demand.
           </p>
           <Link href="/contact">
-            <button className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#0E0D0B] text-black font-bold text-lg
+            <button className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#0A0A0A] text-black font-bold text-lg
                                hover:shadow-[0_8px_24px_rgba(14,13,11,0.2)] hover:scale-[1.02] transition-all duration-300">
               Book a Strategy Call
             </button>

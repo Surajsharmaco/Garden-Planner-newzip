@@ -41,7 +41,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="w-full pt-10 pb-24 bg-[#F8F5EF]">
+    <div className="w-full pt-10 pb-24 bg-[#FAFAFA]">
       <div className="container mx-auto px-4 md:px-8 max-w-6xl">
         <div className="grid md:grid-cols-5 gap-16 lg:gap-24">
 
@@ -50,19 +50,19 @@ export default function Contact() {
             animate={{ opacity: 1, x: 0 }}
             className="md:col-span-2"
           >
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight text-[#0E0D0B]">Let's build<br/>your system.</h1>
-            <p className="text-xl text-[#6B6760] mb-12">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight text-[#0A0A0A]">Let's build<br/>your system.</h1>
+            <p className="text-xl text-[#525252] mb-12">
               Ready to stop renting attention and start owning your category? We partner with ambitious founders and creators.
             </p>
 
             <div className="space-y-8">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-black/[0.05] rounded-full flex items-center justify-center shrink-0">
-                  <Mail className="w-5 h-5 text-[#6B6760]" />
+                  <Mail className="w-5 h-5 text-[#525252]" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-lg mb-1 text-[#0E0D0B]">Email Us</h4>
-                  <a href="mailto:hello@growitbuddy.com" className="text-[#6B6760] hover:text-black transition-colors">
+                  <h4 className="font-bold text-lg mb-1 text-[#0A0A0A]">Email Us</h4>
+                  <a href="mailto:hello@growitbuddy.com" className="text-[#525252] hover:text-black transition-colors">
                     hello@growitbuddy.com
                   </a>
                 </div>
@@ -70,11 +70,11 @@ export default function Contact() {
 
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-black/[0.05] rounded-full flex items-center justify-center shrink-0">
-                  <MapPin className="w-5 h-5 text-[#706C64]" />
+                  <MapPin className="w-5 h-5 text-[#525252]" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-lg mb-1 text-[#0E0D0B]">Global Team</h4>
-                  <p className="text-[#6B6760]">Operating asynchronously<br/>across 4 timezones.</p>
+                  <h4 className="font-bold text-lg mb-1 text-[#0A0A0A]">Global Team</h4>
+                  <p className="text-[#525252]">Operating asynchronously<br/>across 4 timezones.</p>
                 </div>
               </div>
             </div>
@@ -85,8 +85,8 @@ export default function Contact() {
             animate={{ opacity: 1, x: 0 }}
             className="md:col-span-3"
           >
-            <div className="bg-[#EDE9DF] border border-[#0E0D0B]/8 shadow-sm rounded-3xl p-8 md:p-12">
-              <h3 className="text-2xl font-bold mb-8 text-[#0E0D0B]">Book a Strategy Call</h3>
+            <div className="bg-[#F4F4F4] border border-black/8 shadow-sm rounded-3xl p-8 md:p-12">
+              <h3 className="text-2xl font-bold mb-8 text-[#0A0A0A]">Book a Strategy Call</h3>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -108,7 +108,7 @@ export default function Contact() {
                   <FormField control={form.control} name="message" render={({ field }) => (
                     <FormItem><FormLabel>What are you looking to achieve?</FormLabel><FormControl><Textarea className="min-h-[120px]" {...field} /></FormControl><FormMessage /></FormItem>
                   )} />
-                  <Button type="submit" className="w-full h-14 text-lg bg-[#0E0D0B] text-white group" disabled={isSubmitting}>
+                  <Button type="submit" className="w-full h-14 text-lg bg-[#0A0A0A] text-white group" disabled={isSubmitting}>
                     {isSubmitting ? "Sending..." : "Submit Inquiry"}
                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                   </Button>

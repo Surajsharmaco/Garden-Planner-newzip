@@ -34,15 +34,15 @@ const posts = [
 
 export default function Insights() {
   return (
-    <div className="w-full pt-10 pb-24 bg-[#F8F5EF]">
+    <div className="w-full pt-10 pb-24 bg-[#FAFAFA]">
       <div className="container mx-auto px-4 md:px-8 max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="max-w-3xl mb-20"
         >
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-[#0E0D0B]">Insights.</h1>
-          <p className="text-xl text-[#6B6760]">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-[#0A0A0A]">Insights.</h1>
+          <p className="text-xl text-[#525252]">
             Thoughts, frameworks, and strategies on building unignorable authority in a noisy world.
           </p>
         </motion.div>
@@ -56,16 +56,16 @@ export default function Insights() {
               transition={{ delay: idx * 0.1 }}
               className="group cursor-pointer flex flex-col h-full"
             >
-              <div className="bg-[#E8E3D6] border border-[#0E0D0B]/6 aspect-[16/9] rounded-2xl mb-6 overflow-hidden">
+              <div className="bg-[#EEEEEE] border border-black/6 aspect-[16/9] rounded-2xl mb-6 overflow-hidden">
                 <div className="w-full h-full bg-black/[0.04] transition-transform duration-700 group-hover:scale-105" />
               </div>
               <div className="flex items-center gap-4 mb-3">
-                <span className="text-[#6B6760] font-semibold text-sm uppercase tracking-wider">{post.category}</span>
-                <span className="text-[#9C9890] text-sm">{post.date}</span>
-                <span className="text-[#9C9890] text-sm">• {post.readTime}</span>
+                <span className="text-[#525252] font-semibold text-sm uppercase tracking-wider">{post.category}</span>
+                <span className="text-[#9E9E9E] text-sm">{post.date}</span>
+                <span className="text-[#9E9E9E] text-sm">• {post.readTime}</span>
               </div>
-              <h2 className="text-2xl font-bold mb-3 text-[#0E0D0B] group-hover:text-black/70 transition-colors">{post.title}</h2>
-              <p className="text-[#6B6760] line-clamp-2">{post.desc}</p>
+              <h2 className="text-2xl font-bold mb-3 text-[#0A0A0A] group-hover:text-black/70 transition-colors">{post.title}</h2>
+              <p className="text-[#525252] line-clamp-2">{post.desc}</p>
             </motion.div>
           ))}
         </div>

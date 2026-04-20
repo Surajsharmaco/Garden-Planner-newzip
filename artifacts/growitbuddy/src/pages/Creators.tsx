@@ -66,7 +66,7 @@ export default function Creators() {
             Creator Network
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">Join the Ecosystem.</h1>
-          <p className="text-lg md:text-xl text-[#6B6760] max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-[#525252] max-w-2xl mx-auto">
             We partner with high-potential creators to build unignorable authority and multi-channel distribution. Tell us about yourself.
           </p>
         </motion.div>
@@ -75,7 +75,7 @@ export default function Creators() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-[#EDE9DF] border border-[#0E0D0B]/8 shadow-none rounded-3xl p-6 md:p-12"
+          className="bg-[#F4F4F4] border border-black/8 shadow-none rounded-3xl p-6 md:p-12"
         >
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
