@@ -15,47 +15,47 @@ const STATS = [
 
 const PROBLEMS = [
   {
-    title: "You're posting but not getting clients",
-    desc: "You put out content regularly but it's not bringing in real business. No enquiries, no leads, no customers - just time spent with nothing to show for it.",
+    title: "You're creating content. But not building authority.",
+    desc: "Most content gets a few likes, then disappears. Without clear positioning and direction, your content doesn't build the kind of trust that turns followers into clients.",
   },
   {
-    title: "You don't know what to post next",
-    desc: "Every week feels like starting from scratch. No clear direction, no plan, no system - just guessing what might work and hoping something sticks.",
+    title: "You're getting attention - but not the right kind.",
+    desc: "Reach without relevance leads nowhere. If your content isn't reaching decision-makers and the right buyers, it's not converting into real opportunities.",
   },
   {
-    title: "You're not reaching the right people",
-    desc: "Your content gets some likes but the people who could actually become customers never see it. You're talking, but not to the right audience.",
+    title: "You have no system - just constant effort.",
+    desc: "Showing up consistently is exhausting when every post is a new decision. Without a content system, growth stays unpredictable no matter how much effort you put in.",
   },
 ];
 
 const SERVICES = [
   {
     num: "01",
-    title: "Content Planning",
-    desc: "We figure out exactly what to post, who to target, and how to grow - then build a 90-day plan around your business goals.",
+    title: "Authority Strategy",
+    desc: "Define how you are seen and what you're known for - before you create a single piece of content.",
   },
   {
     num: "02",
-    title: "Content Creation",
-    desc: "We write your posts, scripts, and newsletters in your voice - consistent, high-quality content published every week without you doing the work.",
+    title: "Content System",
+    desc: "Build a repeatable process that produces high-quality content consistently, without depending on your time every single week.",
   },
   {
     num: "03",
     title: "Video Editing",
-    desc: "Short and long-form video editing with thumbnails and captions - built to get views and keep people watching until the end.",
+    desc: "High-retention editing for short and long-form video - built to capture attention and keep people watching through to the end.",
   },
   {
     num: "04",
-    title: "Growth Strategy",
-    desc: "We make sure your content reaches the right people - not just your existing followers, but the customers you're actually trying to win.",
+    title: "Distribution",
+    desc: "Structured distribution so your content reaches the right audience - not just the people who already follow you.",
   },
 ];
 
 const FRAMEWORK_STEPS = [
-  { step: "01", title: "Positioning", desc: "We figure out exactly who you're talking to and what makes your business different from everyone else in your space." },
-  { step: "02", title: "Content Engine", desc: "We build a simple, repeatable process so great content gets created every week - without stress or guesswork." },
-  { step: "03", title: "Distribution Loop", desc: "We make sure the right people see your content - not just your current followers, but the people who can actually become customers." },
-  { step: "04", title: "Consistent Growth", desc: "As your content builds trust and reach, more clients find you, deals get easier, and your business grows steadily." },
+  { step: "01", title: "Positioning", desc: "Clarify your expertise and define the exact audience you want to attract. This is the foundation everything else is built on." },
+  { step: "02", title: "Content Engine", desc: "Build a repeatable content system that produces high-quality output every week - without starting from scratch each time." },
+  { step: "03", title: "Distribution Loop", desc: "Consistently get your content in front of the right people - through the platforms and channels where your audience actually spends time." },
+  { step: "04", title: "Authority Compounding", desc: "Over time, consistent content builds recognition, trust, and inbound demand. Opportunities start coming to you." },
 ];
 
 const PROOF = [
@@ -66,10 +66,10 @@ const PROOF = [
 ];
 
 const PROCESS_STEPS = [
-  { num: "01", title: "Understand", desc: "We learn everything about your business, your audience, and what you've tried before. No assumptions." },
-  { num: "02", title: "Plan", desc: "We build a clear content plan - what to post, where to post, how often, and what to say to attract the right customers." },
-  { num: "03", title: "Create & Publish", desc: "Our team handles the writing, editing, and publishing so you can focus on running your business." },
-  { num: "04", title: "Grow", desc: "We track what's working, improve every month, and keep growing your reach and the results you're getting." },
+  { num: "01", title: "Understand", desc: "We study your market, your audience, and your current positioning to identify exactly where the opportunity is." },
+  { num: "02", title: "Strategize", desc: "We design your content strategy - what to say, where to say it, and how to say it in a way that builds trust and drives real demand." },
+  { num: "03", title: "Execute", desc: "Our team produces and distributes your content every week - so you can focus entirely on running your business." },
+  { num: "04", title: "Scale", desc: "We track performance, refine what works, and expand your reach as your authority builds over time." },
 ];
 
 const TESTIMONIALS = [
@@ -225,7 +225,7 @@ export default function Home() {
               fontWeight: 400,
             }}
           >
-            We help founders and creators grow their business with content that brings real customers - not just views. We plan it, create it, and help you grow consistently.
+            Turn your expertise into authority - and that authority into consistent inbound demand. We help you create and distribute content so the right people discover you, trust you, and come to you.
           </motion.p>
 
           <motion.div
@@ -279,7 +279,7 @@ export default function Home() {
               The Problem
             </p>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(30px, 5vw, 56px)", letterSpacing: "-0.035em", lineHeight: "1.08", color: TEXT, maxWidth: "18ch", marginBottom: 60 }}>
-              You're posting. But you're not growing.
+              Most content gets attention. Very little builds authority.
             </h2>
           </FadeUp>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
@@ -318,22 +318,22 @@ export default function Home() {
               The Solution
             </p>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(30px, 5vw, 56px)", letterSpacing: "-0.035em", lineHeight: "1.08", color: "#fff", maxWidth: "22ch", marginBottom: 60 }}>
-              We fix this with a clear content system built around your business.
+              From random content - to a system that builds authority.
             </h2>
           </FadeUp>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: 2, background: "rgba(255,255,255,0.06)", borderRadius: 16, overflow: "hidden" }}>
             {[
               {
-                label: "Without a clear system",
+                label: "Content without a system",
                 dark: true,
-                items: ["Posting with no clear plan", "Random topics with no direction", "Chasing likes and views", "Burning out every few months", "No real results after months of effort"],
+                items: ["Content with no strategic direction", "Reach without the right audience", "Metrics without real business outcomes", "Inconsistency and creative burnout", "No compounding effect over time"],
                 color: "rgba(255,255,255,0.3)",
               },
               {
                 label: "With GrowitBuddy",
                 dark: false,
-                items: ["A clear content plan that makes sense", "Content that attracts real customers", "Consistent posting without the stress", "More reach, better engagement, more growth", "A system that improves over time"],
+                items: ["Clear positioning before any content", "Consistent reach to the right people", "Content that builds trust and drives demand", "A system that runs without daily effort", "Authority that compounds with every piece"],
                 color: TEXT,
               },
             ].map((col, i) => (
@@ -375,7 +375,7 @@ export default function Home() {
           <FadeUp>
             <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Services</p>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(30px, 5vw, 54px)", letterSpacing: "-0.035em", lineHeight: "1.08", color: TEXT, maxWidth: "18ch", marginBottom: 60 }}>
-              Everything you need to grow your business with content.
+              Everything you need to build authority and generate inbound demand.
             </h2>
           </FadeUp>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 12 }}>
@@ -508,7 +508,7 @@ export default function Home() {
           <FadeUp>
             <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Process</p>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(30px, 5vw, 54px)", letterSpacing: "-0.035em", lineHeight: "1.08", color: TEXT, maxWidth: "20ch", marginBottom: 60 }}>
-              How we help you grow with content.
+              How we build your authority system.
             </h2>
           </FadeUp>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 16 }}>
@@ -547,16 +547,16 @@ export default function Home() {
             {[
               {
                 tag: "For Creators",
-                title: "Turn your content into a real business.",
-                desc: "If you're creating content but not making consistent money from it, we help you build a system that turns your audience into paying customers.",
+                title: "Turn your platform into consistent income.",
+                desc: "We help creators build a positioned, monetized content system - so your audience turns into a real business, not just a following.",
                 cta: "Join as a Creator",
                 href: "/creators",
                 dark: false,
               },
               {
                 tag: "For Freelancers",
-                title: "Work with top founders and creators.",
-                desc: "Are you a writer, editor, or strategist? Apply to join our team and work on content projects for ambitious clients worldwide.",
+                title: "Join the GrowitBuddy network.",
+                desc: "Are you a writer, editor, or strategist? Apply to work with ambitious founders and help them build the authority they deserve.",
                 cta: "Apply to Join",
                 href: "/freelancers",
                 dark: true,
@@ -612,10 +612,10 @@ export default function Home() {
             <FadeUp>
               <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 16 }}>Authority Audit</p>
               <h2 style={{ fontWeight: 800, fontSize: "clamp(28px, 4vw, 52px)", letterSpacing: "-0.035em", lineHeight: "1.08", color: "#fff", marginBottom: 20 }}>
-                Find out what's blocking your growth.
+                Find out what's holding your authority back.
               </h2>
               <p style={{ fontSize: 16, color: "rgba(255,255,255,0.45)", lineHeight: "1.75", marginBottom: 32 }}>
-                Answer 6 quick questions and get a personalized diagnosis of exactly what's holding your content back - free, in under 2 minutes.
+                Answer 6 questions and get a specific, personalized breakdown of exactly what's limiting your content's impact - free, in under 2 minutes.
               </p>
               <Link href="/authority-audit">
                 <span className="gb-btn" style={{ fontSize: 14 }}>
@@ -703,7 +703,7 @@ export default function Home() {
                 Suraj Sharma
               </h2>
               <p style={{ fontSize: 15, color: "rgba(11,11,11,0.5)", lineHeight: "1.8", marginBottom: 28 }}>
-                "I started GrowitBuddy because the best founders I knew were being ignored - not because of talent, but because they didn't know how to talk about what they did. We help them change that."
+                "I built GrowitBuddy after watching brilliant founders lose market position to louder, less qualified voices. Authority isn't given - it's built. We built the systems to do it consistently."
               </p>
               <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
                 {["Founder & CEO", "Content Strategist", "Authority Architect"].map((tag) => (
