@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function PageIntro() {
   const [visible, setVisible] = useState(() => {
     try {
+      if (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("skip-intro") === "1") return false;
       return !sessionStorage.getItem("gb_intro_seen");
     } catch {
       return true;
