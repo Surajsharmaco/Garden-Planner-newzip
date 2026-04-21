@@ -6,41 +6,41 @@ import SEOMeta from "@/components/SEOMeta";
 const services = [
   {
     num: "01",
-    title: "Authority Strategy",
-    headline: "Know exactly what you stand for.",
-    description: "Narrative design, category positioning, and a bespoke 90-day authority roadmap built for your specific market and audience.",
-    features: ["Narrative Design", "Category Creation", "Audience Avatar Mapping", "90-Day Roadmap", "Competitor Analysis"],
+    title: "Content Planning",
+    headline: "Know exactly what to post and why.",
+    description: "We figure out exactly what content will work for your business - who you're talking to, what they care about, and how to get them to choose you. Then we build a plan around it.",
+    features: ["Clear Content Strategy", "Target Audience Research", "90-Day Content Roadmap", "Competitor Analysis", "Content Themes & Pillars"],
     dark: false,
   },
   {
     num: "02",
-    title: "Content Production",
-    headline: "High-signal content. At scale.",
-    description: "We extract your knowledge and systematize the production of high-quality content - ghostwriting, visual assets, newsletters, and platform-native formats.",
+    title: "Content Creation",
+    headline: "Content that works. Every week.",
+    description: "We write your posts, captions, scripts, and newsletters - all in your voice. Consistent, high-quality content published every week without you having to do the work.",
     features: ["Ghostwriting", "Visual Asset Creation", "Newsletter Systems", "Platform-Native Formatting", "Content Calendar"],
     dark: true,
   },
   {
     num: "03",
     title: "Video Editing",
-    headline: "Video built for retention.",
-    description: "Short-form clips, long-form editing, thumbnail design, and algorithm-native structure built for compounding reach.",
+    headline: "Video that gets watched and remembered.",
+    description: "We edit your long-form and short-form videos so they look professional, get views, and keep people watching until the end. Thumbnails, captions, and structure included.",
     features: ["Short-Form Clips", "Long-Form Editing", "Thumbnail Design", "Retention Optimization", "Caption Systems"],
     dark: false,
   },
   {
     num: "04",
-    title: "Distribution Strategy",
-    headline: "Reach decision-makers at scale.",
-    description: "Platform-native, algorithm-aware strategies that ensure your narrative reaches the decision-makers that matter across every major channel.",
-    features: ["Algorithm Strategy", "Cross-Platform Syndication", "Engagement Architecture", "Community Building", "Paid Amplification"],
+    title: "Getting You Seen",
+    headline: "Reach the Right Audience - Consistently",
+    description: "Make sure your content doesn't just get posted - it gets seen by the people who actually matter. Better reach, better targeting, better results for your business.",
+    features: ["Platform Growth Strategy", "Cross-Platform Reach", "Engagement Improvement", "Community Building", "Paid Amplification"],
     dark: true,
   },
   {
     num: "05",
     title: "Personal Brand Growth",
-    headline: "Own your category.",
-    description: "Profile optimisation, network expansion, monetisation strategy, and PR placements - a full-stack approach to authority ownership.",
+    headline: "Become the name people think of first.",
+    description: "We optimize your profiles, expand your network, and get you into the right conversations and media - so you become the recognized name in your space.",
     features: ["Profile Optimization", "Network Expansion", "Monetization Strategy", "PR & Media Placements", "Speaking Outreach"],
     dark: false,
   },
@@ -65,7 +65,7 @@ export default function Services() {
               transition={{ duration: 0.7 }}
               style={{ fontWeight: 800, fontSize: "clamp(44px, 6.5vw, 80px)", letterSpacing: "-0.04em", lineHeight: "1.02", color: "#0B0B0B" }}
             >
-              End-to-end authority systems.
+              Everything you need to grow with content.
             </motion.h1>
           </div>
           <motion.p
@@ -74,7 +74,7 @@ export default function Services() {
             transition={{ delay: 0.1 }}
             style={{ fontSize: 18, lineHeight: "1.75", color: "rgba(11,11,11,0.5)", alignSelf: "flex-end" }}
           >
-            We don't just create content. We build the infrastructure for category leadership - every module designed to compound.
+            We plan your content, create it, and help it reach the right people. Everything done for you, so you can focus on running your business.
           </motion.p>
         </div>
       </section>
@@ -147,10 +147,10 @@ export default function Services() {
       <section style={{ padding: "80px 24px", background: "#0B0B0B", textAlign: "center" }}>
         <div className="max-w-[600px] mx-auto">
           <h2 style={{ fontWeight: 800, fontSize: "clamp(28px, 5vw, 52px)", letterSpacing: "-0.04em", color: "#fff", marginBottom: 20 }}>
-            Ready to start building?
+            Ready to start growing?
           </h2>
           <p style={{ fontSize: 16, color: "rgba(255,255,255,0.45)", lineHeight: "1.75", marginBottom: 32 }}>
-            Book a free strategy call and let's scope your authority system.
+            Book a free strategy call. We'll figure out exactly what you need and put a clear plan together.
           </p>
           <Link href="/contact">
             <span

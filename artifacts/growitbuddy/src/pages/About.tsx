@@ -21,7 +21,7 @@ export default function About() {
             transition={{ duration: 0.7 }}
             style={{ fontWeight: 800, fontSize: "clamp(44px, 7vw, 88px)", letterSpacing: "-0.04em", lineHeight: "1.02", color: "#0B0B0B", maxWidth: "18ch", marginBottom: 24 }}
           >
-            Engineering authority since day one.
+            We help real businesses grow with content that actually works.
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -29,7 +29,7 @@ export default function About() {
             transition={{ delay: 0.1 }}
             style={{ fontSize: 18, color: "rgba(11,11,11,0.5)", lineHeight: "1.75", maxWidth: "55ch" }}
           >
-            We are a collective of strategists, writers, editors, and growth engineers who believe true expertise deserves to be heard.
+            We are a team of strategists, writers, and editors who help founders and creators grow their business with clear, consistent content.
           </motion.p>
         </div>
       </section>
@@ -59,13 +59,13 @@ export default function About() {
           <motion.div initial={{ opacity: 0, x: 16 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
             <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Mission</p>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(28px, 4vw, 48px)", letterSpacing: "-0.04em", lineHeight: "1.1", color: "#0B0B0B", marginBottom: 20 }}>
-              Deep expertise deserves disproportionate attention.
+              Good businesses deserve to be seen.
             </h2>
             <p style={{ fontSize: 16, color: "rgba(11,11,11,0.5)", lineHeight: "1.8", marginBottom: 16 }}>
-              We don't do hacks. We build robust content and distribution systems that translate deep knowledge into market leadership and inbound revenue.
+              We work with founders and creators who are genuinely good at what they do but aren't getting the attention they deserve. We fix that with content that speaks to the right people.
             </p>
             <p style={{ fontSize: 16, color: "rgba(11,11,11,0.5)", lineHeight: "1.8", marginBottom: 32 }}>
-              Every founder we work with has something worth amplifying. Our job is to build the infrastructure that ensures the market hears it - loudly, consistently, and credibly.
+              We plan, create, and manage your content - so you grow consistently without spending all your time on it.
             </p>
             <Link href="/services">
               <span className="gb-btn" style={{ fontSize: 14 }}>
@@ -96,10 +96,10 @@ export default function About() {
             <div>
               <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)", marginBottom: 20 }}>The origin</p>
               <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 3.5vw, 44px)", letterSpacing: "-0.04em", lineHeight: "1.1", color: "#fff", marginBottom: 20 }}>
-                "I built GrowitBuddy after watching brilliant founders lose to louder, less qualified voices."
+                "I started GrowitBuddy because the best founders I knew were being ignored - not because of talent, but because they didn't know how to talk about what they did."
               </h2>
               <p style={{ fontSize: 16, color: "rgba(255,255,255,0.4)", lineHeight: "1.8" }}>
-                Authority isn't given - it's architected. We built the agency to be the silent engine behind the world's most influential founders. The result is a studio that has helped generate over 700M+ views and scale hundreds of founder brands to market leadership.
+                We help them change that. Today we've helped founders and creators generate over 700M+ views and bring in real business through content that actually makes sense for their goals.
               </p>
             </div>
           </div>
@@ -113,9 +113,9 @@ export default function About() {
           <h2 style={{ fontWeight: 800, fontSize: "clamp(28px, 4vw, 48px)", letterSpacing: "-0.04em", lineHeight: 1.1, color: "#0B0B0B", marginBottom: 48 }}>How we operate.</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 1, background: "rgba(11,11,11,0.08)", borderRadius: 16, overflow: "hidden" }}>
             {[
-              { title: "Signal over noise", body: "Every piece we produce is built to establish credibility, not chase vanity metrics. If it doesn't compound, we don't build it.", num: "01" },
-              { title: "Systems thinking", body: "We build infrastructure, not campaigns. Every element is designed to compound and create leverage over time.", num: "02" },
-              { title: "Radical transparency", body: "We tell you what's working and what isn't, even when it's uncomfortable. Our best clients are the ones who want the truth.", num: "03" },
+              { title: "Results over vanity", body: "We don't chase likes or views. We focus on content that actually brings in customers and grows your business.", num: "01" },
+              { title: "Simple, clear systems", body: "We build processes that are easy to follow and sustainable long-term - not complicated strategies that fall apart in a month.", num: "02" },
+              { title: "Honest communication", body: "We tell you what's working and what isn't, every single month. No fluff, no excuses - just clear information and a plan forward.", num: "03" },
             ].map((v, i) => (
               <div key={i} style={{ background: "#fff", padding: "36px 32px" }}>
                 <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.15em", color: "rgba(11,11,11,0.2)", marginBottom: 20 }}>{v.num}</p>
@@ -134,7 +134,7 @@ export default function About() {
             Ready to work together?
           </h2>
           <p style={{ fontSize: 16, color: "rgba(11,11,11,0.5)", lineHeight: "1.75", marginBottom: 32 }}>
-            Book a free strategy call and let's scope your authority system.
+            Book a free strategy call. Let's figure out exactly how we can help you grow.
           </p>
           <Link href="/contact">
             <span className="gb-btn" style={{ margin: "0 auto", fontSize: 14 }}>

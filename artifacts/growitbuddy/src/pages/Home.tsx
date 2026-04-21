@@ -15,47 +15,47 @@ const STATS = [
 
 const PROBLEMS = [
   {
-    title: "Posting without traction",
-    desc: "You're creating content consistently but getting little engagement, no inbound leads, and zero authority signal in your market.",
+    title: "You're posting but not getting clients",
+    desc: "You put out content regularly but it's not bringing in real business. No enquiries, no leads, no customers - just time spent with nothing to show for it.",
   },
   {
-    title: "Lost in the noise",
-    desc: "Less qualified competitors are louder than you. Decision-makers in your space have never heard your name despite your expertise.",
+    title: "You don't know what to post next",
+    desc: "Every week feels like starting from scratch. No clear direction, no plan, no system - just guessing what might work and hoping something sticks.",
   },
   {
-    title: "No system, just improvising",
-    desc: "Every week is a scramble to figure out what to post. There's no repeatable process and no compounding effect - just random acts of content.",
+    title: "You're not reaching the right people",
+    desc: "Your content gets some likes but the people who could actually become customers never see it. You're talking, but not to the right audience.",
   },
 ];
 
 const SERVICES = [
   {
     num: "01",
-    title: "Authority Strategy",
-    desc: "Category positioning, narrative design, and a 90-day roadmap built for your specific market.",
+    title: "Content Planning",
+    desc: "We figure out exactly what to post, who to target, and how to grow - then build a 90-day plan around your business goals.",
   },
   {
     num: "02",
-    title: "Content Systems",
-    desc: "Ghostwriting, visual assets, newsletters, and platform-native formats - systematized and scalable.",
+    title: "Content Creation",
+    desc: "We write your posts, scripts, and newsletters in your voice - consistent, high-quality content published every week without you doing the work.",
   },
   {
     num: "03",
     title: "Video Editing",
-    desc: "Short-form clips, long-form editing, thumbnail design, and retention-first structure.",
+    desc: "Short and long-form video editing with thumbnails and captions - built to get views and keep people watching until the end.",
   },
   {
     num: "04",
-    title: "Distribution Systems",
-    desc: "Algorithm-aware, platform-native strategies that reach decision-makers at scale.",
+    title: "Growth Strategy",
+    desc: "We make sure your content reaches the right people - not just your existing followers, but the customers you're actually trying to win.",
   },
 ];
 
 const FRAMEWORK_STEPS = [
-  { step: "01", title: "Positioning", desc: "Define your unique angle, audience, and category claim. Stand for something specific." },
-  { step: "02", title: "Content Engine", desc: "Build the repeatable system that produces high-signal content efficiently every week." },
-  { step: "03", title: "Distribution Loop", desc: "Get your content in front of the right people through owned, borrowed, and algorithmic channels." },
-  { step: "04", title: "Authority Compounding", desc: "Your growing reputation attracts better opportunities, clients, and collaborations automatically." },
+  { step: "01", title: "Positioning", desc: "We figure out exactly who you're talking to and what makes your business different from everyone else in your space." },
+  { step: "02", title: "Content Engine", desc: "We build a simple, repeatable process so great content gets created every week - without stress or guesswork." },
+  { step: "03", title: "Distribution Loop", desc: "We make sure the right people see your content - not just your current followers, but the people who can actually become customers." },
+  { step: "04", title: "Consistent Growth", desc: "As your content builds trust and reach, more clients find you, deals get easier, and your business grows steadily." },
 ];
 
 const PROOF = [
@@ -66,10 +66,10 @@ const PROOF = [
 ];
 
 const PROCESS_STEPS = [
-  { num: "01", title: "Understand", desc: "We audit your existing presence, audience, and competitive landscape to find your authority gap." },
-  { num: "02", title: "Strategize", desc: "We map out your positioning, content themes, and a 90-day authority roadmap." },
-  { num: "03", title: "Execute", desc: "Our team produces, edits, and distributes content on your behalf - while you focus on your business." },
-  { num: "04", title: "Scale", desc: "We iterate based on data, double down on what compounds, and expand your distribution footprint." },
+  { num: "01", title: "Understand", desc: "We learn everything about your business, your audience, and what you've tried before. No assumptions." },
+  { num: "02", title: "Plan", desc: "We build a clear content plan - what to post, where to post, how often, and what to say to attract the right customers." },
+  { num: "03", title: "Create & Publish", desc: "Our team handles the writing, editing, and publishing so you can focus on running your business." },
+  { num: "04", title: "Grow", desc: "We track what's working, improve every month, and keep growing your reach and the results you're getting." },
 ];
 
 const TESTIMONIALS = [
@@ -225,7 +225,7 @@ export default function Home() {
               fontWeight: 400,
             }}
           >
-            You're not a content creator - you're a business leader. We build the authority systems that turn your expertise into market dominance.
+            We help founders and creators grow their business with content that brings real customers - not just views. We plan it, create it, and help you grow consistently.
           </motion.p>
 
           <motion.div
@@ -279,7 +279,7 @@ export default function Home() {
               The Problem
             </p>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(30px, 5vw, 56px)", letterSpacing: "-0.035em", lineHeight: "1.08", color: TEXT, maxWidth: "18ch", marginBottom: 60 }}>
-              Why most founders stay invisible.
+              You're posting. But you're not growing.
             </h2>
           </FadeUp>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
@@ -318,22 +318,22 @@ export default function Home() {
               The Solution
             </p>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(30px, 5vw, 56px)", letterSpacing: "-0.035em", lineHeight: "1.08", color: "#fff", maxWidth: "22ch", marginBottom: 60 }}>
-              Stop creating content. Start building an authority system.
+              We fix this with a clear content system built around your business.
             </h2>
           </FadeUp>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: 2, background: "rgba(255,255,255,0.06)", borderRadius: 16, overflow: "hidden" }}>
             {[
               {
-                label: "Content creation (old way)",
+                label: "Without a clear system",
                 dark: true,
-                items: ["Random posting schedule", "No positioning or angle", "Vanity metrics focus", "Burn out after 3 months", "Zero compounding effect"],
+                items: ["Posting with no clear plan", "Random topics with no direction", "Chasing likes and views", "Burning out every few months", "No real results after months of effort"],
                 color: "rgba(255,255,255,0.3)",
               },
               {
-                label: "Authority systems (the GrowitBuddy way)",
+                label: "With GrowitBuddy",
                 dark: false,
-                items: ["Positioned, strategic output", "Clear category ownership", "Inbound leads & deal flow", "Sustainable for years", "Compounds with every piece"],
+                items: ["A clear content plan that makes sense", "Content that attracts real customers", "Consistent posting without the stress", "More reach, better engagement, more growth", "A system that improves over time"],
                 color: TEXT,
               },
             ].map((col, i) => (
@@ -375,7 +375,7 @@ export default function Home() {
           <FadeUp>
             <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Services</p>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(30px, 5vw, 54px)", letterSpacing: "-0.035em", lineHeight: "1.08", color: TEXT, maxWidth: "18ch", marginBottom: 60 }}>
-              Everything you need to dominate your category.
+              Everything you need to grow your business with content.
             </h2>
           </FadeUp>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 12 }}>
@@ -508,7 +508,7 @@ export default function Home() {
           <FadeUp>
             <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Process</p>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(30px, 5vw, 54px)", letterSpacing: "-0.035em", lineHeight: "1.08", color: TEXT, maxWidth: "20ch", marginBottom: 60 }}>
-              How we build your authority system.
+              How we help you grow with content.
             </h2>
           </FadeUp>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 16 }}>
@@ -547,16 +547,16 @@ export default function Home() {
             {[
               {
                 tag: "For Creators",
-                title: "Turn your platform into a business.",
-                desc: "We help content creators build monetizable authority systems - turning views into a real business with predictable income.",
+                title: "Turn your content into a real business.",
+                desc: "If you're creating content but not making consistent money from it, we help you build a system that turns your audience into paying customers.",
                 cta: "Join as a Creator",
                 href: "/creators",
                 dark: false,
               },
               {
                 tag: "For Freelancers",
-                title: "Join the GrowitBuddy network.",
-                desc: "Are you a writer, editor, or strategist? Apply to join our vetted network and work with the world's most ambitious founders.",
+                title: "Work with top founders and creators.",
+                desc: "Are you a writer, editor, or strategist? Apply to join our team and work on content projects for ambitious clients worldwide.",
                 cta: "Apply to Join",
                 href: "/freelancers",
                 dark: true,
@@ -612,14 +612,14 @@ export default function Home() {
             <FadeUp>
               <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 16 }}>Authority Audit</p>
               <h2 style={{ fontWeight: 800, fontSize: "clamp(28px, 4vw, 52px)", letterSpacing: "-0.035em", lineHeight: "1.08", color: "#fff", marginBottom: 20 }}>
-                What's your Authority Score?
+                Find out what's blocking your growth.
               </h2>
               <p style={{ fontSize: 16, color: "rgba(255,255,255,0.45)", lineHeight: "1.75", marginBottom: 32 }}>
-                Answer 8 questions and get a personalized breakdown of your authority leverage - free, in under 3 minutes.
+                Answer 6 quick questions and get a personalized diagnosis of exactly what's holding your content back - free, in under 2 minutes.
               </p>
               <Link href="/authority-audit">
                 <span className="gb-btn" style={{ fontSize: 14 }}>
-                  Get My Authority Score
+                  Get My Growth Diagnosis
                   <ArrowRight className="w-4 h-4" />
                 </span>
               </Link>
@@ -639,7 +639,7 @@ export default function Home() {
             >
               <div style={{ marginBottom: 24 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                  <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.5)" }}>Content Consistency</span>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.5)" }}>Posting Consistency</span>
                   <span style={{ fontSize: 13, fontWeight: 700, color: "rgba(255,255,255,0.8)" }}>72</span>
                 </div>
                 <div style={{ height: 6, background: "rgba(255,255,255,0.08)", borderRadius: 100, overflow: "hidden" }}>
@@ -647,9 +647,9 @@ export default function Home() {
                 </div>
               </div>
               {[
-                { label: "Positioning Clarity", val: 58 },
-                { label: "Distribution Reach", val: 41 },
-                { label: "Proof & Credibility", val: 85 },
+                { label: "Content Direction", val: 58 },
+                { label: "Audience Reach", val: 41 },
+                { label: "Customer Conversion", val: 85 },
               ].map((item) => (
                 <div key={item.label} style={{ marginBottom: 20 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
@@ -663,8 +663,8 @@ export default function Home() {
               ))}
               <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 24, marginTop: 8 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: 15, fontWeight: 700, color: "#fff" }}>Overall Authority Score</span>
-                  <span style={{ fontSize: 28, fontWeight: 800, color: "#fff", letterSpacing: "-0.04em" }}>64/100</span>
+                  <span style={{ fontSize: 15, fontWeight: 700, color: "#fff" }}>Growth Blockers Found</span>
+                  <span style={{ fontSize: 28, fontWeight: 800, color: "#fff", letterSpacing: "-0.04em" }}>3 / 4</span>
                 </div>
               </div>
             </motion.div>
@@ -703,7 +703,7 @@ export default function Home() {
                 Suraj Sharma
               </h2>
               <p style={{ fontSize: 15, color: "rgba(11,11,11,0.5)", lineHeight: "1.8", marginBottom: 28 }}>
-                "I built GrowitBuddy after watching brilliant founders lose to louder, less qualified voices. Authority isn't given - it's architected. We built the agency to be the silent engine behind the world's most influential founders."
+                "I started GrowitBuddy because the best founders I knew were being ignored - not because of talent, but because they didn't know how to talk about what they did. We help them change that."
               </p>
               <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
                 {["Founder & CEO", "Content Strategist", "Authority Architect"].map((tag) => (
