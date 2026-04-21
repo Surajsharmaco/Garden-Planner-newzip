@@ -12,10 +12,12 @@ import Resources from "@/pages/Resources";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import NotFound from "@/pages/not-found";
+import CustomCursor from "@/components/effects/CustomCursor";
 
 function App() {
   return (
     <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+      <CustomCursor />
       <Layout>
         <Switch>
           <Route path="/" component={Home} />

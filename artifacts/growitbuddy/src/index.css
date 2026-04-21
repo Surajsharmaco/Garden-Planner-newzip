@@ -174,3 +174,60 @@ body {
   border: 1.5px solid currentColor;
   flex-shrink: 0;
 }
+
+/* ─────────────────────────────────────────────
+   Custom cursor — hide default cursor on desktop
+───────────────────────────────────────────── */
+@media (pointer: fine) {
+  html, body, *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   Smooth scrolling
+───────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ─────────────────────────────────────────────
+   Marquee ticker keyframes
+───────────────────────────────────────────── */
+@keyframes marquee-forward {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-25%); }
+}
+@keyframes marquee-reverse {
+  from { transform: translateX(-25%); }
+  to   { transform: translateX(0); }
+}
+
+/* ─────────────────────────────────────────────
+   Clip-mask text reveal utility
+   Use: <div class="reveal-wrap"><h2 class="reveal-text">…</h2></div>
+   Driven by JS (.in-view class toggled via IntersectionObserver)
+───────────────────────────────────────────── */
+.reveal-wrap {
+  overflow: hidden;
+}
+.reveal-text {
+  transform: translateY(105%);
+  opacity: 0;
+  transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.6s ease;
+}
+.reveal-text.in-view {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ─────────────────────────────────────────────
+   Prefers reduced motion — respect user preference
+───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
