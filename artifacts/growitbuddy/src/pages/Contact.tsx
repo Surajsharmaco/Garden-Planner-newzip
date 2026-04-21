@@ -3,11 +3,10 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import SEOMeta from "@/components/SEOMeta";
 
 const schema = z.object({
   name: z.string().min(2, "Name required"),
@@ -17,51 +16,59 @@ const schema = z.object({
 });
 type F = z.infer<typeof schema>;
 
-const inputStyle = {
-  background: "#F6F6F6",
-  border: "1px solid rgba(0,0,0,0.12)",
-  borderRadius: "5px",
-  fontFamily: "'Instrument Sans', sans-serif",
-  fontSize: "16px",
-  height: "48px",
-};
-
 export default function Contact() {
   const { toast } = useToast();
   const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const form = useForm<F>({ resolver: zodResolver(schema), defaultValues: { name: "", email: "", company: "", message: "" } });
 
-  const onSubmit = async () => {
+  const onSubmit = async (data: F) => {
     setSubmitting(true);
-    await new Promise(r => setTimeout(r, 900));
-    setSubmitting(false);
-    toast({ title: "Message sent", description: "We'll be in touch within 24 hours." });
-    form.reset();
+    try {
+      const res = await fetch(`${import.meta.env.BASE_URL}api/forms/contact`.replace(/\/\//g, "/"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (res.ok) {
+        setSubmitted(true);
+        form.reset();
+      } else {
+        toast({ title: "Something went wrong", description: "Please try again.", variant: "destructive" });
+      }
+    } catch {
+      toast({ title: "Connection error", description: "Please check your connection and try again.", variant: "destructive" });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
-    <div className="w-full bg-white">
+    <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
+      <SEOMeta
+        title="Contact — GrowitBuddy"
+        description="Book a free strategy call with GrowitBuddy. We'll audit your presence, identify your authority gap, and map out your 90-day system."
+      />
+
       {/* Hero */}
-      <section className="pt-28 pb-20 px-6 md:px-12 lg:px-20" style={{ background: "#F6F6F6", borderBottom: "1px solid rgba(0,0,0,0.08)" }}>
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
+      <section style={{ paddingTop: 120, paddingBottom: 80, paddingLeft: 24, paddingRight: 24, background: "#fff", borderBottom: "1px solid rgba(11,11,11,0.08)" }}>
+        <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] mb-5" style={{ color: "rgba(0,0,0,0.35)", fontFamily: "'Instrument Sans', sans-serif" }}>Contact</p>
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Contact</p>
             <motion.h1
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7 }}
-              className="omc-heading leading-[1.05]"
-              style={{ fontSize: "clamp(44px, 6.5vw, 80px)", color: "#000" }}
+              style={{ fontWeight: 800, fontSize: "clamp(44px, 6.5vw, 80px)", letterSpacing: "-0.04em", lineHeight: "1.02", color: "#0B0B0B" }}
             >
-              Let's build your <em>authority system</em>.
+              Let's build your authority system.
             </motion.h1>
           </div>
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-[17px] leading-[1.75] self-end"
-            style={{ color: "rgba(0,0,0,0.5)", fontFamily: "'Instrument Sans', sans-serif" }}
+            style={{ fontSize: 18, lineHeight: "1.75", color: "rgba(11,11,11,0.5)", alignSelf: "flex-end" }}
           >
             We partner with ambitious founders and creators who are serious about authority. One strategy call is all it takes to get started.
           </motion.p>
@@ -69,21 +76,22 @@ export default function Contact() {
       </section>
 
       {/* Form + info */}
-      <section className="py-20 px-6 md:px-12 lg:px-20 pb-32">
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-[1fr_1.6fr] gap-16">
+      <section style={{ padding: "80px 24px 100px" }}>
+        <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-[1fr_1.6fr] gap-16">
           {/* Info */}
           <div>
-            <div className="flex flex-col gap-px" style={{ borderTop: "1px solid rgba(0,0,0,0.08)" }}>
+            <div style={{ borderTop: "1px solid rgba(11,11,11,0.08)", display: "flex", flexDirection: "column" }}>
               {[
                 { label: "Email", value: "hello@growitbuddy.com", href: "mailto:hello@growitbuddy.com" },
                 { label: "Response time", value: "Within 24 hours" },
                 { label: "Based", value: "Global — 4 timezones" },
+                { label: "Next step", value: "Free 30-min strategy call" },
               ].map((item) => (
-                <div key={item.label} className="py-5" style={{ borderBottom: "1px solid rgba(0,0,0,0.08)" }}>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.15em] mb-1.5" style={{ color: "rgba(0,0,0,0.35)", fontFamily: "'Instrument Sans', sans-serif" }}>{item.label}</p>
+                <div key={item.label} style={{ padding: "20px 0", borderBottom: "1px solid rgba(11,11,11,0.08)" }}>
+                  <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 6 }}>{item.label}</p>
                   {item.href
-                    ? <a href={item.href} className="text-[16px] font-medium hover:opacity-60 transition-opacity" style={{ color: "#0072F5", fontFamily: "'Instrument Sans', sans-serif" }}>{item.value}</a>
-                    : <p className="text-[16px]" style={{ color: "#000", fontFamily: "'Instrument Sans', sans-serif" }}>{item.value}</p>
+                    ? <a href={item.href} style={{ fontSize: 16, fontWeight: 600, color: "#0B0B0B", textDecoration: "none" }} className="hover:opacity-60 transition-opacity">{item.value}</a>
+                    : <p style={{ fontSize: 16, fontWeight: 500, color: "#0B0B0B" }}>{item.value}</p>
                   }
                 </div>
               ))}
@@ -92,57 +100,79 @@ export default function Contact() {
 
           {/* Form */}
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField control={form.control} name="name" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel style={{ fontFamily: "'Instrument Sans', sans-serif", fontSize: "13px", fontWeight: 500, color: "#000" }}>Name</FormLabel>
-                      <FormControl><Input style={inputStyle} className="border-0" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
-                  <FormField control={form.control} name="email" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel style={{ fontFamily: "'Instrument Sans', sans-serif", fontSize: "13px", fontWeight: 500, color: "#000" }}>Email</FormLabel>
-                      <FormControl><Input type="email" style={inputStyle} className="border-0" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
-                </div>
-                <FormField control={form.control} name="company" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel style={{ fontFamily: "'Instrument Sans', sans-serif", fontSize: "13px", fontWeight: 500, color: "#000" }}>Company / Brand</FormLabel>
-                    <FormControl><Input style={inputStyle} className="border-0" {...field} /></FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
-                <FormField control={form.control} name="message" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel style={{ fontFamily: "'Instrument Sans', sans-serif", fontSize: "13px", fontWeight: 500, color: "#000" }}>What are you looking to achieve?</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        style={{ ...inputStyle, height: "auto", minHeight: "140px", resize: "none" }}
-                        className="border-0"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="omc-btn h-12 text-[15px] justify-center mt-1"
-                  data-testid="button-book-call-cta"
-                >
-                  {submitting ? "Sending…" : "Send message"}
-                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-full flex-shrink-0" style={{ border: "1.5px solid rgba(255,255,255,0.4)" }}>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </span>
-                </button>
-              </form>
-            </Form>
+            {submitted ? (
+              <div
+                style={{
+                  background: "#fff",
+                  border: "1.5px solid rgba(11,11,11,0.15)",
+                  borderRadius: 20,
+                  padding: "60px 40px",
+                  textAlign: "center",
+                }}
+              >
+                <div style={{ width: 72, height: 72, borderRadius: "50%", background: "#0B0B0B", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px", fontSize: 30, fontWeight: 800, color: "#fff" }}>✓</div>
+                <h3 style={{ fontWeight: 800, fontSize: 28, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 12 }}>Message sent!</h3>
+                <p style={{ fontSize: 16, color: "rgba(11,11,11,0.5)", lineHeight: "1.75" }}>
+                  We'll be in touch within 24 hours to schedule your free strategy call.
+                </p>
+              </div>
+            ) : (
+              <div style={{ background: "#fff", border: "1.5px solid rgba(11,11,11,0.08)", borderRadius: 20, padding: "40px 36px" }}>
+                <h3 style={{ fontWeight: 800, fontSize: 22, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 8 }}>Send us a message</h3>
+                <p style={{ fontSize: 14, color: "rgba(11,11,11,0.45)", marginBottom: 28 }}>We respond to every inquiry within 24 hours.</p>
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))", gap: 16 }}>
+                      <FormField control={form.control} name="name" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 600, color: "#0B0B0B" }}>Name</FormLabel>
+                          <FormControl><input className="gb-input" placeholder="Your name" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                      <FormField control={form.control} name="email" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 600, color: "#0B0B0B" }}>Email</FormLabel>
+                          <FormControl><input type="email" className="gb-input" placeholder="you@example.com" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                    </div>
+                    <FormField control={form.control} name="company" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 600, color: "#0B0B0B" }}>Company / Brand</FormLabel>
+                        <FormControl><input className="gb-input" placeholder="Your company" {...field} /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
+                    <FormField control={form.control} name="message" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 600, color: "#0B0B0B" }}>What are you looking to achieve?</FormLabel>
+                        <FormControl>
+                          <textarea
+                            className="gb-input"
+                            style={{ minHeight: 140, resize: "none", lineHeight: "1.6" }}
+                            placeholder="Tell us about your goals and challenges..."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="gb-btn"
+                      style={{ justifyContent: "center", marginTop: 8, padding: "14px 0", fontSize: 15 }}
+                      data-testid="button-book-call-cta"
+                    >
+                      {submitting ? "Sending…" : "Send Message"}
+                      {!submitting && <ArrowRight className="w-4 h-4" />}
+                    </button>
+                  </form>
+                </Form>
+              </div>
+            )}
           </motion.div>
         </div>
       </section>

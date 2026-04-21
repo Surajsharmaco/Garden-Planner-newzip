@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-/*
-  vivafoxdigital.com-style intro:
-  Dark background, brand name fades in with orange glow, then scales out.
-  Runs once per session.
-*/
 export default function PageIntro() {
   const [visible, setVisible] = useState(() => {
     try {
@@ -40,7 +35,7 @@ export default function PageIntro() {
             position: "fixed",
             inset: 0,
             zIndex: 99999,
-            background: "#050505",
+            background: "#F7F7F5",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -48,7 +43,6 @@ export default function PageIntro() {
             pointerEvents: "all",
           }}
         >
-          {/* Orange radial glow */}
           <motion.div
             initial={{ scale: 0.3, opacity: 0 }}
             animate={phase === "in" ? { scale: 0.6, opacity: 0.6 } : phase === "hold" ? { scale: 1, opacity: 0.7 } : { scale: 2.5, opacity: 0 }}
@@ -57,11 +51,9 @@ export default function PageIntro() {
               position: "absolute",
               width: 500, height: 500,
               borderRadius: "50%",
-              background: "radial-gradient(ellipse at center, rgba(255,85,0,0.35) 0%, rgba(255,85,0,0.1) 40%, transparent 70%)",
+              background: "radial-gradient(ellipse at center, rgba(11,11,11,0.06) 0%, rgba(11,11,11,0.03) 40%, transparent 70%)",
             }}
           />
-
-          {/* Brand name */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={phase === "in" ? { opacity: 0, scale: 0.9 } : phase === "hold" ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.05 }}
@@ -76,30 +68,29 @@ export default function PageIntro() {
               gap: 12,
             }}
           >
-            {/* Orange circle mark */}
             <div
               style={{
                 width: 56, height: 56,
                 borderRadius: "50%",
-                background: "linear-gradient(135deg, #FF9A3C 0%, #FF5500 100%)",
+                background: "#0B0B0B",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontSize: 26,
-                fontWeight: 700,
+                fontWeight: 800,
                 color: "#fff",
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Inter', sans-serif",
               }}
             >
               G
             </div>
             <h1
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
-                fontWeight: 700,
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 800,
                 fontSize: "clamp(28px, 6vw, 56px)",
-                letterSpacing: "-0.03em",
-                color: "#fff",
+                letterSpacing: "-0.04em",
+                color: "#0B0B0B",
                 lineHeight: 1,
                 margin: 0,
               }}
@@ -108,12 +99,12 @@ export default function PageIntro() {
             </h1>
             <p
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Inter', sans-serif",
                 fontSize: 12,
                 fontWeight: 500,
                 letterSpacing: "0.18em",
                 textTransform: "uppercase",
-                color: "rgba(255,255,255,0.3)",
+                color: "rgba(11,11,11,0.35)",
               }}
             >
               Content & Authority Studio

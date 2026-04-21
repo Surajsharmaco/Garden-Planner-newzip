@@ -1,98 +1,192 @@
 import { Link } from "wouter";
 
-/* vivafoxdigital.com footer — dark, minimal: logo + links + copyright */
 export function Footer() {
   return (
     <footer
       style={{
-        background: "#080808",
+        background: "#0B0B0B",
         borderTop: "1px solid rgba(255,255,255,0.06)",
-        padding: "40px 24px",
+        padding: "60px 24px 32px",
       }}
     >
       <div className="max-w-[1200px] mx-auto">
         <div
           style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            flexWrap: "wrap",
-            gap: 32,
-            marginBottom: 40,
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+            gap: 48,
+            marginBottom: 56,
           }}
         >
-          {/* Brand */}
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-              <span
-                style={{
-                  width: 32, height: 32,
-                  borderRadius: "50%",
-                  background: "linear-gradient(135deg, #FF9A3C 0%, #FF5500 100%)",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 14,
-                  fontWeight: 700,
-                  color: "#fff",
-                  fontFamily: "'Space Grotesk', sans-serif",
-                }}
-              >
-                G
+          <div style={{ gridColumn: "span 2" }}>
+            <Link href="/">
+              <span className="inline-flex items-center gap-2 cursor-pointer mb-4" style={{ display: "flex" }}>
+                <span
+                  style={{
+                    width: 36, height: 36,
+                    borderRadius: "50%",
+                    background: "rgba(255,255,255,0.12)",
+                    border: "1px solid rgba(255,255,255,0.15)",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 16,
+                    fontWeight: 800,
+                    color: "#fff",
+                    fontFamily: "'Inter', sans-serif",
+                    flexShrink: 0,
+                  }}
+                >
+                  G
+                </span>
+                <span
+                  style={{
+                    fontFamily: "'Inter', sans-serif",
+                    fontSize: 17,
+                    fontWeight: 800,
+                    color: "#fff",
+                    letterSpacing: "-0.03em",
+                  }}
+                >
+                  GrowitBuddy
+                </span>
               </span>
-              <span
-                style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontSize: 16,
-                  fontWeight: 700,
-                  color: "#fff",
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                GrowitBuddy
-              </span>
-            </div>
+            </Link>
             <p
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
-                fontSize: 13,
-                color: "rgba(255,255,255,0.3)",
+                fontFamily: "'Inter', sans-serif",
+                fontSize: 14,
+                color: "rgba(255,255,255,0.35)",
                 maxWidth: "28ch",
-                lineHeight: "1.6",
+                lineHeight: "1.7",
+                marginTop: 4,
               }}
             >
-              Content & Authority Studio for founders and creators.
+              Content & Authority Studio for founders, creators and growing brands.
             </p>
+            <a
+              href="mailto:hello@growitbuddy.com"
+              style={{
+                display: "inline-block",
+                marginTop: 16,
+                fontFamily: "'Inter', sans-serif",
+                fontSize: 13,
+                color: "rgba(255,255,255,0.6)",
+                fontWeight: 600,
+                textDecoration: "none",
+              }}
+              className="hover:text-white transition-colors"
+            >
+              hello@growitbuddy.com
+            </a>
           </div>
 
-          {/* Useful Links */}
           <div>
             <h4
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
-                fontSize: 12,
+                fontFamily: "'Inter', sans-serif",
+                fontSize: 11,
                 fontWeight: 700,
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
                 color: "rgba(255,255,255,0.25)",
-                marginBottom: 16,
+                marginBottom: 18,
               }}
             >
-              Useful Links
+              Services
             </h4>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {[
-                { href: "/work", label: "Portfolio" },
+                { href: "/services", label: "Authority Strategy" },
+                { href: "/services", label: "Content Systems" },
+                { href: "/services", label: "Video Editing" },
+                { href: "/services", label: "Distribution" },
+              ].map((l) => (
+                <Link key={l.label} href={l.href}>
+                  <span
+                    style={{
+                      fontFamily: "'Inter', sans-serif",
+                      fontSize: 14,
+                      color: "rgba(255,255,255,0.4)",
+                      cursor: "pointer",
+                      display: "block",
+                      transition: "color 0.15s",
+                    }}
+                    className="hover:text-white"
+                  >
+                    {l.label}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h4
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: "rgba(255,255,255,0.25)",
+                marginBottom: 18,
+              }}
+            >
+              Company
+            </h4>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {[
                 { href: "/about", label: "About" },
+                { href: "/work", label: "Work" },
+                { href: "/framework", label: "Framework" },
+                { href: "/insights", label: "Blog" },
                 { href: "/contact", label: "Contact" },
-                { href: "#", label: "Privacy" },
               ].map((l) => (
                 <Link key={l.href} href={l.href}>
                   <span
                     style={{
-                      fontFamily: "'Space Grotesk', sans-serif",
+                      fontFamily: "'Inter', sans-serif",
                       fontSize: 14,
-                      color: "rgba(255,255,255,0.45)",
+                      color: "rgba(255,255,255,0.4)",
+                      cursor: "pointer",
+                      display: "block",
+                    }}
+                    className="hover:text-white transition-colors"
+                  >
+                    {l.label}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h4
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: "rgba(255,255,255,0.25)",
+                marginBottom: 18,
+              }}
+            >
+              Join Us
+            </h4>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {[
+                { href: "/creators", label: "For Creators" },
+                { href: "/freelancers", label: "For Freelancers" },
+                { href: "/authority-audit", label: "Authority Audit" },
+              ].map((l) => (
+                <Link key={l.href} href={l.href}>
+                  <span
+                    style={{
+                      fontFamily: "'Inter', sans-serif",
+                      fontSize: 14,
+                      color: "rgba(255,255,255,0.4)",
                       cursor: "pointer",
                       display: "block",
                     }}
@@ -106,11 +200,10 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom bar */}
         <div
           style={{
             borderTop: "1px solid rgba(255,255,255,0.06)",
-            paddingTop: 20,
+            paddingTop: 24,
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
@@ -120,13 +213,30 @@ export function Footer() {
         >
           <p
             style={{
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Inter', sans-serif",
               fontSize: 12,
               color: "rgba(255,255,255,0.2)",
             }}
           >
             &copy; {new Date().getFullYear()} GrowitBuddy. All rights reserved.
           </p>
+          <div style={{ display: "flex", gap: 20 }}>
+            {["Privacy", "Terms"].map((l) => (
+              <a
+                key={l}
+                href="#"
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: 12,
+                  color: "rgba(255,255,255,0.2)",
+                  textDecoration: "none",
+                }}
+                className="hover:text-white/50 transition-colors"
+              >
+                {l}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </footer>

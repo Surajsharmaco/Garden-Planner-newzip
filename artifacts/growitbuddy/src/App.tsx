@@ -5,6 +5,7 @@ import Services from "@/pages/Services";
 import Work from "@/pages/Work";
 import Framework from "@/pages/Framework";
 import Insights from "@/pages/Insights";
+import InsightDetail from "@/pages/InsightDetail";
 import Creators from "@/pages/Creators";
 import Freelancers from "@/pages/Freelancers";
 import AuthorityAudit from "@/pages/AuthorityAudit";
@@ -27,6 +28,7 @@ function App() {
           <Route path="/work" component={Work} />
           <Route path="/framework" component={Framework} />
           <Route path="/insights" component={Insights} />
+          <Route path="/insights/:slug" component={InsightDetail} />
           <Route path="/creators" component={Creators} />
           <Route path="/freelancers" component={Freelancers} />
           <Route path="/authority-audit" component={AuthorityAudit} />
