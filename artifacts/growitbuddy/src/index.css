@@ -64,67 +64,63 @@
   --button-outline: rgba(0,0,0,.10);
   --badge-outline: rgba(0,0,0,.06);
   --opaque-button-border-intensity: 9;
-
   --elevate-1: rgba(0,0,0,.03);
   --elevate-2: rgba(0,0,0,.06);
 
-  /* Apple palette */
+  /* omc.com palette */
   --background: 0 0% 100%;
-  --foreground: 0 0% 11%;        /* #1D1D1F */
-  --border: 0 0% 88%;
+  --foreground: 0 0% 0%;
 
+  --border: 0 0% 88%;
   --card: 0 0% 100%;
-  --card-foreground: 0 0% 11%;
+  --card-foreground: 0 0% 0%;
   --card-border: 0 0% 90%;
 
-  --sidebar: 0 0% 96%;
-  --sidebar-foreground: 0 0% 11%;
+  --sidebar: 0 0% 98%;
+  --sidebar-foreground: 0 0% 0%;
   --sidebar-border: 0 0% 88%;
-  --sidebar-primary: 0 0% 11%;
+  --sidebar-primary: 210 100% 48%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 0 0% 94%;
-  --sidebar-accent-foreground: 0 0% 11%;
-  --sidebar-ring: 0 0% 11%;
+  --sidebar-accent: 0 0% 96%;
+  --sidebar-accent-foreground: 0 0% 0%;
+  --sidebar-ring: 210 100% 48%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 11%;
+  --popover-foreground: 0 0% 0%;
   --popover-border: 0 0% 88%;
 
-  --primary: 213 100% 44%;       /* Apple blue #0071E3 */
+  /* omc blue */
+  --primary: 210 100% 48%;      /* #0089F7 */
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 240 3% 96%;       /* #F5F5F7 Apple grey */
-  --secondary-foreground: 0 0% 11%;
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 0% 0%;
 
-  --muted: 240 3% 96%;
-  --muted-foreground: 240 2% 44%; /* #6E6E73 Apple body grey */
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 40%;
 
-  --accent: 213 100% 44%;
+  --accent: 210 100% 48%;
   --accent-foreground: 0 0% 100%;
 
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
 
-  --input: 0 0% 88%;
-  --ring: 213 100% 44%;
+  --input: 0 0% 90%;
+  --ring: 210 100% 48%;
 
-  /* Apple system font */
-  --app-font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
-  --app-font-serif: Georgia, serif;
-  --app-font-mono: 'SF Mono', Menlo, monospace;
-  --radius: 0.75rem;  /* 12px, Apple uses 18-20px but we'll scale per component */
+  --app-font-sans: 'Instrument Sans', sans-serif;
+  --app-font-serif: 'Cormorant Garamond', Georgia, serif;
+  --app-font-mono: Menlo, monospace;
+  --radius: 0.3125rem; /* 5px — omc's sharp minimal radius */
 
   --shadow-2xs: 0px 1px 2px rgba(0,0,0,0.04);
-  --shadow-xs:  0px 1px 3px rgba(0,0,0,0.06);
-  --shadow-sm:  0px 2px 8px rgba(0,0,0,0.08);
-  --shadow-md:  0px 4px 16px rgba(0,0,0,0.10);
-  --shadow-lg:  0px 8px 32px rgba(0,0,0,0.12);
-  --shadow-xl:  0px 12px 48px rgba(0,0,0,0.16);
-  --shadow-2xl: 0px 24px 64px rgba(0,0,0,0.20);
+  --shadow-xs: 0px 1px 4px rgba(0,0,0,0.06);
+  --shadow-sm: 0px 2px 8px rgba(0,0,0,0.08);
+  --shadow-md: 0px 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0px 8px 32px rgba(0,0,0,0.12);
 }
 
-/* ── Apple-style base ── */
-*, *::before, *::after { box-sizing: border-box; }
+*,*::before,*::after { box-sizing: border-box; }
 
 html {
   -webkit-font-smoothing: antialiased;
@@ -133,16 +129,48 @@ html {
 }
 
 body {
-  font-family: var(--app-font-sans);
-  background-color: #fff;
-  color: #1D1D1F;
-  letter-spacing: -0.003em;
+  font-family: 'Instrument Sans', sans-serif;
+  background: #fff;
+  color: #000;
 }
 
-/* Apple blue link utility */
-.apple-link {
-  color: #0071E3;
-  text-decoration: none;
-  font-size: 17px;
+/* omc-style serif headline — Cormorant Garamond */
+.omc-heading {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
-.apple-link:hover { text-decoration: underline; }
+
+/* Italic emphasis within headings */
+.omc-heading em {
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* Blue CTA pill button */
+.omc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #0072F5;
+  color: #fff;
+  border-radius: 40px;
+  padding: 10px 22px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.omc-btn:hover { background: #005CE6; }
+
+/* Arrow circle icon — omc uses a small circle arrow */
+.omc-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  flex-shrink: 0;
+}

@@ -1,37 +1,38 @@
 import { Link } from "wouter";
+import { ArrowUpRight } from "lucide-react";
 
-/* Apple-style footer — light grey, very minimal, small text */
 export function Footer() {
   return (
-    <footer style={{ background: "#F5F5F7", borderTop: "1px solid rgba(0,0,0,0.12)" }}>
-      <div className="max-w-[980px] mx-auto px-5 py-10">
+    <footer style={{ background: "#000", color: "#fff" }}>
+      <div className="max-w-[1200px] mx-auto px-6 md:px-8 py-20">
+        <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr] gap-12 pb-16 border-b border-white/10">
+          {/* Brand col */}
+          <div>
+            <p className="text-[22px] font-semibold mb-4" style={{ fontFamily: "'Instrument Sans', sans-serif" }}>GrowitBuddy</p>
+            <p className="text-[13px] leading-[1.75] mb-6" style={{ color: "rgba(255,255,255,0.4)" }}>
+              A premium content and distribution studio helping founders build authority that compounds.
+            </p>
+            <Link href="/contact">
+              <button className="omc-btn text-[13px]">
+                Get in touch
+                <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 20, height: 20, borderRadius: "50%", border: "1.5px solid rgba(255,255,255,0.4)" }}>
+                  <ArrowUpRight className="w-3 h-3" />
+                </span>
+              </button>
+            </Link>
+          </div>
 
-        {/* Top row — columns */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pb-8 border-b border-black/10 mb-8">
           {[
-            {
-              title: "GrowitBuddy",
-              links: [["Work", "/work"], ["Services", "/services"], ["Framework", "/framework"], ["Insights", "/insights"]]
-            },
-            {
-              title: "Creators",
-              links: [["For Creators", "/creators"], ["For Freelancers", "/freelancers"], ["Resources", "/resources"], ["Authority Audit", "/authority-audit"]]
-            },
-            {
-              title: "Company",
-              links: [["About", "/about"], ["Contact", "/contact"], ["Book a Call", "/contact"]]
-            },
-            {
-              title: "Follow",
-              links: [["Twitter / X", "#"], ["LinkedIn", "#"], ["Instagram", "#"], ["YouTube", "#"]]
-            }
+            { title: "Services", links: [["Work", "/work"], ["Services", "/services"], ["Framework", "/framework"], ["Insights", "/insights"]] },
+            { title: "Company", links: [["About", "/about"], ["Creators", "/creators"], ["Freelancers", "/freelancers"], ["Resources", "/resources"]] },
+            { title: "Connect", links: [["Book a call", "/contact"], ["Twitter / X", "#"], ["LinkedIn", "#"], ["Instagram", "#"]] },
           ].map((col) => (
             <div key={col.title}>
-              <h5 className="text-[12px] font-semibold mb-4" style={{ color: "#1D1D1F" }}>{col.title}</h5>
-              <ul className="flex flex-col gap-2.5">
-                {col.links.map(([label, href]) => (
-                  <li key={label}>
-                    <Link href={href} className="text-[12px] hover:underline" style={{ color: "#6E6E73" }}>{label}</Link>
+              <h5 className="text-[11px] font-semibold uppercase tracking-[0.15em] mb-5" style={{ color: "rgba(255,255,255,0.35)" }}>{col.title}</h5>
+              <ul className="flex flex-col gap-3">
+                {col.links.map(([l, h]) => (
+                  <li key={l}>
+                    <Link href={h} className="text-[13px] hover:text-white transition-colors" style={{ color: "rgba(255,255,255,0.5)" }}>{l}</Link>
                   </li>
                 ))}
               </ul>
@@ -39,14 +40,13 @@ export function Footer() {
           ))}
         </div>
 
-        {/* Bottom bar */}
-        <div className="flex flex-col md:flex-row justify-between items-start gap-3">
-          <p className="text-[12px]" style={{ color: "#6E6E73" }}>
-            Copyright &copy; {new Date().getFullYear()} GrowitBuddy. All rights reserved.
+        <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.25)" }}>
+            &copy; {new Date().getFullYear()} GrowitBuddy. All rights reserved.
           </p>
-          <div className="flex gap-5">
-            {[["Privacy Policy", "#"], ["Terms of Use", "#"], ["Contact", "/contact"]].map(([l, h]) => (
-              <Link key={l} href={h} className="text-[12px] hover:underline" style={{ color: "#6E6E73" }}>{l}</Link>
+          <div className="flex gap-6">
+            {[["Privacy", "#"], ["Terms", "#"]].map(([l, h]) => (
+              <Link key={l} href={h} className="text-[12px] hover:text-white transition-colors" style={{ color: "rgba(255,255,255,0.25)" }}>{l}</Link>
             ))}
           </div>
         </div>

@@ -1,46 +1,47 @@
 import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 import { Link } from "wouter";
 
 const cases = [
-  { name: "Tech Founder to Industry Voice", category: "B2B SaaS · LinkedIn", metric: "14M", unit: "impressions in 90 days", dark: true, bg: "#1D1D1F" },
-  { name: "Agency Owner Authority", category: "Services · Multi-channel", metric: "$2.4M", unit: "new pipeline attributed", dark: true, bg: "#2C2C2E" },
-  { name: "Creator Monetization", category: "Creator Economy · YouTube", metric: "250K", unit: "subscribers in 12 months", dark: false, bg: "#F5F5F7" },
-  { name: "Executive Personal Brand", category: "Leadership · Podcast", metric: "15+", unit: "speaking invites / quarter", dark: false, bg: "#fff" },
-  { name: "E-commerce Founder Growth", category: "E-commerce · X / Twitter", metric: "400%", unit: "branded search increase", dark: true, bg: "#1D1D1F" },
-  { name: "VC Authority Engine", category: "Finance · LinkedIn", metric: "3×", unit: "qualified deal flow", dark: false, bg: "#F5F5F7" },
+  { name: "Tech Founder to Industry Voice", category: "B2B SaaS · LinkedIn", metric: "14M", unit: "impressions", body: "From zero online presence to the most-cited voice in their SaaS niche within 6 months.", dark: true },
+  { name: "Agency Owner Authority Engine", category: "Services · Multi-channel", metric: "$2.4M", unit: "pipeline attributed", body: "Systematic content strategy that drove inbound pipeline exceeding prior annual revenue.", dark: false },
+  { name: "Creator Monetization System", category: "Creator Economy · YouTube", metric: "250K", unit: "subscribers", body: "Educational content system built around a proprietary framework, monetized to $40K/mo.", dark: false },
+  { name: "Executive Personal Brand", category: "Leadership · Podcast & PR", metric: "15+", unit: "speaking invites / qtr", body: "Turned a quiet operator into an industry thought leader with consistent PR placement.", dark: true },
+  { name: "E-commerce Founder Growth", category: "E-commerce · X / Twitter", metric: "400%", unit: "branded search growth", body: "Personal brand-first strategy that made the founder synonymous with their product category.", dark: false },
+  { name: "VC Authority Engine", category: "Finance · LinkedIn", metric: "3×", unit: "deal flow growth", body: "Positioned a venture firm as the category expert, attracting better deal flow at higher velocity.", dark: true },
 ];
 
 export default function Work() {
   return (
-    <div className="w-full">
+    <div className="w-full bg-white">
       {/* Hero */}
-      <section className="pt-28 pb-20 px-5 text-center" style={{ background: "#F5F5F7" }}>
-        <div className="max-w-[680px] mx-auto mt-8">
-          <p className="text-[12px] font-semibold uppercase tracking-widest mb-4" style={{ color: "#6E6E73" }}>Work</p>
+      <section className="pt-28 pb-20 px-6 md:px-12 lg:px-20" style={{ background: "#F6F6F6" }}>
+        <div className="max-w-[1200px] mx-auto">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] mb-5" style={{ color: "rgba(0,0,0,0.35)", fontFamily: "'Instrument Sans', sans-serif" }}>Work</p>
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="font-bold mb-5"
-            style={{ fontSize: "clamp(40px, 6vw, 80px)", lineHeight: "1.06", letterSpacing: "-0.025em", color: "#1D1D1F" }}
+            className="omc-heading leading-[1.05]"
+            style={{ fontSize: "clamp(44px, 6.5vw, 88px)", color: "#000", maxWidth: "12ch" }}
           >
-            Work work work<br />work work work.
+            Work work work work work work.
           </motion.h1>
           <motion.p
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-[19px] leading-[1.55]"
-            style={{ color: "#6E6E73" }}
+            className="mt-8 text-[17px] leading-[1.7] max-w-[52ch]"
+            style={{ color: "rgba(0,0,0,0.5)", fontFamily: "'Instrument Sans', sans-serif" }}
           >
-            We measure success by outcomes. Our all-time client satisfaction score is 9.4/10. Here's proof.
+            Our clients expect outcomes. We measure our success by theirs. Here's the proof.
           </motion.p>
         </div>
       </section>
 
-      {/* Case grid */}
-      <section className="px-5 py-12" style={{ background: "#fff" }}>
-        <div className="max-w-[980px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* Cases grid */}
+      <section className="py-16 px-6 md:px-12 lg:px-20 bg-white">
+        <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {cases.map((c, i) => (
             <motion.div
               key={i}
@@ -48,41 +49,24 @@ export default function Work() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.06, duration: 0.55 }}
-              className="p-8 rounded-[20px] aspect-square flex flex-col justify-between cursor-pointer hover:scale-[1.02] transition-transform duration-200"
-              style={{ background: c.bg, border: !c.dark ? "1px solid rgba(0,0,0,0.08)" : "none" }}
+              className="group p-8 aspect-square flex flex-col justify-between cursor-pointer hover:shadow-md transition-all duration-200"
+              style={{
+                background: c.dark ? "#0A0A0A" : "#F6F6F6",
+                borderRadius: "5px",
+                border: c.dark ? "none" : "1px solid rgba(0,0,0,0.08)",
+              }}
             >
-              <p
-                className="text-[12px] font-semibold uppercase tracking-widest"
-                style={{ color: c.dark ? "rgba(255,255,255,0.35)" : "#6E6E73" }}
-              >
-                {c.category}
-              </p>
+              <div className="flex items-start justify-between">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.15em]" style={{ color: c.dark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.35)", fontFamily: "'Instrument Sans', sans-serif" }}>{c.category}</p>
+                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full opacity-0 group-hover:opacity-100 transition-all" style={{ border: `1.5px solid ${c.dark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.25)"}`, color: c.dark ? "#fff" : "#000" }}>
+                  <ArrowUpRight className="w-4 h-4" />
+                </span>
+              </div>
               <div>
-                <div className="mb-4">
-                  <span
-                    className="font-bold block"
-                    style={{
-                      fontSize: "clamp(36px, 4vw, 52px)",
-                      letterSpacing: "-0.025em",
-                      lineHeight: "1",
-                      color: c.dark ? "#fff" : "#1D1D1F",
-                    }}
-                  >
-                    {c.metric}
-                  </span>
-                  <span className="text-[15px] mt-1 block" style={{ color: c.dark ? "rgba(255,255,255,0.45)" : "#6E6E73" }}>
-                    {c.unit}
-                  </span>
-                </div>
-                <h3
-                  className="font-semibold text-[17px] leading-[1.3] mb-4"
-                  style={{ color: c.dark ? "rgba(255,255,255,0.75)" : "#1D1D1F" }}
-                >
-                  {c.name}
-                </h3>
-                <Link href="/contact">
-                  <span className="text-[15px] cursor-pointer hover:underline" style={{ color: "#0071E3" }}>Learn more ›</span>
-                </Link>
+                <p className="omc-heading leading-none mb-2" style={{ fontSize: "clamp(36px, 4vw, 52px)", color: c.dark ? "#fff" : "#000" }}>{c.metric}</p>
+                <p className="text-[13px] mb-4" style={{ color: c.dark ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.4)", fontFamily: "'Instrument Sans', sans-serif" }}>{c.unit}</p>
+                <h3 className="text-[16px] font-semibold mb-2 leading-[1.4]" style={{ color: c.dark ? "#fff" : "#000", fontFamily: "'Instrument Sans', sans-serif" }}>{c.name}</h3>
+                <p className="text-[13px] leading-[1.65]" style={{ color: c.dark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.5)", fontFamily: "'Instrument Sans', sans-serif" }}>{c.body}</p>
               </div>
             </motion.div>
           ))}
@@ -90,16 +74,21 @@ export default function Work() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 px-5 text-center" style={{ background: "#F5F5F7" }}>
-        <div className="max-w-[560px] mx-auto">
-          <h2 className="font-bold mb-4" style={{ fontSize: "clamp(28px, 4vw, 48px)", letterSpacing: "-0.022em", color: "#1D1D1F" }}>
-            Your results, next.
+      <section className="py-24 px-6 text-center" style={{ background: "#F6F6F6", borderTop: "1px solid rgba(0,0,0,0.08)" }}>
+        <div className="max-w-[600px] mx-auto">
+          <h2 className="omc-heading leading-[1.06] mb-6" style={{ fontSize: "clamp(32px, 5vw, 56px)", color: "#000" }}>
+            Your results, <em>next</em>.
           </h2>
-          <p className="text-[17px] mb-8 leading-[1.6]" style={{ color: "#6E6E73" }}>
-            Ready to be in this list? Book a free strategy call and let's scope your authority system.
+          <p className="text-[17px] mb-8 leading-[1.7]" style={{ color: "rgba(0,0,0,0.5)", fontFamily: "'Instrument Sans', sans-serif" }}>
+            Book a free strategy call and let's scope your authority system.
           </p>
           <Link href="/contact">
-            <span className="text-[17px] cursor-pointer hover:underline" style={{ color: "#0071E3" }}>Book a strategy call ›</span>
+            <button className="omc-btn text-[15px] px-8 py-4">
+              Book a strategy call
+              <span className="inline-flex items-center justify-center w-7 h-7 rounded-full flex-shrink-0" style={{ border: "1.5px solid rgba(255,255,255,0.5)" }}>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </span>
+            </button>
           </Link>
         </div>
       </section>
