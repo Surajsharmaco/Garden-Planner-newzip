@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-/**
- * omc.com-style page intro:
- * 1. Full-screen white overlay
- * 2. Brand name sweeps in from center
- * 3. Name expands and fades, overlay exits — revealing the page beneath
- *
- * Runs once per session (sessionStorage flag).
- */
+/*
+  vivafoxdigital.com-style intro:
+  Dark background, brand name fades in with orange glow, then scales out.
+  Runs once per session.
+*/
 export default function PageIntro() {
   const [visible, setVisible] = useState(() => {
     try {
@@ -22,15 +19,12 @@ export default function PageIntro() {
 
   useEffect(() => {
     if (!visible) return;
-
-    // Phase timeline
-    const t1 = setTimeout(() => setPhase("hold"), 600);
-    const t2 = setTimeout(() => setPhase("out"), 1500);
+    const t1 = setTimeout(() => setPhase("hold"), 400);
+    const t2 = setTimeout(() => setPhase("out"), 1400);
     const t3 = setTimeout(() => {
       setVisible(false);
       try { sessionStorage.setItem("gb_intro_seen", "1"); } catch {}
-    }, 2400);
-
+    }, 2200);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, [visible]);
 
@@ -41,87 +35,90 @@ export default function PageIntro() {
           key="intro"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.55, ease: "easeInOut" }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
           style={{
             position: "fixed",
             inset: 0,
             zIndex: 99999,
-            background: "#fff",
+            background: "#050505",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            flexDirection: "column",
             pointerEvents: "all",
           }}
         >
-          {/* Outer ring that grows */}
+          {/* Orange radial glow */}
           <motion.div
-            initial={{ scale: 0, opacity: 0 }}
-            animate={
-              phase === "in"
-                ? { scale: 0.8, opacity: 1 }
-                : phase === "hold"
-                ? { scale: 1, opacity: 1 }
-                : { scale: 18, opacity: 0 }
-            }
-            transition={
-              phase === "out"
-                ? { duration: 0.75, ease: [0.22, 1, 0.36, 1] }
-                : { duration: 0.7, ease: [0.22, 1, 0.36, 1] }
-            }
+            initial={{ scale: 0.3, opacity: 0 }}
+            animate={phase === "in" ? { scale: 0.6, opacity: 0.6 } : phase === "hold" ? { scale: 1, opacity: 0.7 } : { scale: 2.5, opacity: 0 }}
+            transition={{ duration: phase === "out" ? 0.7 : 0.8, ease: [0.22, 1, 0.36, 1] }}
             style={{
               position: "absolute",
-              width: 400,
-              height: 400,
+              width: 500, height: 500,
               borderRadius: "50%",
-              border: "1px solid rgba(0,0,0,0.06)",
+              background: "radial-gradient(ellipse at center, rgba(255,85,0,0.35) 0%, rgba(255,85,0,0.1) 40%, transparent 70%)",
             }}
           />
 
-          {/* Brand wordmark */}
-          <div style={{ overflow: "hidden", position: "relative", zIndex: 1 }}>
-            <motion.h1
-              initial={{ y: "110%" }}
-              animate={
-                phase === "in"
-                  ? { y: "110%" }
-                  : phase === "hold"
-                  ? { y: 0 }
-                  : { y: "-110%", opacity: 0 }
-              }
-              transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+          {/* Brand name */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={phase === "in" ? { opacity: 0, scale: 0.9 } : phase === "hold" ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.05 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              position: "relative",
+              zIndex: 1,
+              textAlign: "center",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 12,
+            }}
+          >
+            {/* Orange circle mark */}
+            <div
               style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontWeight: 500,
-                fontSize: "clamp(40px, 8vw, 96px)",
-                letterSpacing: "-0.025em",
-                color: "#000",
+                width: 56, height: 56,
+                borderRadius: "50%",
+                background: "linear-gradient(135deg, #FF9A3C 0%, #FF5500 100%)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 26,
+                fontWeight: 700,
+                color: "#fff",
+                fontFamily: "'Space Grotesk', sans-serif",
+              }}
+            >
+              G
+            </div>
+            <h1
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: 700,
+                fontSize: "clamp(28px, 6vw, 56px)",
+                letterSpacing: "-0.03em",
+                color: "#fff",
                 lineHeight: 1,
                 margin: 0,
-                whiteSpace: "nowrap",
               }}
             >
               GrowitBuddy
-            </motion.h1>
-          </div>
-
-          {/* Tagline */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={phase === "hold" ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 }}
-            style={{
-              position: "absolute",
-              bottom: "calc(50% - 72px)",
-              fontFamily: "'Instrument Sans', sans-serif",
-              fontSize: "11px",
-              fontWeight: 500,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "rgba(0,0,0,0.3)",
-            }}
-          >
-            Content & Authority Studio
-          </motion.p>
+            </h1>
+            <p
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: 12,
+                fontWeight: 500,
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                color: "rgba(255,255,255,0.3)",
+              }}
+            >
+              Content & Authority Studio
+            </p>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>

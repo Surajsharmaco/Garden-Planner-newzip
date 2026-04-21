@@ -1,22 +1,21 @@
 import { Link, useLocation } from "wouter";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowUpRight, MessageCircle, Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-/* omc.com navbar:
-   - Fixed, white, ~70px tall
-   - Logo mark (circle) + brand name — LEFT
-   - Nav links — CENTER  
-   - Clean text "Contact" — RIGHT (no blue pill)
-   - Thin bottom border only
+/*
+  vivafoxdigital.com navbar:
+  - Dark/transparent background
+  - Logo — LEFT
+  - Pill container with nav links — CENTER
+  - "Get In Touch ↗" + "Book a call" — RIGHT
 */
 
 const NAV_LINKS = [
-  { href: "/work", label: "Work" },
+  { href: "/work", label: "Portfolio" },
   { href: "/services", label: "Services" },
-  { href: "/framework", label: "Framework" },
-  { href: "/insights", label: "Insights" },
-  { href: "/about", label: "About" },
+  { href: "/about", label: "Client success" },
+  { href: "/insights", label: "About us" },
 ];
 
 export function Navbar() {
@@ -29,28 +28,33 @@ export function Navbar() {
     <>
       <header
         className="fixed top-0 left-0 right-0 z-50"
-        style={{ height: 70, background: "#fff", borderBottom: "1px solid rgba(0,0,0,0.08)" }}
+        style={{
+          height: 64,
+          background: "rgba(5,5,5,0.85)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          borderBottom: "1px solid rgba(255,255,255,0.06)",
+        }}
       >
         <div
-          className="h-full max-w-[1440px] mx-auto px-8 md:px-12"
-          style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center" }}
+          className="h-full w-full max-w-[1400px] mx-auto px-5 md:px-8"
+          style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
         >
           {/* LEFT — Logo */}
           <Link href="/">
-            <span className="inline-flex items-center gap-2.5 cursor-pointer group">
-              {/* Circle mark */}
+            <span className="inline-flex items-center gap-2 cursor-pointer group flex-shrink-0">
               <span
                 style={{
-                  width: 28, height: 28,
+                  width: 32, height: 32,
                   borderRadius: "50%",
-                  border: "1.5px solid rgba(0,0,0,0.2)",
+                  background: "linear-gradient(135deg, #FF9A3C 0%, #FF5500 100%)",
                   display: "inline-flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: "13px",
-                  fontWeight: 500,
-                  color: "#000",
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontSize: 15,
+                  fontWeight: 700,
+                  color: "#fff",
                   flexShrink: 0,
                 }}
               >
@@ -58,11 +62,11 @@ export function Navbar() {
               </span>
               <span
                 style={{
-                  fontFamily: "'Instrument Sans', sans-serif",
-                  fontSize: "15px",
-                  fontWeight: 500,
-                  color: "#000",
-                  letterSpacing: "-0.01em",
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontSize: 16,
+                  fontWeight: 700,
+                  color: "#fff",
+                  letterSpacing: "-0.02em",
                 }}
               >
                 GrowitBuddy
@@ -70,48 +74,84 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* CENTER — Nav */}
-          <nav className="hidden lg:flex items-center gap-8">
+          {/* CENTER — Pill nav container (desktop) — exact vivafox style */}
+          <nav
+            className="hidden lg:flex items-center"
+            style={{
+              border: "1px solid rgba(255,255,255,0.12)",
+              borderRadius: 40,
+              padding: "6px 8px",
+              gap: 2,
+            }}
+          >
             {NAV_LINKS.map((link) => (
               <Link key={link.href} href={link.href}>
                 <span
-                  className="text-[13px] font-medium cursor-pointer transition-colors duration-150 hover:text-black"
+                  className="text-[13px] font-medium cursor-pointer transition-colors duration-150 rounded-full px-4 py-1.5"
                   style={{
-                    fontFamily: "'Instrument Sans', sans-serif",
-                    color: location === link.href ? "#000" : "rgba(0,0,0,0.45)",
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    color: location === link.href ? "#fff" : "rgba(255,255,255,0.55)",
+                    background: location === link.href ? "rgba(255,255,255,0.08)" : "transparent",
                   }}
                 >
                   {link.label}
                 </span>
               </Link>
             ))}
+            {/* WhatsApp / contact icon — vivafox has this */}
+            <a
+              href="https://wa.me/1234567890"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-1 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
+              style={{ width: 32, height: 32 }}
+            >
+              <MessageCircle className="w-4 h-4" style={{ color: "rgba(255,255,255,0.55)" }} />
+            </a>
           </nav>
 
-          {/* RIGHT — Contact text link (omc.com style — no blue pill) */}
-          <div className="hidden lg:flex items-center justify-end">
+          {/* RIGHT — CTA Buttons (desktop) */}
+          <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
+            {/* "Get In Touch ↗" */}
             <Link href="/contact">
               <span
-                data-testid="button-book-call-nav"
-                className="inline-flex items-center gap-1.5 text-[13px] font-medium cursor-pointer hover:opacity-60 transition-opacity group"
-                style={{ fontFamily: "'Instrument Sans', sans-serif", color: "#000" }}
+                className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[13px] font-medium cursor-pointer transition-all hover:bg-white/10"
+                style={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  color: "#fff",
+                  border: "1px solid rgba(255,255,255,0.18)",
+                }}
+                data-testid="button-get-in-touch"
               >
-                Contact
-                <span
-                  className="inline-flex items-center justify-center w-5 h-5 rounded-full group-hover:scale-110 transition-transform"
-                  style={{ border: "1.5px solid rgba(0,0,0,0.3)" }}
-                >
-                  <ArrowUpRight className="w-2.5 h-2.5" />
-                </span>
+                Get In Touch
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </span>
+            </Link>
+            {/* "Book a call" — dark filled */}
+            <Link href="/contact">
+              <span
+                className="inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-[13px] font-semibold cursor-pointer transition-all"
+                style={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  color: "#fff",
+                  background: "rgba(255,255,255,0.1)",
+                  border: "1px solid rgba(255,255,255,0.2)",
+                }}
+                data-testid="button-book-call-nav"
+              >
+                Book a call
               </span>
             </Link>
           </div>
 
-          {/* Mobile toggle */}
-          <div className="flex lg:hidden justify-end">
-            <button className="text-black p-1" onClick={() => setIsOpen(!isOpen)} data-testid="button-mobile-menu">
-              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
+          {/* Mobile menu toggle */}
+          <button
+            className="lg:hidden text-white p-1"
+            onClick={() => setIsOpen(!isOpen)}
+            data-testid="button-mobile-menu"
+          >
+            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
       </header>
 
@@ -123,20 +163,46 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.18 }}
-            className="fixed inset-x-0 z-40 bg-white border-b border-black/8 py-8 px-8 shadow-sm"
-            style={{ top: 70 }}
+            style={{
+              position: "fixed",
+              top: 64,
+              left: 0,
+              right: 0,
+              zIndex: 40,
+              background: "#0A0A0A",
+              borderBottom: "1px solid rgba(255,255,255,0.08)",
+              padding: "24px 20px",
+            }}
           >
-            <nav className="flex flex-col gap-6">
+            <nav className="flex flex-col gap-5">
               {[...NAV_LINKS, { href: "/contact", label: "Contact" }].map((link) => (
                 <Link key={link.href} href={link.href}>
                   <span
-                    className="text-[18px] font-medium cursor-pointer"
-                    style={{ color: location === link.href ? "#000" : "rgba(0,0,0,0.45)", fontFamily: "'Instrument Sans', sans-serif" }}
+                    style={{
+                      fontFamily: "'Space Grotesk', sans-serif",
+                      fontSize: 18,
+                      fontWeight: 600,
+                      color: location === link.href ? "#fff" : "rgba(255,255,255,0.5)",
+                      cursor: "pointer",
+                    }}
                   >
                     {link.label}
                   </span>
                 </Link>
               ))}
+              <Link href="/contact">
+                <span
+                  className="inline-flex items-center justify-center rounded-full py-3 text-[15px] font-semibold cursor-pointer mt-2"
+                  style={{
+                    background: "linear-gradient(135deg, #FF9A3C 0%, #FF5500 100%)",
+                    color: "#fff",
+                    width: "100%",
+                    fontFamily: "'Space Grotesk', sans-serif",
+                  }}
+                >
+                  Book a call
+                </span>
+              </Link>
             </nav>
           </motion.div>
         )}

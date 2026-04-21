@@ -1,547 +1,541 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { Link } from "wouter";
 import { FadeUp } from "@/components/effects/TextReveal";
 import CountUp from "@/components/effects/CountUp";
 
-/* ══════════════════════════════════════════════════════════════════
-   omc.com EXACT STRUCTURE — GrowitBuddy content
-   
-   1. Hero          — white, full-screen, centered, circle mark + large H1 + capability links
-   2. Dark panel    — full-bleed, "Content & Authority Studio" label + big heading + arrow link
-   3. System        — dark image + "GrowitBuddy System" label + heading + 6 feature cards
-   4. Results       — white, "A record of sustained growth", stats + link
-   5. News          — "What's new" 3-card grid
-   ══════════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════
+   vivafoxdigital.com STRUCTURE — GrowitBuddy content
+   1. Hero           — dark, orange glow, bold headline, pill CTAs
+   2. Logos marquee  — scrolling partner/client logos
+   3. Process        — 3 service cards
+   4. Features grid  — 6 features
+   5. Testimonials   — 3 client reviews
+   6. Pricing        — 3 tiers
+   7. Stats          — count-up numbers
+   8. Footer CTA     — "Authority content for every founder"
+══════════════════════════════════════════════════════════════ */
 
-const CAPABILITIES = [
-  "Authority Strategy",
-  "Content Production",
-  "Video Editing",
-  "Distribution",
-  "Personal Branding",
-  "Ghostwriting",
-  "PR & Media",
-  "Community Growth",
+const PROCESS_CARDS = [
+  {
+    icon: "✂",
+    tag: "Editing",
+    title: "Need editing?",
+    desc: "A world-class editing team at your disposal. Turn your raw footage into scroll-stopping content that demands attention.",
+    link: "Explore",
+  },
+  {
+    icon: "🚀",
+    tag: "Done-for-you",
+    title: "Need A-Z support?",
+    desc: "A complete done-for-you authority system — helping you create 15+ high-quality pieces in just 2 hours of your time.",
+    link: "Explore",
+  },
+  {
+    icon: "🎙",
+    tag: "Podcast",
+    title: "Have a podcast?",
+    desc: "Outsource your podcast's signature editing and multi-platform distribution. We handle the rest — you just record.",
+    link: "Explore",
+  },
 ];
 
-const SYSTEM_CARDS = [
-  { icon: "◎", title: "Authority Architecture", desc: "One unified positioning system." },
-  { icon: "✦", title: "Content at Scale", desc: "Production at an unmatched pace." },
-  { icon: "◈", title: "Predictive Distribution", desc: "Anticipates what resonates next." },
-  { icon: "⬡", title: "Unified Brand Backbone", desc: "A single source of narrative truth." },
-  { icon: "◐", title: "Outcome-Driven Activation", desc: "Strategy connected to revenue." },
-  { icon: "◑", title: "Audience Intelligence", desc: "Global reach. Category precision." },
+const FEATURES = [
+  { title: "Performance Insights", desc: "Track how your content performs with data-backed analytics across every platform." },
+  { title: "Brand Direction", desc: "Define your tone and vision — our team brings it to life with precision." },
+  { title: "Precision Editing", desc: "We fine-tune your best footage into captivating clips designed to grab attention." },
+  { title: "Quick Viral Formats", desc: "Multiple viral-ready formats from a single shoot — reels, shorts, and promos." },
+  { title: "Authority Workflow", desc: "Step-by-step guidance for building a content system that compounds over time." },
+  { title: "Competitor Analysis", desc: "Visual strategy insights from top-performing creators in your exact niche." },
 ];
 
-const NEWS = [
-  { tag: "Framework", date: "April 18, 2026", title: "The 4-step Authority Flywheel every founder needs to build this year." },
-  { tag: "Creator Economy", date: "April 10, 2026", title: "How to turn a newsletter into a $500K/yr business without ads." },
-  { tag: "Distribution", date: "April 3, 2026", title: "LinkedIn's algorithm in 2026: what actually drives reach for founders." },
+const TESTIMONIALS = [
+  {
+    quote: "We saw real engagement growth and inbound leads after partnering with GrowitBuddy. They're experts at authority-driven content.",
+    name: "Jordan Lally",
+    role: "Founder & CEO",
+    company: "SaaSGrowth Co.",
+    initials: "JL",
+    bg: "#1A1A1A",
+  },
+  {
+    quote: "GrowitBuddy helped us create content that actually drives investor interest and partnership deals. Creative, fast, and reliable.",
+    name: "Sarah Chen",
+    role: "CEO",
+    company: "VentureEdge",
+    initials: "SC",
+    bg: "#1A1A1A",
+  },
+  {
+    quote: "Their system is incredible — we went from 0 to 50K LinkedIn followers in 90 days and closed 3 enterprise deals from content alone.",
+    name: "Marcus Johnson",
+    role: "Founder",
+    company: "TechScale Labs",
+    initials: "MJ",
+    bg: "#1A1A1A",
+  },
 ];
 
-function CircleArrowLink({ href, children, dark = false }: { href: string; children: React.ReactNode; dark?: boolean }) {
+const PRICING = [
+  {
+    price: "$2,500",
+    period: "/month",
+    name: "8 Posts / Month",
+    desc: "Perfect for founders starting their authority journey with consistent, high-quality content.",
+    features: ["Ideation & Strategy", "Scripting & Direction", "Premium Editing", "LinkedIn Management", "Monthly Analytics Report"],
+    cta: "Get Started",
+    highlight: false,
+  },
+  {
+    price: "$5,000",
+    period: "/month",
+    name: "20 Posts + 2 Videos",
+    desc: "Our most popular plan — full content engine for growth-stage founders and operators.",
+    features: ["Everything in Starter", "Short-Form Video Production", "YouTube Integration", "Cross-Platform Distribution", "24/7 Creative Support"],
+    cta: "Book a Call",
+    highlight: true,
+  },
+  {
+    price: "$8,000",
+    period: "/month",
+    name: "30 Posts + 4 Videos",
+    desc: "For founders ready to dominate their category and build undeniable authority at scale.",
+    features: ["Everything in Authority", "4-Hour Studio Sessions", "Podcast Production", "PR & Media Outreach", "YouTube SEO & Optimization"],
+    cta: "Book a Call",
+    highlight: false,
+  },
+];
+
+const MARQUEE_ITEMS = [
+  "LinkedIn Authority", "YouTube Growth", "Podcast Production",
+  "Short-Form Video", "Content Strategy", "Brand Positioning",
+  "Ghostwriting", "Newsletter", "PR & Media", "Community Growth",
+  "LinkedIn Authority", "YouTube Growth", "Podcast Production",
+  "Short-Form Video", "Content Strategy", "Brand Positioning",
+  "Ghostwriting", "Newsletter", "PR & Media", "Community Growth",
+];
+
+/* Overlapping pill CTA — exact vivafox style */
+function HeroCTA() {
   return (
-    <Link href={href}>
-      <span
-        className="inline-flex items-center gap-2 text-[14px] font-medium cursor-pointer hover:opacity-60 transition-opacity group"
-        style={{ color: dark ? "#fff" : "#000", fontFamily: "'Instrument Sans', sans-serif" }}
-      >
-        {children}
+    <div
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        border: "1px solid rgba(255,255,255,0.15)",
+        borderRadius: 40,
+        padding: 5,
+        gap: 0,
+        background: "rgba(255,255,255,0.04)",
+        backdropFilter: "blur(8px)",
+      }}
+    >
+      <Link href="/contact">
         <span
-          className="inline-flex items-center justify-center rounded-full group-hover:scale-110 transition-transform"
-          style={{
-            width: 28, height: 28,
-            border: `1.5px solid ${dark ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.22)"}`,
-          }}
+          className="inline-flex items-center gap-2.5 text-[14px] font-semibold cursor-pointer rounded-full pr-4 pl-2 py-2 hover:opacity-80 transition-opacity"
+          style={{ fontFamily: "'Space Grotesk', sans-serif", color: "#fff" }}
+          data-testid="button-book-demo"
         >
-          <ArrowUpRight className="w-3.5 h-3.5" />
+          <span
+            style={{
+              width: 34, height: 34,
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, #FF9A3C 0%, #FF5500 100%)",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
+            <ArrowRight className="w-4 h-4 text-white" />
+          </span>
+          Book a Demo Call
         </span>
-      </span>
-    </Link>
+      </Link>
+      <Link href="/contact">
+        <span
+          className="inline-flex items-center gap-2.5 text-[14px] font-semibold cursor-pointer rounded-full pr-5 pl-2 py-2 hover:opacity-80 transition-opacity"
+          style={{ fontFamily: "'Space Grotesk', sans-serif", color: "#fff" }}
+          data-testid="button-get-in-touch"
+        >
+          <span
+            style={{
+              width: 34, height: 34,
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, #FF9A3C 0%, #FF5500 100%)",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+              marginLeft: -8,
+            }}
+          >
+            <ArrowRight className="w-4 h-4 text-white" />
+          </span>
+          Get In Touch
+        </span>
+      </Link>
+    </div>
   );
 }
 
 export default function Home() {
   return (
-    <div className="flex flex-col w-full" style={{ background: "#fff" }}>
+    <div style={{ background: "#050505", color: "#fff", fontFamily: "'Space Grotesk', sans-serif" }}>
 
-      {/* ════════════════════════════════════════════════════════
-          1. HERO — omc.com: full-screen white, centered, large serif
-          Structure: [circle mark] → [H1 italic] → [sub] → [body] → [capability links]
-      ════════════════════════════════════════════════════════ */}
+      {/* ══════════════════════════════════════════════════════════
+          1. HERO — vivafox: dark, radial orange glow, big headline, pill CTAs
+      ══════════════════════════════════════════════════════════ */}
       <section
         style={{
           minHeight: "100vh",
-          paddingTop: 70, /* navbar height */
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "#fff",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: 860,
-            width: "100%",
-            margin: "0 auto",
-            padding: "60px 24px 0",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            textAlign: "center",
-          }}
-        >
-          {/* Brand mark — the large circle with "G", like omc's circular Omnicom logo */}
-          <motion.div
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.05 }}
-            style={{
-              width: 100, height: 100,
-              borderRadius: "50%",
-              border: "1.5px solid rgba(0,0,0,0.15)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              marginBottom: 40,
-            }}
-          >
-            <span
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 48,
-                fontWeight: 500,
-                color: "#000",
-                letterSpacing: "-0.03em",
-                lineHeight: 1,
-              }}
-            >
-              G
-            </span>
-          </motion.div>
-
-          {/* H1 — omc: "The world's leading marketing and sales company" */}
-          <div style={{ overflow: "hidden", width: "100%" }}>
-            <motion.h1
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "clamp(52px, 7.5vw, 96px)",
-                fontWeight: 500,
-                letterSpacing: "-0.025em",
-                lineHeight: "1.04",
-                color: "#000",
-                margin: 0,
-              }}
-            >
-              The world's leading{" "}
-              <em>content</em>{" "}and{" "}
-              <em>authority</em>{" "}studio.
-            </motion.h1>
-          </div>
-
-          {/* Sub — omc: "Built for intelligent growth in the next era." */}
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            style={{
-              fontFamily: "'Instrument Sans', sans-serif",
-              fontSize: "clamp(17px, 2vw, 21px)",
-              color: "rgba(0,0,0,0.5)",
-              marginTop: 28,
-              letterSpacing: "-0.01em",
-            }}
-          >
-            Built for intelligent growth in the next era.
-          </motion.p>
-
-          {/* Body — omc: 2-line centered description */}
-          <motion.p
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.38, duration: 0.65 }}
-            style={{
-              fontFamily: "'Instrument Sans', sans-serif",
-              fontSize: 16,
-              color: "rgba(0,0,0,0.4)",
-              marginTop: 14,
-              maxWidth: "54ch",
-              lineHeight: "1.8",
-            }}
-          >
-            We help ambitious founders and creators solve their most critical growth
-            challenges by giving them access to proven authority systems,
-            breakthrough content, and the most effective distribution in the business.
-          </motion.p>
-        </div>
-
-        {/* Capability links — omc: inline links below body, separated by thin lines */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.6 }}
-          style={{
-            marginTop: 60,
-            width: "100%",
-            maxWidth: 1200,
-            padding: "0 24px",
-            borderTop: "1px solid rgba(0,0,0,0.08)",
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-          }}
-        >
-          {CAPABILITIES.map((cap, i) => (
-            <Link key={cap} href="/services">
-              <span
-                className="inline-flex items-center hover:text-black transition-colors"
-                style={{
-                  fontFamily: "'Instrument Sans', sans-serif",
-                  fontSize: 13,
-                  fontWeight: 500,
-                  color: "rgba(0,0,0,0.4)",
-                  padding: "16px 20px",
-                  borderRight: i < CAPABILITIES.length - 1 ? "1px solid rgba(0,0,0,0.08)" : "none",
-                  cursor: "pointer",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {cap}
-              </span>
-            </Link>
-          ))}
-        </motion.div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════
-          2. FULL-BLEED DARK PANEL — omc: large dark image with "Connected Capabilities" label + heading + arrow link
-      ════════════════════════════════════════════════════════ */}
-      <section
-        style={{
-          width: "100%",
-          height: "55vw",
-          maxHeight: 700,
-          minHeight: 380,
-          background: "#0A0A0A",
+          textAlign: "center",
           position: "relative",
           overflow: "hidden",
-          display: "flex",
-          alignItems: "flex-end",
+          paddingTop: 64,
         }}
       >
-        {/* Subtle grid overlay — mimics omc.com's textured dark image */}
+        {/* Radial orange glow — exact vivafox hero glow */}
         <div
           style={{
             position: "absolute",
-            inset: 0,
-            backgroundImage:
-              "repeating-linear-gradient(0deg,rgba(255,255,255,0.03) 0,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 64px),repeating-linear-gradient(90deg,rgba(255,255,255,0.03) 0,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 64px)",
-          }}
-        />
-        {/* Radial gradient center glow */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: "radial-gradient(ellipse 70% 60% at 50% 40%, rgba(0,114,245,0.06) 0%, transparent 70%)",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -55%)",
+            width: "70vw",
+            height: "70vw",
+            maxWidth: 900,
+            maxHeight: 900,
+            borderRadius: "50%",
+            background: "radial-gradient(ellipse at center, rgba(255,90,10,0.28) 0%, rgba(220,60,0,0.12) 35%, transparent 65%)",
+            animation: "pulse-glow 4s ease-in-out infinite",
+            pointerEvents: "none",
           }}
         />
 
-        {/* Bottom-left content — omc pattern */}
+        {/* Concentric rings — vivafox's subtle radar pattern */}
+        {[1, 0.6, 0.35, 0.18].map((opacity, i) => (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -55%)",
+              width: `${(i + 1) * 22}vw`,
+              height: `${(i + 1) * 22}vw`,
+              maxWidth: (i + 1) * 280,
+              maxHeight: (i + 1) * 280,
+              borderRadius: "50%",
+              border: `1px solid rgba(255,120,40,${opacity * 0.12})`,
+              pointerEvents: "none",
+            }}
+          />
+        ))}
+
+        {/* Hero content */}
+        <div style={{ position: "relative", zIndex: 1, maxWidth: 860, padding: "0 24px" }}>
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 700,
+              fontSize: "clamp(44px, 8vw, 100px)",
+              lineHeight: "1.05",
+              letterSpacing: "-0.03em",
+              margin: "0 0 28px",
+              color: "#fff",
+            }}
+          >
+            Grow your Authority
+            <br />
+            with Content
+            <br />
+            <span className="text-orange-gradient">That Converts</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15, duration: 0.7 }}
+            style={{
+              fontSize: "clamp(15px, 2vw, 18px)",
+              color: "rgba(255,255,255,0.5)",
+              maxWidth: "50ch",
+              margin: "0 auto 44px",
+              lineHeight: "1.7",
+            }}
+          >
+            You're not a content creator — you're a business leader. But in today's world, attention is leverage. Let us turn you into a brand that commands your industry.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25, duration: 0.6 }}
+          >
+            <HeroCTA />
+          </motion.div>
+        </div>
+
+        {/* Bottom fade */}
         <div
-          className="relative z-10 max-w-[1440px] mx-auto w-full px-8 md:px-16 pb-14 md:pb-20"
-          style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: 120,
+            background: "linear-gradient(to top, #050505, transparent)",
+            pointerEvents: "none",
+          }}
+        />
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════
+          2. LOGOS MARQUEE — vivafox: scrolling horizontal strip
+      ══════════════════════════════════════════════════════════ */}
+      <div
+        style={{
+          overflow: "hidden",
+          borderTop: "1px solid rgba(255,255,255,0.06)",
+          borderBottom: "1px solid rgba(255,255,255,0.06)",
+          padding: "18px 0",
+          background: "#080808",
+        }}
+      >
+        <motion.div
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 28, ease: "linear", repeat: Infinity }}
+          style={{ display: "flex", gap: 48, whiteSpace: "nowrap", width: "max-content" }}
         >
+          {MARQUEE_ITEMS.map((item, i) => (
+            <span
+              key={i}
+              style={{
+                fontSize: 13,
+                fontWeight: 500,
+                color: "rgba(255,255,255,0.25)",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 12,
+              }}
+            >
+              <span
+                style={{
+                  width: 5, height: 5,
+                  borderRadius: "50%",
+                  background: "#FF5500",
+                  display: "inline-block",
+                }}
+              />
+              {item}
+            </span>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* ══════════════════════════════════════════════════════════
+          3. PROCESS — vivafox: 3 service cards
+      ══════════════════════════════════════════════════════════ */}
+      <section style={{ padding: "100px 24px", background: "#050505" }}>
+        <div className="max-w-[1200px] mx-auto">
           <FadeUp>
             <p
               style={{
-                fontFamily: "'Instrument Sans', sans-serif",
-                fontSize: 11,
+                fontSize: 12,
                 fontWeight: 600,
-                letterSpacing: "0.18em",
+                letterSpacing: "0.2em",
                 textTransform: "uppercase",
-                color: "rgba(255,255,255,0.3)",
+                color: "#FF5500",
                 marginBottom: 16,
               }}
             >
-              Content &amp; Authority Studio
+              Process
             </p>
             <h2
               style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "clamp(36px, 5vw, 64px)",
-                fontWeight: 500,
+                fontWeight: 700,
+                fontSize: "clamp(30px, 5vw, 54px)",
                 letterSpacing: "-0.025em",
-                lineHeight: "1.05",
+                lineHeight: "1.1",
                 color: "#fff",
-                maxWidth: "14ch",
-                margin: 0,
+                maxWidth: "16ch",
+                marginBottom: 60,
               }}
             >
-              A competitive edge across <em>every</em> dimension.
+              Simple Systems for Explosive Growth
             </h2>
           </FadeUp>
-          <FadeUp delay={0.1} className="pb-1">
-            <CircleArrowLink href="/services" dark>
-              Connected Capabilities
-            </CircleArrowLink>
-          </FadeUp>
-        </div>
-      </section>
 
-      {/* ════════════════════════════════════════════════════════
-          3. GROWITBUDDY SYSTEM — omc: "Omni" section with dark image + feature cards
-          Structure: dark full-bleed top half, white cards below, overlapping
-      ════════════════════════════════════════════════════════ */}
-      <section style={{ background: "#fff" }}>
-        {/* Dark top portion */}
-        <div
-          style={{
-            background: "#111",
-            padding: "80px 24px 100px",
-          }}
-        >
-          <div className="max-w-[1200px] mx-auto">
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 20,
-                maxWidth: 700,
-              }}
-            >
-              <FadeUp>
-                <p
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+              gap: 16,
+            }}
+          >
+            {PROCESS_CARDS.map((card, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-5%" }}
+                transition={{ delay: i * 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                data-cursor-hover
+                style={{
+                  background: "#0E0E0E",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                  borderRadius: 16,
+                  overflow: "hidden",
+                  cursor: "pointer",
+                  transition: "border-color 0.2s",
+                }}
+                whileHover={{ borderColor: "rgba(255,85,0,0.3)" }}
+              >
+                {/* Card image placeholder — dark gradient mimicking vivafox's images */}
+                <div
                   style={{
-                    fontFamily: "'Instrument Sans', sans-serif",
-                    fontSize: 11,
-                    fontWeight: 600,
-                    letterSpacing: "0.18em",
-                    textTransform: "uppercase",
-                    color: "rgba(255,255,255,0.3)",
-                    marginBottom: 4,
+                    height: 180,
+                    background: `linear-gradient(135deg, #1A0A00 0%, #0D0D0D 50%, rgba(255,85,0,0.05) 100%)`,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 48,
+                    borderBottom: "1px solid rgba(255,255,255,0.05)",
                   }}
                 >
-                  GrowitBuddy System
-                </p>
-                <h2
-                  style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                    fontSize: "clamp(32px, 4.5vw, 58px)",
-                    fontWeight: 500,
-                    letterSpacing: "-0.025em",
-                    lineHeight: "1.07",
-                    color: "#fff",
-                  }}
-                >
-                  GrowitBuddy's content <em>intelligence</em>{" "}
-                  and authority platform
-                </h2>
-              </FadeUp>
-              <FadeUp delay={0.05} style={{ display: "flex", alignItems: "flex-start", gap: 40, flexWrap: "wrap" }}>
-                <p
-                  style={{
-                    fontFamily: "'Instrument Sans', sans-serif",
-                    fontSize: 16,
-                    color: "rgba(255,255,255,0.45)",
-                    lineHeight: "1.8",
-                    maxWidth: "50ch",
-                  }}
-                >
-                  Our proprietary system unites positioning, content, distribution, and AI to help founders grow with clarity, speed, and measurable authority impact.
-                </p>
-                <CircleArrowLink href="/framework" dark>Learn More</CircleArrowLink>
-              </FadeUp>
-            </div>
-          </div>
-        </div>
+                  {card.icon}
+                </div>
 
-        {/* Feature cards — overlap into white */}
-        <div style={{ background: "#fff", padding: "0 24px 80px" }}>
-          <div className="max-w-[1200px] mx-auto" style={{ marginTop: -40 }}>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-                gap: 1,
-                background: "rgba(0,0,0,0.08)",
-                borderRadius: 5,
-                overflow: "hidden",
-              }}
-            >
-              {SYSTEM_CARDS.map((card, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-8% 0px" }}
-                  transition={{ delay: i * 0.07, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                  data-cursor-hover
-                  style={{
-                    background: "#fff",
-                    padding: "36px 32px",
-                    cursor: "pointer",
-                    transition: "background 0.2s",
-                  }}
-                  whileHover={{ backgroundColor: "#F8F8F8" }}
-                >
-                  <div
+                <div style={{ padding: "28px 28px 32px" }}>
+                  <span
                     style={{
-                      width: 44, height: 44,
-                      borderRadius: 5,
-                      background: "#F2F2F2",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: 18,
-                      marginBottom: 20,
-                      color: "#333",
+                      display: "inline-block",
+                      fontSize: 11,
+                      fontWeight: 600,
+                      letterSpacing: "0.12em",
+                      textTransform: "uppercase",
+                      color: "#FF5500",
+                      marginBottom: 12,
                     }}
                   >
-                    {card.icon}
-                  </div>
+                    {card.tag}
+                  </span>
                   <h3
                     style={{
-                      fontFamily: "'Instrument Sans', sans-serif",
-                      fontSize: 16,
-                      fontWeight: 600,
-                      color: "#000",
-                      marginBottom: 8,
-                      lineHeight: "1.3",
+                      fontWeight: 700,
+                      fontSize: 22,
+                      letterSpacing: "-0.02em",
+                      color: "#fff",
+                      marginBottom: 12,
                     }}
                   >
                     {card.title}
                   </h3>
                   <p
                     style={{
-                      fontFamily: "'Instrument Sans', sans-serif",
                       fontSize: 14,
-                      color: "rgba(0,0,0,0.45)",
-                      lineHeight: "1.65",
+                      color: "rgba(255,255,255,0.45)",
+                      lineHeight: "1.75",
+                      marginBottom: 20,
                     }}
                   >
                     {card.desc}
                   </p>
-                </motion.div>
-              ))}
-            </div>
+                  <Link href="/services">
+                    <span
+                      style={{
+                        fontSize: 13,
+                        fontWeight: 700,
+                        color: "#FF5500",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 6,
+                        cursor: "pointer",
+                      }}
+                      className="hover:opacity-70 transition-opacity"
+                    >
+                      <strong>{card.link}</strong>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </span>
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════════════════
-          4. RESULTS — omc: "A record of sustained growth" / Investors section
-          Clean, single-column metrics + link button on right
-      ════════════════════════════════════════════════════════ */}
-      <section
-        style={{
-          borderTop: "1px solid rgba(0,0,0,0.07)",
-          borderBottom: "1px solid rgba(0,0,0,0.07)",
-          padding: "80px 24px",
-          background: "#F7F7F7",
-        }}
-      >
-        <div
-          className="max-w-[1200px] mx-auto"
-          style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 40 }}
-        >
-          <FadeUp style={{ flex: "1 1 340px" }}>
-            <p
-              style={{
-                fontFamily: "'Instrument Sans', sans-serif",
-                fontSize: 11,
-                fontWeight: 600,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                color: "rgba(0,0,0,0.3)",
-                marginBottom: 16,
-              }}
-            >
-              Results
-            </p>
+      {/* ══════════════════════════════════════════════════════════
+          4. FEATURES GRID — vivafox: "Elevate Your Content Game"
+      ══════════════════════════════════════════════════════════ */}
+      <section style={{ padding: "80px 24px 100px", background: "#080808" }}>
+        <div className="max-w-[1200px] mx-auto">
+          <FadeUp>
             <h2
               style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "clamp(32px, 4.5vw, 56px)",
-                fontWeight: 500,
+                fontWeight: 700,
+                fontSize: "clamp(28px, 5vw, 50px)",
                 letterSpacing: "-0.025em",
-                lineHeight: "1.06",
-                color: "#000",
-                marginBottom: 24,
+                lineHeight: "1.1",
+                color: "#fff",
+                marginBottom: 60,
+                textAlign: "center",
               }}
             >
-              A record of <em>sustained growth</em>.
+              Level Up Your{" "}
+              <span className="text-orange-gradient">Content Game.</span>
             </h2>
-            <p
-              style={{
-                fontFamily: "'Instrument Sans', sans-serif",
-                fontSize: 16,
-                color: "rgba(0,0,0,0.45)",
-                lineHeight: "1.75",
-                maxWidth: "44ch",
-                marginBottom: 32,
-              }}
-            >
-              GrowitBuddy sets the standard for content and authority leadership by consistently building stronger personal brands and delivering superior outcomes.
-            </p>
-            <CircleArrowLink href="/work">See all case studies</CircleArrowLink>
           </FadeUp>
 
-          {/* Stats grid */}
           <div
             style={{
-              flex: "1 1 320px",
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
+              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
               gap: 1,
-              background: "rgba(0,0,0,0.07)",
-              borderRadius: 5,
+              background: "rgba(255,255,255,0.05)",
+              borderRadius: 16,
               overflow: "hidden",
-              alignSelf: "flex-start",
+              border: "1px solid rgba(255,255,255,0.05)",
             }}
           >
-            {[
-              { v: "200+", l: "Clients Served" },
-              { v: "10K+", l: "Content Pieces" },
-              { v: "$50M+", l: "Pipeline Generated" },
-              { v: "4.2×", l: "Authority Growth" },
-            ].map((s, i) => (
+            {FEATURES.map((f, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.08, duration: 0.5 }}
-                style={{ background: "#fff", padding: "32px 24px" }}
+                transition={{ delay: i * 0.06, duration: 0.5 }}
+                style={{ background: "#0A0A0A", padding: "32px 28px" }}
               >
-                <CountUp
-                  value={s.v}
+                <h4
                   style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                    fontSize: "clamp(28px, 4vw, 44px)",
-                    fontWeight: 500,
-                    letterSpacing: "-0.02em",
-                    color: "#000",
-                    display: "block",
-                    lineHeight: 1,
-                    marginBottom: 8,
-                  }}
-                />
-                <p
-                  style={{
-                    fontFamily: "'Instrument Sans', sans-serif",
-                    fontSize: 12,
-                    color: "rgba(0,0,0,0.4)",
-                    letterSpacing: "0.06em",
-                    textTransform: "uppercase",
+                    fontWeight: 700,
+                    fontSize: 17,
+                    color: "#fff",
+                    marginBottom: 10,
+                    letterSpacing: "-0.01em",
                   }}
                 >
-                  {s.l}
+                  {f.title}
+                </h4>
+                <p
+                  style={{
+                    fontSize: 14,
+                    color: "rgba(255,255,255,0.4)",
+                    lineHeight: "1.7",
+                  }}
+                >
+                  {f.desc}
                 </p>
               </motion.div>
             ))}
@@ -549,73 +543,86 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════════════════
-          5. NEWS — omc: "What's new across Omnicom" 3-card grid
-      ════════════════════════════════════════════════════════ */}
-      <section style={{ padding: "80px 24px", background: "#fff" }}>
+      {/* ══════════════════════════════════════════════════════════
+          5. TESTIMONIALS — vivafox: "Our clients"
+      ══════════════════════════════════════════════════════════ */}
+      <section style={{ padding: "100px 24px", background: "#050505" }}>
         <div className="max-w-[1200px] mx-auto">
-          <FadeUp
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-end",
-              marginBottom: 40,
-              borderBottom: "1px solid rgba(0,0,0,0.08)",
-              paddingBottom: 24,
-            }}
-          >
+          <FadeUp style={{ textAlign: "center", marginBottom: 60 }}>
             <h2
               style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "clamp(22px, 3vw, 36px)",
-                fontWeight: 500,
-                letterSpacing: "-0.02em",
-                color: "#000",
+                fontWeight: 700,
+                fontSize: "clamp(28px, 5vw, 48px)",
+                letterSpacing: "-0.025em",
+                color: "#fff",
+                marginBottom: 12,
               }}
             >
-              What's new across GrowitBuddy
+              Our clients
             </h2>
-            <CircleArrowLink href="/insights">View All</CircleArrowLink>
+            <p style={{ fontSize: 16, color: "rgba(255,255,255,0.4)" }}>
+              Hear firsthand how our system has boosted authority for founders like you.
+            </p>
           </FadeUp>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 32 }}>
-            {NEWS.map((a, i) => (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+              gap: 16,
+            }}
+          >
+            {TESTIMONIALS.map((t, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.08, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                data-cursor-hover
-                className="group cursor-pointer"
-                style={{ display: "flex", flexDirection: "column" }}
+                transition={{ delay: i * 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                style={{
+                  background: "#0E0E0E",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                  borderRadius: 16,
+                  padding: "32px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 20,
+                }}
               >
                 <p
                   style={{
-                    fontFamily: "'Instrument Sans', sans-serif",
-                    fontSize: 11,
-                    fontWeight: 500,
-                    color: "rgba(0,0,0,0.35)",
-                    letterSpacing: "0.05em",
-                    marginBottom: 12,
+                    fontSize: 15,
+                    color: "rgba(255,255,255,0.75)",
+                    lineHeight: "1.75",
+                    fontStyle: "italic",
+                    flex: 1,
                   }}
                 >
-                  {a.date}
+                  "{t.quote}"
                 </p>
-                <h3
-                  className="group-hover:opacity-60 transition-opacity"
-                  style={{
-                    fontFamily: "'Instrument Sans', sans-serif",
-                    fontSize: 16,
-                    fontWeight: 500,
-                    color: "#000",
-                    lineHeight: "1.5",
-                  }}
-                >
-                  {a.title}
-                </h3>
-                <div style={{ marginTop: 16 }}>
-                  <CircleArrowLink href="/insights">Read more</CircleArrowLink>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <div
+                    style={{
+                      width: 44, height: 44,
+                      borderRadius: "50%",
+                      background: "linear-gradient(135deg, #FF9A3C 0%, #FF5500 100%)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: 14,
+                      fontWeight: 700,
+                      color: "#fff",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {t.initials}
+                  </div>
+                  <div>
+                    <p style={{ fontWeight: 700, fontSize: 14, color: "#fff" }}>{t.name}</p>
+                    <p style={{ fontSize: 12, color: "rgba(255,255,255,0.35)" }}>
+                      {t.role} · {t.company}
+                    </p>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -623,110 +630,271 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════════════════
-          6. STAY CONNECTED — omc: footer section with contact + socials
-      ════════════════════════════════════════════════════════ */}
+      {/* ══════════════════════════════════════════════════════════
+          6. PRICING — vivafox: 3 tier cards
+      ══════════════════════════════════════════════════════════ */}
+      <section style={{ padding: "80px 24px 100px", background: "#080808" }}>
+        <div className="max-w-[1200px] mx-auto">
+          <FadeUp style={{ textAlign: "center", marginBottom: 60 }}>
+            <p
+              style={{
+                fontSize: 12,
+                fontWeight: 600,
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                color: "#FF5500",
+                marginBottom: 16,
+              }}
+            >
+              Pricing
+            </p>
+            <h2
+              style={{
+                fontWeight: 700,
+                fontSize: "clamp(28px, 5vw, 48px)",
+                letterSpacing: "-0.025em",
+                color: "#fff",
+              }}
+            >
+              Invest in your authority.
+            </h2>
+          </FadeUp>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+              gap: 16,
+            }}
+          >
+            {PRICING.map((plan, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.6 }}
+                style={{
+                  background: plan.highlight ? "linear-gradient(135deg, #1A0800 0%, #120800 100%)" : "#0E0E0E",
+                  border: plan.highlight ? "1px solid rgba(255,85,0,0.4)" : "1px solid rgba(255,255,255,0.07)",
+                  borderRadius: 16,
+                  padding: "36px 28px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 20,
+                  position: "relative",
+                }}
+              >
+                {plan.highlight && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: 20, right: 20,
+                      fontSize: 11,
+                      fontWeight: 700,
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      color: "#FF5500",
+                      background: "rgba(255,85,0,0.12)",
+                      padding: "4px 10px",
+                      borderRadius: 40,
+                    }}
+                  >
+                    Most Popular
+                  </span>
+                )}
+
+                <div>
+                  <div style={{ display: "flex", alignItems: "flex-end", gap: 6, marginBottom: 4 }}>
+                    <span
+                      style={{
+                        fontWeight: 700,
+                        fontSize: 42,
+                        letterSpacing: "-0.03em",
+                        color: plan.highlight ? "#FF7A30" : "#fff",
+                        lineHeight: 1,
+                      }}
+                    >
+                      {plan.price}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: 14,
+                        color: "rgba(255,255,255,0.35)",
+                        paddingBottom: 6,
+                      }}
+                    >
+                      {plan.period}
+                    </span>
+                  </div>
+                  <p
+                    style={{
+                      fontWeight: 700,
+                      fontSize: 16,
+                      color: "rgba(255,255,255,0.7)",
+                    }}
+                  >
+                    {plan.name}
+                  </p>
+                </div>
+
+                <p
+                  style={{
+                    fontSize: 14,
+                    color: "rgba(255,255,255,0.4)",
+                    lineHeight: "1.65",
+                  }}
+                >
+                  {plan.desc}
+                </p>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  {plan.features.map((feat, j) => (
+                    <div key={j} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <span
+                        style={{
+                          width: 18, height: 18,
+                          borderRadius: "50%",
+                          background: "rgba(255,85,0,0.15)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flexShrink: 0,
+                        }}
+                      >
+                        <Check className="w-2.5 h-2.5" style={{ color: "#FF5500" }} />
+                      </span>
+                      <span style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", fontWeight: 500 }}>
+                        {feat}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <Link href="/contact">
+                  <span
+                    className="cursor-pointer inline-flex items-center justify-center w-full rounded-full py-3 text-[14px] font-semibold transition-all hover:opacity-85"
+                    style={{
+                      background: plan.highlight
+                        ? "linear-gradient(135deg, #FF9A3C 0%, #FF5500 100%)"
+                        : "rgba(255,255,255,0.07)",
+                      color: "#fff",
+                      border: plan.highlight ? "none" : "1px solid rgba(255,255,255,0.12)",
+                      marginTop: 8,
+                    }}
+                    data-testid={`button-pricing-${i}`}
+                  >
+                    {plan.cta}
+                  </span>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════
+          7. STATS — vivafox: count-up numbers
+      ══════════════════════════════════════════════════════════ */}
       <section
         style={{
           padding: "80px 24px",
-          background: "#fff",
-          borderTop: "1px solid rgba(0,0,0,0.08)",
+          background: "#050505",
+          borderTop: "1px solid rgba(255,255,255,0.06)",
         }}
       >
-        <div className="max-w-[1200px] mx-auto">
-          <FadeUp>
-            <h2
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "clamp(32px, 5vw, 56px)",
-                fontWeight: 500,
-                letterSpacing: "-0.025em",
-                lineHeight: 1.05,
-                color: "#000",
-                marginBottom: 48,
-              }}
+        <div
+          className="max-w-[1200px] mx-auto"
+          style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 60 }}
+        >
+          {[
+            { value: "500+", label: "Hours Saved" },
+            { value: "10M+", label: "Organic Views" },
+            { value: "4×", label: "Credibility Boost" },
+          ].map((s, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, duration: 0.6 }}
+              style={{ textAlign: "center" }}
             >
-              Stay connected.
-            </h2>
-          </FadeUp>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 48 }}>
-            <FadeUp>
-              <h4
+              <CountUp
+                value={s.value}
                 style={{
-                  fontFamily: "'Instrument Sans', sans-serif",
-                  fontSize: 12,
-                  fontWeight: 600,
-                  letterSpacing: "0.12em",
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontWeight: 700,
+                  fontSize: "clamp(44px, 8vw, 88px)",
+                  letterSpacing: "-0.04em",
+                  lineHeight: 1,
+                  display: "block",
+                  marginBottom: 8,
+                  background: "linear-gradient(135deg, #FF9A3C 0%, #FF5500 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              />
+              <p
+                style={{
+                  fontSize: 13,
+                  fontWeight: 500,
+                  letterSpacing: "0.1em",
                   textTransform: "uppercase",
-                  color: "rgba(0,0,0,0.35)",
-                  marginBottom: 20,
+                  color: "rgba(255,255,255,0.35)",
                 }}
               >
-                Contact
-              </h4>
-              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                <div>
-                  <p style={{ fontFamily: "'Instrument Sans', sans-serif", fontSize: 13, color: "rgba(0,0,0,0.4)", marginBottom: 4 }}>
-                    Strategy Inquiries
-                  </p>
-                  <a
-                    href="mailto:hello@growitbuddy.com"
-                    style={{ fontFamily: "'Instrument Sans', sans-serif", fontSize: 15, color: "#000", textDecoration: "none" }}
-                    className="hover:opacity-50 transition-opacity"
-                  >
-                    hello@growitbuddy.com
-                  </a>
-                </div>
-                <div>
-                  <p style={{ fontFamily: "'Instrument Sans', sans-serif", fontSize: 13, color: "rgba(0,0,0,0.4)", marginBottom: 4 }}>
-                    Partnerships
-                  </p>
-                  <a
-                    href="mailto:partners@growitbuddy.com"
-                    style={{ fontFamily: "'Instrument Sans', sans-serif", fontSize: 15, color: "#000", textDecoration: "none" }}
-                    className="hover:opacity-50 transition-opacity"
-                  >
-                    partners@growitbuddy.com
-                  </a>
-                </div>
-              </div>
-            </FadeUp>
-
-            <FadeUp delay={0.05}>
-              <h4
-                style={{
-                  fontFamily: "'Instrument Sans', sans-serif",
-                  fontSize: 12,
-                  fontWeight: 600,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "rgba(0,0,0,0.35)",
-                  marginBottom: 20,
-                }}
-              >
-                Follow Us
-              </h4>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {["LinkedIn", "Twitter / X", "Instagram", "YouTube"].map((s) => (
-                  <a
-                    key={s}
-                    href="#"
-                    style={{
-                      fontFamily: "'Instrument Sans', sans-serif",
-                      fontSize: 15,
-                      color: "#000",
-                      textDecoration: "none",
-                    }}
-                    className="hover:opacity-50 transition-opacity"
-                  >
-                    {s}
-                  </a>
-                ))}
-              </div>
-            </FadeUp>
-          </div>
+                {s.label}
+              </p>
+            </motion.div>
+          ))}
         </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════
+          8. FOOTER CTA — vivafox: "Viral clips for every brand"
+      ══════════════════════════════════════════════════════════ */}
+      <section
+        style={{
+          padding: "100px 24px 80px",
+          background: "#080808",
+          borderTop: "1px solid rgba(255,255,255,0.06)",
+          textAlign: "center",
+        }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+        >
+          <h2
+            style={{
+              fontWeight: 700,
+              fontSize: "clamp(28px, 6vw, 64px)",
+              letterSpacing: "-0.03em",
+              lineHeight: "1.08",
+              color: "#fff",
+              marginBottom: 32,
+            }}
+          >
+            Authority content for{" "}
+            <span className="text-orange-gradient">every founder.</span>
+          </h2>
+          <p
+            style={{
+              fontSize: 16,
+              color: "rgba(255,255,255,0.4)",
+              marginBottom: 40,
+              maxWidth: "40ch",
+              margin: "0 auto 40px",
+            }}
+          >
+            No credit card required · Start within 48 hours
+          </p>
+          <HeroCTA />
+        </motion.div>
       </section>
 
     </div>
