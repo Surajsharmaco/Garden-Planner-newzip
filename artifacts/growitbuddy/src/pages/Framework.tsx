@@ -35,8 +35,8 @@ const STEPS = [
   {
     num: "03",
     title: "Distribution Loop",
-    headline: "Reach decision-makers at scale.",
-    desc: "Great content without distribution is a journal. We build three distribution channels that work together: owned (email), borrowed (partnerships), and algorithmic (platform-native).",
+    headline: "Reach the Right Audience — Consistently",
+    desc: "Make sure your content doesn't just get posted — it gets seen by the people who actually matter.",
     details: [
       "LinkedIn publishing system",
       "Email list growth strategy",
