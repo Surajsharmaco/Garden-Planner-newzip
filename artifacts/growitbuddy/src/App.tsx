@@ -13,10 +13,12 @@ import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import NotFound from "@/pages/not-found";
 import CustomCursor from "@/components/effects/CustomCursor";
+import PageIntro from "@/components/effects/PageIntro";
 
 function App() {
   return (
     <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+      <PageIntro />
       <CustomCursor />
       <Layout>
         <Switch>
