@@ -16,7 +16,7 @@ const services = [
     num: "02",
     title: "Content Production",
     headline: "High-signal content. At scale.",
-    description: "We extract your knowledge and systematize the production of high-quality content — ghostwriting, visual assets, newsletters, and platform-native formats.",
+    description: "We extract your knowledge and systematize the production of high-quality content - ghostwriting, visual assets, newsletters, and platform-native formats.",
     features: ["Ghostwriting", "Visual Asset Creation", "Newsletter Systems", "Platform-Native Formatting", "Content Calendar"],
     dark: true,
   },
@@ -40,7 +40,7 @@ const services = [
     num: "05",
     title: "Personal Brand Growth",
     headline: "Own your category.",
-    description: "Profile optimisation, network expansion, monetisation strategy, and PR placements — a full-stack approach to authority ownership.",
+    description: "Profile optimisation, network expansion, monetisation strategy, and PR placements - a full-stack approach to authority ownership.",
     features: ["Profile Optimization", "Network Expansion", "Monetization Strategy", "PR & Media Placements", "Speaking Outreach"],
     dark: false,
   },
@@ -50,7 +50,7 @@ export default function Services() {
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title="Services — GrowitBuddy"
+        title="Services - GrowitBuddy"
         description="End-to-end authority systems for founders and creators. Authority Strategy, Content Production, Video Editing, Distribution, and Personal Brand Growth."
       />
 
@@ -74,7 +74,7 @@ export default function Services() {
             transition={{ delay: 0.1 }}
             style={{ fontSize: 18, lineHeight: "1.75", color: "rgba(11,11,11,0.5)", alignSelf: "flex-end" }}
           >
-            We don't just create content. We build the infrastructure for category leadership — every module designed to compound.
+            We don't just create content. We build the infrastructure for category leadership - every module designed to compound.
           </motion.p>
         </div>
       </section>

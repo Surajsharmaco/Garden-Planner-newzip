@@ -71,7 +71,7 @@ export default function Marquee({ items, speed = 30, dark = false, reverse = fal
 }
 
 /**
- * Scroll-velocity marquee — speeds up / slows / reverses based on scroll direction.
+ * Scroll-velocity marquee - speeds up / slows / reverses based on scroll direction.
  */
 export function ScrollMarquee({ items, dark = false }: { items: string[]; dark?: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null);

@@ -82,7 +82,7 @@ export default function Creators() {
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title="For Creators — GrowitBuddy"
+        title="For Creators - GrowitBuddy"
         description="Turn your creator platform into a real business. Join the GrowitBuddy creator ecosystem and get done-for-you authority systems built for your niche."
       />
 

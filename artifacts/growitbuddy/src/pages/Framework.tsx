@@ -8,7 +8,7 @@ const STEPS = [
     num: "01",
     title: "Positioning",
     headline: "Know exactly what you stand for.",
-    desc: "We audit your space, map your competitors, and identify the specific category angle only you can own. This becomes your authority compass — every piece of content flows from it.",
+    desc: "We audit your space, map your competitors, and identify the specific category angle only you can own. This becomes your authority compass - every piece of content flows from it.",
     details: [
       "Competitor landscape audit",
       "Category design & naming",
@@ -22,7 +22,7 @@ const STEPS = [
     num: "02",
     title: "Content Engine",
     headline: "High-signal content. At scale.",
-    desc: "We build a repeatable content production system that extracts your expertise and packages it into formats that educate, persuade, and convert — without consuming your time.",
+    desc: "We build a repeatable content production system that extracts your expertise and packages it into formats that educate, persuade, and convert - without consuming your time.",
     details: [
       "Pillar content strategy",
       "Content calendar & themes",
@@ -35,8 +35,8 @@ const STEPS = [
   {
     num: "03",
     title: "Distribution Loop",
-    headline: "Reach the Right Audience — Consistently",
-    desc: "Make sure your content doesn't just get posted — it gets seen by the people who actually matter.",
+    headline: "Reach the Right Audience - Consistently",
+    desc: "Make sure your content doesn't just get posted - it gets seen by the people who actually matter.",
     details: [
       "LinkedIn publishing system",
       "Email list growth strategy",
@@ -66,7 +66,7 @@ export default function Framework() {
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title="The GrowitBuddy Framework — 4-Step Authority System"
+        title="The GrowitBuddy Framework - 4-Step Authority System"
         description="A battle-tested 4-step system for engineering category dominance that compounds over time: Positioning, Content Engine, Distribution Loop, Authority Compounding."
       />
 

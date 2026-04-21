@@ -10,7 +10,7 @@ interface CountUpProps {
 
 /**
  * Animates a numeric string (like "14M", "$2.4M", "4.2×") from 0 to its value
- * when it enters the viewport — just like omc.com's stat counters.
+ * when it enters the viewport - just like omc.com's stat counters.
  */
 export default function CountUp({ value, className = "", style = {}, duration = 1400 }: CountUpProps) {
   const ref = useRef<HTMLSpanElement>(null);

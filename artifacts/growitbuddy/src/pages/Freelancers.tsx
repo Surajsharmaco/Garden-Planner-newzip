@@ -89,7 +89,7 @@ export default function Freelancers() {
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title="For Freelancers — GrowitBuddy"
+        title="For Freelancers - GrowitBuddy"
         description="Join the GrowitBuddy freelancer network. We work with talented writers, editors, strategists, and designers who want to work with the world's most ambitious founders."
       />
 

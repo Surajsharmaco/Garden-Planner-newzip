@@ -44,7 +44,7 @@ export function HeroScene() {
         }}
         className="relative w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96"
       >
-        {/* Outermost ring — slow CW */}
+        {/* Outermost ring - slow CW */}
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
@@ -54,7 +54,7 @@ export function HeroScene() {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-[#F5E663]" />
         </motion.div>
 
-        {/* Second ring — medium CCW */}
+        {/* Second ring - medium CCW */}
         <motion.div
           animate={{ rotate: -360 }}
           transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
@@ -64,7 +64,7 @@ export function HeroScene() {
           <div className="absolute top-0 right-4 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[#F5E663]/60" />
         </motion.div>
 
-        {/* Third ring — fast CW, gray */}
+        {/* Third ring - fast CW, gray */}
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
@@ -81,7 +81,7 @@ export function HeroScene() {
           className="absolute inset-[100px] rounded-full bg-gradient-to-br from-[#F5E663]/25 via-[#F5E663]/8 to-transparent border border-[#F5E663]/25"
         />
 
-        {/* Orbiting accent dot — fast */}
+        {/* Orbiting accent dot - fast */}
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
@@ -90,7 +90,7 @@ export function HeroScene() {
           <div className="absolute top-[8%] left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#F5E663]/80 shadow-[0_0_8px_#F5E663]" />
         </motion.div>
 
-        {/* Orbiting small dot — medium */}
+        {/* Orbiting small dot - medium */}
         <motion.div
           animate={{ rotate: -360 }}
           transition={{ duration: 17, repeat: Infinity, ease: "linear" }}

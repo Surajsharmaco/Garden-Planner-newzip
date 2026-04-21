@@ -67,7 +67,7 @@ export default function InsightDetail() {
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title={`${post.title} — GrowitBuddy`}
+        title={`${post.title} - GrowitBuddy`}
         description={post.excerpt}
       />
 

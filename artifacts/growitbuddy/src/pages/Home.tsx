@@ -24,7 +24,7 @@ const PROBLEMS = [
   },
   {
     title: "No system, just improvising",
-    desc: "Every week is a scramble to figure out what to post. There's no repeatable process and no compounding effect — just random acts of content.",
+    desc: "Every week is a scramble to figure out what to post. There's no repeatable process and no compounding effect - just random acts of content.",
   },
 ];
 
@@ -37,7 +37,7 @@ const SERVICES = [
   {
     num: "02",
     title: "Content Systems",
-    desc: "Ghostwriting, visual assets, newsletters, and platform-native formats — systematized and scalable.",
+    desc: "Ghostwriting, visual assets, newsletters, and platform-native formats - systematized and scalable.",
   },
   {
     num: "03",
@@ -68,7 +68,7 @@ const PROOF = [
 const PROCESS_STEPS = [
   { num: "01", title: "Understand", desc: "We audit your existing presence, audience, and competitive landscape to find your authority gap." },
   { num: "02", title: "Strategize", desc: "We map out your positioning, content themes, and a 90-day authority roadmap." },
-  { num: "03", title: "Execute", desc: "Our team produces, edits, and distributes content on your behalf — while you focus on your business." },
+  { num: "03", title: "Execute", desc: "Our team produces, edits, and distributes content on your behalf - while you focus on your business." },
   { num: "04", title: "Scale", desc: "We iterate based on data, double down on what compounds, and expand your distribution footprint." },
 ];
 
@@ -128,7 +128,7 @@ export default function Home() {
   return (
     <div style={{ background: BG, color: TEXT, fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title="GrowitBuddy — Build Authority That Compounds"
+        title="GrowitBuddy - Build Authority That Compounds"
         description="GrowitBuddy is a content & authority studio for founders and creators. We build the systems that turn expertise into market leadership."
       />
 
@@ -225,7 +225,7 @@ export default function Home() {
               fontWeight: 400,
             }}
           >
-            You're not a content creator — you're a business leader. We build the authority systems that turn your expertise into market dominance.
+            You're not a content creator - you're a business leader. We build the authority systems that turn your expertise into market dominance.
           </motion.p>
 
           <motion.div
@@ -548,7 +548,7 @@ export default function Home() {
               {
                 tag: "For Creators",
                 title: "Turn your platform into a business.",
-                desc: "We help content creators build monetizable authority systems — turning views into a real business with predictable income.",
+                desc: "We help content creators build monetizable authority systems - turning views into a real business with predictable income.",
                 cta: "Join as a Creator",
                 href: "/creators",
                 dark: false,
@@ -615,7 +615,7 @@ export default function Home() {
                 What's your Authority Score?
               </h2>
               <p style={{ fontSize: 16, color: "rgba(255,255,255,0.45)", lineHeight: "1.75", marginBottom: 32 }}>
-                Answer 8 questions and get a personalized breakdown of your authority leverage — free, in under 3 minutes.
+                Answer 8 questions and get a personalized breakdown of your authority leverage - free, in under 3 minutes.
               </p>
               <Link href="/authority-audit">
                 <span className="gb-btn" style={{ fontSize: 14 }}>
@@ -703,7 +703,7 @@ export default function Home() {
                 Suraj Sharma
               </h2>
               <p style={{ fontSize: 15, color: "rgba(11,11,11,0.5)", lineHeight: "1.8", marginBottom: 28 }}>
-                "I built GrowitBuddy after watching brilliant founders lose to louder, less qualified voices. Authority isn't given — it's architected. We built the agency to be the silent engine behind the world's most influential founders."
+                "I built GrowitBuddy after watching brilliant founders lose to louder, less qualified voices. Authority isn't given - it's architected. We built the agency to be the silent engine behind the world's most influential founders."
               </p>
               <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
                 {["Founder & CEO", "Content Strategist", "Authority Architect"].map((tag) => (

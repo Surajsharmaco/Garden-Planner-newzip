@@ -8,7 +8,7 @@ export default function Insights() {
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title="Insights — GrowitBuddy"
+        title="Insights - GrowitBuddy"
         description="Frameworks, strategies and strong opinions on building unignorable influence and authority as a founder or creator."
       />
 

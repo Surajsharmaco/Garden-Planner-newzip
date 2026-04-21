@@ -46,7 +46,7 @@ export default function Contact() {
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title="Contact — GrowitBuddy"
+        title="Contact - GrowitBuddy"
         description="Book a free strategy call with GrowitBuddy. We'll audit your presence, identify your authority gap, and map out your 90-day system."
       />
 
@@ -84,7 +84,7 @@ export default function Contact() {
               {[
                 { label: "Email", value: "hello@growitbuddy.com", href: "mailto:hello@growitbuddy.com" },
                 { label: "Response time", value: "Within 24 hours" },
-                { label: "Based", value: "Global — 4 timezones" },
+                { label: "Based", value: "Global - 4 timezones" },
                 { label: "Next step", value: "Free 30-min strategy call" },
               ].map((item) => (
                 <div key={item.label} style={{ padding: "20px 0", borderBottom: "1px solid rgba(11,11,11,0.08)" }}>

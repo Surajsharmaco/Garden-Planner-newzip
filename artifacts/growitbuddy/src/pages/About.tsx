@@ -7,7 +7,7 @@ export default function About() {
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title="About GrowitBuddy — Content & Authority Studio"
+        title="About GrowitBuddy - Content & Authority Studio"
         description="GrowitBuddy is a content and authority studio founded by Suraj Sharma. We believe deep expertise deserves disproportionate attention."
       />
 
@@ -65,7 +65,7 @@ export default function About() {
               We don't do hacks. We build robust content and distribution systems that translate deep knowledge into market leadership and inbound revenue.
             </p>
             <p style={{ fontSize: 16, color: "rgba(11,11,11,0.5)", lineHeight: "1.8", marginBottom: 32 }}>
-              Every founder we work with has something worth amplifying. Our job is to build the infrastructure that ensures the market hears it — loudly, consistently, and credibly.
+              Every founder we work with has something worth amplifying. Our job is to build the infrastructure that ensures the market hears it - loudly, consistently, and credibly.
             </p>
             <Link href="/services">
               <span className="gb-btn" style={{ fontSize: 14 }}>
@@ -99,7 +99,7 @@ export default function About() {
                 "I built GrowitBuddy after watching brilliant founders lose to louder, less qualified voices."
               </h2>
               <p style={{ fontSize: 16, color: "rgba(255,255,255,0.4)", lineHeight: "1.8" }}>
-                Authority isn't given — it's architected. We built the agency to be the silent engine behind the world's most influential founders. The result is a studio that has helped generate over 700M+ views and scale hundreds of founder brands to market leadership.
+                Authority isn't given - it's architected. We built the agency to be the silent engine behind the world's most influential founders. The result is a studio that has helped generate over 700M+ views and scale hundreds of founder brands to market leadership.
               </p>
             </div>
           </div>

@@ -17,7 +17,7 @@ export default function Work() {
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title="Our Work — GrowitBuddy"
+        title="Our Work - GrowitBuddy"
         description="Case studies and proof of work from GrowitBuddy's authority-building campaigns. Real results for founders, creators, and growing brands."
       />
 

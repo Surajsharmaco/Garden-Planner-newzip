@@ -12,7 +12,7 @@ interface TextRevealProps {
 
 /**
  * omc.com-style clip reveal: text slides up from behind an overflow:hidden mask.
- * Works on any text node — wrap the heading in this component.
+ * Works on any text node - wrap the heading in this component.
  */
 export function TextReveal({ children, as: Tag = "h2", className = "", style = {}, delay = 0 }: TextRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -32,7 +32,7 @@ export function TextReveal({ children, as: Tag = "h2", className = "", style = {
 }
 
 /**
- * Word-by-word staggered reveal — each word slides up independently.
+ * Word-by-word staggered reveal - each word slides up independently.
  * Pass plain string children for best results.
  */
 export function WordReveal({ children, as: Tag = "h2", className = "", style = {}, delay = 0 }: TextRevealProps & { children: string }) {
@@ -60,7 +60,7 @@ export function WordReveal({ children, as: Tag = "h2", className = "", style = {
 }
 
 /**
- * Line-by-line reveal — each line of text (separated by <br> or newlines) slides up.
+ * Line-by-line reveal - each line of text (separated by <br> or newlines) slides up.
  */
 export function LineReveal({ lines, className = "", style = {}, delay = 0, dark = false }: {
   lines: string[];

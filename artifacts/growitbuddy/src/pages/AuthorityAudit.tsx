@@ -46,43 +46,43 @@ const QUESTIONS = [
     id: 5,
     question: "How clear is your content positioning?",
     type: "choice",
-    options: ["Very clear — I have a specific angle", "Somewhat clear — still refining", "Unclear — I post broadly", "I have no positioning strategy"],
+    options: ["Very clear - I have a specific angle", "Somewhat clear - still refining", "Unclear - I post broadly", "I have no positioning strategy"],
     key: "positioning",
   },
   {
     id: 6,
     question: "Do you have a system for content creation?",
     type: "choice",
-    options: ["Yes — a fully documented system", "Partially — some consistency", "No — I improvise each week", "No — I barely post"],
+    options: ["Yes - a fully documented system", "Partially - some consistency", "No - I improvise each week", "No - I barely post"],
     key: "system",
   },
   {
     id: 7,
     question: "Are you generating inbound opportunities from your content?",
     type: "choice",
-    options: ["Yes — regularly", "Occasionally", "Rarely", "Never"],
+    options: ["Yes - regularly", "Occasionally", "Rarely", "Never"],
     key: "inbound",
   },
 ];
 
 function computeScore(answers: Answer): { total: number; breakdown: { label: string; score: number; max: number }[] } {
   const posMap: Record<string, number> = {
-    "Very clear — I have a specific angle": 25,
-    "Somewhat clear — still refining": 15,
-    "Unclear — I post broadly": 8,
+    "Very clear - I have a specific angle": 25,
+    "Somewhat clear - still refining": 15,
+    "Unclear - I post broadly": 8,
     "I have no positioning strategy": 0,
   };
   const freqMap: Record<string, number> = {
     Daily: 25, "3–5x per week": 20, "1–2x per week": 14, "A few times a month": 7, Rarely: 0,
   };
   const sysMap: Record<string, number> = {
-    "Yes — a fully documented system": 25,
-    "Partially — some consistency": 15,
-    "No — I improvise each week": 7,
-    "No — I barely post": 0,
+    "Yes - a fully documented system": 25,
+    "Partially - some consistency": 15,
+    "No - I improvise each week": 7,
+    "No - I barely post": 0,
   };
   const inbMap: Record<string, number> = {
-    "Yes — regularly": 25, Occasionally: 15, Rarely: 7, Never: 0,
+    "Yes - regularly": 25, Occasionally: 15, Rarely: 7, Never: 0,
   };
 
   const positioning = posMap[answers[5]] ?? 8;
@@ -148,7 +148,7 @@ export default function AuthorityAudit() {
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title="Authority Audit — GrowitBuddy"
+        title="Authority Audit - GrowitBuddy"
         description="Get your personalized Authority Score in under 3 minutes. Answer 8 questions and discover your authority leverage gaps and opportunities."
       />
 
@@ -170,7 +170,7 @@ export default function AuthorityAudit() {
             transition={{ delay: 0.1 }}
             style={{ fontSize: 18, color: "rgba(11,11,11,0.5)", lineHeight: "1.75", maxWidth: "52ch" }}
           >
-            Answer 8 questions and get a personalized breakdown of your authority leverage — free, in under 3 minutes.
+            Answer 8 questions and get a personalized breakdown of your authority leverage - free, in under 3 minutes.
           </motion.p>
         </div>
       </section>

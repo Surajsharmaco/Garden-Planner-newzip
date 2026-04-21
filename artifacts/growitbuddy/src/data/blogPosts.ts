@@ -12,7 +12,7 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "why-authority-compounds",
     title: "Why Authority Compounds (and Traffic Doesn't)",
-    excerpt: "Most founders chase traffic. The smartest ones build authority — and discover it's the only asset that gets more valuable as you grow.",
+    excerpt: "Most founders chase traffic. The smartest ones build authority - and discover it's the only asset that gets more valuable as you grow.",
     date: "April 10, 2026",
     tag: "Strategy",
     readTime: "6 min read",
@@ -23,7 +23,7 @@ Every founder eventually discovers the traffic trap. You publish content, maybe 
 
 Traffic is rented. Authority is owned.
 
-When you build genuine authority in your space — when people know your name before they need your product — something remarkable happens. Every piece of content you create amplifies the last. Every podcast appearance opens two more. Every client win attracts three more.
+When you build genuine authority in your space - when people know your name before they need your product - something remarkable happens. Every piece of content you create amplifies the last. Every podcast appearance opens two more. Every client win attracts three more.
 
 ## What Authority Actually Means
 
@@ -37,10 +37,10 @@ One gets likes. The other closes deals from a DM.
 
 Authority compounds through four mechanisms:
 
-1. **Network trust transfer** — When someone with authority endorses you, their trust passes to you.
-2. **Search and discovery** — People find you when searching for expertise, not entertainment.
-3. **Premium positioning** — Authority justifies premium pricing without lengthy justification.
-4. **Inbound leverage** — The best opportunities come inbound when authority is established.
+1. **Network trust transfer** - When someone with authority endorses you, their trust passes to you.
+2. **Search and discovery** - People find you when searching for expertise, not entertainment.
+3. **Premium positioning** - Authority justifies premium pricing without lengthy justification.
+4. **Inbound leverage** - The best opportunities come inbound when authority is established.
 
 ## How to Start Building It
 
@@ -52,7 +52,7 @@ Specificity is the seed of authority. Everything else is distribution.
   {
     slug: "content-system-not-content-creation",
     title: "Stop Creating Content. Start Building a Content System.",
-    excerpt: "The difference between founders who burn out and those who compound isn't talent — it's whether they have a system or are improvising every week.",
+    excerpt: "The difference between founders who burn out and those who compound isn't talent - it's whether they have a system or are improvising every week.",
     date: "April 3, 2026",
     tag: "Systems",
     readTime: "8 min read",
@@ -84,7 +84,7 @@ The key is **one creation session, multiple outputs**.
 A system without distribution is a journal. Build repeatable distribution: an email list, a LinkedIn publishing cadence, a cross-posting workflow. Automate what can be automated.
 
 ### 4. The Feedback Layer
-Track which content drives actual business outcomes — replies, DMs, inbound calls. Double down on those formats and topics. Kill everything else.
+Track which content drives actual business outcomes - replies, DMs, inbound calls. Double down on those formats and topics. Kill everything else.
 
 ## The Result
 
@@ -117,7 +117,7 @@ The most dangerous thing you can do is sound like everyone else in your space.
 
 ## Pillar 2: Consistent Signal
 
-Authority requires repetition. Not repetition of the same content — repetition of the same *theme*, the same *worldview*, the same *promise*.
+Authority requires repetition. Not repetition of the same content - repetition of the same *theme*, the same *worldview*, the same *promise*.
 
 The market needs to hear your core message 7 to 10 times before it sticks. Most founders give up after post 3.
 
