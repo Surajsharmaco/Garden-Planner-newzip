@@ -1,0 +1,146 @@
+Act as a senior product designer, UX strategist, and conversion expert.
+
+You are NOT allowed to change any design, layout, colors, or UI structure.
+
+Your ONLY task is to upgrade the existing "Authority Audit / Score" feature into a high-value, insight-driven diagnostic tool.
+
+--------------------------------------------------
+
+🎯 GOAL
+
+Transform the current generic “Authority Score” tool into a powerful “Content Growth Diagnosis Tool” that provides real, specific, and actionable insights.
+
+The tool should NOT feel like a score calculator.
+
+It should feel like:
+
+👉 a deep analysis  
+👉 a personalized diagnosis  
+👉 a clarity tool  
+
+--------------------------------------------------
+
+🧠 CORE PRINCIPLE
+
+Users do NOT want a score.
+
+Users want to understand:
+
+- why they are not growing  
+- what they are doing wrong  
+- what exactly needs to be fixed  
+
+--------------------------------------------------
+
+🔁 RENAME THE TOOL
+
+Replace:
+
+“Authority Score”
+
+With something more outcome-driven like:
+
+- "Content Growth Diagnosis"
+- "Find What’s Blocking Your Growth"
+- "Content Clarity Check"
+
+--------------------------------------------------
+
+🧩 FORM EXPERIENCE (IMPORTANT)
+
+Rewrite the form to feel like a guided diagnosis.
+
+Add smart, problem-based questions:
+
+1. What platform do you mainly post on?
+2. How often do you post?
+3. What’s your biggest problem right now?
+   - Not getting views  
+   - Not getting clients  
+   - Inconsistent posting  
+   - Don’t know what to post  
+   - Low engagement  
+
+4. What type of content do you create?
+5. What is your goal?
+   - Grow audience  
+   - Get clients  
+   - Build personal brand  
+
+--------------------------------------------------
+
+🧠 OUTPUT (MOST IMPORTANT PART)
+
+Remove generic scoring.
+
+Instead of:
+
+“Authority Score: 52”
+
+Create a personalized diagnosis:
+
+--------------------------------------------------
+
+🔹 SECTION 1: “What’s Holding You Back”
+
+List 2–3 real problems based on inputs:
+
+Example:
+
+- You are posting, but without a clear content direction  
+- Your content is not reaching the right audience  
+- You lack a repeatable content system  
+
+--------------------------------------------------
+
+🔹 SECTION 2: “What You Need to Fix”
+
+Simple actionable insights:
+
+- Define clear content themes  
+- Improve hooks and first 3 seconds  
+- Focus on consistency  
+
+--------------------------------------------------
+
+🔹 SECTION 3: “What Happens If You Fix This”
+
+Outcome-driven:
+
+- More consistent reach  
+- Better engagement  
+- Higher chances of inbound leads  
+
+--------------------------------------------------
+
+🔹 SECTION 4: CTA
+
+Add strong CTA:
+
+- “Get a Custom Growth Plan”
+- “Let’s Fix Your Content System”
+
+--------------------------------------------------
+
+⚠️ IMPORTANT RULES
+
+- Keep language simple and direct  
+- No jargon like “authority frameworks”  
+- No generic motivational lines  
+- Every insight should feel specific and real  
+
+--------------------------------------------------
+
+🎯 FINAL OUTPUT
+
+The upgraded tool should feel like:
+
+- a real analysis  
+- a personal breakdown  
+- a moment of realization  
+
+User should think:
+
+👉 “Yes, this is exactly what I am missing”
+
+--------------------------------------------------
