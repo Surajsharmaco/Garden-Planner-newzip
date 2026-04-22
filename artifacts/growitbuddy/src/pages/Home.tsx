@@ -181,24 +181,32 @@ export default function Home() {
           }}
         />
 
-        {/* Floating lines — pre-distributed via negative CSS animation-delay */}
+        {/* Floating particles */}
         {[
-          { width: "42%", left: "12%", duration: 20, phase: 0.30, opacity: 0.22 },
-          { width: "32%", left: "50%", duration: 26, phase: 0.65, opacity: 0.16 },
-          { width: "55%", left: "20%", duration: 22, phase: 0.10, opacity: 0.14 },
-          { width: "28%", left: "62%", duration: 18, phase: 0.50, opacity: 0.20 },
-          { width: "38%", left:  "4%", duration: 24, phase: 0.80, opacity: 0.13 },
-          { width: "22%", left: "72%", duration: 16, phase: 0.40, opacity: 0.17 },
-        ].map((l, i) => (
+          { size: 3,   left: "8%",  duration: 18, phase: 0.20, opacity: 0.30, blur: 1   },
+          { size: 5,   left: "18%", duration: 24, phase: 0.55, opacity: 0.18, blur: 2   },
+          { size: 2,   left: "30%", duration: 14, phase: 0.80, opacity: 0.35, blur: 0.5 },
+          { size: 6,   left: "42%", duration: 28, phase: 0.35, opacity: 0.14, blur: 3   },
+          { size: 3,   left: "55%", duration: 20, phase: 0.70, opacity: 0.28, blur: 1   },
+          { size: 4,   left: "64%", duration: 16, phase: 0.10, opacity: 0.22, blur: 1.5 },
+          { size: 2,   left: "74%", duration: 22, phase: 0.45, opacity: 0.32, blur: 0.5 },
+          { size: 7,   left: "82%", duration: 30, phase: 0.60, opacity: 0.12, blur: 4   },
+          { size: 3,   left: "90%", duration: 17, phase: 0.25, opacity: 0.26, blur: 1   },
+          { size: 2,   left: "50%", duration: 13, phase: 0.90, opacity: 0.30, blur: 0.5 },
+          { size: 4,   left: "24%", duration: 26, phase: 0.15, opacity: 0.20, blur: 2   },
+          { size: 3,   left: "70%", duration: 19, phase: 0.50, opacity: 0.24, blur: 1   },
+        ].map((p, i) => (
           <div
             key={i}
-            className="hero-line"
+            className="hero-particle"
             style={{
-              left: l.left,
-              width: l.width,
-              background: `linear-gradient(90deg, transparent 0%, rgba(11,11,11,${l.opacity}) 20%, rgba(11,11,11,${l.opacity}) 80%, transparent 100%)`,
-              animationDuration: `${l.duration}s`,
-              animationDelay: `${-(l.phase * l.duration)}s`,
+              left: p.left,
+              width:  p.size,
+              height: p.size,
+              background: `rgba(11,11,11,${p.opacity})`,
+              filter: `blur(${p.blur}px)`,
+              animationDuration: `${p.duration}s`,
+              animationDelay: `${-(p.phase * p.duration)}s`,
             }}
           />
         ))}
