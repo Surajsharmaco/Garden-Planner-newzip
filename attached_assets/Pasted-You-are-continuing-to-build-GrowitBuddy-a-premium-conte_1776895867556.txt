@@ -1,0 +1,114 @@
+You are continuing to build GrowitBuddy — a premium content/authority studio website for founders and creators. Here is everything you need to know:
+
+---
+
+PROJECT OVERVIEW
+A frontend-only website (no backend needed). React + Vite + TypeScript. Already built and live. Your job is to continue adding features and improving it.
+
+TECH STACK
+- React + Vite (TypeScript)
+- Routing: Wouter
+- Animations: Framer Motion
+- Styling: Tailwind CSS + inline styles
+- Icons: Lucide React
+- Font: Inter (Google Fonts)
+- 3D: React Three Fiber (HeroScene on Home page)
+- Package manager: pnpm
+
+---
+
+DESIGN SYSTEM (follow strictly)
+- Background: #F7F7F5 (off-white)
+- Text: #0B0B0B (deep black)
+- Card background: #FFFFFF
+- Dark card: #0B0B0B
+- Muted text: rgba(11,11,11,0.45)
+- Border: rgba(11,11,11,0.1)
+- Font: Inter, weights 400–900
+- Primary button class: .gb-btn — black pill, white text, border-radius 100px
+- Outline button: .gb-btn-outline
+- Input class: .gb-input
+- Page container: max-w-[1100px] mx-auto
+- Hero section padding: paddingTop: 120
+- NEVER use em dashes (—), always use hyphen with spaces ( - )
+
+---
+
+ALL PAGES (all built)
+/ → Home.tsx
+/services → Services.tsx
+/work → Work.tsx
+/framework → Framework.tsx
+/insights → Insights.tsx
+/insights/:slug → InsightDetail.tsx
+/creators → Creators.tsx
+/freelancers → Freelancers.tsx
+/authority-audit → AuthorityAudit.tsx
+/resources → Resources.tsx
+/about → About.tsx
+/contact → Contact.tsx
+
+---
+
+KEY COMPONENTS
+- Navbar.tsx — top nav, links: Services / Work / Framework / Creators / Freelancers / Authority Audit (highlighted) / Blog / About. CTAs: "Get In Touch" (outline) + "Book a Call" (black pill)
+- Footer.tsx — 3-column footer
+- PageIntro.tsx — full-screen animation on first load. Bypass with URL param ?skip-intro=1
+- CustomCursor.tsx — custom black dot cursor on desktop only
+- SEOMeta.tsx — per-page SEO meta tags
+- HeroScene.tsx — 3D Three.js scene on Home page
+
+---
+
+AUTHORITY AUDIT PAGE (/authority-audit)
+The most complex page. An 8-question interactive tool. No backend — all logic is inside AuthorityAudit.tsx.
+
+8 Questions (in order):
+1. Primary platform (LinkedIn / Instagram / YouTube / Twitter-X / Newsletter / Podcast / Multiple)
+2. Role (Founder / Freelancer / Coach or Consultant / Content Creator / Executive / Other)
+3. Posting frequency (Daily / 3-4x week / 1-2x week / A few times a month / Rarely)
+4. How long posting (Under 3 months / 3-6 months / 6-12 months / 1-2 years / 2+ years)
+5. Content type (Educational / Personal stories / Case studies / Opinions / Mixed)
+6. Biggest challenge (Not enough reach / No inbound leads / Inconsistent posting / Content doesn't convert / No clear niche / No time)
+7. Content goal (Build brand awareness / Generate leads / Become industry voice / Grow audience / Land speaking or press)
+8. Ideal client/audience (text input)
+
+Outputs:
+- Authority Stage: Early Builder / Building Momentum / Stalled Authority / Plateau Stage / Unfocused Authority
+- Named Content Gap: Distribution Gap / Trust Gap / System Gap / Positioning Gap / Conversion Gap / Niche Gap / Consistency Gap
+- #1 Priority Action (specific to their answers)
+- Personalized Plan (narrative prose, not bullet points — references their specific platform and role)
+
+Intro page layout (two stacked options):
+1. TOP (white card, black border): "Start the Audit yourself" — free, self-serve quiz with 4 deliverable cards inside + "Start the Audit" button
+2. BOTTOM (dark black card): "Get your audit from GrowitBuddy's team" — links to /contact with "Book a Call" button on the right
+
+---
+
+COPY & TONE RULES
+- Premium authority positioning language
+- Headline style: "Turn your expertise into authority - and that authority into consistent inbound demand"
+- Target audience: founders, freelancers, creators
+- Confident, direct, no fluff, no generic advice language
+- Never use em dashes (—), always use hyphen with spaces ( - )
+- All new sections must match the hero pattern: label (uppercase small) + big bold headline + subtext below
+
+---
+
+IMPORTANT DECISIONS ALREADY MADE (do not change these)
+- No split-screen layouts — all pages use the standard hero + content section pattern
+- Hero sections always: paddingTop 120, white background, border-bottom, label + headline + subtext
+- Tool/interactive sections go in an off-white (#F7F7F5) section below the hero
+- Authority Audit page is called "Authority Audit" (not "Content Growth Diagnosis")
+- The self-serve quiz is the PRIMARY option (shown first/top), team audit is secondary (shown below in dark card)
+
+---
+
+SECRETS NEEDED
+- SESSION_SECRET = any random string (add in Replit Secrets tab)
+
+---
+
+DEPLOYMENT
+The site is published at: garden-planner-auctopusss.replit.app
+Replit project name: Garden Planner (the internal Replit name — the website is called GrowitBuddy)
