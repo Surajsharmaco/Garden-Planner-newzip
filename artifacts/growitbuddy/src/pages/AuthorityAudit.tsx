@@ -301,19 +301,21 @@ export default function AuthorityAudit() {
                 <div style={{ background: "#0B0B0B", borderRadius: 20, padding: "36px 32px", textAlign: "center" }}>
                   <p style={{ fontSize: 12, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 14 }}>Free - No account needed - 3 minutes</p>
                   <h2 style={{ fontWeight: 800, fontSize: "clamp(22px, 4vw, 34px)", letterSpacing: "-0.04em", color: "#fff", marginBottom: 12 }}>
-                    Get your personalized Authority Audit
+                    Get your personalised Authority Audit
                   </h2>
-                  <p style={{ fontSize: 15, color: "rgba(255,255,255,0.4)", lineHeight: "1.7", marginBottom: 28, maxWidth: "42ch", margin: "0 auto 28px" }}>
+                  <p style={{ fontSize: 15, color: "rgba(255,255,255,0.4)", lineHeight: "1.7", maxWidth: "42ch", margin: "0 auto" }}>
                     Every result is specific to your role, platform, frequency, and goals. Not generic advice.
                   </p>
-                  <button
-                    onClick={() => setStep(0)}
-                    style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 28px", borderRadius: 100, background: "#fff", color: TEXT, fontSize: 15, fontWeight: 700, cursor: "pointer", border: "none", fontFamily: "'Inter', sans-serif" }}
-                    className="hover:opacity-85 transition-opacity"
-                  >
-                    Start the Audit <ArrowRight className="w-4 h-4" />
-                  </button>
                 </div>
+
+                {/* CTA button — outside the dark card */}
+                <button
+                  onClick={() => setStep(0)}
+                  className="gb-btn hover:opacity-85 transition-opacity"
+                  style={{ width: "100%", justifyContent: "center", fontSize: 15, padding: "15px 0", marginTop: 12 }}
+                >
+                  Start the Audit <ArrowRight className="w-4 h-4" />
+                </button>
               </motion.div>
             )}
 
