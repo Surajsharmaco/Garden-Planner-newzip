@@ -297,22 +297,36 @@ export default function AuthorityAudit() {
                   ))}
                 </div>
 
-                {/* CTA card */}
+                {/* Team CTA card — dark box */}
                 <div style={{ background: "#0B0B0B", borderRadius: 20, padding: "36px 32px", textAlign: "center" }}>
-                  <p style={{ fontSize: 12, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 14 }}>Free - No account needed - 3 minutes</p>
-                  <h2 style={{ fontWeight: 800, fontSize: "clamp(22px, 4vw, 34px)", letterSpacing: "-0.04em", color: "#fff", marginBottom: 12 }}>
-                    Get your personalised Authority Audit
+                  <p style={{ fontSize: 12, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 14 }}>Done with you - personalised to your business</p>
+                  <h2 style={{ fontWeight: 800, fontSize: "clamp(22px, 4vw, 32px)", letterSpacing: "-0.04em", color: "#fff", marginBottom: 12 }}>
+                    Get your audit from GrowitBuddy's team
                   </h2>
-                  <p style={{ fontSize: 15, color: "rgba(255,255,255,0.4)", lineHeight: "1.7", maxWidth: "42ch", margin: "0 auto" }}>
-                    Every result is specific to your role, platform, frequency, and goals. Not generic advice.
+                  <p style={{ fontSize: 15, color: "rgba(255,255,255,0.4)", lineHeight: "1.7", maxWidth: "42ch", margin: "0 auto 24px" }}>
+                    Our team reviews your content, positioning, and audience - then hands you a full plan built around your goals.
                   </p>
+                  <a
+                    href="/contact"
+                    style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 26px", borderRadius: 100, background: "#fff", color: "#0B0B0B", fontSize: 14, fontWeight: 700, cursor: "pointer", textDecoration: "none", fontFamily: "'Inter', sans-serif" }}
+                    className="hover:opacity-85 transition-opacity"
+                  >
+                    Book a Call <ArrowRight className="w-4 h-4" />
+                  </a>
                 </div>
 
-                {/* CTA button — outside the dark card */}
+                {/* Divider */}
+                <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                  <div style={{ flex: 1, height: 1, background: "rgba(11,11,11,0.1)" }} />
+                  <span style={{ fontSize: 12, fontWeight: 600, color: "rgba(11,11,11,0.3)", letterSpacing: "0.1em", textTransform: "uppercase" }}>or do it yourself</span>
+                  <div style={{ flex: 1, height: 1, background: "rgba(11,11,11,0.1)" }} />
+                </div>
+
+                {/* Self-serve quiz button */}
                 <button
                   onClick={() => setStep(0)}
                   className="gb-btn hover:opacity-85 transition-opacity"
-                  style={{ width: "100%", justifyContent: "center", fontSize: 15, padding: "15px 0", marginTop: 12 }}
+                  style={{ width: "100%", justifyContent: "center", fontSize: 15, padding: "15px 0" }}
                 >
                   Start the Audit <ArrowRight className="w-4 h-4" />
                 </button>
