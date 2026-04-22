@@ -68,22 +68,16 @@ export default function PageIntro() {
               gap: 12,
             }}
           >
-            <div
+            <img
+              src={`${import.meta.env.BASE_URL}logo-circle.png`}
+              alt="GrowitBuddy"
               style={{
-                width: 56, height: 56,
+                width: 56,
+                height: 56,
                 borderRadius: "50%",
-                background: "#0B0B0B",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 26,
-                fontWeight: 800,
-                color: "#fff",
-                fontFamily: "'Inter', sans-serif",
+                objectFit: "cover",
               }}
-            >
-              G
-            </div>
+            />
             <h1
               style={{
                 fontFamily: "'Inter', sans-serif",

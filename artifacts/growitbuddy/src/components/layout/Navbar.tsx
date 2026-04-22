@@ -44,25 +44,19 @@ export function Navbar() {
         >
           <Link href="/">
             <span className="inline-flex items-center gap-2 cursor-pointer group flex-shrink-0">
-              <span
+              <img
+                src={`${import.meta.env.BASE_URL}logo-circle.png`}
+                alt="GrowitBuddy"
                 style={{
-                  width: 32, height: 32,
+                  width: 32,
+                  height: 32,
                   borderRadius: "50%",
-                  background: "#0B0B0B",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: 15,
-                  fontWeight: 800,
-                  color: "#fff",
+                  objectFit: "cover",
                   flexShrink: 0,
                   transition: "transform 0.2s",
                 }}
                 className="group-hover:scale-110"
-              >
-                G
-              </span>
+              />
               <span
                 style={{
                   fontFamily: "'Inter', sans-serif",
