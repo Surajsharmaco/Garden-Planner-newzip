@@ -225,8 +225,9 @@ body {
 }
 .hero-line {
   position: absolute;
-  height: 1px;
+  height: 2px;
   pointer-events: none;
   animation: hero-line-float linear infinite;
   z-index: 0;
+  filter: blur(2px);
 }
