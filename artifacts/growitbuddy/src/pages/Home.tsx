@@ -93,6 +93,82 @@ const TESTIMONIALS = [
   },
 ];
 
+function DotWaveCanvas() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animId: number;
+    let t = 0;
+
+    const GAP = 28;
+    const DOT_R = 1.5;
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const draw = () => {
+      const { width, height } = canvas;
+      ctx.clearRect(0, 0, width, height);
+
+      const cols = Math.ceil(width / GAP) + 1;
+      const rows = Math.ceil(height / GAP) + 1;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const x = c * GAP;
+          const y = r * GAP;
+
+          const wave1 = Math.sin(c * 0.28 + t * 1.4 + r * 0.12) * 0.5 + 0.5;
+          const wave2 = Math.sin(c * 0.18 - t * 1.1 + r * 0.22 + 1.8) * 0.5 + 0.5;
+          const wave3 = Math.cos(c * 0.14 + r * 0.3 + t * 0.9 + 0.6) * 0.5 + 0.5;
+
+          const combined = (wave1 * 0.5 + wave2 * 0.3 + wave3 * 0.2);
+          const alpha = Math.pow(combined, 2.2) * 0.55;
+
+          if (alpha < 0.018) continue;
+
+          ctx.beginPath();
+          ctx.arc(x, y, DOT_R, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(11,11,11,${alpha.toFixed(3)})`;
+          ctx.fill();
+        }
+      }
+
+      t += 0.016;
+      animId = requestAnimationFrame(draw);
+    };
+
+    draw();
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+        zIndex: 0,
+      }}
+    />
+  );
+}
+
 export default function Home() {
   const BG = "#F7F7F5";
   const TEXT = "#0B0B0B";
@@ -211,64 +287,8 @@ export default function Home() {
           }}
         />
 
-        {/* Animated SVG wave curves */}
-        <svg
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0, overflow: "visible" }}
-          preserveAspectRatio="none"
-          viewBox="0 0 1440 900"
-          aria-hidden="true"
-        >
-          <defs>
-            <filter id="wave-blur-lg" x="-20%" y="-300%" width="140%" height="700%">
-              <feGaussianBlur stdDeviation="22" />
-            </filter>
-            <filter id="wave-blur-md" x="-20%" y="-300%" width="140%" height="700%">
-              <feGaussianBlur stdDeviation="16" />
-            </filter>
-            <filter id="wave-blur-sm" x="-20%" y="-300%" width="140%" height="700%">
-              <feGaussianBlur stdDeviation="11" />
-            </filter>
-          </defs>
-
-          <motion.g
-            animate={{ y: [0, -40, 0] }}
-            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <path
-              d="M-100,600 C200,520 400,680 700,580 C1000,480 1200,640 1540,560"
-              fill="none"
-              stroke="rgba(11,11,11,0.42)"
-              strokeWidth="6"
-              filter="url(#wave-blur-lg)"
-            />
-          </motion.g>
-
-          <motion.g
-            animate={{ y: [0, 36, 0] }}
-            transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
-          >
-            <path
-              d="M-100,720 C300,660 500,790 800,690 C1100,590 1300,730 1540,660"
-              fill="none"
-              stroke="rgba(11,11,11,0.32)"
-              strokeWidth="5"
-              filter="url(#wave-blur-md)"
-            />
-          </motion.g>
-
-          <motion.g
-            animate={{ y: [0, 44, 0] }}
-            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
-          >
-            <path
-              d="M-100,820 C350,770 550,870 850,790 C1150,710 1350,830 1540,760"
-              fill="none"
-              stroke="rgba(11,11,11,0.22)"
-              strokeWidth="3.5"
-              filter="url(#wave-blur-md)"
-            />
-          </motion.g>
-        </svg>
+        {/* Dot wave canvas */}
+        <DotWaveCanvas />
 
         <div style={{ position: "relative", zIndex: 1, maxWidth: 900, padding: "0 24px" }}>
           <motion.div
