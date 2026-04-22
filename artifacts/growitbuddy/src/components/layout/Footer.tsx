@@ -22,14 +22,15 @@ export function Footer() {
             <Link href="/">
               <span className="inline-flex items-center gap-2 cursor-pointer mb-4" style={{ display: "flex" }}>
                 <img
-                  src={`${import.meta.env.BASE_URL}logo-light.png`}
+                  src={`${import.meta.env.BASE_URL}logo-circle.png`}
                   alt="GrowitBuddy"
                   style={{
                     width: 36,
                     height: 36,
-                    objectFit: "contain",
+                    borderRadius: "50%",
+                    objectFit: "cover",
                     flexShrink: 0,
-                    mixBlendMode: "screen",
+                    background: "rgba(255,255,255,0.12)",
                   }}
                 />
                 <span
