@@ -66,7 +66,7 @@ export default function Services() {
           >
             The systems behind authority and inbound demand.
           </motion.h1>
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <div>
             <motion.p
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
