@@ -164,7 +164,7 @@ function DotWaveCanvas() {
         height: "100%",
         pointerEvents: "none",
         zIndex: 0,
-        filter: "blur(2.5px)",
+        filter: "blur(6px)",
       }}
     />
   );
