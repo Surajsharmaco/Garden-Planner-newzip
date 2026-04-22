@@ -232,12 +232,12 @@ export default function Home() {
 
           <motion.g
             animate={{ y: [0, -22, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
           >
             <path
               d="M-100,600 C200,520 400,680 700,580 C1000,480 1200,640 1540,560"
               fill="none"
-              stroke="rgba(11,11,11,0.18)"
+              stroke="rgba(11,11,11,0.38)"
               strokeWidth="2.5"
               filter="url(#wave-blur-lg)"
             />
@@ -245,12 +245,12 @@ export default function Home() {
 
           <motion.g
             animate={{ y: [0, 18, 0] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
           >
             <path
               d="M-100,720 C300,660 500,790 800,690 C1100,590 1300,730 1540,660"
               fill="none"
-              stroke="rgba(11,11,11,0.13)"
+              stroke="rgba(11,11,11,0.28)"
               strokeWidth="2"
               filter="url(#wave-blur-md)"
             />
@@ -258,12 +258,12 @@ export default function Home() {
 
           <motion.g
             animate={{ y: [0, -14, 0] }}
-            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 2.5 }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
           >
             <path
               d="M-100,450 C250,390 450,520 720,430 C990,340 1200,490 1540,410"
               fill="none"
-              stroke="rgba(11,11,11,0.10)"
+              stroke="rgba(11,11,11,0.22)"
               strokeWidth="1.8"
               filter="url(#wave-blur-sm)"
             />
@@ -271,12 +271,12 @@ export default function Home() {
 
           <motion.g
             animate={{ y: [0, 26, 0] }}
-            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
           >
             <path
               d="M-100,820 C350,770 550,870 850,790 C1150,710 1350,830 1540,760"
               fill="none"
-              stroke="rgba(11,11,11,0.08)"
+              stroke="rgba(11,11,11,0.18)"
               strokeWidth="1.5"
               filter="url(#wave-blur-md)"
             />
