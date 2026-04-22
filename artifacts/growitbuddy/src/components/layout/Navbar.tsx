@@ -32,10 +32,10 @@ export function Navbar() {
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-200"
         style={{
           height: 64,
-          background: scrolled ? "rgba(11,11,11,0.97)" : "rgba(11,11,11,0.92)",
+          background: scrolled ? "rgba(247,247,245,0.94)" : "rgba(247,247,245,0.88)",
           backdropFilter: "blur(16px)",
           WebkitBackdropFilter: "blur(16px)",
-          borderBottom: scrolled ? "1px solid rgba(255,255,255,0.08)" : "1px solid transparent",
+          borderBottom: scrolled ? "1px solid rgba(11,11,11,0.08)" : "1px solid transparent",
         }}
       >
         <div
@@ -45,7 +45,7 @@ export function Navbar() {
           <Link href="/">
             <span className="inline-flex items-center gap-2 cursor-pointer group flex-shrink-0">
               <img
-                src={`${import.meta.env.BASE_URL}logo-light.png`}
+                src={`${import.meta.env.BASE_URL}logo-dark.png`}
                 alt="GrowitBuddy"
                 style={{
                   width: 32,
@@ -53,7 +53,7 @@ export function Navbar() {
                   objectFit: "contain",
                   flexShrink: 0,
                   transition: "transform 0.2s",
-                  mixBlendMode: "screen",
+                  mixBlendMode: "multiply",
                 }}
                 className="group-hover:scale-110"
               />
@@ -62,7 +62,7 @@ export function Navbar() {
                   fontFamily: "'Inter', sans-serif",
                   fontSize: 16,
                   fontWeight: 800,
-                  color: "#fff",
+                  color: "#0B0B0B",
                   letterSpacing: "-0.03em",
                 }}
               >
@@ -74,11 +74,11 @@ export function Navbar() {
           <nav
             className="hidden lg:flex items-center"
             style={{
-              border: "1.5px solid rgba(255,255,255,0.12)",
+              border: "1.5px solid rgba(11,11,11,0.1)",
               borderRadius: 40,
               padding: "5px 6px",
               gap: 2,
-              background: "rgba(255,255,255,0.05)",
+              background: "rgba(255,255,255,0.6)",
             }}
           >
             {NAV_LINKS.map((link) => (
@@ -87,8 +87,8 @@ export function Navbar() {
                   className="text-[13px] font-medium cursor-pointer transition-all duration-150 rounded-full px-3.5 py-1.5"
                   style={{
                     fontFamily: "'Inter', sans-serif",
-                    color: location === link.href ? "#0B0B0B" : "rgba(255,255,255,0.5)",
-                    background: location === link.href ? "#fff" : "transparent",
+                    color: location === link.href ? "#fff" : "rgba(11,11,11,0.5)",
+                    background: location === link.href ? "#0B0B0B" : "transparent",
                     fontWeight: location === link.href ? 600 : 500,
                   }}
                 >
@@ -101,11 +101,11 @@ export function Navbar() {
           <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
             <Link href="/contact">
               <span
-                className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[13px] font-semibold cursor-pointer transition-all"
+                className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[13px] font-semibold cursor-pointer transition-all hover:bg-black/5"
                 style={{
                   fontFamily: "'Inter', sans-serif",
-                  color: "rgba(255,255,255,0.7)",
-                  border: "1.5px solid rgba(255,255,255,0.18)",
+                  color: "#0B0B0B",
+                  border: "1.5px solid rgba(11,11,11,0.2)",
                 }}
                 data-testid="button-get-in-touch"
               >
@@ -115,12 +115,8 @@ export function Navbar() {
             </Link>
             <Link href="/contact">
               <span
-                className="inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-[13px] font-semibold cursor-pointer transition-all"
-                style={{
-                  fontFamily: "'Inter', sans-serif",
-                  background: "#fff",
-                  color: "#0B0B0B",
-                }}
+                className="gb-btn text-[13px] px-5 py-2"
+                style={{ borderRadius: 100 }}
                 data-testid="button-book-call-nav"
               >
                 Book a Call
@@ -130,7 +126,7 @@ export function Navbar() {
 
           <button
             className="lg:hidden p-1"
-            style={{ color: "#fff" }}
+            style={{ color: "#0B0B0B" }}
             onClick={() => setIsOpen(!isOpen)}
             data-testid="button-mobile-menu"
           >
@@ -152,8 +148,8 @@ export function Navbar() {
               left: 0,
               right: 0,
               zIndex: 40,
-              background: "#0B0B0B",
-              borderBottom: "1px solid rgba(255,255,255,0.08)",
+              background: "#F7F7F5",
+              borderBottom: "1px solid rgba(11,11,11,0.1)",
               padding: "24px 20px 32px",
             }}
           >
@@ -165,7 +161,7 @@ export function Navbar() {
                       fontFamily: "'Inter', sans-serif",
                       fontSize: 20,
                       fontWeight: 700,
-                      color: location === link.href ? "#fff" : "rgba(255,255,255,0.4)",
+                      color: location === link.href ? "#0B0B0B" : "rgba(11,11,11,0.45)",
                       cursor: "pointer",
                       display: "block",
                       letterSpacing: "-0.02em",
@@ -177,8 +173,8 @@ export function Navbar() {
               ))}
               <Link href="/contact">
                 <span
-                  className="inline-flex items-center justify-center mt-2"
-                  style={{ width: "100%", borderRadius: 12, padding: "14px 0", fontSize: 15, fontWeight: 700, background: "#fff", color: "#0B0B0B", fontFamily: "'Inter', sans-serif", cursor: "pointer" }}
+                  className="gb-btn justify-center mt-2"
+                  style={{ width: "100%", borderRadius: 12, padding: "14px 0", fontSize: 15 }}
                 >
                   Book a Call
                 </span>
