@@ -152,11 +152,11 @@ export default function Home() {
           style={{
             position: "absolute",
             inset: 0,
-            backgroundImage: "radial-gradient(circle, rgba(11,11,11,0.13) 1px, transparent 1px)",
-            backgroundSize: "38px 38px",
+            backgroundImage: "radial-gradient(circle, rgba(11,11,11,0.28) 1.5px, transparent 1.5px)",
+            backgroundSize: "36px 36px",
             pointerEvents: "none",
-            maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%)",
-            WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%)",
+            maskImage: "radial-gradient(ellipse 85% 85% at 50% 50%, black 20%, transparent 100%)",
+            WebkitMaskImage: "radial-gradient(ellipse 85% 85% at 50% 50%, black 20%, transparent 100%)",
           }}
         />
 
@@ -168,11 +168,11 @@ export default function Home() {
             position: "absolute",
             top: "0%",
             left: "-5%",
-            width: 480,
-            height: 480,
+            width: 520,
+            height: 520,
             borderRadius: "50%",
-            background: "radial-gradient(ellipse at center, rgba(11,11,11,0.07) 0%, transparent 70%)",
-            filter: "blur(50px)",
+            background: "radial-gradient(ellipse at center, rgba(11,11,11,0.13) 0%, transparent 70%)",
+            filter: "blur(40px)",
             pointerEvents: "none",
           }}
         />
@@ -185,11 +185,11 @@ export default function Home() {
             position: "absolute",
             bottom: "-10%",
             right: "-8%",
-            width: 560,
-            height: 560,
+            width: 600,
+            height: 600,
             borderRadius: "50%",
-            background: "radial-gradient(ellipse at center, rgba(11,11,11,0.055) 0%, transparent 70%)",
-            filter: "blur(60px)",
+            background: "radial-gradient(ellipse at center, rgba(11,11,11,0.11) 0%, transparent 70%)",
+            filter: "blur(45px)",
             pointerEvents: "none",
           }}
         />
@@ -207,7 +207,7 @@ export default function Home() {
             marginTop: -360,
             marginLeft: -360,
             borderRadius: "50%",
-            border: "1px solid rgba(11,11,11,0.05)",
+            border: "1px solid rgba(11,11,11,0.14)",
             pointerEvents: "none",
           }}
         />
@@ -225,7 +225,7 @@ export default function Home() {
             marginTop: -250,
             marginLeft: -250,
             borderRadius: "50%",
-            border: "1px solid rgba(11,11,11,0.04)",
+            border: "1px solid rgba(11,11,11,0.10)",
             pointerEvents: "none",
           }}
         />
@@ -250,12 +250,13 @@ export default function Home() {
             position: "absolute",
             top: 0,
             left: "50%",
-            marginLeft: -3,
-            marginTop: -3,
-            width: 6,
-            height: 6,
+            marginLeft: -4,
+            marginTop: -4,
+            width: 8,
+            height: 8,
             borderRadius: "50%",
-            background: "rgba(11,11,11,0.2)",
+            background: "rgba(11,11,11,0.4)",
+            boxShadow: "0 0 12px rgba(11,11,11,0.2)",
           }} />
         </motion.div>
 
@@ -279,12 +280,13 @@ export default function Home() {
             position: "absolute",
             bottom: 0,
             left: "50%",
-            marginLeft: -2.5,
-            marginBottom: -2.5,
-            width: 5,
-            height: 5,
+            marginLeft: -3,
+            marginBottom: -3,
+            width: 6,
+            height: 6,
             borderRadius: "50%",
-            background: "rgba(11,11,11,0.15)",
+            background: "rgba(11,11,11,0.3)",
+            boxShadow: "0 0 8px rgba(11,11,11,0.15)",
           }} />
         </motion.div>
 
@@ -300,7 +302,7 @@ export default function Home() {
             transform: "translateX(-50%)",
             width: "60%",
             height: 1,
-            background: "linear-gradient(90deg, transparent 0%, rgba(11,11,11,0.12) 30%, rgba(11,11,11,0.12) 70%, transparent 100%)",
+            background: "linear-gradient(90deg, transparent 0%, rgba(11,11,11,0.2) 30%, rgba(11,11,11,0.2) 70%, transparent 100%)",
             pointerEvents: "none",
             transformOrigin: "center",
           }}
