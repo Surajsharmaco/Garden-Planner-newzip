@@ -21,24 +21,17 @@ export function Footer() {
           <div style={{ gridColumn: "span 2" }}>
             <Link href="/">
               <span className="inline-flex items-center gap-2 cursor-pointer mb-4" style={{ display: "flex" }}>
-                <span
+                <img
+                  src={`${import.meta.env.BASE_URL}logo-light.png`}
+                  alt="GrowitBuddy"
                   style={{
-                    width: 36, height: 36,
-                    borderRadius: "50%",
-                    background: "rgba(255,255,255,0.12)",
-                    border: "1px solid rgba(255,255,255,0.15)",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 16,
-                    fontWeight: 800,
-                    color: "#fff",
-                    fontFamily: "'Inter', sans-serif",
+                    width: 36,
+                    height: 36,
+                    objectFit: "contain",
                     flexShrink: 0,
+                    mixBlendMode: "screen",
                   }}
-                >
-                  G
-                </span>
+                />
                 <span
                   style={{
                     fontFamily: "'Inter', sans-serif",
