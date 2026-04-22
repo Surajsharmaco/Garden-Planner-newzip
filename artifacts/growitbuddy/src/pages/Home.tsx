@@ -147,6 +147,166 @@ export default function Home() {
           paddingBottom: 60,
         }}
       >
+        {/* Dot grid */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage: "radial-gradient(circle, rgba(11,11,11,0.13) 1px, transparent 1px)",
+            backgroundSize: "38px 38px",
+            pointerEvents: "none",
+            maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%)",
+            WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%)",
+          }}
+        />
+
+        {/* Floating orb - top left */}
+        <motion.div
+          animate={{ y: [0, -28, 0], x: [0, 18, 0] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            position: "absolute",
+            top: "0%",
+            left: "-5%",
+            width: 480,
+            height: 480,
+            borderRadius: "50%",
+            background: "radial-gradient(ellipse at center, rgba(11,11,11,0.07) 0%, transparent 70%)",
+            filter: "blur(50px)",
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Floating orb - bottom right */}
+        <motion.div
+          animate={{ y: [0, 22, 0], x: [0, -16, 0] }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+          style={{
+            position: "absolute",
+            bottom: "-10%",
+            right: "-8%",
+            width: 560,
+            height: 560,
+            borderRadius: "50%",
+            background: "radial-gradient(ellipse at center, rgba(11,11,11,0.055) 0%, transparent 70%)",
+            filter: "blur(60px)",
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Rotating outer ring */}
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            width: 720,
+            height: 720,
+            marginTop: -360,
+            marginLeft: -360,
+            borderRadius: "50%",
+            border: "1px solid rgba(11,11,11,0.05)",
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Rotating inner ring - counter */}
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{ duration: 55, repeat: Infinity, ease: "linear" }}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            width: 500,
+            height: 500,
+            marginTop: -250,
+            marginLeft: -250,
+            borderRadius: "50%",
+            border: "1px solid rgba(11,11,11,0.04)",
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Small accent dot on outer ring */}
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            width: 720,
+            height: 720,
+            marginTop: -360,
+            marginLeft: -360,
+            borderRadius: "50%",
+            pointerEvents: "none",
+          }}
+        >
+          <div style={{
+            position: "absolute",
+            top: 0,
+            left: "50%",
+            marginLeft: -3,
+            marginTop: -3,
+            width: 6,
+            height: 6,
+            borderRadius: "50%",
+            background: "rgba(11,11,11,0.2)",
+          }} />
+        </motion.div>
+
+        {/* Small accent dot on inner ring */}
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{ duration: 55, repeat: Infinity, ease: "linear" }}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            width: 500,
+            height: 500,
+            marginTop: -250,
+            marginLeft: -250,
+            borderRadius: "50%",
+            pointerEvents: "none",
+          }}
+        >
+          <div style={{
+            position: "absolute",
+            bottom: 0,
+            left: "50%",
+            marginLeft: -2.5,
+            marginBottom: -2.5,
+            width: 5,
+            height: 5,
+            borderRadius: "50%",
+            background: "rgba(11,11,11,0.15)",
+          }} />
+        </motion.div>
+
+        {/* Shimmer line */}
+        <motion.div
+          initial={{ scaleX: 0, opacity: 0 }}
+          animate={{ scaleX: 1, opacity: 1 }}
+          transition={{ duration: 1.8, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "60%",
+            height: 1,
+            background: "linear-gradient(90deg, transparent 0%, rgba(11,11,11,0.12) 30%, rgba(11,11,11,0.12) 70%, transparent 100%)",
+            pointerEvents: "none",
+            transformOrigin: "center",
+          }}
+        />
+
+        {/* Central radial glow */}
         <div
           style={{
             position: "absolute",
