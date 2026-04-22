@@ -219,20 +219,20 @@ export default function Home() {
           aria-hidden="true"
         >
           <defs>
-            <filter id="wave-blur-lg" x="-20%" y="-200%" width="140%" height="500%">
-              <feGaussianBlur stdDeviation="14" />
+            <filter id="wave-blur-lg" x="-20%" y="-300%" width="140%" height="700%">
+              <feGaussianBlur stdDeviation="22" />
             </filter>
-            <filter id="wave-blur-md" x="-20%" y="-200%" width="140%" height="500%">
-              <feGaussianBlur stdDeviation="10" />
+            <filter id="wave-blur-md" x="-20%" y="-300%" width="140%" height="700%">
+              <feGaussianBlur stdDeviation="16" />
             </filter>
-            <filter id="wave-blur-sm" x="-20%" y="-200%" width="140%" height="500%">
-              <feGaussianBlur stdDeviation="7" />
+            <filter id="wave-blur-sm" x="-20%" y="-300%" width="140%" height="700%">
+              <feGaussianBlur stdDeviation="11" />
             </filter>
           </defs>
 
           <motion.g
-            animate={{ y: [0, -22, 0] }}
-            transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+            animate={{ y: [0, -40, 0] }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
           >
             <path
               d="M-100,600 C200,520 400,680 700,580 C1000,480 1200,640 1540,560"
@@ -244,8 +244,8 @@ export default function Home() {
           </motion.g>
 
           <motion.g
-            animate={{ y: [0, 18, 0] }}
-            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+            animate={{ y: [0, 36, 0] }}
+            transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
           >
             <path
               d="M-100,720 C300,660 500,790 800,690 C1100,590 1300,730 1540,660"
@@ -257,8 +257,8 @@ export default function Home() {
           </motion.g>
 
           <motion.g
-            animate={{ y: [0, 26, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            animate={{ y: [0, 44, 0] }}
+            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
           >
             <path
               d="M-100,820 C350,770 550,870 850,790 C1150,710 1350,830 1540,760"
