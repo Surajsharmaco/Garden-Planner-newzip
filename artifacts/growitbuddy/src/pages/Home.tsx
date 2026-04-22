@@ -220,13 +220,13 @@ export default function Home() {
         >
           <defs>
             <filter id="wave-blur-lg" x="-20%" y="-200%" width="140%" height="500%">
-              <feGaussianBlur stdDeviation="7" />
+              <feGaussianBlur stdDeviation="14" />
             </filter>
             <filter id="wave-blur-md" x="-20%" y="-200%" width="140%" height="500%">
-              <feGaussianBlur stdDeviation="5" />
+              <feGaussianBlur stdDeviation="10" />
             </filter>
             <filter id="wave-blur-sm" x="-20%" y="-200%" width="140%" height="500%">
-              <feGaussianBlur stdDeviation="3.5" />
+              <feGaussianBlur stdDeviation="7" />
             </filter>
           </defs>
 
@@ -237,8 +237,8 @@ export default function Home() {
             <path
               d="M-100,600 C200,520 400,680 700,580 C1000,480 1200,640 1540,560"
               fill="none"
-              stroke="rgba(11,11,11,0.38)"
-              strokeWidth="2.5"
+              stroke="rgba(11,11,11,0.42)"
+              strokeWidth="6"
               filter="url(#wave-blur-lg)"
             />
           </motion.g>
@@ -250,8 +250,8 @@ export default function Home() {
             <path
               d="M-100,720 C300,660 500,790 800,690 C1100,590 1300,730 1540,660"
               fill="none"
-              stroke="rgba(11,11,11,0.28)"
-              strokeWidth="2"
+              stroke="rgba(11,11,11,0.32)"
+              strokeWidth="5"
               filter="url(#wave-blur-md)"
             />
           </motion.g>
@@ -263,8 +263,8 @@ export default function Home() {
             <path
               d="M-100,450 C250,390 450,520 720,430 C990,340 1200,490 1540,410"
               fill="none"
-              stroke="rgba(11,11,11,0.22)"
-              strokeWidth="1.8"
+              stroke="rgba(11,11,11,0.26)"
+              strokeWidth="4"
               filter="url(#wave-blur-sm)"
             />
           </motion.g>
@@ -276,8 +276,8 @@ export default function Home() {
             <path
               d="M-100,820 C350,770 550,870 850,790 C1150,710 1350,830 1540,760"
               fill="none"
-              stroke="rgba(11,11,11,0.18)"
-              strokeWidth="1.5"
+              stroke="rgba(11,11,11,0.22)"
+              strokeWidth="3.5"
               filter="url(#wave-blur-md)"
             />
           </motion.g>
