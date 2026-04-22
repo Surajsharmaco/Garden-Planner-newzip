@@ -56,26 +56,26 @@ export default function Services() {
 
       {/* Hero */}
       <section style={{ paddingTop: 120, paddingBottom: 80, paddingLeft: 24, paddingRight: 24, background: "#fff", borderBottom: "1px solid rgba(11,11,11,0.08)" }}>
-        <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
-          <div>
-            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Services</p>
-            <motion.h1
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7 }}
-              style={{ fontWeight: 800, fontSize: "clamp(44px, 6.5vw, 80px)", letterSpacing: "-0.04em", lineHeight: "1.02", color: "#0B0B0B" }}
-            >
-              The systems behind authority and inbound demand.
-            </motion.h1>
-          </div>
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
+        <div className="max-w-[1100px] mx-auto">
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Services</p>
+          <motion.h1
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            style={{ fontSize: 18, lineHeight: "1.75", color: "rgba(11,11,11,0.5)", alignSelf: "flex-end" }}
+            transition={{ duration: 0.7 }}
+            style={{ fontWeight: 800, fontSize: "clamp(44px, 6.5vw, 80px)", letterSpacing: "-0.04em", lineHeight: "1.02", color: "#0B0B0B", marginBottom: 32 }}
           >
-            We don't just create content. We build the infrastructure that turns your expertise into recognition, trust, and consistent opportunities.
-          </motion.p>
+            The systems behind authority and inbound demand.
+          </motion.h1>
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              style={{ fontSize: 17, lineHeight: "1.75", color: "rgba(11,11,11,0.5)", maxWidth: "44ch" }}
+            >
+              We don't just create content. We build the infrastructure that turns your expertise into recognition, trust, and consistent opportunities.
+            </motion.p>
+          </div>
         </div>
       </section>
 
