@@ -183,18 +183,18 @@ export default function Home() {
 
         {/* Floating particles */}
         {[
-          { size: 3,   left: "8%",  duration: 18, phase: 0.20, opacity: 0.30, blur: 1   },
-          { size: 5,   left: "18%", duration: 24, phase: 0.55, opacity: 0.18, blur: 2   },
-          { size: 2,   left: "30%", duration: 14, phase: 0.80, opacity: 0.35, blur: 0.5 },
-          { size: 6,   left: "42%", duration: 28, phase: 0.35, opacity: 0.14, blur: 3   },
-          { size: 3,   left: "55%", duration: 20, phase: 0.70, opacity: 0.28, blur: 1   },
-          { size: 4,   left: "64%", duration: 16, phase: 0.10, opacity: 0.22, blur: 1.5 },
-          { size: 2,   left: "74%", duration: 22, phase: 0.45, opacity: 0.32, blur: 0.5 },
-          { size: 7,   left: "82%", duration: 30, phase: 0.60, opacity: 0.12, blur: 4   },
-          { size: 3,   left: "90%", duration: 17, phase: 0.25, opacity: 0.26, blur: 1   },
-          { size: 2,   left: "50%", duration: 13, phase: 0.90, opacity: 0.30, blur: 0.5 },
-          { size: 4,   left: "24%", duration: 26, phase: 0.15, opacity: 0.20, blur: 2   },
-          { size: 3,   left: "70%", duration: 19, phase: 0.50, opacity: 0.24, blur: 1   },
+          { size: 14,  left: "8%",  duration: 18, phase: 0.20, opacity: 0.18, blur: 5  },
+          { size: 22,  left: "18%", duration: 24, phase: 0.55, opacity: 0.12, blur: 8  },
+          { size: 10,  left: "30%", duration: 14, phase: 0.80, opacity: 0.22, blur: 4  },
+          { size: 30,  left: "42%", duration: 28, phase: 0.35, opacity: 0.08, blur: 12 },
+          { size: 16,  left: "55%", duration: 20, phase: 0.70, opacity: 0.16, blur: 6  },
+          { size: 20,  left: "64%", duration: 16, phase: 0.10, opacity: 0.14, blur: 7  },
+          { size: 12,  left: "74%", duration: 22, phase: 0.45, opacity: 0.20, blur: 4  },
+          { size: 36,  left: "82%", duration: 30, phase: 0.60, opacity: 0.07, blur: 14 },
+          { size: 14,  left: "90%", duration: 17, phase: 0.25, opacity: 0.16, blur: 5  },
+          { size: 10,  left: "50%", duration: 13, phase: 0.90, opacity: 0.20, blur: 4  },
+          { size: 24,  left: "24%", duration: 26, phase: 0.15, opacity: 0.11, blur: 9  },
+          { size: 18,  left: "70%", duration: 19, phase: 0.50, opacity: 0.15, blur: 6  },
         ].map((p, i) => (
           <div
             key={i}
