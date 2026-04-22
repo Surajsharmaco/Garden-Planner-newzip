@@ -220,13 +220,13 @@ export default function Home() {
         >
           <defs>
             <filter id="wave-blur-lg" x="-20%" y="-200%" width="140%" height="500%">
-              <feGaussianBlur stdDeviation="3" />
+              <feGaussianBlur stdDeviation="7" />
             </filter>
             <filter id="wave-blur-md" x="-20%" y="-200%" width="140%" height="500%">
-              <feGaussianBlur stdDeviation="2" />
+              <feGaussianBlur stdDeviation="5" />
             </filter>
             <filter id="wave-blur-sm" x="-20%" y="-200%" width="140%" height="500%">
-              <feGaussianBlur stdDeviation="1.2" />
+              <feGaussianBlur stdDeviation="3.5" />
             </filter>
           </defs>
 
