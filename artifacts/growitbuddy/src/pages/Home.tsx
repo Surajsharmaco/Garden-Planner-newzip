@@ -147,70 +147,61 @@ export default function Home() {
           paddingBottom: 60,
         }}
       >
-        {/* Film grain texture */}
-        <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0 }} aria-hidden="true">
-          <filter id="hero-grain">
-            <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" stitchTiles="stitch" />
-            <feColorMatrix type="saturate" values="0" />
-          </filter>
-          <rect width="100%" height="100%" filter="url(#hero-grain)" opacity="0.035" />
-        </svg>
-
-        {/* Overhead spotlight - light from top center */}
-        <div
-          style={{
-            position: "absolute",
-            top: "-20%",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "90%",
-            height: "80%",
-            background: "radial-gradient(ellipse 60% 60% at 50% 0%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.4) 45%, transparent 75%)",
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        />
-
-        {/* Left vignette */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: "linear-gradient(90deg, rgba(220,220,218,0.55) 0%, transparent 28%, transparent 72%, rgba(220,220,218,0.55) 100%)",
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        />
-
-        {/* Bottom fade */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "30%",
-            background: "linear-gradient(to bottom, transparent 0%, rgba(247,247,245,0.6) 100%)",
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        />
-
-        {/* Slow scanning beam */}
+        {/* Ambient light pool - top left */}
         <motion.div
-          animate={{ y: ["0%", "110%"] }}
-          transition={{ duration: 7, repeat: Infinity, ease: "linear", repeatDelay: 4 }}
+          animate={{ scale: [1, 1.12, 1], opacity: [0.55, 0.75, 0.55] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
           style={{
             position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: 120,
-            background: "linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.18) 40%, rgba(255,255,255,0.18) 60%, transparent 100%)",
+            top: "-10%",
+            left: "-8%",
+            width: 580,
+            height: 580,
+            borderRadius: "50%",
+            background: "radial-gradient(ellipse at center, rgba(195,195,192,0.65) 0%, transparent 68%)",
             pointerEvents: "none",
             zIndex: 0,
           }}
         />
+
+        {/* Ambient light pool - bottom right */}
+        <motion.div
+          animate={{ scale: [1, 1.1, 1], opacity: [0.45, 0.65, 0.45] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 3 }}
+          style={{
+            position: "absolute",
+            bottom: "-15%",
+            right: "-10%",
+            width: 640,
+            height: 640,
+            borderRadius: "50%",
+            background: "radial-gradient(ellipse at center, rgba(190,190,187,0.6) 0%, transparent 68%)",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        />
+
+        {/* Floating lines — pre-distributed via negative CSS animation-delay */}
+        {[
+          { width: "42%", left: "12%", duration: 20, phase: 0.30, opacity: 0.22 },
+          { width: "32%", left: "50%", duration: 26, phase: 0.65, opacity: 0.16 },
+          { width: "55%", left: "20%", duration: 22, phase: 0.10, opacity: 0.14 },
+          { width: "28%", left: "62%", duration: 18, phase: 0.50, opacity: 0.20 },
+          { width: "38%", left:  "4%", duration: 24, phase: 0.80, opacity: 0.13 },
+          { width: "22%", left: "72%", duration: 16, phase: 0.40, opacity: 0.17 },
+        ].map((l, i) => (
+          <div
+            key={i}
+            className="hero-line"
+            style={{
+              left: l.left,
+              width: l.width,
+              background: `linear-gradient(90deg, transparent 0%, rgba(11,11,11,${l.opacity}) 20%, rgba(11,11,11,${l.opacity}) 80%, transparent 100%)`,
+              animationDuration: `${l.duration}s`,
+              animationDelay: `${-(l.phase * l.duration)}s`,
+            }}
+          />
+        ))}
 
         <div style={{ position: "relative", zIndex: 1, maxWidth: 900, padding: "0 24px" }}>
           <motion.div
