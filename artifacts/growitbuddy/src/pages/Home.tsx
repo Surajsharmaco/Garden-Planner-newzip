@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Check, ChevronRight, Star } from "lucide-react";
 import { Link } from "wouter";
@@ -97,6 +97,23 @@ export default function Home() {
   const BG = "#F7F7F5";
   const TEXT = "#0B0B0B";
 
+  const [mouse, setMouse] = useState({ x: 50, y: 50 });
+  const heroRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero) return;
+    const handle = (e: MouseEvent) => {
+      const rect = hero.getBoundingClientRect();
+      setMouse({
+        x: ((e.clientX - rect.left) / rect.width) * 100,
+        y: ((e.clientY - rect.top) / rect.height) * 100,
+      });
+    };
+    hero.addEventListener("mousemove", handle);
+    return () => hero.removeEventListener("mousemove", handle);
+  }, []);
+
   const [ctaEmail, setCtaEmail] = useState("");
   const [ctaSubmitted, setCtaSubmitted] = useState(false);
   const [ctaSubmitting, setCtaSubmitting] = useState(false);
@@ -134,6 +151,7 @@ export default function Home() {
 
       {/* ══ 1. HERO ══ */}
       <section
+        ref={heroRef}
         style={{
           minHeight: "100vh",
           display: "flex",
@@ -181,35 +199,73 @@ export default function Home() {
           }}
         />
 
-        {/* Floating particles */}
-        {[
-          { size: 14,  left: "8%",  duration: 18, phase: 0.20, opacity: 0.18, blur: 5  },
-          { size: 22,  left: "18%", duration: 24, phase: 0.55, opacity: 0.12, blur: 8  },
-          { size: 10,  left: "30%", duration: 14, phase: 0.80, opacity: 0.22, blur: 4  },
-          { size: 30,  left: "42%", duration: 28, phase: 0.35, opacity: 0.08, blur: 12 },
-          { size: 16,  left: "55%", duration: 20, phase: 0.70, opacity: 0.16, blur: 6  },
-          { size: 20,  left: "64%", duration: 16, phase: 0.10, opacity: 0.14, blur: 7  },
-          { size: 12,  left: "74%", duration: 22, phase: 0.45, opacity: 0.20, blur: 4  },
-          { size: 36,  left: "82%", duration: 30, phase: 0.60, opacity: 0.07, blur: 14 },
-          { size: 14,  left: "90%", duration: 17, phase: 0.25, opacity: 0.16, blur: 5  },
-          { size: 10,  left: "50%", duration: 13, phase: 0.90, opacity: 0.20, blur: 4  },
-          { size: 24,  left: "24%", duration: 26, phase: 0.15, opacity: 0.11, blur: 9  },
-          { size: 18,  left: "70%", duration: 19, phase: 0.50, opacity: 0.15, blur: 6  },
-        ].map((p, i) => (
-          <div
-            key={i}
-            className="hero-particle"
-            style={{
-              left: p.left,
-              width:  p.size,
-              height: p.size,
-              background: `rgba(11,11,11,${p.opacity})`,
-              filter: `blur(${p.blur}px)`,
-              animationDuration: `${p.duration}s`,
-              animationDelay: `${-(p.phase * p.duration)}s`,
-            }}
-          />
-        ))}
+        {/* Mouse-tracking spotlight */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: `radial-gradient(circle 480px at ${mouse.x}% ${mouse.y}%, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.28) 40%, transparent 70%)`,
+            transition: "background 0.12s ease-out",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        />
+
+        {/* Animated SVG wave curves */}
+        <svg
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0, overflow: "visible" }}
+          preserveAspectRatio="none"
+          viewBox="0 0 1440 900"
+          aria-hidden="true"
+        >
+          <motion.g
+            animate={{ y: [0, -22, 0] }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <path
+              d="M-100,600 C200,520 400,680 700,580 C1000,480 1200,640 1540,560"
+              fill="none"
+              stroke="rgba(11,11,11,0.09)"
+              strokeWidth="1.5"
+            />
+          </motion.g>
+
+          <motion.g
+            animate={{ y: [0, 18, 0] }}
+            transition={{ duration: 16, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          >
+            <path
+              d="M-100,720 C300,660 500,790 800,690 C1100,590 1300,730 1540,660"
+              fill="none"
+              stroke="rgba(11,11,11,0.06)"
+              strokeWidth="1.2"
+            />
+          </motion.g>
+
+          <motion.g
+            animate={{ y: [0, -14, 0] }}
+            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 5 }}
+          >
+            <path
+              d="M-100,450 C250,390 450,520 720,430 C990,340 1200,490 1540,410"
+              fill="none"
+              stroke="rgba(11,11,11,0.05)"
+              strokeWidth="1"
+            />
+          </motion.g>
+
+          <motion.g
+            animate={{ y: [0, 26, 0] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 8 }}
+          >
+            <path
+              d="M-100,820 C350,770 550,870 850,790 C1150,710 1350,830 1540,760"
+              fill="none"
+              stroke="rgba(11,11,11,0.04)"
+              strokeWidth="1"
+            />
+          </motion.g>
+        </svg>
 
         <div style={{ position: "relative", zIndex: 1, maxWidth: 900, padding: "0 24px" }}>
           <motion.div
