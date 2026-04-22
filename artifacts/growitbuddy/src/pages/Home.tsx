@@ -106,7 +106,7 @@ function DotWaveCanvas() {
     let t = 0;
 
     const GAP = 28;
-    const DOT_R = 1.5;
+    const DOT_R = 2.2;
 
     const resize = () => {
       canvas.width = canvas.offsetWidth;
@@ -164,6 +164,7 @@ function DotWaveCanvas() {
         height: "100%",
         pointerEvents: "none",
         zIndex: 0,
+        filter: "blur(2.5px)",
       }}
     />
   );
