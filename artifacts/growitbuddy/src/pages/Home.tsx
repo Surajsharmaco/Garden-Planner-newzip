@@ -257,19 +257,6 @@ export default function Home() {
           </motion.g>
 
           <motion.g
-            animate={{ y: [0, -14, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
-          >
-            <path
-              d="M-100,450 C250,390 450,520 720,430 C990,340 1200,490 1540,410"
-              fill="none"
-              stroke="rgba(11,11,11,0.26)"
-              strokeWidth="4"
-              filter="url(#wave-blur-sm)"
-            />
-          </motion.g>
-
-          <motion.g
             animate={{ y: [0, 26, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
           >
