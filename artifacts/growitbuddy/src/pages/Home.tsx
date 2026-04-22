@@ -147,19 +147,6 @@ export default function Home() {
           paddingBottom: 60,
         }}
       >
-        {/* Dot grid */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage: "radial-gradient(circle, rgba(11,11,11,0.28) 1.5px, transparent 1.5px)",
-            backgroundSize: "36px 36px",
-            pointerEvents: "none",
-            maskImage: "radial-gradient(ellipse 85% 85% at 50% 50%, black 20%, transparent 100%)",
-            WebkitMaskImage: "radial-gradient(ellipse 85% 85% at 50% 50%, black 20%, transparent 100%)",
-          }}
-        />
-
         {/* Floating orb - top left */}
         <motion.div
           animate={{ y: [0, -28, 0], x: [0, 18, 0] }}
