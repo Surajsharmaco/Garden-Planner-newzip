@@ -274,62 +274,77 @@ export default function AuthorityAudit() {
       </section>
 
       {/* ── Tool area ── */}
-      <section style={{ padding: "60px 24px 80px" }}>
-        <div style={{ maxWidth: 660, margin: "0 auto" }}>
+      <section style={{ padding: "60px 24px 100px" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto" }}>
           <AnimatePresence mode="wait">
 
             {/* INTRO */}
             {step === -1 && !report && (
-              <motion.div key="intro" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.4 }}>
-                {/* 4 deliverables grid */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 12, marginBottom: 20 }}>
-                  {[
-                    { n: "01", title: "Your Authority Stage",    desc: "See exactly where you sit in the authority-building journey and what it means for your next move." },
-                    { n: "02", title: "Your Named Content Gap",  desc: "The specific gap limiting your growth right now - Distribution Gap, Trust Gap, System Gap, and more." },
-                    { n: "03", title: "Your #1 Priority Action", desc: "One clear, specific action to take before anything else - based on your exact situation." },
-                    { n: "04", title: "Your Personalized Plan",  desc: "Specific blockers, actionable fixes, and outcomes written for your role, platform, and problem." },
-                  ].map(item => (
-                    <div key={item.n} style={{ background: "#fff", borderRadius: 16, padding: "22px 20px", border: "1.5px solid rgba(11,11,11,0.08)" }}>
-                      <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.15em", color: "rgba(11,11,11,0.2)", marginBottom: 10 }}>{item.n}</p>
-                      <p style={{ fontSize: 14, fontWeight: 700, color: TEXT, marginBottom: 6 }}>{item.title}</p>
-                      <p style={{ fontSize: 13, color: "rgba(11,11,11,0.5)", lineHeight: "1.6", margin: 0 }}>{item.desc}</p>
+              <motion.div key="intro" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.4 }}
+                style={{ display: "flex", flexDirection: "column", gap: 16 }}
+              >
+                {/* ── Option 1: Self-serve free audit (primary) ── */}
+                <div style={{ background: "#fff", border: "2px solid #0B0B0B", borderRadius: 24, padding: "36px 36px 32px", display: "flex", flexDirection: "column", gap: 28 }}>
+                  {/* Header row */}
+                  <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
+                    <div>
+                      <span style={{ display: "inline-block", fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", background: "#F7F7F5", borderRadius: 100, padding: "4px 12px", marginBottom: 14 }}>Free - instant results - 3 minutes</span>
+                      <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 3.5vw, 36px)", letterSpacing: "-0.04em", color: TEXT, margin: 0, lineHeight: 1.1 }}>
+                        Start the Audit yourself
+                      </h2>
+                      <p style={{ fontSize: 15, color: "rgba(11,11,11,0.5)", marginTop: 10, maxWidth: "46ch", lineHeight: 1.7 }}>
+                        Answer 8 questions. Get a full authority diagnosis specific to your role, platform, and goals - instantly.
+                      </p>
                     </div>
-                  ))}
+                  </div>
+
+                  {/* 4 deliverables */}
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: 10 }}>
+                    {[
+                      { n: "01", title: "Your Authority Stage",    desc: "Exactly where you sit and what it means for your next move." },
+                      { n: "02", title: "Your Named Content Gap",  desc: "The one gap holding back your growth right now." },
+                      { n: "03", title: "Your #1 Priority Action", desc: "One specific action based on your exact situation." },
+                      { n: "04", title: "Your Personalized Plan",  desc: "Blockers, fixes, and outcomes written for your role." },
+                    ].map(item => (
+                      <div key={item.n} style={{ background: "#F7F7F5", borderRadius: 14, padding: "18px 16px" }}>
+                        <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", color: "rgba(11,11,11,0.25)", marginBottom: 8 }}>{item.n}</p>
+                        <p style={{ fontSize: 13, fontWeight: 700, color: TEXT, marginBottom: 5 }}>{item.title}</p>
+                        <p style={{ fontSize: 12, color: "rgba(11,11,11,0.45)", lineHeight: "1.6", margin: 0 }}>{item.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* CTA */}
+                  <div>
+                    <button
+                      onClick={() => setStep(0)}
+                      className="gb-btn hover:opacity-85 transition-opacity"
+                      style={{ fontSize: 15, padding: "14px 32px" }}
+                    >
+                      Start the Audit <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
 
-                {/* Team CTA card — dark box */}
-                <div style={{ background: "#0B0B0B", borderRadius: 20, padding: "36px 32px", textAlign: "center" }}>
-                  <p style={{ fontSize: 12, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 14 }}>Done with you - personalised to your business</p>
-                  <h2 style={{ fontWeight: 800, fontSize: "clamp(22px, 4vw, 32px)", letterSpacing: "-0.04em", color: "#fff", marginBottom: 12 }}>
-                    Get your audit from GrowitBuddy's team
-                  </h2>
-                  <p style={{ fontSize: 15, color: "rgba(255,255,255,0.4)", lineHeight: "1.7", maxWidth: "42ch", margin: "0 auto 24px" }}>
-                    Our team reviews your content, positioning, and audience - then hands you a full plan built around your goals.
-                  </p>
+                {/* ── Option 2: Team audit (secondary) ── */}
+                <div style={{ background: "#0B0B0B", borderRadius: 24, padding: "32px 36px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 24 }}>
+                  <div style={{ flex: 1, minWidth: 240 }}>
+                    <span style={{ display: "inline-block", fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 12 }}>Done with you</span>
+                    <h2 style={{ fontWeight: 800, fontSize: "clamp(20px, 2.5vw, 28px)", letterSpacing: "-0.04em", color: "#fff", margin: "0 0 10px", lineHeight: 1.15 }}>
+                      Get your audit from GrowitBuddy's team
+                    </h2>
+                    <p style={{ fontSize: 14, color: "rgba(255,255,255,0.45)", lineHeight: "1.7", margin: 0, maxWidth: "48ch" }}>
+                      Our team reviews your content, positioning, and audience - then hands you a full plan built for your goals.
+                    </p>
+                  </div>
                   <a
                     href="/contact"
-                    style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 26px", borderRadius: 100, background: "#fff", color: "#0B0B0B", fontSize: 14, fontWeight: 700, cursor: "pointer", textDecoration: "none", fontFamily: "'Inter', sans-serif" }}
+                    style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 26px", borderRadius: 100, background: "#fff", color: "#0B0B0B", fontSize: 14, fontWeight: 700, cursor: "pointer", textDecoration: "none", fontFamily: "'Inter', sans-serif", whiteSpace: "nowrap", flexShrink: 0 }}
                     className="hover:opacity-85 transition-opacity"
                   >
                     Book a Call <ArrowRight className="w-4 h-4" />
                   </a>
                 </div>
-
-                {/* Divider */}
-                <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                  <div style={{ flex: 1, height: 1, background: "rgba(11,11,11,0.1)" }} />
-                  <span style={{ fontSize: 12, fontWeight: 600, color: "rgba(11,11,11,0.3)", letterSpacing: "0.1em", textTransform: "uppercase" }}>or do it yourself</span>
-                  <div style={{ flex: 1, height: 1, background: "rgba(11,11,11,0.1)" }} />
-                </div>
-
-                {/* Self-serve quiz button */}
-                <button
-                  onClick={() => setStep(0)}
-                  className="gb-btn hover:opacity-85 transition-opacity"
-                  style={{ width: "100%", justifyContent: "center", fontSize: 15, padding: "15px 0" }}
-                >
-                  Start the Audit <ArrowRight className="w-4 h-4" />
-                </button>
               </motion.div>
             )}
 
