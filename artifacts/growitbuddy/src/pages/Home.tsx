@@ -93,42 +93,91 @@ const TESTIMONIALS = [
   },
 ];
 
+const FLOATERS = [
+  { x: "8%",  baseY: 28, amp: 32, dur: 4.2, delay: 0,    size: 6,  opacity: 0.18 },
+  { x: "22%", baseY: 55, amp: 24, dur: 5.1, delay: 0.8,  size: 4,  opacity: 0.13 },
+  { x: "38%", baseY: 18, amp: 40, dur: 3.8, delay: 1.6,  size: 5,  opacity: 0.15 },
+  { x: "56%", baseY: 70, amp: 28, dur: 6.0, delay: 0.4,  size: 4,  opacity: 0.12 },
+  { x: "70%", baseY: 38, amp: 36, dur: 4.6, delay: 2.1,  size: 6,  opacity: 0.16 },
+  { x: "84%", baseY: 60, amp: 22, dur: 5.4, delay: 1.2,  size: 4,  opacity: 0.13 },
+  { x: "93%", baseY: 22, amp: 30, dur: 4.0, delay: 3.0,  size: 5,  opacity: 0.14 },
+];
+
 function GeometricMotion() {
   return (
     <div
       aria-hidden="true"
-      style={{
-        position: "absolute",
-        inset: 0,
-        pointerEvents: "none",
-        zIndex: 0,
-        overflow: "hidden",
-      }}
+      style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}
     >
-      {/* Bottom-right rotating arcs */}
+      {/* Bottom-right rotating arcs — faster */}
       <motion.svg
-        style={{ position: "absolute", bottom: "-180px", right: "-180px", width: 900, height: 900, opacity: 0.18 }}
+        style={{ position: "absolute", bottom: "-180px", right: "-180px", width: 900, height: 900, opacity: 0.2 }}
         viewBox="0 0 900 900"
         animate={{ rotate: 360 }}
-        transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
       >
-        <circle cx="450" cy="450" r="200" fill="none" stroke="#0B0B0B" strokeWidth="0.6" strokeDasharray="420 860" />
-        <circle cx="450" cy="450" r="280" fill="none" stroke="#0B0B0B" strokeWidth="0.5" strokeDasharray="560 1200" />
-        <circle cx="450" cy="450" r="370" fill="none" stroke="#0B0B0B" strokeWidth="0.4" strokeDasharray="700 1700" />
-        <circle cx="450" cy="450" r="430" fill="none" stroke="#0B0B0B" strokeWidth="0.35" strokeDasharray="900 1900" />
+        <circle cx="450" cy="450" r="200" fill="none" stroke="#0B0B0B" strokeWidth="0.7" strokeDasharray="420 860" />
+        <circle cx="450" cy="450" r="290" fill="none" stroke="#0B0B0B" strokeWidth="0.6" strokeDasharray="560 1260" />
+        <circle cx="450" cy="450" r="380" fill="none" stroke="#0B0B0B" strokeWidth="0.5" strokeDasharray="700 1700" />
+        <circle cx="450" cy="450" r="440" fill="none" stroke="#0B0B0B" strokeWidth="0.4" strokeDasharray="900 1860" />
       </motion.svg>
 
-      {/* Top-left counter-rotating arcs */}
+      {/* Top-left counter-rotating arcs — faster */}
       <motion.svg
-        style={{ position: "absolute", top: "-120px", left: "-120px", width: 600, height: 600, opacity: 0.12 }}
+        style={{ position: "absolute", top: "-120px", left: "-120px", width: 600, height: 600, opacity: 0.15 }}
         viewBox="0 0 600 600"
         animate={{ rotate: -360 }}
-        transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
       >
-        <circle cx="300" cy="300" r="160" fill="none" stroke="#0B0B0B" strokeWidth="0.5" strokeDasharray="300 700" />
-        <circle cx="300" cy="300" r="240" fill="none" stroke="#0B0B0B" strokeWidth="0.4" strokeDasharray="450 1050" />
-        <circle cx="300" cy="300" r="290" fill="none" stroke="#0B0B0B" strokeWidth="0.35" strokeDasharray="550 1270" />
+        <circle cx="300" cy="300" r="160" fill="none" stroke="#0B0B0B" strokeWidth="0.6" strokeDasharray="300 700" />
+        <circle cx="300" cy="300" r="240" fill="none" stroke="#0B0B0B" strokeWidth="0.5" strokeDasharray="450 1060" />
+        <circle cx="300" cy="300" r="290" fill="none" stroke="#0B0B0B" strokeWidth="0.4" strokeDasharray="550 1270" />
       </motion.svg>
+
+      {/* Floating crosshair markers */}
+      {FLOATERS.map((f, i) => (
+        <motion.div
+          key={i}
+          style={{
+            position: "absolute",
+            left: f.x,
+            top: `${f.baseY}%`,
+            opacity: f.opacity,
+          }}
+          animate={{ y: [0, f.amp, 0] }}
+          transition={{ duration: f.dur, repeat: Infinity, ease: "easeInOut", delay: f.delay }}
+        >
+          {/* Crosshair / plus mark */}
+          <svg width={f.size * 4} height={f.size * 4} viewBox="0 0 24 24">
+            <line x1="12" y1="0" x2="12" y2="24" stroke="#0B0B0B" strokeWidth="1" />
+            <line x1="0" y1="12" x2="24" y2="12" stroke="#0B0B0B" strokeWidth="1" />
+          </svg>
+        </motion.div>
+      ))}
+
+      {/* Slow diagonal drifting line — top to bottom */}
+      <motion.div
+        style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
+      >
+        <motion.svg
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.08 }}
+          viewBox="0 0 1440 900"
+          preserveAspectRatio="none"
+        >
+          <motion.line
+            x1="0" y1="300" x2="1440" y2="600"
+            stroke="#0B0B0B" strokeWidth="0.8"
+            animate={{ y1: [300, 400, 300], y2: [600, 700, 600] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.line
+            x1="0" y1="550" x2="1440" y2="350"
+            stroke="#0B0B0B" strokeWidth="0.6"
+            animate={{ y1: [550, 480, 550], y2: [350, 420, 350] }}
+            transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          />
+        </motion.svg>
+      </motion.div>
     </div>
   );
 }
