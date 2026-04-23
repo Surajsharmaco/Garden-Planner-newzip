@@ -5,20 +5,20 @@ import CountUp from "@/components/effects/CountUp";
 import SEOMeta from "@/components/SEOMeta";
 
 const cases = [
-  { name: "Tech Founder to Industry Voice", category: "B2B SaaS · LinkedIn", metric: "14M", unit: "impressions", body: "From zero online presence to the most-cited voice in their SaaS niche within 6 months.", dark: true },
-  { name: "Agency Owner Authority Engine", category: "Services · Multi-channel", metric: "$2.4M", unit: "pipeline attributed", body: "Systematic content strategy that drove inbound pipeline exceeding prior annual revenue.", dark: false },
-  { name: "Creator Monetization System", category: "Creator Economy · YouTube", metric: "250K", unit: "subscribers", body: "Educational content system built around a proprietary framework, monetized to $40K/mo.", dark: false },
-  { name: "Executive Personal Brand", category: "Leadership · Podcast & PR", metric: "15+", unit: "speaking invites / qtr", body: "Turned a quiet operator into an industry thought leader with consistent PR placement.", dark: true },
-  { name: "E-commerce Founder Growth", category: "E-commerce · X / Twitter", metric: "400%", unit: "branded search growth", body: "Personal brand-first strategy that made the founder synonymous with their product category.", dark: false },
-  { name: "VC Authority Engine", category: "Finance · LinkedIn", metric: "3×", unit: "deal flow growth", body: "Positioned a venture firm as the category expert, attracting better deal flow at higher velocity.", dark: true },
+  { name: "Tech Founder to Industry Voice", category: "B2B SaaS · LinkedIn", metric: "14M", unit: "impressions", body: "A full content marketing system took this founder from zero online presence to the most-cited authority in their SaaS niche - in 6 months.", dark: true },
+  { name: "Agency Owner Authority Engine", category: "Services · Multi-channel", metric: "$2.4M", unit: "inbound pipeline", body: "A systematic content strategy and distribution system drove inbound pipeline that exceeded prior annual revenue.", dark: false },
+  { name: "Creator Monetization System", category: "Creator Economy · YouTube", metric: "250K", unit: "subscribers", body: "A content strategy built around a proprietary framework compounded into 250K subscribers and $40K/mo in revenue.", dark: false },
+  { name: "Executive Personal Brand", category: "Leadership · Podcast & PR", metric: "15+", unit: "speaking invites / qtr", body: "Personal branding strategy turned a quiet operator into a recognized industry thought leader with consistent media placement.", dark: true },
+  { name: "E-commerce Founder Growth", category: "E-commerce · X / Twitter", metric: "400%", unit: "branded search growth", body: "A personal brand-first content marketing approach made this founder synonymous with their product category.", dark: false },
+  { name: "VC Authority Engine", category: "Finance · LinkedIn", metric: "3×", unit: "deal flow growth", body: "Content strategy and personal branding positioned this venture firm as the category expert - attracting better deals at higher velocity.", dark: true },
 ];
 
 export default function Work() {
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title="Our Work - GrowitBuddy"
-        description="Case studies and proof of work from GrowitBuddy's authority-building campaigns. Real results for founders, creators, and growing brands."
+        title="Content Marketing Results | Case Studies | GrowitBuddy"
+        description="Real content marketing results from GrowitBuddy. Case studies showing inbound growth, brand authority, and pipeline generated for founders, creators, and growing brands."
       />
 
       {/* Hero */}

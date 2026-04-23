@@ -7,8 +7,8 @@ export default function About() {
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title="About GrowitBuddy - Content & Authority Studio"
-        description="GrowitBuddy is a content and authority studio founded by Suraj Sharma. We believe deep expertise deserves disproportionate attention."
+        title="About GrowitBuddy | Content Marketing Agency for Founders & Creators"
+        description="GrowitBuddy is a content marketing agency founded by Suraj Sharma. We help founders and creators build authority through personal branding strategy and content systems."
       />
 
       {/* Hero */}

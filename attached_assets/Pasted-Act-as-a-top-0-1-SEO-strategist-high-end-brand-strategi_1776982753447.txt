@@ -1,0 +1,168 @@
+Act as a top 0.1% SEO strategist + high-end brand strategist + conversion copywriter.
+
+You are rewriting the ENTIRE website content for GrowitBuddy.
+
+CRITICAL INSTRUCTIONS:
+- DO NOT change layout, design, UI, or structure
+- DO NOT remove or dilute positioning
+- ONLY optimize and rewrite text
+- Balance SEO + positioning + clarity
+
+--------------------------------------------------
+
+🧠 CORE POSITIONING (DO NOT CHANGE)
+
+GrowitBuddy helps founders, creators, and businesses:
+
+- turn expertise into authority  
+- build authority through content  
+- distribute content to the right audience  
+- generate inbound demand  
+
+This MUST stay intact.
+
+--------------------------------------------------
+
+🎯 PRIMARY SEO TARGET
+
+Primary keyword:
+👉 content marketing agency
+
+--------------------------------------------------
+
+🎯 SECONDARY KEYWORDS
+
+- personal branding agency  
+- content strategy services  
+- video marketing agency  
+- social media content agency  
+- content distribution strategy  
+
+--------------------------------------------------
+
+🧠 STRATEGY
+
+Use hybrid model:
+
+HOOK → positioning  
+BODY → SEO integration  
+
+--------------------------------------------------
+
+🧩 SECTION-WISE OPTIMIZATION
+
+--------------------------------------------------
+
+🔹 HERO
+
+Rewrite to include keyword WITHOUT killing positioning:
+
+“Build Authority That Compounds —  
+And Turns Into Real Demand”
+
+Subtext:
+
+We are a content marketing agency that helps founders, creators, and businesses turn expertise into authority — and that authority into consistent inbound demand.
+
+We combine content strategy, video marketing, and distribution systems to ensure your content reaches the right people.
+
+--------------------------------------------------
+
+🔹 PROBLEM
+
+Keep POV but add SEO relevance:
+
+Mention:
+- content strategy  
+- audience targeting  
+- lack of system  
+
+--------------------------------------------------
+
+🔹 SERVICES
+
+Optimize headings:
+
+Authority Strategy → Personal Branding Strategy  
+Content System → Content Strategy Services  
+Video Editing → Video Marketing  
+Distribution → Content Distribution Strategy  
+
+--------------------------------------------------
+
+🔹 FRAMEWORK
+
+Add SEO phrases naturally:
+
+- content system  
+- distribution strategy  
+- inbound leads  
+
+--------------------------------------------------
+
+🔹 PROCESS
+
+Add semantic keywords:
+
+- content planning  
+- content creation  
+- growth strategy  
+
+--------------------------------------------------
+
+🔹 CASE STUDIES
+
+Add keyword context:
+
+- content marketing results  
+- inbound growth  
+- brand authority  
+
+--------------------------------------------------
+
+🔹 AUDIT
+
+Rename internally for SEO:
+
+“Content Growth Diagnosis”
+
+--------------------------------------------------
+
+🔹 META TITLE
+
+Content Marketing Agency | Personal Branding & Content Strategy
+
+--------------------------------------------------
+
+🔹 META DESCRIPTION
+
+Grow your business with a content marketing agency that combines content strategy, video marketing, and distribution systems to generate real inbound demand.
+
+--------------------------------------------------
+
+🧠 TONE
+
+- premium  
+- sharp  
+- strategic  
+- not generic  
+- not keyword-heavy  
+
+--------------------------------------------------
+
+🎯 FINAL OUTPUT
+
+The website must feel:
+
+👉 high-end  
+👉 differentiated  
+👉 SEO optimized  
+👉 conversion-focused  
+
+NOT:
+
+- generic agency  
+- keyword stuffed  
+- confusing  
+
+--------------------------------------------------

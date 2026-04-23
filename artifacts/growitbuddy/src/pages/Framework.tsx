@@ -8,7 +8,7 @@ const STEPS = [
     num: "01",
     title: "Positioning",
     headline: "Know exactly what you stand for.",
-    desc: "We audit your space, map your competitors, and identify the specific category angle only you can own. This becomes your authority compass - every piece of content flows from it.",
+    desc: "We audit your space, map your competitors, and identify the specific category angle only you can own. This is the foundation of your personal branding strategy - every piece of content flows from it.",
     details: [
       "Competitor landscape audit",
       "Category design & naming",
@@ -21,8 +21,8 @@ const STEPS = [
   {
     num: "02",
     title: "Content Engine",
-    headline: "High-signal content. At scale.",
-    desc: "We build a repeatable content production system that extracts your expertise and packages it into formats that educate, persuade, and convert - without consuming your time.",
+    headline: "High-signal content strategy. At scale.",
+    desc: "We build a repeatable content system that extracts your expertise and packages it into formats that educate, persuade, and convert - without consuming your time.",
     details: [
       "Pillar content strategy",
       "Content calendar & themes",
@@ -35,8 +35,8 @@ const STEPS = [
   {
     num: "03",
     title: "Distribution Loop",
-    headline: "Reach the Right Audience - Consistently",
-    desc: "Make sure your content doesn't just get posted - it gets seen by the people who actually matter.",
+    headline: "Content Distribution Strategy That Actually Works",
+    desc: "Make sure your content doesn't just get posted - it gets seen by the people who actually matter. A structured content distribution strategy is what separates noise from authority.",
     details: [
       "LinkedIn publishing system",
       "Email list growth strategy",
@@ -50,7 +50,7 @@ const STEPS = [
     num: "04",
     title: "Authority Compounding",
     headline: "The flywheel that never stops.",
-    desc: "When positioning, content, and distribution work together, authority compounds automatically. Inbound opportunities increase, deal close rates improve, and pricing power grows.",
+    desc: "When your personal branding strategy, content system, and distribution work together, authority compounds automatically. Inbound leads increase, deal close rates improve, and pricing power grows.",
     details: [
       "Monthly authority score tracking",
       "Inbound opportunity capture",
@@ -66,8 +66,8 @@ export default function Framework() {
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title="The GrowitBuddy Framework - 4-Step Authority System"
-        description="A battle-tested 4-step system for engineering category dominance that compounds over time: Positioning, Content Engine, Distribution Loop, Authority Compounding."
+        title="The Content Marketing Framework | 4-Step Authority System | GrowitBuddy"
+        description="GrowitBuddy's battle-tested content marketing framework: Personal Branding Strategy, Content System, Distribution Strategy, and Authority Compounding - built to generate inbound leads."
       />
 
       {/* Hero */}
@@ -88,7 +88,7 @@ export default function Framework() {
             transition={{ delay: 0.1 }}
             style={{ fontSize: 18, color: "rgba(11,11,11,0.5)", lineHeight: "1.75", maxWidth: "52ch" }}
           >
-            A battle-tested 4-step system for engineering category dominance that compounds over time. No hacks. No shortcuts. Just infrastructure.
+            A battle-tested content marketing framework for engineering category dominance that compounds over time. No hacks. No shortcuts. Just infrastructure built to generate inbound leads.
           </motion.p>
         </div>
       </section>

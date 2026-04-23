@@ -15,47 +15,47 @@ const STATS = [
 
 const PROBLEMS = [
   {
-    title: "You're creating content. But not building authority.",
-    desc: "Most content gets a few likes, then disappears. Without clear positioning and direction, your content doesn't build the kind of trust that turns followers into clients.",
+    title: "You're creating content. But it's not part of a real content strategy.",
+    desc: "Most content gets a few likes, then disappears. Without a clear content strategy and positioning, your output doesn't build the kind of trust that turns followers into paying clients.",
   },
   {
-    title: "You're getting attention - but not the right kind.",
-    desc: "Reach without relevance leads nowhere. If your content isn't reaching decision-makers and the right buyers, it's not converting into real opportunities.",
+    title: "You're getting attention - but not reaching the right audience.",
+    desc: "Reach without relevance leads nowhere. Without precise audience targeting, your content misses the decision-makers and buyers who actually matter to your business.",
   },
   {
     title: "You have no system - just constant effort.",
-    desc: "Showing up consistently is exhausting when every post is a new decision. Without a content system, growth stays unpredictable no matter how much effort you put in.",
+    desc: "Showing up consistently is exhausting when every post is a new decision. Without a structured content system, growth stays unpredictable no matter how much effort you put in.",
   },
 ];
 
 const SERVICES = [
   {
     num: "01",
-    title: "Authority Strategy",
-    desc: "Define how you are seen and what you're known for - before you create a single piece of content.",
+    title: "Personal Branding Strategy",
+    desc: "Define exactly how you are positioned and what you're known for - the foundation of your entire content marketing approach.",
   },
   {
     num: "02",
-    title: "Content System",
-    desc: "Build a repeatable process that produces high-quality content consistently, without depending on your time every single week.",
+    title: "Content Strategy Services",
+    desc: "Build a repeatable content system that produces high-quality output consistently, without depending on your time every single week.",
   },
   {
     num: "03",
-    title: "Video Editing",
-    desc: "High-retention editing for short and long-form video - built to capture attention and keep people watching through to the end.",
+    title: "Video Marketing",
+    desc: "High-retention video marketing for short and long-form - built to capture attention, perform on the algorithm, and keep people watching.",
   },
   {
     num: "04",
-    title: "Distribution",
-    desc: "Structured distribution so your content reaches the right audience - not just the people who already follow you.",
+    title: "Content Distribution Strategy",
+    desc: "Structured content distribution so your message reaches the right audience - not just the people who already follow you.",
   },
 ];
 
 const FRAMEWORK_STEPS = [
-  { step: "01", title: "Positioning", desc: "Clarify your expertise and define the exact audience you want to attract. This is the foundation everything else is built on." },
+  { step: "01", title: "Positioning", desc: "Clarify your expertise and define the exact audience you want to attract. Your personal branding strategy starts here - everything else is built on this foundation." },
   { step: "02", title: "Content Engine", desc: "Build a repeatable content system that produces high-quality output every week - without starting from scratch each time." },
-  { step: "03", title: "Distribution Loop", desc: "Consistently get your content in front of the right people - through the platforms and channels where your audience actually spends time." },
-  { step: "04", title: "Authority Compounding", desc: "Over time, consistent content builds recognition, trust, and inbound demand. Opportunities start coming to you." },
+  { step: "03", title: "Distribution Loop", desc: "Execute a consistent content distribution strategy - getting your content in front of the right people on the channels they actually use." },
+  { step: "04", title: "Authority Compounding", desc: "Over time, a structured content system generates recognition, trust, and inbound leads. The right opportunities start coming to you." },
 ];
 
 const PROOF = [
@@ -66,10 +66,10 @@ const PROOF = [
 ];
 
 const PROCESS_STEPS = [
-  { num: "01", title: "Understand", desc: "We study your market, your audience, and your current positioning to identify exactly where the opportunity is." },
-  { num: "02", title: "Strategize", desc: "We design your content strategy - what to say, where to say it, and how to say it in a way that builds trust and drives real demand." },
-  { num: "03", title: "Execute", desc: "Our team produces and distributes your content every week - so you can focus entirely on running your business." },
-  { num: "04", title: "Scale", desc: "We track performance, refine what works, and expand your reach as your authority builds over time." },
+  { num: "01", title: "Understand", desc: "We study your market, your audience, and your current positioning to identify exactly where your content marketing opportunity is." },
+  { num: "02", title: "Strategize", desc: "We design your content planning roadmap - what to say, where to say it, and how to say it in a way that builds trust and drives real inbound demand." },
+  { num: "03", title: "Execute", desc: "Our team handles content creation and distribution every week - so you can focus entirely on running your business." },
+  { num: "04", title: "Scale", desc: "We track performance, refine your growth strategy, and expand your content reach as your authority compounds over time." },
 ];
 
 const TESTIMONIALS = [
@@ -250,8 +250,8 @@ export default function Home() {
   return (
     <div style={{ background: BG, color: TEXT, fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title="GrowitBuddy - Build Authority That Compounds"
-        description="GrowitBuddy is a content & authority studio for founders and creators. We build the systems that turn expertise into market leadership."
+        title="Content Marketing Agency | Personal Branding & Content Strategy | GrowitBuddy"
+        description="Grow your business with a content marketing agency that combines content strategy, video marketing, and distribution systems to generate real inbound demand."
       />
 
       {/* ══ 1. HERO ══ */}
@@ -349,7 +349,7 @@ export default function Home() {
               fontWeight: 400,
             }}
           >
-            Turn your expertise into authority - and that authority into consistent inbound demand. We help you create and distribute content so the right people discover you, trust you, and come to you.
+            We are a content marketing agency that helps founders, creators, and businesses turn expertise into authority - and that authority into consistent inbound demand. We combine content strategy, video marketing, and distribution systems to ensure your content reaches the right people.
           </motion.p>
 
           <motion.div
@@ -589,9 +589,9 @@ export default function Home() {
       <section style={{ padding: "100px 24px", background: BG }}>
         <div className="max-w-[1100px] mx-auto">
           <FadeUp>
-            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Proof of Work</p>
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Content Marketing Results</p>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(30px, 5vw, 54px)", letterSpacing: "-0.035em", lineHeight: "1.08", color: TEXT, maxWidth: "16ch", marginBottom: 60 }}>
-              Results that speak for themselves.
+              Real results. Real inbound growth.
             </h2>
           </FadeUp>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 12 }}>
@@ -734,12 +734,12 @@ export default function Home() {
         <div className="max-w-[1100px] mx-auto">
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 360px), 1fr))", gap: 60, alignItems: "center" }}>
             <FadeUp>
-              <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 16 }}>Authority Audit</p>
+              <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 16 }}>Content Growth Diagnosis</p>
               <h2 style={{ fontWeight: 800, fontSize: "clamp(28px, 4vw, 52px)", letterSpacing: "-0.035em", lineHeight: "1.08", color: "#fff", marginBottom: 20 }}>
-                Find out what's holding your authority back.
+                Find out exactly what's limiting your content growth.
               </h2>
               <p style={{ fontSize: 16, color: "rgba(255,255,255,0.45)", lineHeight: "1.75", marginBottom: 32 }}>
-                Answer 6 questions and get a specific, personalized breakdown of exactly what's limiting your content's impact - free, in under 2 minutes.
+                Answer 6 questions and get a personalized breakdown of exactly what's holding your content marketing back - free, in under 2 minutes.
               </p>
               <Link href="/authority-audit">
                 <span className="gb-btn" style={{ fontSize: 14 }}>

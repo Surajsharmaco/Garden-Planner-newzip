@@ -6,32 +6,32 @@ import SEOMeta from "@/components/SEOMeta";
 const services = [
   {
     num: "01",
-    title: "Authority Strategy",
-    headline: "Define how you are seen - before you create a single piece of content.",
-    description: "We design your positioning, narrative, and content direction so every piece you put out reinforces exactly what you want to be known for.",
+    title: "Personal Branding Strategy",
+    headline: "Define exactly how you are positioned - before you create a single piece of content.",
+    description: "We design your personal branding strategy, narrative, and content direction so every piece you put out reinforces exactly what you want to be known for.",
     features: ["Positioning & Narrative Design", "Target Audience Research", "90-Day Content Roadmap", "Competitive Landscape Analysis", "Content Themes & Pillars"],
     dark: false,
   },
   {
     num: "02",
-    title: "Content Production",
-    headline: "A system that produces great content - consistently.",
+    title: "Content Strategy Services",
+    headline: "A content strategy that produces great content - consistently.",
     description: "We build a repeatable content engine around your expertise - ghostwriting, visual assets, newsletters, and platform-native formats that produce results week after week.",
     features: ["Ghostwriting", "Visual Asset Creation", "Newsletter Systems", "Platform-Native Formatting", "Content Calendar"],
     dark: true,
   },
   {
     num: "03",
-    title: "Video Editing",
-    headline: "Video that captures attention and keeps it.",
-    description: "High-retention editing for short and long-form content - structured to perform on the algorithm and built to make your expertise look as good as it actually is.",
+    title: "Video Marketing",
+    headline: "Video marketing that captures attention and keeps it.",
+    description: "High-retention editing for short and long-form video - structured to perform on the algorithm and built to make your expertise look as sharp as it actually is.",
     features: ["Short-Form Clips", "Long-Form Editing", "Thumbnail Design", "Retention Optimization", "Caption Systems"],
     dark: false,
   },
   {
     num: "04",
-    title: "Distribution Strategy",
-    headline: "Reach the Right Audience - Consistently",
+    title: "Content Distribution Strategy",
+    headline: "A content distribution strategy that reaches the right people - every time.",
     description: "Make sure your content doesn't just get posted - it gets seen by the people who actually matter. Structured distribution across the platforms and channels where your audience lives.",
     features: ["Platform Growth Strategy", "Cross-Platform Reach", "Engagement Optimization", "Community Building", "Paid Amplification"],
     dark: true,
@@ -39,8 +39,8 @@ const services = [
   {
     num: "05",
     title: "Personal Brand Growth",
-    headline: "Become the name that defines your category.",
-    description: "Profile optimization, media placement, network expansion, and speaking opportunities - a full-stack approach to owning your space in the market.",
+    headline: "Become the most recognized name in your category.",
+    description: "Profile optimization, media placement, network expansion, and speaking opportunities - a full-stack personal branding approach to owning your space in the market.",
     features: ["Profile Optimization", "Network Expansion", "Monetization Strategy", "PR & Media Placements", "Speaking Outreach"],
     dark: false,
   },
@@ -50,8 +50,8 @@ export default function Services() {
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title="Services - GrowitBuddy"
-        description="End-to-end authority systems for founders and creators. Authority Strategy, Content Production, Video Editing, Distribution, and Personal Brand Growth."
+        title="Content Marketing Agency Services | Personal Branding & Content Strategy | GrowitBuddy"
+        description="Grow your business with a content marketing agency offering personal branding strategy, content strategy services, video marketing, and content distribution systems."
       />
 
       {/* Hero */}
@@ -64,7 +64,7 @@ export default function Services() {
             transition={{ duration: 0.7 }}
             style={{ fontWeight: 800, fontSize: "clamp(44px, 6.5vw, 80px)", letterSpacing: "-0.04em", lineHeight: "1.02", color: "#0B0B0B", marginBottom: 32 }}
           >
-            The systems behind authority and inbound demand.
+            The content marketing systems behind authority and inbound demand.
           </motion.h1>
           <div>
             <motion.p
@@ -73,7 +73,7 @@ export default function Services() {
               transition={{ delay: 0.1 }}
               style={{ fontSize: 17, lineHeight: "1.75", color: "rgba(11,11,11,0.5)", maxWidth: "44ch" }}
             >
-              We don't just create content. We build the infrastructure that turns your expertise into recognition, trust, and consistent opportunities.
+              We don't just create content. We build the content marketing infrastructure that turns your expertise into recognition, trust, and consistent inbound opportunities.
             </motion.p>
           </div>
         </div>
