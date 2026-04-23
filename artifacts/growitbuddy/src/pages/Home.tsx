@@ -111,7 +111,7 @@ function GeometricMotion() {
     >
       {/* Bottom-right rotating arcs */}
       <motion.svg
-        style={{ position: "absolute", bottom: "-180px", right: "-180px", width: 900, height: 900, opacity: 0.42, filter: "blur(10px)" }}
+        style={{ position: "absolute", bottom: "-180px", right: "-180px", width: 900, height: 900, opacity: 0.42, filter: "blur(20px)" }}
         viewBox="0 0 900 900"
         animate={{ rotate: 360 }}
         transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
@@ -124,7 +124,7 @@ function GeometricMotion() {
 
       {/* Top-left counter-rotating arcs */}
       <motion.svg
-        style={{ position: "absolute", top: "-120px", left: "-120px", width: 600, height: 600, opacity: 0.34, filter: "blur(10px)" }}
+        style={{ position: "absolute", top: "-120px", left: "-120px", width: 600, height: 600, opacity: 0.34, filter: "blur(20px)" }}
         viewBox="0 0 600 600"
         animate={{ rotate: -360 }}
         transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
@@ -143,7 +143,7 @@ function GeometricMotion() {
             left: f.x,
             top: `${f.baseY}%`,
             opacity: f.opacity * 2.2,
-            filter: "blur(6px)",
+            filter: "blur(12px)",
           }}
           animate={{ y: [0, f.amp, 0] }}
           transition={{ duration: f.dur, repeat: Infinity, ease: "easeInOut", delay: f.delay }}
@@ -157,7 +157,7 @@ function GeometricMotion() {
 
       {/* Drifting diagonal lines */}
       <motion.svg
-        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.22, filter: "blur(8px)" }}
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.22, filter: "blur(16px)" }}
         viewBox="0 0 1440 900"
         preserveAspectRatio="none"
       >
