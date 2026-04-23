@@ -349,7 +349,7 @@ export default function Home() {
               fontWeight: 400,
             }}
           >
-            A content marketing agency combining content strategy, video marketing, and distribution systems to turn your expertise into authority - and authority into consistent inbound demand.
+            Turn your expertise into authority - and that authority into consistent inbound demand. We create and distribute content so the right people find you, trust you, and come to you.
           </motion.p>
 
           <motion.div
