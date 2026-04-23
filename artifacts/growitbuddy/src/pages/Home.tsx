@@ -93,75 +93,32 @@ const TESTIMONIALS = [
   },
 ];
 
-function AmbientOrbs() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let animId: number;
-    let t = 0;
-
-    const ORBS = [
-      { ax: 0.38, ay: 0.22, rx: 0.28, ry: 0.18, r: 520, alpha: 0.13, speed: 0.00032, phase: 0 },
-      { ax: 0.75, ay: 0.65, rx: 0.22, ry: 0.20, r: 460, alpha: 0.10, speed: 0.00028, phase: 1.8 },
-      { ax: 0.15, ay: 0.75, rx: 0.18, ry: 0.15, r: 400, alpha: 0.09, speed: 0.00038, phase: 3.4 },
-      { ax: 0.88, ay: 0.20, rx: 0.14, ry: 0.20, r: 380, alpha: 0.08, speed: 0.00042, phase: 5.1 },
-      { ax: 0.52, ay: 0.90, rx: 0.20, ry: 0.12, r: 440, alpha: 0.07, speed: 0.00025, phase: 2.6 },
-    ];
-
-    const resize = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    const draw = () => {
-      const { width, height } = canvas;
-      ctx.clearRect(0, 0, width, height);
-
-      for (const orb of ORBS) {
-        const x = (orb.ax + Math.sin(t * orb.speed * 1000 + orb.phase) * orb.rx) * width;
-        const y = (orb.ay + Math.cos(t * orb.speed * 1000 * 0.7 + orb.phase + 1) * orb.ry) * height;
-
-        const grad = ctx.createRadialGradient(x, y, 0, x, y, orb.r);
-        grad.addColorStop(0, `rgba(11,11,11,${orb.alpha})`);
-        grad.addColorStop(0.5, `rgba(11,11,11,${(orb.alpha * 0.3).toFixed(3)})`);
-        grad.addColorStop(1, `rgba(11,11,11,0)`);
-
-        ctx.beginPath();
-        ctx.arc(x, y, orb.r, 0, Math.PI * 2);
-        ctx.fillStyle = grad;
-        ctx.fill();
-      }
-
-      t += 16;
-      animId = requestAnimationFrame(draw);
-    };
-
-    draw();
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener("resize", resize);
-    };
-  }, []);
-
+function GrainOverlay() {
   return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        pointerEvents: "none",
-        zIndex: 0,
-      }}
-    />
+    <svg
+      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0, opacity: 0.055 }}
+      aria-hidden="true"
+    >
+      <defs>
+        <filter id="grain-filter" x="0" y="0" width="100%" height="100%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.72"
+            numOctaves="4"
+            stitchTiles="stitch"
+          >
+            <animate
+              attributeName="seed"
+              values="0;20;40;60;80;100;0"
+              dur="12s"
+              repeatCount="indefinite"
+            />
+          </feTurbulence>
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+      </defs>
+      <rect width="100%" height="100%" filter="url(#grain-filter)" />
+    </svg>
   );
 }
 
@@ -237,54 +194,20 @@ export default function Home() {
           paddingBottom: 60,
         }}
       >
-        {/* Ambient light pool - top left */}
-        <motion.div
-          animate={{ scale: [1, 1.12, 1], opacity: [0.55, 0.75, 0.55] }}
-          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-          style={{
-            position: "absolute",
-            top: "-10%",
-            left: "-8%",
-            width: 580,
-            height: 580,
-            borderRadius: "50%",
-            background: "radial-gradient(ellipse at center, rgba(195,195,192,0.65) 0%, transparent 68%)",
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        />
-
-        {/* Ambient light pool - bottom right */}
-        <motion.div
-          animate={{ scale: [1, 1.1, 1], opacity: [0.45, 0.65, 0.45] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 3 }}
-          style={{
-            position: "absolute",
-            bottom: "-15%",
-            right: "-10%",
-            width: 640,
-            height: 640,
-            borderRadius: "50%",
-            background: "radial-gradient(ellipse at center, rgba(190,190,187,0.6) 0%, transparent 68%)",
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        />
+        {/* Grain texture */}
+        <GrainOverlay />
 
         {/* Mouse-tracking spotlight */}
         <div
           style={{
             position: "absolute",
             inset: 0,
-            background: `radial-gradient(circle 480px at ${mouse.x}% ${mouse.y}%, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.28) 40%, transparent 70%)`,
-            transition: "background 0.12s ease-out",
+            background: `radial-gradient(circle 600px at ${mouse.x}% ${mouse.y}%, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.15) 50%, transparent 75%)`,
+            transition: "background 0.15s ease-out",
             pointerEvents: "none",
-            zIndex: 0,
+            zIndex: 1,
           }}
         />
-
-        {/* Ambient orbs */}
-        <AmbientOrbs />
 
         <div style={{ position: "relative", zIndex: 1, maxWidth: 900, padding: "0 24px" }}>
           <motion.div
