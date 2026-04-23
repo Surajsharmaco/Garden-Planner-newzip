@@ -1,0 +1,111 @@
+Act as a senior motion designer and front-end developer.
+
+Create a minimal, premium, and highly subtle animated background for a website hero section.
+
+IMPORTANT:
+This is for a high-end agency website. The animation must feel clean, intelligent, and non-distracting.
+
+--------------------------------------------------
+
+🎯 GOAL
+
+Add depth and visual richness to the background WITHOUT distracting from the main text.
+
+The motion should feel:
+
+- calm
+- premium
+- controlled
+- almost invisible but noticeable
+
+--------------------------------------------------
+
+🎨 STYLE
+
+- Light/off-white background (#F7F7F5 or similar)
+- Use very soft gray tones only (no strong colors)
+- Maintain minimal contrast
+
+--------------------------------------------------
+
+🧩 ELEMENTS TO INCLUDE
+
+Use a combination of:
+
+1. Soft halftone dot patterns  
+   - very low opacity  
+   - slightly blurred  
+   - placed in corners or edges  
+
+2. Blurred abstract shapes  
+   - organic shapes (not sharp)  
+   - very soft edges  
+   - extremely low visibility  
+
+3. Minimal fine lines or curves  
+   - thin, subtle  
+   - geometric or flow-based  
+
+4. Floating micro particles (optional)  
+   - very slow movement  
+   - barely noticeable  
+
+--------------------------------------------------
+
+🎬 ANIMATION BEHAVIOR
+
+- ultra slow motion (almost static feel)
+- smooth easing (no sharp transitions)
+- subtle parallax effect on scroll
+- gentle floating / drifting motion
+
+Examples:
+- halftone pattern slowly shifting position
+- blurred shapes moving slightly over time
+- particles drifting slowly
+
+--------------------------------------------------
+
+⚠️ STRICT RULES
+
+- NO fast animation  
+- NO bright colors  
+- NO heavy gradients  
+- NO distracting motion  
+- NO sharp edges  
+- NO visual noise  
+
+Everything should feel:
+
+👉 calm  
+👉 controlled  
+👉 premium  
+
+--------------------------------------------------
+
+📐 PLACEMENT
+
+- keep center area clean (for text)
+- motion elements mostly on edges / corners
+- ensure readability is NOT affected
+
+--------------------------------------------------
+
+💡 PERFORMANCE
+
+- lightweight animation
+- optimized for fast loading
+- responsive across devices
+
+--------------------------------------------------
+
+🎯 FINAL FEEL
+
+The user should not consciously notice the animation.
+
+But subconsciously feel:
+
+👉 “this looks premium”
+👉 “this feels alive”
+
+--------------------------------------------------

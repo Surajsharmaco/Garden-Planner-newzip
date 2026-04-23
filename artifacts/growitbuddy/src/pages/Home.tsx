@@ -93,88 +93,167 @@ const TESTIMONIALS = [
   },
 ];
 
-const FLOATERS = [
-  { x: "8%",  baseY: 28, amp: 32, dur: 4.2, delay: 0,    size: 6,  opacity: 0.18 },
-  { x: "22%", baseY: 55, amp: 24, dur: 5.1, delay: 0.8,  size: 4,  opacity: 0.13 },
-  { x: "38%", baseY: 18, amp: 40, dur: 3.8, delay: 1.6,  size: 5,  opacity: 0.15 },
-  { x: "56%", baseY: 70, amp: 28, dur: 6.0, delay: 0.4,  size: 4,  opacity: 0.12 },
-  { x: "70%", baseY: 38, amp: 36, dur: 4.6, delay: 2.1,  size: 6,  opacity: 0.16 },
-  { x: "84%", baseY: 60, amp: 22, dur: 5.4, delay: 1.2,  size: 4,  opacity: 0.13 },
-  { x: "93%", baseY: 22, amp: 30, dur: 4.0, delay: 3.0,  size: 5,  opacity: 0.14 },
-];
+function PremiumBackground() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const particlesRef = useRef<Array<{ cx: number; cy: number; r: number; phase: number }>>([]);
 
-function GeometricMotion() {
+  useEffect(() => {
+    particlesRef.current = Array.from({ length: 22 }, () => ({
+      cx: Math.random(),
+      cy: Math.random(),
+      r: 0.7 + Math.random() * 1.0,
+      phase: Math.random() * Math.PI * 2,
+    }));
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animId: number;
+    let t = 0;
+    const CORNER_GAP = 20;
+    const CORNER_REACH = 260;
+    const DOT_R = 1.1;
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const draw = () => {
+      const { width, height } = canvas;
+      ctx.clearRect(0, 0, width, height);
+
+      const cols = Math.ceil(width / CORNER_GAP) + 1;
+      const rows = Math.ceil(height / CORNER_GAP) + 1;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const x = c * CORNER_GAP;
+          const y = r * CORNER_GAP;
+          const dTL = Math.sqrt(x * x + y * y);
+          const dTR = Math.sqrt((width - x) ** 2 + y * y);
+          const dBL = Math.sqrt(x * x + (height - y) ** 2);
+          const dBR = Math.sqrt((width - x) ** 2 + (height - y) ** 2);
+          const minD = Math.min(dTL, dTR, dBL, dBR);
+          if (minD > CORNER_REACH) continue;
+          const fade = 1 - minD / CORNER_REACH;
+          const pulse = 1 + Math.sin(t * 0.0015 + c * 0.25 + r * 0.18) * 0.12;
+          const alpha = Math.min(fade * 0.13 * pulse, 0.16);
+          ctx.beginPath();
+          ctx.arc(x, y, DOT_R, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(11,11,11,${alpha.toFixed(3)})`;
+          ctx.fill();
+        }
+      }
+
+      for (const p of particlesRef.current) {
+        p.cx += Math.sin(t * 0.00022 + p.phase) * 0.00018;
+        p.cy += Math.cos(t * 0.00018 + p.phase + 1.2) * 0.00014;
+        if (p.cx < 0) p.cx = 1;
+        if (p.cx > 1) p.cx = 0;
+        if (p.cy < 0) p.cy = 1;
+        if (p.cy > 1) p.cy = 0;
+        ctx.beginPath();
+        ctx.arc(p.cx * width, p.cy * height, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(11,11,11,0.07)";
+        ctx.fill();
+      }
+
+      t += 1;
+      animId = requestAnimationFrame(draw);
+    };
+
+    draw();
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
   return (
-    <div
-      aria-hidden="true"
-      style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}
-    >
-      {/* Bottom-right rotating arcs */}
-      <motion.svg
-        style={{ position: "absolute", bottom: "-180px", right: "-180px", width: 900, height: 900, opacity: 0.42, filter: "blur(20px)" }}
-        viewBox="0 0 900 900"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
-      >
-        <circle cx="450" cy="450" r="200" fill="none" stroke="#0B0B0B" strokeWidth="4" strokeDasharray="420 860" />
-        <circle cx="450" cy="450" r="290" fill="none" stroke="#0B0B0B" strokeWidth="3" strokeDasharray="560 1260" />
-        <circle cx="450" cy="450" r="380" fill="none" stroke="#0B0B0B" strokeWidth="2.5" strokeDasharray="700 1700" />
-        <circle cx="450" cy="450" r="440" fill="none" stroke="#0B0B0B" strokeWidth="2" strokeDasharray="900 1860" />
-      </motion.svg>
+    <>
+      {/* Canvas: corner halftone + micro particles */}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "absolute", inset: 0, width: "100%", height: "100%",
+          pointerEvents: "none", zIndex: 0, filter: "blur(0.6px)",
+        }}
+      />
 
-      {/* Top-left counter-rotating arcs */}
-      <motion.svg
-        style={{ position: "absolute", top: "-120px", left: "-120px", width: 600, height: 600, opacity: 0.34, filter: "blur(20px)" }}
-        viewBox="0 0 600 600"
-        animate={{ rotate: -360 }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-      >
-        <circle cx="300" cy="300" r="160" fill="none" stroke="#0B0B0B" strokeWidth="3.5" strokeDasharray="300 700" />
-        <circle cx="300" cy="300" r="240" fill="none" stroke="#0B0B0B" strokeWidth="2.5" strokeDasharray="450 1060" />
-        <circle cx="300" cy="300" r="290" fill="none" stroke="#0B0B0B" strokeWidth="2" strokeDasharray="550 1270" />
-      </motion.svg>
-
-      {/* Floating crosshair markers */}
-      {FLOATERS.map((f, i) => (
+      {/* Organic blurred shapes — edges only */}
+      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
         <motion.div
-          key={i}
+          animate={{ x: [0, 26, 0], y: [0, 16, 0] }}
+          transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
           style={{
-            position: "absolute",
-            left: f.x,
-            top: `${f.baseY}%`,
-            opacity: f.opacity * 2.2,
-            filter: "blur(12px)",
+            position: "absolute", top: "-18%", left: "-12%",
+            width: 520, height: 480,
+            background: "radial-gradient(ellipse at 42% 44%, rgba(11,11,11,0.06) 0%, transparent 65%)",
+            filter: "blur(48px)",
+            borderRadius: "63% 37% 54% 46% / 55% 48% 52% 45%",
           }}
-          animate={{ y: [0, f.amp, 0] }}
-          transition={{ duration: f.dur, repeat: Infinity, ease: "easeInOut", delay: f.delay }}
-        >
-          <svg width={f.size * 6} height={f.size * 6} viewBox="0 0 24 24">
-            <line x1="12" y1="0" x2="12" y2="24" stroke="#0B0B0B" strokeWidth="2.5" />
-            <line x1="0" y1="12" x2="24" y2="12" stroke="#0B0B0B" strokeWidth="2.5" />
-          </svg>
-        </motion.div>
-      ))}
+        />
+        <motion.div
+          animate={{ x: [0, -20, 0], y: [0, 28, 0] }}
+          transition={{ duration: 38, repeat: Infinity, ease: "easeInOut", delay: 7 }}
+          style={{
+            position: "absolute", bottom: "-22%", right: "-14%",
+            width: 580, height: 540,
+            background: "radial-gradient(ellipse at 54% 50%, rgba(11,11,11,0.05) 0%, transparent 65%)",
+            filter: "blur(55px)",
+            borderRadius: "42% 58% 38% 62% / 60% 42% 58% 40%",
+          }}
+        />
+        <motion.div
+          animate={{ x: [0, 16, 0], y: [0, -20, 0] }}
+          transition={{ duration: 32, repeat: Infinity, ease: "easeInOut", delay: 14 }}
+          style={{
+            position: "absolute", top: "28%", right: "-10%",
+            width: 400, height: 380,
+            background: "radial-gradient(ellipse at 48% 48%, rgba(11,11,11,0.045) 0%, transparent 65%)",
+            filter: "blur(42px)",
+            borderRadius: "50%",
+          }}
+        />
+        <motion.div
+          animate={{ x: [0, -14, 0], y: [0, 12, 0] }}
+          transition={{ duration: 26, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+          style={{
+            position: "absolute", top: "15%", left: "-8%",
+            width: 360, height: 340,
+            background: "radial-gradient(ellipse at 48% 48%, rgba(11,11,11,0.04) 0%, transparent 65%)",
+            filter: "blur(38px)",
+            borderRadius: "50%",
+          }}
+        />
+      </div>
 
-      {/* Drifting diagonal lines */}
-      <motion.svg
-        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.22, filter: "blur(16px)" }}
-        viewBox="0 0 1440 900"
+      {/* Fine flowing curves — top and bottom, not center */}
+      <svg
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0, overflow: "visible" }}
         preserveAspectRatio="none"
+        viewBox="0 0 1440 900"
+        aria-hidden="true"
       >
-        <motion.line
-          x1="0" y1="300" x2="1440" y2="600"
-          stroke="#0B0B0B" strokeWidth="3"
-          animate={{ y1: [300, 400, 300], y2: [600, 700, 600] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.line
-          x1="0" y1="550" x2="1440" y2="350"
-          stroke="#0B0B0B" strokeWidth="2.5"
-          animate={{ y1: [550, 480, 550], y2: [350, 420, 350] }}
-          transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        />
-      </motion.svg>
-    </div>
+        <motion.g animate={{ y: [0, 12, 0] }} transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}>
+          <path d="M-100 660 Q 360 540 720 630 Q 1080 720 1540 590" fill="none" stroke="#0B0B0B" strokeWidth="0.55" opacity="0.13" />
+        </motion.g>
+        <motion.g animate={{ y: [0, -15, 0] }} transition={{ duration: 28, repeat: Infinity, ease: "easeInOut", delay: 6 }}>
+          <path d="M-100 780 Q 400 700 740 768 Q 1080 836 1540 716" fill="none" stroke="#0B0B0B" strokeWidth="0.45" opacity="0.1" />
+        </motion.g>
+        <motion.g animate={{ y: [0, 9, 0] }} transition={{ duration: 24, repeat: Infinity, ease: "easeInOut", delay: 11 }}>
+          <path d="M-100 185 Q 380 265 720 185 Q 1060 105 1540 225" fill="none" stroke="#0B0B0B" strokeWidth="0.4" opacity="0.09" />
+        </motion.g>
+        <motion.g animate={{ y: [0, -10, 0] }} transition={{ duration: 32, repeat: Infinity, ease: "easeInOut", delay: 3 }}>
+          <path d="M-100 860 Q 440 800 760 850 Q 1080 900 1540 820" fill="none" stroke="#0B0B0B" strokeWidth="0.35" opacity="0.08" />
+        </motion.g>
+      </svg>
+    </>
   );
 }
 
@@ -282,8 +361,8 @@ export default function Home() {
         {/* Grain texture */}
         <GrainOverlay />
 
-        {/* Geometric motion */}
-        <GeometricMotion />
+        {/* Premium background */}
+        <PremiumBackground />
 
         {/* Mouse-tracking spotlight */}
         <div
