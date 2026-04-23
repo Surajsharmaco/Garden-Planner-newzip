@@ -93,7 +93,7 @@ const TESTIMONIALS = [
   },
 ];
 
-function DotWaveCanvas() {
+function AmbientOrbs() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -105,8 +105,13 @@ function DotWaveCanvas() {
     let animId: number;
     let t = 0;
 
-    const GAP = 28;
-    const DOT_R = 2.2;
+    const ORBS = [
+      { ax: 0.38, ay: 0.22, rx: 0.28, ry: 0.18, r: 520, alpha: 0.13, speed: 0.00032, phase: 0 },
+      { ax: 0.75, ay: 0.65, rx: 0.22, ry: 0.20, r: 460, alpha: 0.10, speed: 0.00028, phase: 1.8 },
+      { ax: 0.15, ay: 0.75, rx: 0.18, ry: 0.15, r: 400, alpha: 0.09, speed: 0.00038, phase: 3.4 },
+      { ax: 0.88, ay: 0.20, rx: 0.14, ry: 0.20, r: 380, alpha: 0.08, speed: 0.00042, phase: 5.1 },
+      { ax: 0.52, ay: 0.90, rx: 0.20, ry: 0.12, r: 440, alpha: 0.07, speed: 0.00025, phase: 2.6 },
+    ];
 
     const resize = () => {
       canvas.width = canvas.offsetWidth;
@@ -119,31 +124,22 @@ function DotWaveCanvas() {
       const { width, height } = canvas;
       ctx.clearRect(0, 0, width, height);
 
-      const cols = Math.ceil(width / GAP) + 1;
-      const rows = Math.ceil(height / GAP) + 1;
+      for (const orb of ORBS) {
+        const x = (orb.ax + Math.sin(t * orb.speed * 1000 + orb.phase) * orb.rx) * width;
+        const y = (orb.ay + Math.cos(t * orb.speed * 1000 * 0.7 + orb.phase + 1) * orb.ry) * height;
 
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          const x = c * GAP;
-          const y = r * GAP;
+        const grad = ctx.createRadialGradient(x, y, 0, x, y, orb.r);
+        grad.addColorStop(0, `rgba(11,11,11,${orb.alpha})`);
+        grad.addColorStop(0.5, `rgba(11,11,11,${(orb.alpha * 0.3).toFixed(3)})`);
+        grad.addColorStop(1, `rgba(11,11,11,0)`);
 
-          const wave1 = Math.sin(c * 0.28 + t * 1.4 + r * 0.12) * 0.5 + 0.5;
-          const wave2 = Math.sin(c * 0.18 - t * 1.1 + r * 0.22 + 1.8) * 0.5 + 0.5;
-          const wave3 = Math.cos(c * 0.14 + r * 0.3 + t * 0.9 + 0.6) * 0.5 + 0.5;
-
-          const combined = (wave1 * 0.5 + wave2 * 0.3 + wave3 * 0.2);
-          const alpha = Math.pow(combined, 2.2) * 0.55;
-
-          if (alpha < 0.018) continue;
-
-          ctx.beginPath();
-          ctx.arc(x, y, DOT_R, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(11,11,11,${alpha.toFixed(3)})`;
-          ctx.fill();
-        }
+        ctx.beginPath();
+        ctx.arc(x, y, orb.r, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
       }
 
-      t += 0.016;
+      t += 16;
       animId = requestAnimationFrame(draw);
     };
 
@@ -164,7 +160,6 @@ function DotWaveCanvas() {
         height: "100%",
         pointerEvents: "none",
         zIndex: 0,
-        filter: "blur(6px)",
       }}
     />
   );
@@ -288,8 +283,8 @@ export default function Home() {
           }}
         />
 
-        {/* Dot wave canvas */}
-        <DotWaveCanvas />
+        {/* Ambient orbs */}
+        <AmbientOrbs />
 
         <div style={{ position: "relative", zIndex: 1, maxWidth: 900, padding: "0 24px" }}>
           <motion.div
