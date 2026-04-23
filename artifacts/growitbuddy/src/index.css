@@ -196,6 +196,43 @@ body {
   background: rgba(11,11,11,0.04);
 }
 
+/* ── Global paragraph text justification ── */
+p {
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Headings: safe word wrap, never justify */
+h1, h2, h3, h4, h5, h6 {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* ── Responsive global improvements ── */
+@media (max-width: 640px) {
+  /* Better section horizontal spacing on small screens */
+  section {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Stack grids to single column on mobile */
+  .grid {
+    gap: 12px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  /* Tablet-level section padding */
+  section {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+
 /* ── Form inputs ── */
 .gb-input {
   background: #FFFFFF;
