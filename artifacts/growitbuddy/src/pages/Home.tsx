@@ -93,6 +93,46 @@ const TESTIMONIALS = [
   },
 ];
 
+function GeometricMotion() {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: "absolute",
+        inset: 0,
+        pointerEvents: "none",
+        zIndex: 0,
+        overflow: "hidden",
+      }}
+    >
+      {/* Bottom-right rotating arcs */}
+      <motion.svg
+        style={{ position: "absolute", bottom: "-180px", right: "-180px", width: 900, height: 900, opacity: 0.18 }}
+        viewBox="0 0 900 900"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+      >
+        <circle cx="450" cy="450" r="200" fill="none" stroke="#0B0B0B" strokeWidth="0.6" strokeDasharray="420 860" />
+        <circle cx="450" cy="450" r="280" fill="none" stroke="#0B0B0B" strokeWidth="0.5" strokeDasharray="560 1200" />
+        <circle cx="450" cy="450" r="370" fill="none" stroke="#0B0B0B" strokeWidth="0.4" strokeDasharray="700 1700" />
+        <circle cx="450" cy="450" r="430" fill="none" stroke="#0B0B0B" strokeWidth="0.35" strokeDasharray="900 1900" />
+      </motion.svg>
+
+      {/* Top-left counter-rotating arcs */}
+      <motion.svg
+        style={{ position: "absolute", top: "-120px", left: "-120px", width: 600, height: 600, opacity: 0.12 }}
+        viewBox="0 0 600 600"
+        animate={{ rotate: -360 }}
+        transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
+      >
+        <circle cx="300" cy="300" r="160" fill="none" stroke="#0B0B0B" strokeWidth="0.5" strokeDasharray="300 700" />
+        <circle cx="300" cy="300" r="240" fill="none" stroke="#0B0B0B" strokeWidth="0.4" strokeDasharray="450 1050" />
+        <circle cx="300" cy="300" r="290" fill="none" stroke="#0B0B0B" strokeWidth="0.35" strokeDasharray="550 1270" />
+      </motion.svg>
+    </div>
+  );
+}
+
 function GrainOverlay() {
   return (
     <svg
@@ -196,6 +236,9 @@ export default function Home() {
       >
         {/* Grain texture */}
         <GrainOverlay />
+
+        {/* Geometric motion */}
+        <GeometricMotion />
 
         {/* Mouse-tracking spotlight */}
         <div
