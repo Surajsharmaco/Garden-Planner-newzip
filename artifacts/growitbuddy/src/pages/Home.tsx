@@ -95,16 +95,8 @@ const TESTIMONIALS = [
 
 function PremiumBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const particlesRef = useRef<Array<{ cx: number; cy: number; r: number; phase: number }>>([]);
 
   useEffect(() => {
-    particlesRef.current = Array.from({ length: 22 }, () => ({
-      cx: Math.random(),
-      cy: Math.random(),
-      r: 0.7 + Math.random() * 1.0,
-      phase: Math.random() * Math.PI * 2,
-    }));
-
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -112,9 +104,8 @@ function PremiumBackground() {
 
     let animId: number;
     let t = 0;
-    const CORNER_GAP = 20;
-    const CORNER_REACH = 260;
-    const DOT_R = 1.1;
+    const GAP = 24;
+    const MAX_R = 5.5;
 
     const resize = () => {
       canvas.width = canvas.offsetWidth;
@@ -127,43 +118,31 @@ function PremiumBackground() {
       const { width, height } = canvas;
       ctx.clearRect(0, 0, width, height);
 
-      const cols = Math.ceil(width / CORNER_GAP) + 1;
-      const rows = Math.ceil(height / CORNER_GAP) + 1;
+      const cols = Math.ceil(width / GAP) + 2;
+      const rows = Math.ceil(height / GAP) + 2;
 
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
-          const x = c * CORNER_GAP;
-          const y = r * CORNER_GAP;
-          const dTL = Math.sqrt(x * x + y * y);
-          const dTR = Math.sqrt((width - x) ** 2 + y * y);
-          const dBL = Math.sqrt(x * x + (height - y) ** 2);
-          const dBR = Math.sqrt((width - x) ** 2 + (height - y) ** 2);
-          const minD = Math.min(dTL, dTR, dBL, dBR);
-          if (minD > CORNER_REACH) continue;
-          const fade = 1 - minD / CORNER_REACH;
-          const pulse = 1 + Math.sin(t * 0.0015 + c * 0.25 + r * 0.18) * 0.12;
-          const alpha = Math.min(fade * 0.13 * pulse, 0.16);
+          const x = c * GAP + (r % 2 === 0 ? 0 : GAP / 2);
+          const y = r * GAP * 0.866;
+
+          const w1 = Math.sin(c * 0.22 + r * 0.14 - t * 1.8) * 0.5 + 0.5;
+          const w2 = Math.sin(c * 0.11 - r * 0.19 + t * 1.3 + 2.4) * 0.5 + 0.5;
+          const w3 = Math.cos(c * 0.08 + r * 0.28 - t * 0.9 + 1.1) * 0.5 + 0.5;
+
+          const val = w1 * 0.5 + w2 * 0.3 + w3 * 0.2;
+          const radius = Math.pow(val, 1.6) * MAX_R;
+
+          if (radius < 0.25) continue;
+
           ctx.beginPath();
-          ctx.arc(x, y, DOT_R, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(11,11,11,${alpha.toFixed(3)})`;
+          ctx.arc(x, y, radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(11,11,11,${(val * 0.45).toFixed(3)})`;
           ctx.fill();
         }
       }
 
-      for (const p of particlesRef.current) {
-        p.cx += Math.sin(t * 0.00022 + p.phase) * 0.00018;
-        p.cy += Math.cos(t * 0.00018 + p.phase + 1.2) * 0.00014;
-        if (p.cx < 0) p.cx = 1;
-        if (p.cx > 1) p.cx = 0;
-        if (p.cy < 0) p.cy = 1;
-        if (p.cy > 1) p.cy = 0;
-        ctx.beginPath();
-        ctx.arc(p.cx * width, p.cy * height, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(11,11,11,0.07)";
-        ctx.fill();
-      }
-
-      t += 1;
+      t += 0.018;
       animId = requestAnimationFrame(draw);
     };
 
@@ -175,85 +154,18 @@ function PremiumBackground() {
   }, []);
 
   return (
-    <>
-      {/* Canvas: corner halftone + micro particles */}
-      <canvas
-        ref={canvasRef}
-        style={{
-          position: "absolute", inset: 0, width: "100%", height: "100%",
-          pointerEvents: "none", zIndex: 0, filter: "blur(0.6px)",
-        }}
-      />
-
-      {/* Organic blurred shapes — edges only */}
-      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
-        <motion.div
-          animate={{ x: [0, 26, 0], y: [0, 16, 0] }}
-          transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
-          style={{
-            position: "absolute", top: "-18%", left: "-12%",
-            width: 520, height: 480,
-            background: "radial-gradient(ellipse at 42% 44%, rgba(11,11,11,0.06) 0%, transparent 65%)",
-            filter: "blur(48px)",
-            borderRadius: "63% 37% 54% 46% / 55% 48% 52% 45%",
-          }}
-        />
-        <motion.div
-          animate={{ x: [0, -20, 0], y: [0, 28, 0] }}
-          transition={{ duration: 38, repeat: Infinity, ease: "easeInOut", delay: 7 }}
-          style={{
-            position: "absolute", bottom: "-22%", right: "-14%",
-            width: 580, height: 540,
-            background: "radial-gradient(ellipse at 54% 50%, rgba(11,11,11,0.05) 0%, transparent 65%)",
-            filter: "blur(55px)",
-            borderRadius: "42% 58% 38% 62% / 60% 42% 58% 40%",
-          }}
-        />
-        <motion.div
-          animate={{ x: [0, 16, 0], y: [0, -20, 0] }}
-          transition={{ duration: 32, repeat: Infinity, ease: "easeInOut", delay: 14 }}
-          style={{
-            position: "absolute", top: "28%", right: "-10%",
-            width: 400, height: 380,
-            background: "radial-gradient(ellipse at 48% 48%, rgba(11,11,11,0.045) 0%, transparent 65%)",
-            filter: "blur(42px)",
-            borderRadius: "50%",
-          }}
-        />
-        <motion.div
-          animate={{ x: [0, -14, 0], y: [0, 12, 0] }}
-          transition={{ duration: 26, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-          style={{
-            position: "absolute", top: "15%", left: "-8%",
-            width: 360, height: 340,
-            background: "radial-gradient(ellipse at 48% 48%, rgba(11,11,11,0.04) 0%, transparent 65%)",
-            filter: "blur(38px)",
-            borderRadius: "50%",
-          }}
-        />
-      </div>
-
-      {/* Fine flowing curves — top and bottom, not center */}
-      <svg
-        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0, overflow: "visible" }}
-        preserveAspectRatio="none"
-        viewBox="0 0 1440 900"
-        aria-hidden="true"
-      >
-        <motion.g animate={{ y: [0, 12, 0] }} transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}>
-          <path d="M-100 660 Q 360 540 720 630 Q 1080 720 1540 590" fill="none" stroke="#0B0B0B" strokeWidth="0.55" opacity="0.13" />
-        </motion.g>
-        <motion.g animate={{ y: [0, -15, 0] }} transition={{ duration: 28, repeat: Infinity, ease: "easeInOut", delay: 6 }}>
-          <path d="M-100 780 Q 400 700 740 768 Q 1080 836 1540 716" fill="none" stroke="#0B0B0B" strokeWidth="0.45" opacity="0.1" />
-        </motion.g>
-        <motion.g animate={{ y: [0, 9, 0] }} transition={{ duration: 24, repeat: Infinity, ease: "easeInOut", delay: 11 }}>
-          <path d="M-100 185 Q 380 265 720 185 Q 1060 105 1540 225" fill="none" stroke="#0B0B0B" strokeWidth="0.4" opacity="0.09" />
-        </motion.g>
-        <motion.g animate={{ y: [0, -10, 0] }} transition={{ duration: 32, repeat: Infinity, ease: "easeInOut", delay: 3 }}>
-          <path d="M-100 860 Q 440 800 760 850 Q 1080 900 1540 820" fill="none" stroke="#0B0B0B" strokeWidth="0.35" opacity="0.08" />
-        </motion.g>
-      </svg>
-    </>
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+        zIndex: 0,
+        filter: "blur(12px)",
+      }}
+    />
   );
 }
 
