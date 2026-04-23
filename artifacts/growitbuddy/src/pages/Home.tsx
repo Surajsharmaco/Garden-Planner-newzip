@@ -330,6 +330,10 @@ export default function Home() {
               style={{
                 display: "inline-block",
                 fontStyle: "italic",
+                background: "linear-gradient(135deg, #0B0B0B 0%, #555 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
               }}
             >
               Compounds
@@ -374,7 +378,7 @@ export default function Home() {
       </section>
 
       {/* ══ 2. SOCIAL PROOF STRIP ══ */}
-      <section style={{ borderTop: "1px solid rgba(11,11,11,0.08)", borderBottom: "1px solid rgba(11,11,11,0.08)", padding: "40px 24px", background: "#fff" }}>
+      <section style={{ borderTop: "1px solid rgba(11,11,11,0.08)", borderBottom: "1px solid rgba(11,11,11,0.08)", padding: "40px 24px", background: "linear-gradient(to bottom, #fff 0%, #F7F7F5 100%)" }}>
         <div className="max-w-[1100px] mx-auto">
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 32, textAlign: "center" }}>
             {STATS.map((stat, i) => (
@@ -385,7 +389,7 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.07, duration: 0.5 }}
               >
-                <div style={{ fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 800, letterSpacing: "-0.04em", color: TEXT, lineHeight: 1 }}>
+                <div style={{ fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1, background: "linear-gradient(135deg, #0B0B0B 0%, #444 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
                   <CountUp value={stat.value} />
                 </div>
                 <div style={{ fontSize: 13, color: "rgba(11,11,11,0.45)", marginTop: 6, fontWeight: 500 }}>{stat.label}</div>
@@ -435,8 +439,10 @@ export default function Home() {
       </section>
 
       {/* ══ 4. SOLUTION / SHIFT ══ */}
-      <section style={{ padding: "80px 24px 100px", background: "#0B0B0B" }}>
-        <div className="max-w-[1100px] mx-auto">
+      <section style={{ padding: "80px 24px 100px", background: "linear-gradient(145deg, #141414 0%, #0B0B0B 55%, #09090e 100%)", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", top: "-30%", right: "-10%", width: 700, height: 700, borderRadius: "50%", background: "radial-gradient(circle, rgba(255,255,255,0.035) 0%, transparent 65%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", bottom: "-20%", left: "5%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(255,255,255,0.02) 0%, transparent 65%)", pointerEvents: "none" }} />
+        <div className="max-w-[1100px] mx-auto" style={{ position: "relative" }}>
           <FadeUp>
             <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 16 }}>
               The Solution
@@ -535,8 +541,9 @@ export default function Home() {
       </section>
 
       {/* ══ 6. FRAMEWORK ══ */}
-      <section style={{ padding: "100px 24px", background: "#0B0B0B" }}>
-        <div className="max-w-[1100px] mx-auto">
+      <section style={{ padding: "100px 24px", background: "linear-gradient(160deg, #0B0B0B 0%, #101014 50%, #141414 100%)", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 800, height: 600, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(255,255,255,0.025) 0%, transparent 65%)", pointerEvents: "none" }} />
+        <div className="max-w-[1100px] mx-auto" style={{ position: "relative" }}>
           <FadeUp>
             <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 16 }}>Framework</p>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(30px, 5vw, 54px)", letterSpacing: "-0.035em", lineHeight: "1.08", color: "#fff", maxWidth: "22ch", marginBottom: 64 }}>
@@ -603,7 +610,7 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08, duration: 0.5 }}
                 style={{
-                  background: i % 2 === 0 ? "#0B0B0B" : "#fff",
+                  background: i % 2 === 0 ? "linear-gradient(145deg, #141414 0%, #0B0B0B 100%)" : "#fff",
                   border: i % 2 === 0 ? "none" : "1.5px solid rgba(11,11,11,0.08)",
                   borderRadius: 16,
                   padding: "32px 28px",
@@ -627,7 +634,7 @@ export default function Home() {
       </section>
 
       {/* ══ 8. PROCESS ══ */}
-      <section style={{ padding: "100px 24px", background: "#fff" }}>
+      <section style={{ padding: "100px 24px", background: "linear-gradient(to bottom, #F7F7F5 0%, #fff 100%)" }}>
         <div className="max-w-[1100px] mx-auto">
           <FadeUp>
             <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Process</p>
@@ -693,7 +700,7 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
                 style={{
-                  background: card.dark ? "#0B0B0B" : "#fff",
+                  background: card.dark ? "linear-gradient(145deg, #181818 0%, #0B0B0B 60%, #0d0d12 100%)" : "#fff",
                   border: card.dark ? "none" : "1.5px solid rgba(11,11,11,0.08)",
                   borderRadius: 20,
                   padding: "40px 36px",
@@ -730,8 +737,9 @@ export default function Home() {
       </section>
 
       {/* ══ 10. AUTHORITY SCORE TOOL ══ */}
-      <section style={{ padding: "100px 24px", background: "#0B0B0B" }}>
-        <div className="max-w-[1100px] mx-auto">
+      <section style={{ padding: "100px 24px", background: "linear-gradient(135deg, #0d0d12 0%, #0B0B0B 40%, #111 100%)", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: 900, height: 400, background: "radial-gradient(ellipse at top, rgba(255,255,255,0.04) 0%, transparent 65%)", pointerEvents: "none" }} />
+        <div className="max-w-[1100px] mx-auto" style={{ position: "relative" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 360px), 1fr))", gap: 60, alignItems: "center" }}>
             <FadeUp>
               <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 16 }}>Authority Audit</p>
@@ -767,7 +775,7 @@ export default function Home() {
                   <span style={{ fontSize: 13, fontWeight: 700, color: "rgba(255,255,255,0.8)" }}>72</span>
                 </div>
                 <div style={{ height: 6, background: "rgba(255,255,255,0.08)", borderRadius: 100, overflow: "hidden" }}>
-                  <div style={{ width: "72%", height: "100%", background: "rgba(255,255,255,0.75)", borderRadius: 100 }} />
+                  <div style={{ width: "72%", height: "100%", background: "linear-gradient(to right, rgba(255,255,255,0.95), rgba(255,255,255,0.4))", borderRadius: 100 }} />
                 </div>
               </div>
               {[
@@ -781,7 +789,7 @@ export default function Home() {
                     <span style={{ fontSize: 13, fontWeight: 700, color: "rgba(255,255,255,0.6)" }}>{item.val}</span>
                   </div>
                   <div style={{ height: 6, background: "rgba(255,255,255,0.08)", borderRadius: 100, overflow: "hidden" }}>
-                    <div style={{ width: `${item.val}%`, height: "100%", background: "rgba(255,255,255,0.2)", borderRadius: 100 }} />
+                    <div style={{ width: `${item.val}%`, height: "100%", background: "linear-gradient(to right, rgba(255,255,255,0.55), rgba(255,255,255,0.15))", borderRadius: 100 }} />
                   </div>
                 </div>
               ))}
@@ -840,7 +848,7 @@ export default function Home() {
       </section>
 
       {/* ══ 12. TESTIMONIALS ══ */}
-      <section style={{ padding: "80px 24px 100px", background: "#fff" }}>
+      <section style={{ padding: "80px 24px 100px", background: "linear-gradient(to bottom, #fff 0%, #F7F7F5 100%)" }}>
         <div className="max-w-[1100px] mx-auto">
           <FadeUp>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(26px, 4vw, 48px)", letterSpacing: "-0.035em", textAlign: "center", color: TEXT, marginBottom: 48 }}>
@@ -880,8 +888,10 @@ export default function Home() {
       </section>
 
       {/* ══ 13. FINAL CTA ══ */}
-      <section style={{ padding: "100px 24px", background: "#0B0B0B", textAlign: "center" }}>
-        <div className="max-w-[700px] mx-auto">
+      <section style={{ padding: "100px 24px", background: "linear-gradient(180deg, #111 0%, #0B0B0B 45%, #0d0d14 100%)", textAlign: "center", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 900, height: 700, borderRadius: "50%", background: "radial-gradient(ellipse at center, rgba(255,255,255,0.05) 0%, transparent 60%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%)", width: 600, height: 300, background: "radial-gradient(ellipse at bottom, rgba(255,255,255,0.03) 0%, transparent 70%)", pointerEvents: "none" }} />
+        <div className="max-w-[700px] mx-auto" style={{ position: "relative" }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
