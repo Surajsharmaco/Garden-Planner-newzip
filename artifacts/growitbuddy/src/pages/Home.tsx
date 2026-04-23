@@ -178,6 +178,82 @@ function GeometricMotion() {
   );
 }
 
+function HalftoneMotion() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animId: number;
+    let t = 0;
+    const GAP = 24;
+    const MAX_R = 5.5;
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const draw = () => {
+      const { width, height } = canvas;
+      ctx.clearRect(0, 0, width, height);
+
+      const cols = Math.ceil(width / GAP) + 2;
+      const rows = Math.ceil(height / GAP) + 2;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const x = c * GAP + (r % 2 === 0 ? 0 : GAP / 2);
+          const y = r * GAP * 0.866;
+
+          const w1 = Math.sin(c * 0.22 + r * 0.14 - t * 1.8) * 0.5 + 0.5;
+          const w2 = Math.sin(c * 0.11 - r * 0.19 + t * 1.3 + 2.4) * 0.5 + 0.5;
+          const w3 = Math.cos(c * 0.08 + r * 0.28 - t * 0.9 + 1.1) * 0.5 + 0.5;
+
+          const val = w1 * 0.5 + w2 * 0.3 + w3 * 0.2;
+          const radius = Math.pow(val, 1.6) * MAX_R;
+
+          if (radius < 0.25) continue;
+
+          ctx.beginPath();
+          ctx.arc(x, y, radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(11,11,11,${(val * 0.45).toFixed(3)})`;
+          ctx.fill();
+        }
+      }
+
+      t += 0.018;
+      animId = requestAnimationFrame(draw);
+    };
+
+    draw();
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+        zIndex: 0,
+        filter: "blur(0.8px)",
+      }}
+    />
+  );
+}
+
 function GrainOverlay() {
   return (
     <svg
@@ -279,6 +355,9 @@ export default function Home() {
           paddingBottom: 60,
         }}
       >
+        {/* Halftone motion */}
+        <HalftoneMotion />
+
         {/* Grain texture */}
         <GrainOverlay />
 
