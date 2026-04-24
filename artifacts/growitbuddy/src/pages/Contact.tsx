@@ -9,10 +9,10 @@ import { useToast } from "@/hooks/use-toast";
 import SEOMeta from "@/components/SEOMeta";
 
 const schema = z.object({
-  name: z.string().min(2, "Name required"),
-  email: z.string().email("Enter a valid email"),
-  company: z.string().min(1, "Company required"),
-  message: z.string().min(10, "Tell us about your goals"),
+  name: z.string().min(2, "Enter your full name").max(80, "Name too long").regex(/^[a-zA-Z\s'-]+$/, "Name should only contain letters"),
+  email: z.string().email("Enter a valid email address (e.g. you@example.com)"),
+  company: z.string().min(1, "Enter your company or brand name").max(100, "Company name too long"),
+  message: z.string().min(20, "Please write at least 20 characters about your goals"),
 });
 type F = z.infer<typeof schema>;
 

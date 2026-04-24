@@ -11,12 +11,12 @@ import { useToast } from "@/hooks/use-toast";
 import SEOMeta from "@/components/SEOMeta";
 
 const schema = z.object({
-  name: z.string().min(2, "Full name required"),
-  email: z.string().email("Enter a valid email"),
-  phone: z.string().min(7, "Enter a valid contact number"),
-  niche: z.string().min(1, "Select your niche"),
-  handle: z.string().min(1, "Enter your primary social handle"),
-  monthlyViews: z.string().min(1, "Select your monthly views range"),
+  name: z.string().min(2, "Enter your full name").max(80, "Name too long").regex(/^[a-zA-Z\s'-]+$/, "Name should only contain letters"),
+  email: z.string().email("Enter a valid email address (e.g. you@example.com)"),
+  phone: z.string().regex(/^\+?[\d\s\-().]{7,20}$/, "Enter a valid phone number (e.g. +1 234 567 8900)"),
+  niche: z.string().min(1, "Please select your niche"),
+  handle: z.string().min(2, "Enter your social handle or profile URL").max(200, "Handle too long"),
+  monthlyViews: z.string().min(1, "Please select your monthly views range"),
 });
 type F = z.infer<typeof schema>;
 

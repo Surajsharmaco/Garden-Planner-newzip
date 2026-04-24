@@ -27,13 +27,13 @@ const EXPERIENCE_OPTIONS = [
 ];
 
 const schema = z.object({
-  name: z.string().min(2, "Full name required"),
-  email: z.string().email("Enter a valid email"),
-  phone: z.string().min(7, "Enter a valid contact number"),
-  role: z.string().min(1, "Select a role"),
-  experience: z.string().min(1, "Select your experience level"),
-  linkedinUrl: z.string().min(1, "LinkedIn or portfolio URL required"),
-  coverNote: z.string().min(20, "Tell us a bit about yourself"),
+  name: z.string().min(2, "Enter your full name").max(80, "Name too long").regex(/^[a-zA-Z\s'-]+$/, "Name should only contain letters"),
+  email: z.string().email("Enter a valid email address (e.g. you@example.com)"),
+  phone: z.string().regex(/^\+?[\d\s\-().]{7,20}$/, "Enter a valid phone number (e.g. +1 234 567 8900)"),
+  role: z.string().min(1, "Please select a role"),
+  experience: z.string().min(1, "Please select your experience level"),
+  linkedinUrl: z.string().url("Enter a valid URL — must start with https://"),
+  coverNote: z.string().min(30, "Please write at least 30 characters about yourself"),
 });
 type F = z.infer<typeof schema>;
 
