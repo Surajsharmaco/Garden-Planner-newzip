@@ -94,7 +94,7 @@ export default function Framework() {
       </section>
 
       {/* Visual connector — vertical */}
-      <section style={{ padding: "56px 24px 0" }}>
+      <section style={{ padding: "80px 24px" }}>
         <div className="max-w-[1100px] mx-auto">
           <div style={{ display: "flex", flexDirection: "column", gap: 0, position: "relative" }}>
             {/* Vertical line */}
