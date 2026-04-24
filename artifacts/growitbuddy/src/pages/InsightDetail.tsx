@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
 import { Link, useParams } from "wouter";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { blogPosts } from "@/data/blogPosts";
@@ -44,44 +44,10 @@ function renderMarkdown(text: string) {
   return elements;
 }
 
-function splitContent(content: string): { preview: string; locked: string } {
-  const lines = content.trim().split("\n");
-  let h2Count = 0;
-  let splitIndex = Math.floor(lines.length * 0.5);
-  for (let i = 0; i < lines.length; i++) {
-    if (lines[i].trim().startsWith("## ")) {
-      h2Count++;
-      if (h2Count === 2) { splitIndex = i; break; }
-    }
-  }
-  return {
-    preview: lines.slice(0, splitIndex).join("\n"),
-    locked: lines.slice(splitIndex).join("\n"),
-  };
-}
-
 export default function InsightDetail() {
   const params = useParams<{ slug: string }>();
   const post = blogPosts.find((p) => p.slug === params.slug);
   const otherPosts = blogPosts.filter((p) => p.slug !== params.slug);
-
-  const [email, setEmail]       = useState("");
-  const [unlocked, setUnlocked] = useState(false);
-  const [busy, setBusy]         = useState(false);
-
-  const handleUnlock = async () => {
-    if (!email.includes("@")) return;
-    setBusy(true);
-    try {
-      await fetch(`${import.meta.env.BASE_URL}api/forms/newsletter`.replace(/\/\//g, "/"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, source: `Insight: ${post?.title}` }),
-      });
-    } catch { /* silently continue */ }
-    setUnlocked(true);
-    setBusy(false);
-  };
 
   if (!post) {
     return (
@@ -97,8 +63,6 @@ export default function InsightDetail() {
       </div>
     );
   }
-
-  const { preview, locked } = splitContent(post.content);
 
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
@@ -137,91 +101,12 @@ export default function InsightDetail() {
         </div>
       </section>
 
-      {/* Content — preview (always visible) */}
-      <section style={{ padding: "64px 24px 0" }}>
+      {/* Full content */}
+      <section style={{ padding: "64px 24px 80px" }}>
         <div className="max-w-[760px] mx-auto">
-          {renderMarkdown(preview)}
+          {renderMarkdown(post.content)}
         </div>
       </section>
-
-      {/* Newsletter gate or full content */}
-      <AnimatePresence mode="wait">
-        {!unlocked ? (
-          <motion.div key="gate" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            {/* Blurred locked preview with fade — self-contained so it never overlaps the gate card */}
-            <div style={{ position: "relative", maxHeight: 240, overflow: "hidden" }}>
-              <div style={{ padding: "24px 24px 0", pointerEvents: "none", userSelect: "none", filter: "blur(6px)", opacity: 0.4 }}>
-                <div className="max-w-[760px] mx-auto">
-                  {renderMarkdown(locked)}
-                </div>
-              </div>
-              {/* Fade covers only the blurred area */}
-              <div style={{
-                position: "absolute", inset: 0, pointerEvents: "none",
-                background: "linear-gradient(to bottom, rgba(247,247,245,0) 0%, rgba(247,247,245,0.98) 75%)",
-              }} />
-            </div>
-
-            {/* Gate card — in normal flow, fully interactive */}
-            <div style={{ padding: "0 24px 80px", marginTop: 8 }}>
-              <div className="max-w-[760px] mx-auto">
-                <div style={{ background: "#fff", border: "2px solid #0B0B0B", borderRadius: 24, padding: "40px 36px", textAlign: "center" }}>
-                  <div style={{ width: 48, height: 48, borderRadius: 14, background: "#0B0B0B", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <rect x="3" y="11" width="18" height="11" rx="2" stroke="#fff" strokeWidth="2"/>
-                      <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
-                  </div>
-                  <h3 style={{ fontWeight: 800, fontSize: "clamp(20px, 3vw, 26px)", letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 10, lineHeight: 1.2 }}>
-                    Continue reading — free
-                  </h3>
-                  <p style={{ fontSize: 15, color: "rgba(11,11,11,0.5)", lineHeight: "1.7", marginBottom: 28, maxWidth: "40ch", margin: "0 auto 28px" }}>
-                    Join the GrowitBuddy newsletter and unlock the full article instantly. Weekly frameworks on building authority.
-                  </p>
-                  <div style={{ display: "flex", gap: 8, maxWidth: 440, margin: "0 auto", flexDirection: "column" }}>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      onKeyDown={e => { if (e.key === "Enter") handleUnlock(); }}
-                      placeholder="Your email address"
-                      style={{
-                        width: "100%", boxSizing: "border-box", padding: "14px 18px", borderRadius: 12,
-                        border: "1.5px solid rgba(11,11,11,0.15)", background: "#F7F7F5",
-                        fontSize: 15, fontFamily: "'Inter', sans-serif", color: "#0B0B0B", outline: "none",
-                      }}
-                    />
-                    <button
-                      onClick={handleUnlock}
-                      disabled={busy || !email.includes("@")}
-                      style={{
-                        width: "100%", padding: "14px 0", borderRadius: 12,
-                        background: email.includes("@") ? "#0B0B0B" : "rgba(11,11,11,0.15)",
-                        color: "#fff", fontSize: 15, fontWeight: 700,
-                        cursor: email.includes("@") ? "pointer" : "default",
-                        border: "none", fontFamily: "'Inter', sans-serif", transition: "all 0.15s",
-                        display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                      }}
-                    >
-                      {busy ? "Unlocking..." : "Unlock Full Article"}
-                      {!busy && <ArrowRight style={{ width: 16, height: 16 }} />}
-                    </button>
-                  </div>
-                  <p style={{ fontSize: 11, color: "rgba(11,11,11,0.3)", marginTop: 14 }}>No spam. Unsubscribe anytime.</p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div key="unlocked" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
-            <section style={{ padding: "0 24px 80px" }}>
-              <div className="max-w-[760px] mx-auto" style={{ paddingTop: 24 }}>
-                {renderMarkdown(locked)}
-              </div>
-            </section>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* More posts */}
       {otherPosts.length > 0 && (

@@ -6,27 +6,10 @@ import { blogPosts } from "@/data/blogPosts";
 import SEOMeta from "@/components/SEOMeta";
 
 export default function Insights() {
-  const [email, setEmail]     = useState("");
-  const [done, setDone]       = useState(false);
-  const [busy, setBusy]       = useState(false);
   const [activeTag, setActiveTag] = useState("All");
 
   const allTags = ["All", ...Array.from(new Set(blogPosts.map(p => p.tag)))];
   const filtered = activeTag === "All" ? blogPosts : blogPosts.filter(p => p.tag === activeTag);
-
-  const handleSubscribe = async () => {
-    if (!email.includes("@")) return;
-    setBusy(true);
-    try {
-      await fetch(`${import.meta.env.BASE_URL}api/forms/newsletter`.replace(/\/\//g, "/"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, source: "Insights Page" }),
-      });
-    } catch { /* silently continue */ }
-    setDone(true);
-    setBusy(false);
-  };
 
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
@@ -59,7 +42,7 @@ export default function Insights() {
       </section>
 
       {/* Tag filter + Posts grid */}
-      <section style={{ padding: "60px 24px 80px", background: "#fff" }}>
+      <section style={{ padding: "60px 24px 100px", background: "#fff" }}>
         <div className="max-w-[1100px] mx-auto">
 
           {/* Filter bar */}
@@ -149,55 +132,6 @@ export default function Insights() {
               );
             })}
           </div>
-        </div>
-      </section>
-
-      {/* Newsletter CTA */}
-      <section style={{ padding: "80px 24px", background: "#0B0B0B", textAlign: "center" }}>
-        <div className="max-w-[520px] mx-auto">
-          <h2 style={{ fontWeight: 800, fontSize: "clamp(26px, 4vw, 44px)", letterSpacing: "-0.04em", color: "#fff", marginBottom: 16 }}>
-            Get insights in your inbox.
-          </h2>
-          <p style={{ fontSize: 16, color: "rgba(255,255,255,0.45)", lineHeight: "1.75", marginBottom: 32 }}>
-            Weekly frameworks and strategies on building authority as a founder. No noise. Just signal.
-          </p>
-          {done ? (
-            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-              style={{ background: "rgba(255,255,255,0.08)", borderRadius: 14, padding: "18px 24px", display: "inline-block" }}>
-              <p style={{ fontSize: 15, fontWeight: 600, color: "#fff", margin: 0 }}>You're in. First issue coming soon.</p>
-            </motion.div>
-          ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 420, margin: "0 auto" }}>
-              <input
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                onKeyDown={e => { if (e.key === "Enter") handleSubscribe(); }}
-                placeholder="Your email address"
-                style={{
-                  width: "100%", boxSizing: "border-box", padding: "14px 18px", borderRadius: 12,
-                  border: "1.5px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.06)",
-                  fontSize: 15, fontFamily: "'Inter', sans-serif", color: "#fff", outline: "none",
-                }}
-              />
-              <button
-                onClick={handleSubscribe}
-                disabled={busy || !email.includes("@")}
-                style={{
-                  width: "100%", padding: "14px 0", borderRadius: 12,
-                  background: email.includes("@") ? "#fff" : "rgba(255,255,255,0.15)",
-                  color: email.includes("@") ? "#0B0B0B" : "rgba(255,255,255,0.4)",
-                  fontSize: 15, fontWeight: 700, cursor: email.includes("@") ? "pointer" : "default",
-                  border: "none", fontFamily: "'Inter', sans-serif", transition: "all 0.15s",
-                  display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                }}
-              >
-                {busy ? "Subscribing..." : "Subscribe to the Newsletter"}
-                {!busy && <ArrowRight style={{ width: 16, height: 16 }} />}
-              </button>
-              <p style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", marginTop: 4 }}>No spam. Unsubscribe anytime.</p>
-            </div>
-          )}
         </div>
       </section>
     </div>
