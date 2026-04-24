@@ -54,3 +54,8 @@ externalPort = 3003
 [[ports]]
 localPort = 19924
 externalPort = 3001
+
+[userenv]
+
+[userenv.shared]
+NOTIFY_EMAIL = "growitbuddy@gmail.com"
