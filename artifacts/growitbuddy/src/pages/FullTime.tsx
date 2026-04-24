@@ -61,10 +61,10 @@ export default function FullTime() {
   const onSubmit = async (data: F) => {
     setSubmitting(true);
     try {
-      const res = await fetch(`${import.meta.env.BASE_URL}api/forms/contact`.replace(/\/\//g, "/"), {
+      const res = await fetch(`${import.meta.env.BASE_URL}api/forms/full-time`.replace(/\/\//g, "/"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, name: data.name, company: "Full-Time Application", message: `Role: ${data.role === "Other" ? `Other - ${otherRole}` : data.role}\nExperience: ${data.experience}\nLinkedIn: ${data.linkedinUrl}\nPhone: ${data.phone}\nNote: ${data.coverNote}` }),
+        body: JSON.stringify({ ...data, otherRole: data.role === "Other" ? otherRole : undefined }),
       });
       if (res.ok) {
         setSubmitted(true);
