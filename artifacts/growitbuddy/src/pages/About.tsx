@@ -125,7 +125,7 @@ export default function About() {
               <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.22)", marginBottom: 28 }}>The Origin</p>
 
               <p style={{ fontWeight: 800, fontSize: "clamp(20px, 2.8vw, 36px)", letterSpacing: "-0.035em", lineHeight: "1.2", color: "#fff", marginBottom: 20 }}>
-                I built GrowitBuddy after seeing a pattern — the best people weren't the most visible.
+                I built GrowitBuddy after seeing a pattern - the best people weren't the most visible.
               </p>
 
               <p style={{ fontWeight: 700, fontSize: "clamp(16px, 1.8vw, 22px)", letterSpacing: "-0.02em", lineHeight: "1.5", color: "rgba(255,255,255,0.55)", marginBottom: 20 }}>
@@ -134,7 +134,7 @@ export default function About() {
 
               <p style={{ fontWeight: 800, fontSize: "clamp(18px, 2.2vw, 28px)", letterSpacing: "-0.03em", lineHeight: "1.3", color: "#fff", marginBottom: 40 }}>
                 <span style={{ color: "#fff" }}>Authority</span> isn't given.<br />
-                It's built — with the right <span style={{ color: "#fff", borderBottom: "2px solid rgba(255,255,255,0.25)", paddingBottom: 1 }}>system</span>.
+                It's built - with the right <span style={{ color: "#fff", borderBottom: "2px solid rgba(255,255,255,0.25)", paddingBottom: 1 }}>system</span>.
               </p>
 
               <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 32, display: "flex", flexDirection: "column", gap: 16 }}>
@@ -142,7 +142,7 @@ export default function About() {
                   We build content and distribution systems that help founders and creators become the most recognized voices in their space.
                 </p>
                 <p style={{ fontSize: 15, color: "rgba(255,255,255,0.35)", lineHeight: "1.85" }}>
-                  So far, we've helped generate <span style={{ color: "rgba(255,255,255,0.7)", fontWeight: 700 }}>700M+ views</span> — and turn attention into real authority.
+                  So far, we've helped generate <span style={{ color: "rgba(255,255,255,0.7)", fontWeight: 700 }}>700M+ views</span> and turn attention into real authority.
                 </p>
               </div>
             </div>

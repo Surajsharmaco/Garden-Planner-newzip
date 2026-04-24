@@ -34,13 +34,13 @@ const schema = z.object({
   email: z.string().email("Enter a valid email address (e.g. you@example.com)"),
   phone: z.string().regex(/^\+?[\d\s\-().]{7,20}$/, "Enter a valid phone number (e.g. +1 234 567 8900)"),
   skills: z.array(z.string()).min(1, "Please select at least one skill"),
-  portfolioUrl: z.string().url("Enter a valid URL — must start with https://").or(z.literal("")),
+  portfolioUrl: z.string().url("Enter a valid URL (must start with https://)").or(z.literal("")),
   experience: z.string().min(1, "Please select your experience level"),
 });
 type F = z.infer<typeof schema>;
 
 const PERKS = [
-  "Real client projects — not random gigs",
+  "Real client projects, not random gigs",
   "Consistent work opportunities based on performance",
   "Performance-based growth within the network",
   "Access to tools and resources as you level up",
@@ -94,7 +94,7 @@ export default function Freelancers() {
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
         title="Talent Network - GrowitBuddy"
-        description="Join the GrowitBuddy Talent Network. Work on real projects, get selected on performance, and build your career with a system — not random gigs."
+        description="Join the GrowitBuddy Talent Network. Work on real projects, get selected on performance, and build your career with a system, not random gigs."
       />
 
       {/* Hero */}
@@ -115,7 +115,7 @@ export default function Freelancers() {
             transition={{ delay: 0.1 }}
             style={{ fontSize: 18, color: "rgba(11,11,11,0.5)", lineHeight: "1.75", maxWidth: "52ch" }}
           >
-            Work on real projects. Get selected based on performance. Build your career with a system — not random gigs.
+            Work on real projects. Get selected based on performance. Build your career with a system, not random gigs.
           </motion.p>
         </div>
       </section>
@@ -148,8 +148,8 @@ export default function Freelancers() {
 
             <div style={{ background: "#0B0B0B", borderRadius: 16, padding: "28px 32px" }}>
               <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 14 }}>Not for everyone</p>
-              {["Video editors ready to work on real client projects", "Graphic and motion designers with a strong portfolio", "Content creators who execute — not just ideate", "If you want random gigs, this is not for you"].map((item, i) => (
-                <p key={i} style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", lineHeight: "1.7", marginBottom: 8 }}>— {item}</p>
+              {["Video editors ready to work on real client projects", "Graphic and motion designers with a strong portfolio", "Content creators who execute, not just ideate", "If you want random gigs, this is not for you"].map((item, i) => (
+                <p key={i} style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", lineHeight: "1.7", marginBottom: 8 }}>{item}</p>
               ))}
             </div>
           </div>

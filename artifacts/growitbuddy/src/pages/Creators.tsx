@@ -84,7 +84,7 @@ export default function Creators() {
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
         title="Influencer Network - GrowitBuddy"
-        description="Join the GrowitBuddy Influencer Network. Built for serious creators who want real authority, meaningful opportunities, and long-term growth — not just views."
+        description="Join the GrowitBuddy Influencer Network. Built for serious creators who want real authority, meaningful opportunities, and long-term growth, not just views."
       />
 
       {/* Hero */}
@@ -105,7 +105,7 @@ export default function Creators() {
             transition={{ delay: 0.1 }}
             style={{ fontSize: 18, color: "rgba(11,11,11,0.5)", lineHeight: "1.75", maxWidth: "52ch" }}
           >
-            Connect, grow, and unlock opportunities. We work with creators who want to build real authority and long-term growth — not just chase views.
+            Connect, grow, and unlock opportunities. We work with creators who want to build real authority and long-term growth, not just chase views.
           </motion.p>
         </div>
       </section>
@@ -143,7 +143,7 @@ export default function Creators() {
                 "Personal brands building real authority in their space",
                 "Content creators who want more than just views",
               ].map((item, i) => (
-                <p key={i} style={{ fontSize: 14, color: "rgba(11,11,11,0.6)", lineHeight: "1.7", marginBottom: 8 }}>— {item}</p>
+                <p key={i} style={{ fontSize: 14, color: "rgba(11,11,11,0.6)", lineHeight: "1.7", marginBottom: 8 }}>{item}</p>
               ))}
             </div>
           </div>

@@ -32,7 +32,7 @@ const schema = z.object({
   phone: z.string().regex(/^\+?[\d\s\-().]{7,20}$/, "Enter a valid phone number (e.g. +1 234 567 8900)"),
   role: z.string().min(1, "Please select a role"),
   experience: z.string().min(1, "Please select your experience level"),
-  linkedinUrl: z.string().url("Enter a valid URL — must start with https://"),
+  linkedinUrl: z.string().url("Enter a valid URL (must start with https://)"),
   coverNote: z.string().min(30, "Please write at least 30 characters about yourself"),
 });
 type F = z.infer<typeof schema>;
@@ -139,7 +139,7 @@ export default function FullTime() {
             <div style={{ background: "#0B0B0B", borderRadius: 16, padding: "28px 32px" }}>
               <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 14 }}>Open roles</p>
               {ROLES.filter(r => r !== "Other").map((role, i) => (
-                <p key={i} style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", lineHeight: "1.7", marginBottom: 8 }}>— {role}</p>
+                <p key={i} style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", lineHeight: "1.7", marginBottom: 8 }}>{role}</p>
               ))}
             </div>
           </div>
