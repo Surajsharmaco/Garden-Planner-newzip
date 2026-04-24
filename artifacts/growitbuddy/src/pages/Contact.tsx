@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -7,6 +7,43 @@ import { ArrowRight } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import SEOMeta from "@/components/SEOMeta";
+
+function CalEmbed() {
+  useEffect(() => {
+    const existingScript = document.querySelector('script[src="https://app.cal.com/embed/embed.js"]');
+    if (!existingScript) {
+      const script = document.createElement("script");
+      script.src = "https://app.cal.com/embed/embed.js";
+      script.async = true;
+      script.onload = () => initCal();
+      document.head.appendChild(script);
+    } else {
+      initCal();
+    }
+
+    function initCal() {
+      const w = window as any;
+      if (!w.Cal) return;
+      w.Cal("init", "growth-strategy-call", { origin: "https://app.cal.com" });
+      w.Cal.ns["growth-strategy-call"]("inline", {
+        elementOrSelector: "#my-cal-inline-growth-strategy-call",
+        config: { layout: "month_view", useSlotsViewOnSmallScreen: "true" },
+        calLink: "growitbuddy.com/growth-strategy-call",
+      });
+      w.Cal.ns["growth-strategy-call"]("ui", {
+        hideEventTypeDetails: false,
+        layout: "month_view",
+      });
+    }
+  }, []);
+
+  return (
+    <div
+      id="my-cal-inline-growth-strategy-call"
+      style={{ width: "100%", minHeight: 600, overflow: "scroll", borderRadius: 16 }}
+    />
+  );
+}
 
 const schema = z.object({
   name: z.string().min(2, "Enter your full name").max(80, "Name too long").regex(/^[a-zA-Z\s'-]+$/, "Name should only contain letters"),
@@ -72,6 +109,17 @@ export default function Contact() {
           >
             We partner with ambitious founders and creators who are serious about authority. One strategy call is all it takes to get started.
           </motion.p>
+        </div>
+      </section>
+
+      {/* Cal.com Booking */}
+      <section style={{ padding: "80px 24px", background: "#fff", borderBottom: "1px solid rgba(11,11,11,0.08)" }}>
+        <div className="max-w-[1100px] mx-auto">
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 12 }}>Book a call</p>
+          <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 3vw, 40px)", letterSpacing: "-0.04em", color: "#0B0B0B", marginBottom: 40, lineHeight: 1.1 }}>
+            Pick a time that works for you.
+          </h2>
+          <CalEmbed />
         </div>
       </section>
 
