@@ -346,7 +346,7 @@ export default function Home() {
               fontWeight: 400,
             }}
           >
-            Turn your expertise into authority - and that authority into consistent inbound demand. We create and distribute content so the right people find you, trust you, and come to you.
+            We help founders, creators, and businesses turn expertise into authority and that authority into consistent inbound demand through content strategy and distribution.
           </motion.p>
 
           <motion.div
