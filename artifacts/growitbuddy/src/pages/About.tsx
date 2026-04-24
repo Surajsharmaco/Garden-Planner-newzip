@@ -80,47 +80,57 @@ export default function About() {
       {/* Founder */}
       <section style={{ padding: "80px 24px", background: "#0B0B0B", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="max-w-[1100px] mx-auto">
-          <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: 48, alignItems: "start" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                <div style={{ width: 72, height: 72, borderRadius: "50%", overflow: "hidden", border: "2px solid rgba(255,255,255,0.12)", flexShrink: 0 }}>
-                  <img
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face"
-                    alt="Suraj Sharma"
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                    onError={(e) => {
-                      const el = e.currentTarget.parentElement!;
-                      el.style.background = "#1a1a1a";
-                      el.style.display = "flex";
-                      el.style.alignItems = "center";
-                      el.style.justifyContent = "center";
-                      el.style.fontSize = "28px";
-                      el.style.fontWeight = "800";
-                      el.style.color = "#fff";
-                      el.innerHTML = "S";
-                    }}
-                  />
-                </div>
-                <div>
-                  <h3 style={{ fontWeight: 800, fontSize: 20, letterSpacing: "-0.02em", color: "#fff", marginBottom: 2 }}>Suraj Sharma</h3>
-                  <p style={{ fontSize: 14, color: "rgba(255,255,255,0.35)" }}>Founder & CEO</p>
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-[220px_1fr] gap-10 md:gap-16 items-start">
+
+            {/* Left — founder card */}
+            <div className="flex flex-row md:flex-col items-center md:items-start gap-4 md:gap-5">
+              <div style={{ width: 72, height: 72, borderRadius: "50%", overflow: "hidden", border: "2px solid rgba(255,255,255,0.14)", flexShrink: 0 }}>
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face"
+                  alt="Suraj Sharma"
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  onError={(e) => {
+                    const el = e.currentTarget.parentElement!;
+                    el.style.background = "#1a1a1a";
+                    el.style.display = "flex";
+                    el.style.alignItems = "center";
+                    el.style.justifyContent = "center";
+                    el.style.fontSize = "28px";
+                    el.style.fontWeight = "800";
+                    el.style.color = "#fff";
+                    el.innerHTML = "S";
+                  }}
+                />
               </div>
-              <div style={{ display: "flex", gap: 12 }}>
-                {["LinkedIn", "Twitter"].map((s) => (
-                  <a key={s} href="#" style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.55)", textDecoration: "none" }} className="hover:opacity-70 transition-opacity">{s}</a>
-                ))}
+              <div>
+                <h3 style={{ fontWeight: 800, fontSize: 18, letterSpacing: "-0.02em", color: "#fff", marginBottom: 3 }}>Suraj Sharma</h3>
+                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", marginBottom: 10 }}>Founder & CEO</p>
+                <div style={{ display: "flex", gap: 14 }}>
+                  {["LinkedIn", "Twitter"].map((s) => (
+                    <a
+                      key={s}
+                      href="#"
+                      style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.5)", textDecoration: "none" }}
+                      className="hover:text-white transition-colors"
+                    >
+                      {s}
+                    </a>
+                  ))}
+                </div>
               </div>
             </div>
+
+            {/* Right — quote + body */}
             <div>
-              <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)", marginBottom: 20 }}>The origin</p>
-              <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 3.5vw, 44px)", letterSpacing: "-0.04em", lineHeight: "1.1", color: "#fff", marginBottom: 20 }}>
+              <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)", marginBottom: 18 }}>The Origin</p>
+              <h2 style={{ fontWeight: 800, fontSize: "clamp(22px, 3.2vw, 42px)", letterSpacing: "-0.04em", lineHeight: "1.12", color: "#fff", marginBottom: 24 }}>
                 "I built GrowitBuddy after watching brilliant founders lose market position to louder, less qualified voices. Authority isn't given - it's engineered."
               </h2>
-              <p style={{ fontSize: 16, color: "rgba(255,255,255,0.4)", lineHeight: "1.8" }}>
+              <p style={{ fontSize: 15, color: "rgba(255,255,255,0.38)", lineHeight: "1.85", maxWidth: "60ch" }}>
                 We built the systems to help the best voices in any room become the most recognized ones. Today we've helped founders and creators generate over 700M+ views and build market authority worldwide.
               </p>
             </div>
+
           </div>
         </div>
       </section>
