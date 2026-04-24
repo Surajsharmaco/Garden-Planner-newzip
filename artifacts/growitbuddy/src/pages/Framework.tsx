@@ -93,29 +93,63 @@ export default function Framework() {
         </div>
       </section>
 
-      {/* Visual connector */}
-      <section style={{ padding: "20px 24px 0", background: "#fff" }}>
+      {/* Visual connector — vertical */}
+      <section style={{ padding: "56px 24px 0" }}>
         <div className="max-w-[1100px] mx-auto">
-          <div style={{ display: "flex", alignItems: "center", gap: 0, overflowX: "auto", paddingBottom: 0 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 0, position: "relative" }}>
+            {/* Vertical line */}
+            <div style={{ position: "absolute", left: 21, top: 22, bottom: 22, width: 1, background: "rgba(11,11,11,0.1)", zIndex: 0 }} />
+
             {STEPS.map((step, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", flex: 1, minWidth: 160 }}>
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08, duration: 0.5 }}
+                style={{ display: "flex", alignItems: "center", gap: 20, padding: "18px 0", position: "relative", zIndex: 1 }}
+              >
+                {/* Step dot */}
+                <div
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: "50%",
+                    background: step.color === "#0B0B0B" ? "#0B0B0B" : "#fff",
+                    border: "1.5px solid rgba(11,11,11,0.12)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                    boxShadow: "0 2px 8px rgba(11,11,11,0.08)",
+                  }}
+                >
+                  <span style={{ fontSize: 12, fontWeight: 800, color: step.color === "#0B0B0B" ? "#fff" : "#0B0B0B", letterSpacing: "-0.02em" }}>{step.num}</span>
+                </div>
+
+                {/* Label */}
                 <div
                   style={{
                     flex: 1,
-                    padding: "20px 24px",
-                    background: step.color,
-                    borderRadius: 0,
-                    borderLeft: i === 0 ? "none" : "1px solid rgba(255,255,255,0.3)",
-                    textAlign: "center",
+                    padding: "14px 24px",
+                    background: step.color === "#0B0B0B" ? "#0B0B0B" : "#fff",
+                    borderRadius: 14,
+                    border: "1px solid rgba(11,11,11,0.08)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 12,
                   }}
                 >
-                  <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", color: step.color === "#0B0B0B" ? "rgba(255,255,255,0.4)" : "rgba(11,11,11,0.4)", marginBottom: 6 }}>{step.num}</p>
-                  <p style={{ fontSize: 16, fontWeight: 800, letterSpacing: "-0.02em", color: step.color === "#0B0B0B" ? "#fff" : "#0B0B0B" }}>{step.title}</p>
+                  <div>
+                    <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: step.color === "#0B0B0B" ? "rgba(255,255,255,0.35)" : "rgba(11,11,11,0.35)", marginBottom: 3 }}>{step.num}</p>
+                    <p style={{ fontSize: 17, fontWeight: 800, letterSpacing: "-0.03em", color: step.color === "#0B0B0B" ? "#fff" : "#0B0B0B" }}>{step.title}</p>
+                  </div>
+                  <p style={{ fontSize: 13, color: step.color === "#0B0B0B" ? "rgba(255,255,255,0.4)" : "rgba(11,11,11,0.4)", maxWidth: "38ch", lineHeight: 1.5, display: "none" }} className="step-tagline">
+                    {STEPS[i].headline}
+                  </p>
                 </div>
-                {i < STEPS.length - 1 && (
-                  <div style={{ width: 0, height: 0, borderTop: "30px solid transparent", borderBottom: "30px solid transparent", borderLeft: `16px solid ${step.color}`, flexShrink: 0 }} />
-                )}
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
