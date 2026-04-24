@@ -40,11 +40,11 @@ const schema = z.object({
 type F = z.infer<typeof schema>;
 
 const PERKS = [
-  "Work with ambitious founders and fast-growing brands",
-  "Flexible, remote-first project-based work",
-  "Competitive, transparent compensation",
-  "Grow within a world-class content operation",
-  "Access to GrowitBuddy's frameworks and training",
+  "Real client projects — not random gigs",
+  "Consistent work opportunities based on performance",
+  "Performance-based growth within the network",
+  "Access to tools and resources as you level up",
+  "A structured system to sharpen your skills",
 ];
 
 export default function Freelancers() {
@@ -93,21 +93,21 @@ export default function Freelancers() {
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title="For Freelancers - GrowitBuddy"
-        description="Join the GrowitBuddy freelancer network. We work with talented writers, editors, strategists, and designers who want to work with the world's most ambitious founders."
+        title="Talent Network - GrowitBuddy"
+        description="Join the GrowitBuddy Talent Network. Work on real projects, get selected on performance, and build your career with a system — not random gigs."
       />
 
       {/* Hero */}
       <section style={{ paddingTop: 120, paddingBottom: 80, paddingLeft: 24, paddingRight: 24, borderBottom: "1px solid rgba(11,11,11,0.08)" }}>
         <div className="max-w-[1100px] mx-auto">
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Freelancers</p>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Talent Network</p>
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
             style={{ fontWeight: 800, fontSize: "clamp(44px, 7vw, 88px)", letterSpacing: "-0.04em", lineHeight: "1.02", color: "#0B0B0B", maxWidth: "18ch", marginBottom: 24 }}
           >
-            Join our network of world-class talent.
+            Join the Talent Network.
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -115,7 +115,7 @@ export default function Freelancers() {
             transition={{ delay: 0.1 }}
             style={{ fontSize: 18, color: "rgba(11,11,11,0.5)", lineHeight: "1.75", maxWidth: "52ch" }}
           >
-            We work with talented writers, editors, strategists, and designers who want to make a real impact working with ambitious founders worldwide.
+            Work on real projects. Get selected based on performance. Build your career with a system — not random gigs.
           </motion.p>
         </div>
       </section>
@@ -126,7 +126,7 @@ export default function Freelancers() {
           {/* Perks */}
           <div>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 3vw, 40px)", letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 32, lineHeight: 1.15 }}>
-              Why work with GrowitBuddy?
+              What You Get.
             </h2>
             <ul style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 40 }}>
               {PERKS.map((perk, i) => (
@@ -147,8 +147,8 @@ export default function Freelancers() {
             </ul>
 
             <div style={{ background: "#0B0B0B", borderRadius: 16, padding: "28px 32px" }}>
-              <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 14 }}>We're looking for</p>
-              {["Writers who've worked with founders or B2B brands", "Video editors with short-form expertise", "Designers with content & social media experience", "Strategists with a track record in growth"].map((item, i) => (
+              <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 14 }}>Not for everyone</p>
+              {["Video editors ready to work on real client projects", "Graphic and motion designers with a strong portfolio", "Content creators who execute — not just ideate", "If you want random gigs, this is not for you"].map((item, i) => (
                 <p key={i} style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", lineHeight: "1.7", marginBottom: 8 }}>— {item}</p>
               ))}
             </div>
@@ -171,15 +171,15 @@ export default function Freelancers() {
                 }}
               >
                 <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#0B0B0B", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", fontSize: 28 }}>✓</div>
-                <h3 style={{ fontWeight: 800, fontSize: 26, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 12 }}>Application received!</h3>
+                <h3 style={{ fontWeight: 800, fontSize: 26, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 12 }}>Application received.</h3>
                 <p style={{ fontSize: 15, color: "rgba(11,11,11,0.55)", lineHeight: "1.75" }}>
-                  We review applications weekly. If you're a fit, we'll reach out to schedule a conversation.
+                  We review applications based on performance. If you make the cut, we'll be in touch within 7 business days.
                 </p>
               </div>
             ) : (
               <div style={{ background: "#F7F7F5", border: "1.5px solid rgba(11,11,11,0.08)", borderRadius: 20, padding: "40px 32px" }}>
-                <h3 style={{ fontWeight: 800, fontSize: 24, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 8 }}>Apply to join</h3>
-                <p style={{ fontSize: 14, color: "rgba(11,11,11,0.45)", marginBottom: 28 }}>We review every application. Expect a response within 7 business days.</p>
+                <h3 style={{ fontWeight: 800, fontSize: 24, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 8 }}>Apply for the Talent Network</h3>
+                <p style={{ fontSize: 14, color: "rgba(11,11,11,0.45)", marginBottom: 28 }}>Selection is performance-based. Apply now and prove your work.</p>
 
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -297,7 +297,7 @@ export default function Freelancers() {
                       style={{ justifyContent: "center", marginTop: 8, padding: "14px 0", fontSize: 15 }}
                       data-testid="button-freelancer-submit"
                     >
-                      {submitting ? "Submitting…" : "Submit Application"}
+                      {submitting ? "Submitting…" : "Apply for the Talent Network"}
                       {!submitting && <ArrowRight className="w-4 h-4" />}
                     </button>
                   </form>

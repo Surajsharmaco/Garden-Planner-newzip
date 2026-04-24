@@ -7,11 +7,11 @@ const NAV_LINKS = [
   { href: "/services", label: "Services" },
   { href: "/work", label: "Work" },
   { href: "/framework", label: "Framework" },
-  { href: "/creators", label: "Creators" },
+  { href: "/creators", label: "Influencer Network" },
   {
     label: "Hiring",
     dropdown: [
-      { href: "/freelancers", label: "Freelancer" },
+      { href: "/freelancers", label: "Talent Network" },
       { href: "/full-time", label: "Full Time" },
     ],
   },

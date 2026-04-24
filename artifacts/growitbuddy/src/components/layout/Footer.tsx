@@ -177,8 +177,8 @@ export function Footer() {
             </h4>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {[
-                { href: "/creators", label: "For Creators" },
-                { href: "/freelancers", label: "For Freelancers" },
+                { href: "/creators", label: "Influencer Network" },
+                { href: "/freelancers", label: "Talent Network" },
                 { href: "/authority-audit", label: "Authority Audit" },
               ].map((l) => (
                 <Link key={l.href} href={l.href}>

@@ -42,11 +42,11 @@ const VIEWS_RANGES = [
 ];
 
 const BENEFITS = [
-  "Done-for-you content strategy tailored to your niche",
-  "Professional editing team at your disposal",
-  "Multi-platform distribution systems",
-  "Monthly performance analytics & optimization",
-  "Direct access to Suraj & the GrowitBuddy team",
+  "Growth-focused guidance built around your platform",
+  "Collaboration opportunities with serious creators",
+  "Access to brand and content opportunities",
+  "Strategic support to build lasting authority",
+  "A network of creators focused on long-term growth",
 ];
 
 export default function Creators() {
@@ -83,21 +83,21 @@ export default function Creators() {
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title="For Creators - GrowitBuddy"
-        description="Turn your creator platform into a real business. Join the GrowitBuddy creator ecosystem and get done-for-you authority systems built for your niche."
+        title="Influencer Network - GrowitBuddy"
+        description="Join the GrowitBuddy Influencer Network. Built for serious creators who want real authority, meaningful opportunities, and long-term growth — not just views."
       />
 
       {/* Hero */}
       <section style={{ paddingTop: 120, paddingBottom: 80, paddingLeft: 24, paddingRight: 24, borderBottom: "1px solid rgba(11,11,11,0.08)" }}>
         <div className="max-w-[1100px] mx-auto">
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Creators</p>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Influencer Network</p>
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
             style={{ fontWeight: 800, fontSize: "clamp(44px, 7vw, 88px)", letterSpacing: "-0.04em", lineHeight: "1.02", color: "#0B0B0B", maxWidth: "18ch", marginBottom: 24 }}
           >
-            Built for creators who mean business.
+            Join the Influencer Network.
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -105,7 +105,7 @@ export default function Creators() {
             transition={{ delay: 0.1 }}
             style={{ fontSize: 18, color: "rgba(11,11,11,0.5)", lineHeight: "1.75", maxWidth: "52ch" }}
           >
-            Systems designed specifically for content creators turning their platform into predictable revenue and lasting authority.
+            Connect, grow, and unlock opportunities. We work with creators who want to build real authority and long-term growth — not just chase views.
           </motion.p>
         </div>
       </section>
@@ -116,7 +116,7 @@ export default function Creators() {
           {/* Benefits */}
           <div>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 3vw, 40px)", letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 32, lineHeight: 1.15 }}>
-              What you get when you join.
+              What You Get.
             </h2>
             <ul style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 40 }}>
               {BENEFITS.map((benefit, i) => (
@@ -137,11 +137,11 @@ export default function Creators() {
             </ul>
 
             <div style={{ background: "#F7F7F5", borderRadius: 16, padding: "28px", border: "1px solid rgba(11,11,11,0.08)" }}>
-              <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 14 }}>Who is this for?</p>
+              <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 14 }}>Built for serious creators</p>
               {[
-                "Creators with 5K+ followers on any platform",
-                "Founders building a personal brand alongside a business",
-                "Coaches, consultants, and educators with expertise to share",
+                "Influencers focused on growth and long-term opportunities",
+                "Personal brands building real authority in their space",
+                "Content creators who want more than just views",
               ].map((item, i) => (
                 <p key={i} style={{ fontSize: 14, color: "rgba(11,11,11,0.6)", lineHeight: "1.7", marginBottom: 8 }}>— {item}</p>
               ))}
@@ -165,15 +165,15 @@ export default function Creators() {
                 }}
               >
                 <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#0B0B0B", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", fontSize: 28 }}>✓</div>
-                <h3 style={{ fontWeight: 800, fontSize: 26, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 12 }}>Application received!</h3>
+                <h3 style={{ fontWeight: 800, fontSize: 26, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 12 }}>Application received.</h3>
                 <p style={{ fontSize: 15, color: "rgba(11,11,11,0.55)", lineHeight: "1.75" }}>
-                  Welcome to the GrowitBuddy creator ecosystem. We'll review your application and be in touch within 48 hours.
+                  We review every application personally. If you're a fit for the Influencer Network, we'll be in touch within 48 hours.
                 </p>
               </div>
             ) : (
               <div style={{ background: "#F7F7F5", border: "1.5px solid rgba(11,11,11,0.08)", borderRadius: 20, padding: "40px 32px" }}>
-                <h3 style={{ fontWeight: 800, fontSize: 24, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 8 }}>Apply to join</h3>
-                <p style={{ fontSize: 14, color: "rgba(11,11,11,0.45)", marginBottom: 28 }}>Takes less than 2 minutes. We review every application personally.</p>
+                <h3 style={{ fontWeight: 800, fontSize: 24, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 8 }}>Join the Network</h3>
+                <p style={{ fontSize: 14, color: "rgba(11,11,11,0.45)", marginBottom: 28 }}>Takes less than 2 minutes. Every application is reviewed personally.</p>
 
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -262,7 +262,7 @@ export default function Creators() {
                       style={{ justifyContent: "center", marginTop: 8, padding: "14px 0", fontSize: 15 }}
                       data-testid="button-creator-submit"
                     >
-                      {submitting ? "Submitting…" : "Submit Application"}
+                      {submitting ? "Submitting…" : "Join the Influencer Network"}
                       {!submitting && <ArrowRight className="w-4 h-4" />}
                     </button>
                   </form>
