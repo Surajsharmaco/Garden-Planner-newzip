@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowRight, Search, X, SlidersHorizontal, ChevronDown, Check } from "lucide-react";
-import { influencers, NICHE_CATEGORIES } from "@/data/influencers";
+import { ArrowRight, Search, X, SlidersHorizontal, ChevronDown, Check, Globe } from "lucide-react";
+import { influencers, NICHE_CATEGORIES, COUNTRIES } from "@/data/influencers";
 import SEOMeta from "@/components/SEOMeta";
 import { useState, useMemo, useRef, useEffect } from "react";
 
@@ -79,13 +79,19 @@ function InfluencerCard({ inf, i }: { inf: (typeof influencers)[0]; i: number })
   );
 }
 
-/* ── Genre Dropdown ──────────────────────────────────────── */
-function GenreDropdown({
+/* ── Shared Dropdown ─────────────────────────────────────── */
+function FilterDropdown({
+  icon,
+  placeholder,
   selected,
+  options,
   onChange,
 }: {
+  icon: React.ReactNode;
+  placeholder: string;
   selected: string[];
-  onChange: (cats: string[]) => void;
+  options: readonly string[];
+  onChange: (vals: string[]) => void;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -98,20 +104,16 @@ function GenreDropdown({
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  function toggle(cat: string) {
-    if (selected.includes(cat)) {
-      onChange(selected.filter((c) => c !== cat));
-    } else {
-      onChange([...selected, cat]);
-    }
+  function toggle(val: string) {
+    onChange(selected.includes(val) ? selected.filter((v) => v !== val) : [...selected, val]);
   }
 
   const label =
     selected.length === 0
-      ? "Select Genre"
+      ? placeholder
       : selected.length === 1
       ? selected[0]
-      : `${selected.length} genres selected`;
+      : `${selected.length} selected`;
 
   return (
     <div ref={ref} style={{ position: "relative", userSelect: "none" }}>
@@ -122,30 +124,28 @@ function GenreDropdown({
           display: "flex",
           alignItems: "center",
           gap: 10,
-          padding: "10px 18px",
+          padding: "10px 16px",
           background: open ? "#0B0B0B" : "#fff",
           border: `1.5px solid ${open ? "#0B0B0B" : "rgba(11,11,11,0.14)"}`,
           borderRadius: open ? "12px 12px 0 0" : 12,
+          borderBottom: open ? "1.5px solid rgba(255,255,255,0.1)" : undefined,
           cursor: "pointer",
           fontFamily: "'Inter', sans-serif",
           fontSize: 14,
-          fontWeight: 500,
-          color: open ? "rgba(255,255,255,0.6)" : "rgba(11,11,11,0.45)",
-          minWidth: 220,
+          fontWeight: selected.length > 0 ? 600 : 400,
+          color: open ? "#fff" : selected.length > 0 ? "#0B0B0B" : "rgba(11,11,11,0.45)",
+          minWidth: 200,
           transition: "background 0.15s, color 0.15s, border-color 0.15s",
-          borderBottom: open ? "1.5px solid rgba(255,255,255,0.1)" : undefined,
         }}
       >
-        <SlidersHorizontal style={{ width: 15, height: 15, flexShrink: 0 }} />
-        <span style={{ flex: 1, textAlign: "left", color: open ? "#fff" : selected.length > 0 ? "#0B0B0B" : "rgba(11,11,11,0.45)", fontWeight: selected.length > 0 ? 600 : 500 }}>
-          {label}
-        </span>
+        <span style={{ color: open ? "rgba(255,255,255,0.5)" : "rgba(11,11,11,0.35)", flexShrink: 0, display: "flex" }}>{icon}</span>
+        <span style={{ flex: 1, textAlign: "left" }}>{label}</span>
         <ChevronDown
           style={{
-            width: 15,
-            height: 15,
+            width: 14,
+            height: 14,
             flexShrink: 0,
-            color: open ? "rgba(255,255,255,0.5)" : "rgba(11,11,11,0.35)",
+            color: open ? "rgba(255,255,255,0.4)" : "rgba(11,11,11,0.3)",
             transform: open ? "rotate(180deg)" : "rotate(0deg)",
             transition: "transform 0.2s ease",
           }}
@@ -170,53 +170,51 @@ function GenreDropdown({
               borderTop: "none",
               borderRadius: "0 0 12px 12px",
               zIndex: 50,
-              maxHeight: 400,
+              maxHeight: 380,
               overflowY: "auto",
               scrollbarWidth: "none",
             }}
           >
-            <style>{`.genre-panel::-webkit-scrollbar { display: none; }`}</style>
-
-            {/* Clear option */}
+            {/* Clear row */}
             {selected.length > 0 && (
               <button
                 onClick={() => onChange([])}
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: 12,
+                  gap: 10,
                   width: "100%",
-                  padding: "12px 18px",
+                  padding: "11px 16px",
                   background: "none",
                   border: "none",
                   borderBottom: "1px solid rgba(255,255,255,0.07)",
                   cursor: "pointer",
                   fontFamily: "'Inter', sans-serif",
-                  fontSize: 13,
+                  fontSize: 12,
                   fontWeight: 600,
-                  color: "rgba(255,255,255,0.4)",
-                  textAlign: "left",
+                  color: "rgba(255,255,255,0.35)",
                   letterSpacing: "0.04em",
+                  textTransform: "uppercase",
                 }}
               >
-                <X style={{ width: 13, height: 13 }} />
+                <X style={{ width: 12, height: 12 }} />
                 Clear all
               </button>
             )}
 
-            {/* Category rows */}
-            {NICHE_CATEGORIES.map((cat) => {
-              const checked = selected.includes(cat);
+            {/* Options */}
+            {options.map((opt) => {
+              const checked = selected.includes(opt);
               return (
                 <button
-                  key={cat}
-                  onClick={() => toggle(cat)}
+                  key={opt}
+                  onClick={() => toggle(opt)}
                   style={{
                     display: "flex",
                     alignItems: "center",
                     gap: 14,
                     width: "100%",
-                    padding: "13px 18px",
+                    padding: "13px 16px",
                     background: checked ? "rgba(255,255,255,0.04)" : "none",
                     border: "none",
                     borderBottom: "1px solid rgba(255,255,255,0.05)",
@@ -226,16 +224,11 @@ function GenreDropdown({
                     fontWeight: checked ? 600 : 400,
                     color: checked ? "#fff" : "rgba(255,255,255,0.7)",
                     textAlign: "left",
-                    transition: "background 0.1s, color 0.1s",
+                    transition: "background 0.1s",
                   }}
-                  onMouseEnter={(e) => {
-                    if (!checked) (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.04)";
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!checked) (e.currentTarget as HTMLButtonElement).style.background = "none";
-                  }}
+                  onMouseEnter={(e) => { if (!checked) (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.04)"; }}
+                  onMouseLeave={(e) => { if (!checked) (e.currentTarget as HTMLButtonElement).style.background = "none"; }}
                 >
-                  {/* Checkbox */}
                   <div
                     style={{
                       width: 18,
@@ -252,7 +245,7 @@ function GenreDropdown({
                   >
                     {checked && <Check style={{ width: 11, height: 11, color: "#0B0B0B", strokeWidth: 3 }} />}
                   </div>
-                  {cat}
+                  {opt}
                 </button>
               );
             })}
@@ -263,15 +256,48 @@ function GenreDropdown({
   );
 }
 
+/* ── Active tag pill ─────────────────────────────────────── */
+function ActiveTag({ label, onRemove }: { label: string; onRemove: () => void }) {
+  return (
+    <button
+      onClick={onRemove}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 6,
+        padding: "5px 12px",
+        borderRadius: 100,
+        background: "#0B0B0B",
+        border: "none",
+        color: "#fff",
+        fontSize: 12,
+        fontWeight: 600,
+        fontFamily: "'Inter', sans-serif",
+        cursor: "pointer",
+        letterSpacing: "-0.01em",
+      }}
+    >
+      {label}
+      <X style={{ width: 11, height: 11, opacity: 0.5 }} />
+    </button>
+  );
+}
+
 /* ── Page ────────────────────────────────────────────────── */
 export default function InfluencerExplore() {
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
   const filtered = useMemo(() => {
     let list = influencers;
-    if (selectedCategories.length > 0) {
-      list = list.filter((inf) => selectedCategories.includes(inf.niche));
+    if (selectedGenres.length > 0) {
+      list = list.filter((inf) => selectedGenres.includes(inf.niche));
+    }
+    if (selectedCountries.length > 0) {
+      list = list.filter((inf) =>
+        selectedCountries.some((c) => inf.audienceCountries.includes(c))
+      );
     }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -284,7 +310,15 @@ export default function InfluencerExplore() {
       );
     }
     return list;
-  }, [selectedCategories, searchQuery]);
+  }, [selectedGenres, selectedCountries, searchQuery]);
+
+  const hasActiveFilters = selectedGenres.length > 0 || selectedCountries.length > 0;
+
+  function clearAll() {
+    setSelectedGenres([]);
+    setSelectedCountries([]);
+    setSearchQuery("");
+  }
 
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
@@ -294,7 +328,13 @@ export default function InfluencerExplore() {
           grid-template-columns: repeat(3, 1fr);
           gap: 20px;
         }
-        .search-wrap { position: relative; flex: 1; max-width: 320px; }
+        .filter-row {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          flex-wrap: wrap;
+        }
+        .search-wrap { position: relative; flex: 1; min-width: 180px; }
         .search-input {
           width: 100%;
           padding: 10px 14px 10px 38px;
@@ -315,8 +355,6 @@ export default function InfluencerExplore() {
         .search-clear:hover { color: #0B0B0B; }
         @media (max-width: 900px) {
           .influencer-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-          .filter-row { flex-wrap: wrap; }
-          .search-wrap { max-width: 100%; }
         }
         @media (max-width: 600px) {
           .influencer-grid { grid-template-columns: 1fr; gap: 14px; }
@@ -325,8 +363,9 @@ export default function InfluencerExplore() {
           .influencer-cta-section { padding: 0 16px 64px !important; }
           .influencer-cta-box { padding: 36px 20px !important; border-radius: 16px !important; }
           .card-description { display: none; }
-          .filter-row { flex-direction: column !important; align-items: stretch !important; }
-          .search-wrap { max-width: 100%; }
+          .filter-row { flex-direction: column; align-items: stretch; }
+          .filter-row > * { width: 100%; }
+          .filter-row > button[style] { min-width: unset !important; }
         }
       `}</style>
 
@@ -371,9 +410,24 @@ export default function InfluencerExplore() {
         <div className="max-w-[1100px] mx-auto">
 
           {/* Filter row */}
-          <div className="filter-row" style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 36 }}>
+          <div className="filter-row" style={{ marginBottom: 20 }}>
             {/* Genre dropdown */}
-            <GenreDropdown selected={selectedCategories} onChange={setSelectedCategories} />
+            <FilterDropdown
+              icon={<SlidersHorizontal style={{ width: 15, height: 15 }} />}
+              placeholder="Select Genre"
+              selected={selectedGenres}
+              options={NICHE_CATEGORIES}
+              onChange={setSelectedGenres}
+            />
+
+            {/* Country dropdown */}
+            <FilterDropdown
+              icon={<Globe style={{ width: 15, height: 15 }} />}
+              placeholder="Select Country"
+              selected={selectedCountries}
+              options={COUNTRIES}
+              onChange={setSelectedCountries}
+            />
 
             {/* Search */}
             <div className="search-wrap">
@@ -398,33 +452,21 @@ export default function InfluencerExplore() {
             </span>
           </div>
 
-          {/* Active genre tags */}
-          {selectedCategories.length > 0 && (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28 }}>
-              {selectedCategories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategories(selectedCategories.filter((c) => c !== cat))}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 6,
-                    padding: "5px 12px",
-                    borderRadius: 100,
-                    background: "#0B0B0B",
-                    border: "none",
-                    color: "#fff",
-                    fontSize: 12,
-                    fontWeight: 600,
-                    fontFamily: "'Inter', sans-serif",
-                    cursor: "pointer",
-                    letterSpacing: "-0.01em",
-                  }}
-                >
-                  {cat}
-                  <X style={{ width: 11, height: 11, opacity: 0.6 }} />
-                </button>
+          {/* Active filter tags */}
+          {hasActiveFilters && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28, alignItems: "center" }}>
+              {selectedGenres.map((g) => (
+                <ActiveTag key={g} label={g} onRemove={() => setSelectedGenres(selectedGenres.filter((x) => x !== g))} />
               ))}
+              {selectedCountries.map((c) => (
+                <ActiveTag key={c} label={c} onRemove={() => setSelectedCountries(selectedCountries.filter((x) => x !== c))} />
+              ))}
+              <button
+                onClick={clearAll}
+                style={{ fontSize: 12, fontWeight: 600, color: "rgba(11,11,11,0.4)", background: "none", border: "none", cursor: "pointer", fontFamily: "'Inter', sans-serif", marginLeft: 4, textDecoration: "underline", textUnderlineOffset: 3 }}
+              >
+                Clear all
+              </button>
             </div>
           )}
 
@@ -447,10 +489,10 @@ export default function InfluencerExplore() {
                 No creators found
               </p>
               <p style={{ fontSize: 14, color: "rgba(11,11,11,0.4)", marginBottom: 24 }}>
-                Try a different genre or search term.
+                Try a different genre, country, or search term.
               </p>
               <button
-                onClick={() => { setSelectedCategories([]); setSearchQuery(""); }}
+                onClick={clearAll}
                 style={{ fontSize: 13, fontWeight: 600, color: "#0B0B0B", background: "none", border: "none", cursor: "pointer", textDecoration: "underline", textUnderlineOffset: 3, fontFamily: "'Inter', sans-serif" }}
               >
                 Clear filters

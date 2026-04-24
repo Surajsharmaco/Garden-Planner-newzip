@@ -7,6 +7,7 @@ export interface Influencer {
   engagementRate: string;
   description: string;
   photo: string;
+  audienceCountries: string[];
   about: {
     creates: string;
     audience: string;
@@ -48,6 +49,25 @@ export const NICHE_CATEGORIES = [
   "Mindset & Psychology",
 ] as const;
 
+export const COUNTRIES = [
+  "USA",
+  "UK",
+  "India",
+  "UAE",
+  "Canada",
+  "Australia",
+  "Nigeria",
+  "Singapore",
+  "Brazil",
+  "Germany",
+  "France",
+  "Japan",
+  "Mexico",
+  "Portugal",
+  "South Africa",
+  "Kenya",
+] as const;
+
 export const influencers: Influencer[] = [
   {
     slug: "aisha-rahman",
@@ -58,6 +78,7 @@ export const influencers: Influencer[] = [
     engagementRate: "4.8%",
     description: "Helping founders build authority through authentic storytelling and strategic content.",
     photo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face",
+    audienceCountries: ["USA", "UK", "UAE", "Canada"],
     initials: "AR",
     accentColor: "#0B0B0B",
     about: {
@@ -88,6 +109,7 @@ export const influencers: Influencer[] = [
     engagementRate: "6.1%",
     description: "Breaking down wealth-building strategies that actually work for the next generation.",
     photo: "https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=400&h=400&fit=crop&crop=face",
+    audienceCountries: ["USA", "UK", "Australia", "Nigeria"],
     initials: "MO",
     accentColor: "#1a1a1a",
     about: {
@@ -118,6 +140,7 @@ export const influencers: Influencer[] = [
     engagementRate: "5.4%",
     description: "Demystifying AI and technology for founders who need to stay ahead without the hype.",
     photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=face",
+    audienceCountries: ["USA", "India", "UK", "Singapore"],
     initials: "SC",
     accentColor: "#2a2a2a",
     about: {
@@ -148,6 +171,7 @@ export const influencers: Influencer[] = [
     engagementRate: "5.9%",
     description: "Growth frameworks and marketing strategies built for founders who are playing the long game.",
     photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+    audienceCountries: ["USA", "UK", "Australia", "Canada"],
     initials: "JW",
     accentColor: "#111111",
     about: {
@@ -178,6 +202,7 @@ export const influencers: Influencer[] = [
     engagementRate: "7.2%",
     description: "Teaching ambitious leaders how to scale themselves so their business can scale too.",
     photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=face",
+    audienceCountries: ["UK", "USA", "India", "UAE"],
     initials: "PN",
     accentColor: "#0d0d0d",
     about: {
@@ -208,6 +233,7 @@ export const influencers: Influencer[] = [
     engagementRate: "5.5%",
     description: "Behind-the-scenes of building a real product business -- from sourcing to scaling.",
     photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face",
+    audienceCountries: ["USA", "UK", "Mexico", "Canada"],
     initials: "TR",
     accentColor: "#181818",
     about: {
@@ -238,6 +264,7 @@ export const influencers: Influencer[] = [
     engagementRate: "8.3%",
     description: "Evidence-based wellness content that helps high performers optimize their body and mind.",
     photo: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=400&fit=crop&crop=face",
+    audienceCountries: ["USA", "UK", "Australia", "Canada"],
     initials: "NB",
     accentColor: "#0B0B0B",
     about: {
@@ -268,6 +295,7 @@ export const influencers: Influencer[] = [
     engagementRate: "6.7%",
     description: "Performance training and athletic mindset content built for people who compete at life.",
     photo: "https://images.unsplash.com/photo-1583864697784-a0efc8379f70?w=400&h=400&fit=crop&crop=face",
+    audienceCountries: ["USA", "UK", "Australia", "Nigeria"],
     initials: "DF",
     accentColor: "#0B0B0B",
     about: {
@@ -298,6 +326,7 @@ export const influencers: Influencer[] = [
     engagementRate: "5.1%",
     description: "Stripping the mystique out of real estate investing for the next generation of property owners.",
     photo: "https://images.unsplash.com/photo-1560298803-a99b7e4e15f0?w=400&h=400&fit=crop&crop=face",
+    audienceCountries: ["USA", "UK", "Canada", "Australia"],
     initials: "CM",
     accentColor: "#1a1a1a",
     about: {
@@ -328,6 +357,7 @@ export const influencers: Influencer[] = [
     engagementRate: "9.1%",
     description: "Building coaches and educators who create lasting transformation, not just viral moments.",
     photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
+    audienceCountries: ["USA", "Brazil", "UK", "Portugal"],
     initials: "RS",
     accentColor: "#0B0B0B",
     about: {
@@ -358,6 +388,7 @@ export const influencers: Influencer[] = [
     engagementRate: "4.4%",
     description: "Redefining style for the professional woman who refuses to choose between ambition and elegance.",
     photo: "https://images.unsplash.com/photo-1488716820095-cbe80883c496?w=400&h=400&fit=crop&crop=face",
+    audienceCountries: ["USA", "UK", "UAE", "France"],
     initials: "YE",
     accentColor: "#0B0B0B",
     about: {
@@ -388,6 +419,7 @@ export const influencers: Influencer[] = [
     engagementRate: "7.8%",
     description: "High-performance nutrition made practical for busy people who refuse to eat like a robot.",
     photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=face",
+    audienceCountries: ["USA", "UK", "Japan", "Australia"],
     initials: "BT",
     accentColor: "#181818",
     about: {
@@ -418,6 +450,7 @@ export const influencers: Influencer[] = [
     engagementRate: "5.8%",
     description: "Slow travel, smart logistics, and the art of living well without being tethered to one place.",
     photo: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=400&fit=crop&crop=face",
+    audienceCountries: ["USA", "UK", "Germany", "Australia"],
     initials: "LV",
     accentColor: "#0d0d0d",
     about: {
@@ -448,6 +481,7 @@ export const influencers: Influencer[] = [
     engagementRate: "6.5%",
     description: "Evidence-based self development without the toxic positivity or pseudoscience.",
     photo: "https://images.unsplash.com/photo-1463453091185-61582044d556?w=400&h=400&fit=crop&crop=face",
+    audienceCountries: ["USA", "UK", "Australia", "Canada"],
     initials: "OG",
     accentColor: "#111111",
     about: {
@@ -478,6 +512,7 @@ export const influencers: Influencer[] = [
     engagementRate: "7.0%",
     description: "No-nonsense career strategy for ambitious professionals who want to move faster than their peers.",
     photo: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop&crop=face",
+    audienceCountries: ["USA", "UK", "Canada", "India"],
     initials: "MJ",
     accentColor: "#0B0B0B",
     about: {
@@ -508,6 +543,7 @@ export const influencers: Influencer[] = [
     engagementRate: "6.9%",
     description: "Making sustainable living accessible to people who don't want to sacrifice quality for conscience.",
     photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&crop=face",
+    audienceCountries: ["UK", "USA", "Germany", "Australia"],
     initials: "ZA",
     accentColor: "#0B0B0B",
     about: {
@@ -523,7 +559,7 @@ export const influencers: Influencer[] = [
       brands: ["Patagonia", "Allbirds", "Grove Collaborative", "Oatly"],
       sampleContent: [
         "Series: 'I switched every household product for 90 days -- what stayed'",
-        "Deep dive: 'What 'carbon neutral' actually means (and when it's greenwashing)'",
+        "Deep dive: 'What carbon neutral actually means (and when it's greenwashing)'",
         "Review: 'The sustainable brands worth paying more for, ranked'",
       ],
     },
@@ -538,6 +574,7 @@ export const influencers: Influencer[] = [
     engagementRate: "8.6%",
     description: "Applying behavioral psychology to help high performers break the patterns that are keeping them stuck.",
     photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face",
+    audienceCountries: ["USA", "UK", "Nigeria", "Canada"],
     initials: "JO",
     accentColor: "#0d0d0d",
     about: {
