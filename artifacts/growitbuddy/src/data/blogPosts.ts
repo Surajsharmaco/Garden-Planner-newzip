@@ -14,7 +14,7 @@ export const blogPosts: BlogPost[] = [
     title: "Why Authority Compounds (and Traffic Doesn't)",
     excerpt: "Most founders chase traffic. The smartest ones build authority - and discover it's the only asset that gets more valuable as you grow.",
     date: "April 10, 2026",
-    tag: "Strategy",
+    tag: "Founders",
     readTime: "6 min read",
     content: `
 ## The Traffic Trap
@@ -54,7 +54,7 @@ Specificity is the seed of authority. Everything else is distribution.
     title: "Stop Creating Content. Start Building a Content System.",
     excerpt: "The difference between founders who burn out and those who compound isn't talent - it's whether they have a system or are improvising every week.",
     date: "April 3, 2026",
-    tag: "Systems",
+    tag: "Founders",
     readTime: "8 min read",
     content: `
 ## The Improvisation Burnout Loop
@@ -98,7 +98,7 @@ Build the system first. The content follows.
     title: "The 4 Pillars of Founder Authority",
     excerpt: "After working with 200+ founders, we've identified the four pillars that separate recognized industry voices from well-kept secrets.",
     date: "March 27, 2026",
-    tag: "Framework",
+    tag: "Founders",
     readTime: "7 min read",
     content: `
 ## Not All Content Builds Authority
@@ -145,7 +145,7 @@ The founders we work with who nail all four typically see meaningful authority t
     title: "Your Founder Brand is More Valuable Than Your Company Brand",
     excerpt: "Companies pivot, rebrand, and get acquired. Your personal authority travels with you forever. Here's why building founder-first is the smarter long-term bet.",
     date: "April 17, 2026",
-    tag: "Founder Brand",
+    tag: "Brand",
     readTime: "6 min read",
     content: `
 ## The Brand That Lasts
@@ -190,7 +190,7 @@ Specificity and conviction are the two rarest things in founder content. Both ar
     title: "How Founders Are Using LinkedIn to Close Deals Without a Sales Team",
     excerpt: "The top-performing founders on LinkedIn aren't just building audiences. They've turned their profile into a pipeline. Here's the exact architecture they use.",
     date: "April 14, 2026",
-    tag: "Founder Brand",
+    tag: "Brand",
     readTime: "7 min read",
     content: `
 ## LinkedIn as a Closing Tool
@@ -394,7 +394,7 @@ When you start pricing from outcomes rather than from the hours it takes to prod
     title: "The Ghostwriter's Guide to Writing for Founders and Executives",
     excerpt: "Writing for someone else is a craft most writers underestimate. Here's how the best ghostwriters extract authentic voice, protect their client's reputation, and build long-term retainers.",
     date: "April 24, 2026",
-    tag: "Ghostwriting",
+    tag: "Freelancers",
     readTime: "8 min read",
     content: `
 ## What Ghostwriting for Executives Actually Requires
