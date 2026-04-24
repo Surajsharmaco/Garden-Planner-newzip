@@ -216,15 +216,15 @@ export default function Freelancers() {
                     <FormField control={form.control} name="skills" render={() => (
                       <FormItem>
                         <FormLabel style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 600, color: "#0B0B0B" }}>Skills (select all that apply)</FormLabel>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginTop: 8 }}>
                           {SKILLS_LIST.map((skill) => (
                             <button
                               key={skill}
                               type="button"
                               onClick={() => toggleSkill(skill)}
                               style={{
-                                padding: "8px 14px",
-                                borderRadius: 100,
+                                padding: "10px 14px",
+                                borderRadius: 10,
                                 fontSize: 13,
                                 fontWeight: 600,
                                 border: "1.5px solid",
@@ -233,6 +233,7 @@ export default function Freelancers() {
                                 color: selectedSkills.includes(skill) ? "#fff" : "#0B0B0B",
                                 cursor: "pointer",
                                 transition: "all 0.15s",
+                                textAlign: "left",
                               }}
                             >
                               {skill}
