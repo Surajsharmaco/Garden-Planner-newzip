@@ -81,27 +81,31 @@ export default function About() {
       <section style={{ padding: "80px 24px", background: "#0B0B0B", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="max-w-[1100px] mx-auto">
           <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: 48, alignItems: "start" }}>
-            <div>
-              <div style={{ width: 96, height: 96, borderRadius: "50%", overflow: "hidden", marginBottom: 20, border: "2px solid rgba(255,255,255,0.12)", flexShrink: 0 }}>
-                <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face"
-                  alt="Suraj Sharma"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  onError={(e) => {
-                    const el = e.currentTarget.parentElement!;
-                    el.style.background = "#1a1a1a";
-                    el.style.display = "flex";
-                    el.style.alignItems = "center";
-                    el.style.justifyContent = "center";
-                    el.style.fontSize = "32px";
-                    el.style.fontWeight = "800";
-                    el.style.color = "#fff";
-                    el.innerHTML = "S";
-                  }}
-                />
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <div style={{ width: 72, height: 72, borderRadius: "50%", overflow: "hidden", border: "2px solid rgba(255,255,255,0.12)", flexShrink: 0 }}>
+                  <img
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face"
+                    alt="Suraj Sharma"
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    onError={(e) => {
+                      const el = e.currentTarget.parentElement!;
+                      el.style.background = "#1a1a1a";
+                      el.style.display = "flex";
+                      el.style.alignItems = "center";
+                      el.style.justifyContent = "center";
+                      el.style.fontSize = "28px";
+                      el.style.fontWeight = "800";
+                      el.style.color = "#fff";
+                      el.innerHTML = "S";
+                    }}
+                  />
+                </div>
+                <div>
+                  <h3 style={{ fontWeight: 800, fontSize: 20, letterSpacing: "-0.02em", color: "#fff", marginBottom: 2 }}>Suraj Sharma</h3>
+                  <p style={{ fontSize: 14, color: "rgba(255,255,255,0.35)" }}>Founder & CEO</p>
+                </div>
               </div>
-              <h3 style={{ fontWeight: 800, fontSize: 20, letterSpacing: "-0.02em", color: "#fff", marginBottom: 4 }}>Suraj Sharma</h3>
-              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.35)", marginBottom: 16 }}>Founder & CEO</p>
               <div style={{ display: "flex", gap: 12 }}>
                 {["LinkedIn", "Twitter"].map((s) => (
                   <a key={s} href="#" style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.55)", textDecoration: "none" }} className="hover:opacity-70 transition-opacity">{s}</a>
