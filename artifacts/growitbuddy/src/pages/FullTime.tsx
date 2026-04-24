@@ -49,11 +49,14 @@ export default function FullTime() {
   const { toast } = useToast();
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [otherRole, setOtherRole] = useState("");
 
   const form = useForm<F>({
     resolver: zodResolver(schema),
     defaultValues: { name: "", email: "", phone: "", role: "", experience: "", linkedinUrl: "", coverNote: "" },
   });
+
+  const watchedRole = form.watch("role");
 
   const onSubmit = async (data: F) => {
     setSubmitting(true);
@@ -61,11 +64,12 @@ export default function FullTime() {
       const res = await fetch(`${import.meta.env.BASE_URL}api/forms/contact`.replace(/\/\//g, "/"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, name: data.name, company: "Full-Time Application", message: `Role: ${data.role}\nExperience: ${data.experience}\nLinkedIn: ${data.linkedinUrl}\nPhone: ${data.phone}\nNote: ${data.coverNote}` }),
+        body: JSON.stringify({ ...data, name: data.name, company: "Full-Time Application", message: `Role: ${data.role === "Other" ? `Other - ${otherRole}` : data.role}\nExperience: ${data.experience}\nLinkedIn: ${data.linkedinUrl}\nPhone: ${data.phone}\nNote: ${data.coverNote}` }),
       });
       if (res.ok) {
         setSubmitted(true);
         form.reset();
+        setOtherRole("");
       } else {
         toast({ title: "Something went wrong", description: "Please try again.", variant: "destructive" });
       }
@@ -197,6 +201,22 @@ export default function FullTime() {
                             ))}
                           </select>
                         </FormControl>
+                        {watchedRole === "Other" && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.2 }}
+                            style={{ marginTop: 10 }}
+                          >
+                            <input
+                              className="gb-input"
+                              placeholder="Please describe the role you are applying for..."
+                              value={otherRole}
+                              onChange={(e) => setOtherRole(e.target.value)}
+                            />
+                          </motion.div>
+                        )}
                         <FormMessage />
                       </FormItem>
                     )} />

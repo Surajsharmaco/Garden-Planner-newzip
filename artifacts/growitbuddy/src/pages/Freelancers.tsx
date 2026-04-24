@@ -52,6 +52,7 @@ export default function Freelancers() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [otherSkill, setOtherSkill] = useState("");
 
   const form = useForm<F>({
     resolver: zodResolver(schema),
@@ -72,12 +73,13 @@ export default function Freelancers() {
       const res = await fetch(`${import.meta.env.BASE_URL}api/forms/freelancers`.replace(/\/\//g, "/"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, otherSkill: selectedSkills.includes("Other") ? otherSkill : undefined }),
       });
       if (res.ok) {
         setSubmitted(true);
         form.reset();
         setSelectedSkills([]);
+        setOtherSkill("");
       } else {
         toast({ title: "Something went wrong", description: "Please try again.", variant: "destructive" });
       }
@@ -237,6 +239,22 @@ export default function Freelancers() {
                             </button>
                           ))}
                         </div>
+                        {selectedSkills.includes("Other") && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.2 }}
+                            style={{ marginTop: 10 }}
+                          >
+                            <input
+                              className="gb-input"
+                              placeholder="Please describe your skill..."
+                              value={otherSkill}
+                              onChange={(e) => setOtherSkill(e.target.value)}
+                            />
+                          </motion.div>
+                        )}
                         <FormMessage />
                       </FormItem>
                     )} />
