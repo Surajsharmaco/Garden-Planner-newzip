@@ -363,9 +363,11 @@ export default function InfluencerExplore() {
           .influencer-cta-section { padding: 0 16px 64px !important; }
           .influencer-cta-box { padding: 36px 20px !important; border-radius: 16px !important; }
           .card-description { display: none; }
-          .filter-row { flex-direction: column; align-items: stretch; }
-          .filter-row > * { width: 100%; }
-          .filter-row > button[style] { min-width: unset !important; }
+          .filter-row { flex-wrap: wrap; }
+          .filter-dropdown-wrap { flex: 1 1 calc(50% - 5px); min-width: 0; }
+          .filter-dropdown-wrap button { min-width: unset !important; width: 100%; box-sizing: border-box; }
+          .search-wrap { flex: 1 1 100%; max-width: 100% !important; }
+          .filter-count { display: none; }
         }
       `}</style>
 
@@ -412,22 +414,26 @@ export default function InfluencerExplore() {
           {/* Filter row */}
           <div className="filter-row" style={{ marginBottom: 20 }}>
             {/* Genre dropdown */}
-            <FilterDropdown
-              icon={<SlidersHorizontal style={{ width: 15, height: 15 }} />}
-              placeholder="Select Genre"
-              selected={selectedGenres}
-              options={NICHE_CATEGORIES}
-              onChange={setSelectedGenres}
-            />
+            <div className="filter-dropdown-wrap">
+              <FilterDropdown
+                icon={<SlidersHorizontal style={{ width: 15, height: 15 }} />}
+                placeholder="Select Genre"
+                selected={selectedGenres}
+                options={NICHE_CATEGORIES}
+                onChange={setSelectedGenres}
+              />
+            </div>
 
             {/* Country dropdown */}
-            <FilterDropdown
-              icon={<Globe style={{ width: 15, height: 15 }} />}
-              placeholder="Select Country"
-              selected={selectedCountries}
-              options={COUNTRIES}
-              onChange={setSelectedCountries}
-            />
+            <div className="filter-dropdown-wrap">
+              <FilterDropdown
+                icon={<Globe style={{ width: 15, height: 15 }} />}
+                placeholder="Select Country"
+                selected={selectedCountries}
+                options={COUNTRIES}
+                onChange={setSelectedCountries}
+              />
+            </div>
 
             {/* Search */}
             <div className="search-wrap">
@@ -447,7 +453,7 @@ export default function InfluencerExplore() {
             </div>
 
             {/* Count */}
-            <span style={{ fontSize: 13, fontWeight: 500, color: "rgba(11,11,11,0.35)", marginLeft: "auto", whiteSpace: "nowrap", flexShrink: 0 }}>
+            <span className="filter-count" style={{ fontSize: 13, fontWeight: 500, color: "rgba(11,11,11,0.35)", marginLeft: "auto", whiteSpace: "nowrap", flexShrink: 0 }}>
               {filtered.length} creator{filtered.length !== 1 ? "s" : ""}
             </span>
           </div>
