@@ -60,7 +60,7 @@ export function Navbar() {
       <header
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-200"
         style={{
-          height: 64,
+          height: 72,
           background: scrolled ? "rgba(247,247,245,0.94)" : "rgba(247,247,245,0.88)",
           backdropFilter: "blur(16px)",
           WebkitBackdropFilter: "blur(16px)",
@@ -119,7 +119,7 @@ export function Navbar() {
                   <div key={link.label} style={{ position: "relative" }}>
                     <button
                       onClick={() => toggleDropdown(link.label)}
-                      className="text-[13px] font-medium cursor-pointer transition-all duration-150 rounded-full px-3.5 py-1.5 inline-flex items-center gap-1"
+                      className="text-[15px] font-medium cursor-pointer transition-all duration-150 rounded-full px-4 py-2 inline-flex items-center gap-1"
                       style={{
                         fontFamily: "'Inter', sans-serif",
                         color: isActive ? "#fff" : "rgba(11,11,11,0.5)",
@@ -158,9 +158,9 @@ export function Navbar() {
                               <span
                                 style={{
                                   display: "block",
-                                  padding: "9px 14px",
+                                  padding: "10px 14px",
                                   borderRadius: 9,
-                                  fontSize: 13,
+                                  fontSize: 14,
                                   fontWeight: location === item.href ? 700 : 500,
                                   color: location === item.href ? "#fff" : "#0B0B0B",
                                   background: location === item.href ? "#0B0B0B" : "transparent",
@@ -184,7 +184,7 @@ export function Navbar() {
               return (
                 <Link key={link.href} href={link.href!}>
                   <span
-                    className="text-[13px] font-medium cursor-pointer transition-all duration-150 rounded-full px-3.5 py-1.5"
+                    className="text-[15px] font-medium cursor-pointer transition-all duration-150 rounded-full px-4 py-2"
                     style={{
                       fontFamily: "'Inter', sans-serif",
                       color: location === link.href ? "#fff" : "rgba(11,11,11,0.5)",
@@ -202,7 +202,7 @@ export function Navbar() {
           <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
             <Link href="/contact">
               <span
-                className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[13px] font-semibold cursor-pointer transition-all hover:bg-black/5"
+                className="inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-[15px] font-semibold cursor-pointer transition-all hover:bg-black/5"
                 style={{
                   fontFamily: "'Inter', sans-serif",
                   color: "#0B0B0B",
@@ -216,7 +216,7 @@ export function Navbar() {
             </Link>
             <Link href="/contact">
               <span
-                className="gb-btn text-[13px] px-5 py-2"
+                className="gb-btn text-[15px] px-5 py-2"
                 style={{ borderRadius: 100 }}
                 data-testid="button-book-call-nav"
               >
@@ -245,7 +245,7 @@ export function Navbar() {
             transition={{ duration: 0.18 }}
             style={{
               position: "fixed",
-              top: 64,
+              top: 72,
               left: 0,
               right: 0,
               zIndex: 40,
