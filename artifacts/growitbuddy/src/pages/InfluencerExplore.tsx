@@ -48,87 +48,84 @@ export default function InfluencerExplore() {
       </section>
 
       {/* Grid */}
-      <section style={{ padding: "80px 24px" }}>
+      <section style={{ padding: "72px 24px" }}>
         <div className="max-w-[1100px] mx-auto">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 24 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 20 }}>
             {influencers.map((inf, i) => (
               <motion.div
                 key={inf.slug}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.06, duration: 0.5 }}
+                transition={{ delay: i * 0.05, duration: 0.45 }}
               >
                 <Link href={`/influencers/${inf.slug}`}>
                   <div
                     style={{
                       background: "#fff",
-                      border: "1.5px solid rgba(11,11,11,0.08)",
                       borderRadius: 20,
-                      padding: "28px",
+                      padding: "40px 28px",
                       cursor: "pointer",
-                      transition: "border-color 0.15s, box-shadow 0.15s",
+                      textAlign: "center",
+                      boxShadow: "0 2px 12px rgba(11,11,11,0.05)",
+                      border: "1px solid rgba(11,11,11,0.06)",
+                      transition: "transform 0.2s ease, box-shadow 0.2s ease",
                     }}
-                    className="hover:border-black/20 hover:shadow-lg group"
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLDivElement).style.transform = "scale(1.03)";
+                      (e.currentTarget as HTMLDivElement).style.boxShadow = "0 12px 40px rgba(11,11,11,0.1)";
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
+                      (e.currentTarget as HTMLDivElement).style.boxShadow = "0 2px 12px rgba(11,11,11,0.05)";
+                    }}
                   >
-                    {/* Header */}
-                    <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 20 }}>
-                      <div
-                        style={{
-                          width: 52,
-                          height: 52,
-                          borderRadius: "50%",
-                          background: inf.accentColor,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flexShrink: 0,
-                          color: "#fff",
-                          fontWeight: 800,
-                          fontSize: 17,
-                          letterSpacing: "-0.02em",
-                        }}
-                      >
-                        {inf.initials}
-                      </div>
-                      <div>
-                        <p style={{ fontWeight: 700, fontSize: 16, color: "#0B0B0B", letterSpacing: "-0.02em", marginBottom: 2 }}>{inf.name}</p>
-                        <p style={{ fontSize: 13, color: "rgba(11,11,11,0.4)", fontWeight: 500 }}>{inf.username}</p>
-                      </div>
+                    {/* Avatar */}
+                    <div
+                      style={{
+                        width: 80,
+                        height: 80,
+                        borderRadius: "50%",
+                        background: inf.accentColor,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "#fff",
+                        fontWeight: 800,
+                        fontSize: 24,
+                        letterSpacing: "-0.02em",
+                        margin: "0 auto 20px",
+                      }}
+                    >
+                      {inf.initials}
                     </div>
 
-                    {/* Niche tag */}
-                    <div style={{ marginBottom: 16 }}>
-                      <span style={{ display: "inline-block", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(11,11,11,0.45)", background: "rgba(11,11,11,0.06)", borderRadius: 100, padding: "4px 10px" }}>
-                        {inf.niche}
-                      </span>
-                    </div>
-
-                    {/* Description */}
-                    <p style={{ fontSize: 14, color: "rgba(11,11,11,0.6)", lineHeight: "1.65", marginBottom: 24 }}>
-                      {inf.description}
+                    {/* Username */}
+                    <p style={{ fontWeight: 700, fontSize: 16, color: "#0B0B0B", letterSpacing: "-0.02em", marginBottom: 6 }}>
+                      {inf.username}
                     </p>
 
-                    {/* Stats */}
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 24 }}>
-                      <div style={{ background: "#F7F7F5", borderRadius: 12, padding: "12px 14px" }}>
-                        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 4 }}>Followers</p>
-                        <p style={{ fontSize: 20, fontWeight: 800, color: "#0B0B0B", letterSpacing: "-0.03em" }}>{inf.followers}</p>
-                      </div>
-                      <div style={{ background: "#F7F7F5", borderRadius: 12, padding: "12px 14px" }}>
-                        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 4 }}>Engagement</p>
-                        <p style={{ fontSize: 20, fontWeight: 800, color: "#0B0B0B", letterSpacing: "-0.03em" }}>{inf.engagementRate}</p>
-                      </div>
-                    </div>
+                    {/* Followers */}
+                    <p style={{ fontSize: 13, fontWeight: 500, color: "rgba(11,11,11,0.4)", marginBottom: 12 }}>
+                      {inf.followers} followers
+                    </p>
 
-                    {/* CTA */}
-                    <div
-                      style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#0B0B0B" }}
-                      className="group-hover:gap-3 transition-all"
+                    {/* Niche */}
+                    <span
+                      style={{
+                        display: "inline-block",
+                        fontSize: 11,
+                        fontWeight: 700,
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
+                        color: "rgba(11,11,11,0.4)",
+                        background: "rgba(11,11,11,0.05)",
+                        borderRadius: 100,
+                        padding: "3px 10px",
+                      }}
                     >
-                      View Profile
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </div>
+                      {inf.niche}
+                    </span>
                   </div>
                 </Link>
               </motion.div>

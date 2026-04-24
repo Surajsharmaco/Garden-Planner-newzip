@@ -1,0 +1,106 @@
+Act as a senior UI/UX designer and frontend developer.
+
+Your task is to redesign the "Explore Influencers" section into a minimal, scalable grid layout.
+
+IMPORTANT:
+- Do NOT change overall website theme
+- Keep it clean, premium, and minimal
+- Focus on scalability and readability
+
+--------------------------------------------------
+
+🎯 GOAL
+
+Create a simple, scrollable influencer listing system where:
+
+- users can quickly scan profiles  
+- many influencers can be displayed  
+- design stays clean and uncluttered  
+
+--------------------------------------------------
+
+🧩 GRID LAYOUT
+
+- 2 influencer cards per row (desktop)
+- 1 per row (mobile)
+- equal spacing between cards
+- infinite vertical scroll style
+
+--------------------------------------------------
+
+🟢 INFLUENCER CARD DESIGN
+
+Each card should include ONLY:
+
+1. Profile Image (centered or top)
+   - circular or rounded square
+   - high quality
+   - main visual focus
+
+2. Username
+   - example: @johncreator
+   - bold, clean font
+
+3. Followers count
+   - short format: 120K, 1.5M
+   - small text below username
+
+4. (Optional) Niche
+   - very small text (e.g. Fitness, Finance)
+
+--------------------------------------------------
+
+🎨 DESIGN STYLE
+
+- white or light background
+- soft shadows
+- rounded corners
+- minimal borders
+- lots of whitespace
+
+--------------------------------------------------
+
+🎬 HOVER EFFECT
+
+- slight scale up (1.03x)
+- soft shadow increase
+- smooth transition
+
+--------------------------------------------------
+
+📱 RESPONSIVENESS
+
+- desktop: 2 columns
+- tablet: 2 columns
+- mobile: 1 column
+
+--------------------------------------------------
+
+⚠️ STRICT RULES
+
+- DO NOT add too much text
+- DO NOT show full details here
+- DO NOT clutter the card
+
+This is only a preview grid.
+
+--------------------------------------------------
+
+🔗 INTERACTION
+
+- clicking a card opens full influencer profile page
+
+--------------------------------------------------
+
+🎯 FINAL RESULT
+
+The section should feel:
+
+- premium  
+- clean  
+- scalable  
+- easy to browse  
+
+User should quickly scroll and explore many influencers without friction.
+
+--------------------------------------------------
