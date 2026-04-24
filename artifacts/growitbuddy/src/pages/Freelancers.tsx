@@ -19,6 +19,7 @@ const SKILLS_LIST = [
   "Newsletter Writing",
   "Social Media Management",
   "Copywriting",
+  "Other",
 ];
 
 const EXPERIENCE_OPTIONS = [
