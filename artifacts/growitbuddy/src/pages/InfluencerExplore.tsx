@@ -18,6 +18,7 @@ function InfluencerCard({ inf, i }: { inf: (typeof influencers)[0]; i: number })
     >
       <Link href={`/influencers/${inf.slug}`}>
         <div
+          className="influencer-card"
           style={{
             background: "#fff",
             borderRadius: 20,
@@ -91,21 +92,21 @@ function InfluencerCard({ inf, i }: { inf: (typeof influencers)[0]; i: number })
           </div>
 
           {/* Info */}
-          <div style={{ padding: "22px 24px 26px" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
-              <p style={{ fontWeight: 800, fontSize: 17, color: "#0B0B0B", letterSpacing: "-0.03em" }}>
+          <div style={{ padding: "20px 20px 24px" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4, gap: 8 }}>
+              <p style={{ fontWeight: 800, fontSize: 16, color: "#0B0B0B", letterSpacing: "-0.03em", minWidth: 0 }}>
                 {inf.name}
               </p>
-              <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(11,11,11,0.35)" }}>
+              <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(11,11,11,0.35)", whiteSpace: "nowrap", flexShrink: 0 }}>
                 {inf.followers}
               </span>
             </div>
 
-            <p style={{ fontSize: 13, fontWeight: 500, color: "rgba(11,11,11,0.4)", marginBottom: 14 }}>
+            <p style={{ fontSize: 13, fontWeight: 500, color: "rgba(11,11,11,0.4)", marginBottom: 12 }}>
               {inf.username}
             </p>
 
-            <p style={{ fontSize: 13, color: "rgba(11,11,11,0.55)", lineHeight: 1.6, marginBottom: 16 }}>
+            <p className="card-description" style={{ fontSize: 13, color: "rgba(11,11,11,0.55)", lineHeight: 1.6, marginBottom: 16 }}>
               {inf.description}
             </p>
 
@@ -120,11 +121,12 @@ function InfluencerCard({ inf, i }: { inf: (typeof influencers)[0]; i: number })
                   background: "rgba(11,11,11,0.05)",
                   borderRadius: 100,
                   padding: "3px 10px",
+                  whiteSpace: "nowrap",
                 }}
               >
                 {inf.engagementRate} eng.
               </span>
-              <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 12, fontWeight: 600, color: "#0B0B0B", marginLeft: "auto" }}>
+              <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 12, fontWeight: 600, color: "#0B0B0B", marginLeft: "auto", whiteSpace: "nowrap" }}>
                 View profile <ArrowRight style={{ width: 12, height: 12 }} />
               </span>
             </div>
@@ -138,20 +140,51 @@ function InfluencerCard({ inf, i }: { inf: (typeof influencers)[0]; i: number })
 export default function InfluencerExplore() {
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
+      <style>{`
+        .influencer-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+        }
+        @media (max-width: 600px) {
+          .influencer-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+          .influencer-hero {
+            padding-top: 100px !important;
+            padding-bottom: 56px !important;
+          }
+          .influencer-grid-section {
+            padding: 48px 16px !important;
+          }
+          .influencer-cta-section {
+            padding: 0 16px 64px !important;
+          }
+          .influencer-cta-box {
+            padding: 40px 24px !important;
+            border-radius: 16px !important;
+          }
+          .card-description {
+            display: none;
+          }
+        }
+      `}</style>
+
       <SEOMeta
         title="Explore Influencers - GrowitBuddy"
         description="Discover proven influencers and content creators who build real engagement and drive meaningful results for ambitious brands."
       />
 
       {/* Hero */}
-      <section style={{ paddingTop: 120, paddingBottom: 80, paddingLeft: 24, paddingRight: 24, borderBottom: "1px solid rgba(11,11,11,0.08)" }}>
+      <section className="influencer-hero" style={{ paddingTop: 120, paddingBottom: 80, paddingLeft: 24, paddingRight: 24, borderBottom: "1px solid rgba(11,11,11,0.08)" }}>
         <div className="max-w-[1100px] mx-auto">
           <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Influencer Network</p>
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            style={{ fontWeight: 800, fontSize: "clamp(44px, 7vw, 88px)", letterSpacing: "-0.04em", lineHeight: "1.02", color: "#0B0B0B", maxWidth: "16ch", marginBottom: 24 }}
+            style={{ fontWeight: 800, fontSize: "clamp(36px, 7vw, 88px)", letterSpacing: "-0.04em", lineHeight: "1.02", color: "#0B0B0B", maxWidth: "16ch", marginBottom: 20 }}
           >
             Work With Proven Influencers.
           </motion.h1>
@@ -159,7 +192,7 @@ export default function InfluencerExplore() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            style={{ fontSize: 18, color: "rgba(11,11,11,0.5)", lineHeight: "1.75", maxWidth: "52ch", marginBottom: 36 }}
+            style={{ fontSize: "clamp(15px, 2.5vw, 18px)", color: "rgba(11,11,11,0.5)", lineHeight: "1.75", maxWidth: "52ch", marginBottom: 32 }}
           >
             Discover creators who build real engagement and drive meaningful results -- not just impressions.
           </motion.p>
@@ -179,9 +212,9 @@ export default function InfluencerExplore() {
       </section>
 
       {/* Grid */}
-      <section style={{ padding: "72px 24px" }}>
+      <section className="influencer-grid-section" style={{ padding: "72px 24px" }}>
         <div className="max-w-[1100px] mx-auto">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 24 }}>
+          <div className="influencer-grid">
             {influencers.map((inf, i) => (
               <InfluencerCard key={inf.slug} inf={inf} i={i} />
             ))}
@@ -190,14 +223,14 @@ export default function InfluencerExplore() {
       </section>
 
       {/* Bottom CTA */}
-      <section style={{ padding: "0 24px 96px" }}>
+      <section className="influencer-cta-section" style={{ padding: "0 24px 96px" }}>
         <div className="max-w-[1100px] mx-auto">
-          <div style={{ background: "#0B0B0B", borderRadius: 24, padding: "56px 48px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 24 }}>
+          <div className="influencer-cta-box" style={{ background: "#0B0B0B", borderRadius: 24, padding: "56px 48px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 20 }}>
             <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)" }}>Are you a creator?</p>
-            <h2 style={{ fontWeight: 800, fontSize: "clamp(28px, 4vw, 48px)", letterSpacing: "-0.04em", color: "#fff", lineHeight: 1.1, maxWidth: "20ch" }}>
+            <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 4vw, 48px)", letterSpacing: "-0.04em", color: "#fff", lineHeight: 1.1, maxWidth: "20ch" }}>
               Ready to Get Discovered?
             </h2>
-            <p style={{ fontSize: 16, color: "rgba(255,255,255,0.5)", maxWidth: "44ch", lineHeight: 1.7 }}>
+            <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: "rgba(255,255,255,0.5)", maxWidth: "44ch", lineHeight: 1.7 }}>
               Apply to join the Influencer Network. Get reviewed, get listed, and unlock real brand opportunities.
             </p>
             <Link href="/creators">
