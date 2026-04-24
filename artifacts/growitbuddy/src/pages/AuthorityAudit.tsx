@@ -8,6 +8,8 @@ const TEXT = "#0B0B0B";
 type Answers = Record<string, string>;
 
 interface Report {
+  score: number;
+  scoreLabel: string;
   stage: string;
   stageDesc: string;
   contentGap: string;
@@ -214,11 +216,42 @@ function buildOutcomes(goal: string, platform: string): string[] {
   ];
 }
 
+function getScore(a: Answers): { score: number; scoreLabel: string } {
+  const freqScore: Record<string, number> = {
+    "Daily": 28, "3-5x per week": 22, "1-2x per week": 16,
+    "A few times a month": 8, "Rarely or never": 3,
+  };
+  const tenureScore: Record<string, number> = {
+    "2+ years": 28, "1-2 years": 20, "3-12 months": 12, "Less than 3 months": 5,
+  };
+  const contentScore: Record<string, number> = {
+    "Case studies and results": 22, "Educational / how-to content": 18,
+    "Personal stories and opinions": 15, "Industry news and commentary": 11,
+    "Mixed - no clear theme": 6,
+  };
+  const problemPenalty: Record<string, number> = {
+    "My content feels scattered or unclear": -8,
+    "I don't know what to post": -8,
+    "I can't stay consistent": -6,
+    "Content isn't converting to clients or revenue": -4,
+    "Not getting enough views or reach": -2,
+  };
+  const raw = (freqScore[a.frequency] || 5) + (tenureScore[a.tenure] || 5) + (contentScore[a.contentType] || 8) + (problemPenalty[a.problem] || 0);
+  const score = Math.min(100, Math.max(10, Math.round((raw / 78) * 100)));
+  const scoreLabel =
+    score >= 75 ? "Strong Authority" :
+    score >= 55 ? "Growing" :
+    score >= 38 ? "Developing" :
+    score >= 22 ? "Early Stage" : "Just Starting";
+  return { score, scoreLabel };
+}
+
 function buildReport(a: Answers): Report {
   const { stage, stageDesc } = getStage(a.frequency, a.tenure, a.problem);
   const contentGap = getContentGap(a.contentType, a.problem);
+  const { score, scoreLabel } = getScore(a);
   return {
-    stage, stageDesc, contentGap,
+    score, scoreLabel, stage, stageDesc, contentGap,
     narrative:      buildNarrative(a, contentGap),
     priorityAction: buildPriority(a.problem, a.frequency),
     blockers:       buildBlockers(a.problem, a.platform),
@@ -230,10 +263,13 @@ function buildReport(a: Answers): Report {
 // ── Main component ───────────────────────────────────────────────────────────
 
 export default function AuthorityAudit() {
-  const [step, setStep]           = useState(-1);
-  const [answers, setAnswers]     = useState<Answers>({});
-  const [textInput, setTextInput] = useState("");
-  const [report, setReport]       = useState<Report | null>(null);
+  const [step, setStep]                       = useState(-1);
+  const [answers, setAnswers]                 = useState<Answers>({});
+  const [textInput, setTextInput]             = useState("");
+  const [report, setReport]                   = useState<Report | null>(null);
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterDone, setNewsletterDone]   = useState(false);
+  const [newsletterBusy, setNewsletterBusy]   = useState(false);
 
   const currentQ  = QUESTIONS[step];
   const firstName = answers["name"] || "";
@@ -245,7 +281,22 @@ export default function AuthorityAudit() {
     if (step === QUESTIONS.length - 1) setReport(buildReport(next));
     else setStep(s => s + 1);
   };
-  const reset = () => { setStep(-1); setAnswers({}); setTextInput(""); setReport(null); };
+
+  const handleNewsletter = async () => {
+    if (!newsletterEmail.includes("@")) return;
+    setNewsletterBusy(true);
+    try {
+      await fetch(`${import.meta.env.BASE_URL}api/forms/newsletter`.replace(/\/\//g, "/"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: newsletterEmail, source: "Authority Audit" }),
+      });
+    } catch { /* silently continue */ }
+    setNewsletterDone(true);
+    setNewsletterBusy(false);
+  };
+
+  const reset = () => { setStep(-1); setAnswers({}); setTextInput(""); setReport(null); setNewsletterDone(false); setNewsletterEmail(""); };
 
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
@@ -411,25 +462,48 @@ export default function AuthorityAudit() {
             {report && (
               <motion.div key="result" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} style={{ maxWidth: 860, margin: "0 auto" }}>
 
-                {/* Header */}
-                <div style={{ marginBottom: 24 }}>
-                  <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 12 }}>Your Authority Audit</p>
-                  <h2 style={{ fontWeight: 800, fontSize: "clamp(28px, 5vw, 48px)", letterSpacing: "-0.04em", color: TEXT, lineHeight: 1.08, marginBottom: 20 }}>
-                    {firstName ? `${firstName}, here's your diagnosis.` : "Here's your full diagnosis."}
-                  </h2>
-                  {/* Badges */}
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                    {[
-                      { label: report.stage, dark: true },
-                      { label: report.contentGap, dark: false },
-                      { label: answers.platform, dark: false },
-                      { label: answers.role, dark: false },
-                    ].map((b, i) => (
-                      <span key={i} style={{ padding: "6px 14px", borderRadius: 100, fontSize: 13, fontWeight: 600, background: b.dark ? TEXT : "#fff", color: b.dark ? "#fff" : TEXT, border: b.dark ? "none" : "1.5px solid rgba(11,11,11,0.1)" }}>
-                        {b.label}
-                      </span>
-                    ))}
+                {/* ── Score card ── */}
+                <div style={{ background: "#0B0B0B", borderRadius: 24, padding: "40px 36px", marginBottom: 12, display: "flex", alignItems: "center", gap: 36, flexWrap: "wrap" }}>
+                  {/* Circle */}
+                  <div style={{ position: "relative", width: 120, height: 120, flexShrink: 0 }}>
+                    <svg width="120" height="120" viewBox="0 0 120 120" style={{ transform: "rotate(-90deg)" }}>
+                      <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="8" />
+                      <circle cx="60" cy="60" r="52" fill="none" stroke="#fff" strokeWidth="8"
+                        strokeDasharray={`${2 * Math.PI * 52}`}
+                        strokeDashoffset={`${2 * Math.PI * 52 * (1 - report.score / 100)}`}
+                        strokeLinecap="round"
+                        style={{ transition: "stroke-dashoffset 1.2s ease" }}
+                      />
+                    </svg>
+                    <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                      <span style={{ fontSize: 28, fontWeight: 900, color: "#fff", lineHeight: 1, letterSpacing: "-0.04em" }}>{report.score}</span>
+                      <span style={{ fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase" }}>/100</span>
+                    </div>
                   </div>
+                  {/* Text */}
+                  <div style={{ flex: 1, minWidth: 200 }}>
+                    <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 8 }}>Authority Score</p>
+                    <h2 style={{ fontWeight: 800, fontSize: "clamp(22px, 4vw, 34px)", letterSpacing: "-0.04em", color: "#fff", lineHeight: 1.1, marginBottom: 10 }}>
+                      {firstName ? `${firstName}, you're` : "You're"} at <span style={{ borderBottom: "2px solid rgba(255,255,255,0.4)" }}>{report.scoreLabel}</span>.
+                    </h2>
+                    <p style={{ fontSize: 14, color: "rgba(255,255,255,0.45)", lineHeight: "1.65", margin: 0, maxWidth: "46ch" }}>
+                      {report.stageDesc}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Badges */}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
+                  {[
+                    { label: report.stage, dark: true },
+                    { label: report.contentGap, dark: false },
+                    { label: answers.platform, dark: false },
+                    { label: answers.role, dark: false },
+                  ].map((b, i) => (
+                    <span key={i} style={{ padding: "6px 14px", borderRadius: 100, fontSize: 13, fontWeight: 600, background: b.dark ? TEXT : "#fff", color: b.dark ? "#fff" : TEXT, border: b.dark ? "none" : "1.5px solid rgba(11,11,11,0.1)" }}>
+                      {b.label}
+                    </span>
+                  ))}
                 </div>
 
                 {/* Narrative */}
@@ -439,79 +513,162 @@ export default function AuthorityAudit() {
                 </div>
 
                 {/* Priority */}
-                <div style={{ background: "#0B0B0B", borderRadius: 20, padding: "28px 28px", marginBottom: 12 }}>
-                  <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 14 }}>Your #1 Priority Action</p>
-                  <p style={{ fontSize: 16, fontWeight: 600, color: "#fff", lineHeight: "1.72", margin: 0 }}>{report.priorityAction}</p>
+                <div style={{ background: "#fff", borderRadius: 20, padding: "28px 28px", marginBottom: 28, border: "1.5px solid rgba(11,11,11,0.08)" }}>
+                  <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 14 }}>Your #1 Priority Action</p>
+                  <p style={{ fontSize: 16, fontWeight: 600, color: TEXT, lineHeight: "1.72", margin: 0 }}>{report.priorityAction}</p>
                 </div>
 
-                {/* Blockers */}
-                <div style={{ background: "#fff", borderRadius: 20, padding: "28px 28px", marginBottom: 12, border: "1.5px solid rgba(11,11,11,0.08)" }}>
-                  <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 20 }}>What's holding you back</p>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-                    {report.blockers.map((b, i) => (
-                      <div key={i} style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
-                        <div style={{ width: 30, height: 30, borderRadius: 9, background: "rgba(11,11,11,0.06)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                          <span style={{ fontSize: 12, fontWeight: 800, color: "rgba(11,11,11,0.4)" }}>{i + 1}</span>
-                        </div>
-                        <div>
-                          <p style={{ fontSize: 14, fontWeight: 700, color: TEXT, marginBottom: 4 }}>{b.title}</p>
-                          <p style={{ fontSize: 14, color: "rgba(11,11,11,0.55)", lineHeight: "1.7", margin: 0 }}>{b.detail}</p>
-                        </div>
+                {/* ── Newsletter Gate ── */}
+                {!newsletterDone ? (
+                  <div style={{ position: "relative", marginBottom: 12 }}>
+                    {/* Blurred preview of locked content */}
+                    <div style={{ pointerEvents: "none", userSelect: "none", filter: "blur(5px)", opacity: 0.45 }}>
+                      {/* Fake blocker preview */}
+                      <div style={{ background: "#fff", borderRadius: 20, padding: "28px 28px", marginBottom: 10, border: "1.5px solid rgba(11,11,11,0.08)" }}>
+                        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 20 }}>What's holding you back</p>
+                        {report.blockers.slice(0, 2).map((b, i) => (
+                          <div key={i} style={{ display: "flex", gap: 16, alignItems: "flex-start", marginBottom: 16 }}>
+                            <div style={{ width: 30, height: 30, borderRadius: 9, background: "rgba(11,11,11,0.06)", flexShrink: 0 }} />
+                            <div>
+                              <div style={{ height: 14, width: "60%", background: "rgba(11,11,11,0.12)", borderRadius: 6, marginBottom: 8 }} />
+                              <div style={{ height: 12, width: "90%", background: "rgba(11,11,11,0.07)", borderRadius: 6 }} />
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Fixes */}
-                <div style={{ background: "#fff", borderRadius: 20, padding: "28px 28px", marginBottom: 12, border: "1.5px solid rgba(11,11,11,0.08)" }}>
-                  <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 20 }}>What to do about it</p>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-                    {report.fixes.map((f, i) => (
-                      <div key={i} style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
-                        <div style={{ width: 30, height: 30, borderRadius: 9, background: "#0B0B0B", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                          <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                        </div>
-                        <div>
-                          <p style={{ fontSize: 14, fontWeight: 700, color: TEXT, marginBottom: 4 }}>{f.title}</p>
-                          <p style={{ fontSize: 14, color: "rgba(11,11,11,0.55)", lineHeight: "1.7", margin: 0 }}>{f.detail}</p>
-                        </div>
+                      <div style={{ background: "#fff", borderRadius: 20, padding: "28px 28px", border: "1.5px solid rgba(11,11,11,0.08)" }}>
+                        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 20 }}>What to do about it</p>
+                        {report.fixes.slice(0, 2).map((_, i) => (
+                          <div key={i} style={{ display: "flex", gap: 16, alignItems: "flex-start", marginBottom: 16 }}>
+                            <div style={{ width: 30, height: 30, borderRadius: 9, background: "rgba(11,11,11,0.12)", flexShrink: 0 }} />
+                            <div>
+                              <div style={{ height: 14, width: "55%", background: "rgba(11,11,11,0.12)", borderRadius: 6, marginBottom: 8 }} />
+                              <div style={{ height: 12, width: "85%", background: "rgba(11,11,11,0.07)", borderRadius: 6 }} />
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </div>
+                    </div>
 
-                {/* Outcomes */}
-                <div style={{ background: "#fff", borderRadius: 20, padding: "28px 28px", marginBottom: 12, border: "1.5px solid rgba(11,11,11,0.08)" }}>
-                  <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 20 }}>What you unlock when you fix this</p>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                    {report.outcomes.map((o, i) => (
-                      <div key={i} style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
-                        <div style={{ width: 22, height: 22, borderRadius: "50%", background: "rgba(11,11,11,0.06)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 2 }}>
-                          <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="rgba(11,11,11,0.45)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                    {/* Gate overlay */}
+                    <div style={{
+                      position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center",
+                      background: "linear-gradient(to bottom, rgba(247,247,245,0) 0%, rgba(247,247,245,0.96) 28%)",
+                      borderRadius: 20,
+                    }}>
+                      <div style={{ background: "#fff", border: "2px solid #0B0B0B", borderRadius: 24, padding: "36px 32px", maxWidth: 480, width: "90%", textAlign: "center", boxShadow: "0 20px 60px rgba(0,0,0,0.1)" }}>
+                        <div style={{ width: 44, height: 44, borderRadius: 12, background: "#0B0B0B", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#fff" strokeWidth="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="#fff" strokeWidth="2" strokeLinecap="round"/></svg>
                         </div>
-                        <p style={{ fontSize: 15, color: TEXT, lineHeight: "1.65", margin: 0 }}>{o}</p>
+                        <h3 style={{ fontWeight: 800, fontSize: 22, letterSpacing: "-0.03em", color: TEXT, marginBottom: 8, lineHeight: 1.2 }}>
+                          Unlock your full audit
+                        </h3>
+                        <p style={{ fontSize: 14, color: "rgba(11,11,11,0.5)", lineHeight: "1.65", marginBottom: 24, maxWidth: "38ch", margin: "0 auto 24px" }}>
+                          Get your blockers, action plan, and outcomes. Join our newsletter for free and unlock everything instantly.
+                        </p>
+                        <div style={{ display: "flex", gap: 8, flexDirection: "column" }}>
+                          <input
+                            type="email"
+                            value={newsletterEmail}
+                            onChange={e => setNewsletterEmail(e.target.value)}
+                            onKeyDown={e => { if (e.key === "Enter") handleNewsletter(); }}
+                            placeholder="Your email address"
+                            style={{
+                              width: "100%", boxSizing: "border-box", padding: "13px 16px", borderRadius: 12,
+                              border: "1.5px solid rgba(11,11,11,0.15)", background: "#F7F7F5",
+                              fontSize: 14, fontFamily: "'Inter', sans-serif", color: TEXT, outline: "none",
+                            }}
+                          />
+                          <button
+                            onClick={handleNewsletter}
+                            disabled={newsletterBusy || !newsletterEmail.includes("@")}
+                            style={{
+                              width: "100%", padding: "13px 0", borderRadius: 12,
+                              background: newsletterEmail.includes("@") ? "#0B0B0B" : "rgba(11,11,11,0.2)",
+                              color: "#fff", fontSize: 14, fontWeight: 700, cursor: newsletterEmail.includes("@") ? "pointer" : "default",
+                              border: "none", fontFamily: "'Inter', sans-serif", transition: "all 0.15s",
+                              display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                            }}
+                          >
+                            {newsletterBusy ? "Unlocking..." : "Unlock Full Audit"} {!newsletterBusy && <ArrowRight style={{ width: 16, height: 16 }} />}
+                          </button>
+                        </div>
+                        <p style={{ fontSize: 11, color: "rgba(11,11,11,0.3)", marginTop: 12 }}>No spam. Unsubscribe anytime.</p>
                       </div>
-                    ))}
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <motion.div key="unlocked" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
+                    {/* Blockers */}
+                    <div style={{ background: "#fff", borderRadius: 20, padding: "28px 28px", marginBottom: 12, border: "1.5px solid rgba(11,11,11,0.08)" }}>
+                      <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 20 }}>What's holding you back</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                        {report.blockers.map((b, i) => (
+                          <div key={i} style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
+                            <div style={{ width: 30, height: 30, borderRadius: 9, background: "rgba(11,11,11,0.06)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                              <span style={{ fontSize: 12, fontWeight: 800, color: "rgba(11,11,11,0.4)" }}>{i + 1}</span>
+                            </div>
+                            <div>
+                              <p style={{ fontSize: 14, fontWeight: 700, color: TEXT, marginBottom: 4 }}>{b.title}</p>
+                              <p style={{ fontSize: 14, color: "rgba(11,11,11,0.55)", lineHeight: "1.7", margin: 0 }}>{b.detail}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
 
-                {/* CTA */}
-                <div style={{ background: "#0B0B0B", borderRadius: 20, padding: "36px 28px", marginBottom: 12 }}>
-                  <h3 style={{ fontWeight: 800, fontSize: "clamp(20px, 3.5vw, 28px)", letterSpacing: "-0.03em", color: "#fff", marginBottom: 10 }}>
-                    Ready to build the system that fixes this?
-                  </h3>
-                  <p style={{ fontSize: 15, color: "rgba(255,255,255,0.45)", lineHeight: "1.7", marginBottom: 24, maxWidth: "48ch" }}>
-                    Book a free strategy call. We'll walk through your audit together and map out exactly what to build first.
-                  </p>
-                  <Link href="/contact">
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 24px", borderRadius: 100, background: "#fff", color: TEXT, fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "'Inter', sans-serif" }} className="hover:opacity-85 transition-opacity">
-                      Book a Free Strategy Call <ArrowRight className="w-4 h-4" />
-                    </span>
-                  </Link>
-                </div>
+                    {/* Fixes */}
+                    <div style={{ background: "#fff", borderRadius: 20, padding: "28px 28px", marginBottom: 12, border: "1.5px solid rgba(11,11,11,0.08)" }}>
+                      <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 20 }}>What to do about it</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                        {report.fixes.map((f, i) => (
+                          <div key={i} style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
+                            <div style={{ width: 30, height: 30, borderRadius: 9, background: "#0B0B0B", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                              <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                            </div>
+                            <div>
+                              <p style={{ fontSize: 14, fontWeight: 700, color: TEXT, marginBottom: 4 }}>{f.title}</p>
+                              <p style={{ fontSize: 14, color: "rgba(11,11,11,0.55)", lineHeight: "1.7", margin: 0 }}>{f.detail}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Outcomes */}
+                    <div style={{ background: "#fff", borderRadius: 20, padding: "28px 28px", marginBottom: 12, border: "1.5px solid rgba(11,11,11,0.08)" }}>
+                      <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 20 }}>What you unlock when you fix this</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                        {report.outcomes.map((o, i) => (
+                          <div key={i} style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+                            <div style={{ width: 22, height: 22, borderRadius: "50%", background: "rgba(11,11,11,0.06)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 2 }}>
+                              <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="rgba(11,11,11,0.45)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                            </div>
+                            <p style={{ fontSize: 15, color: TEXT, lineHeight: "1.65", margin: 0 }}>{o}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* CTA */}
+                    <div style={{ background: "#0B0B0B", borderRadius: 20, padding: "36px 28px", marginBottom: 12 }}>
+                      <h3 style={{ fontWeight: 800, fontSize: "clamp(20px, 3.5vw, 28px)", letterSpacing: "-0.03em", color: "#fff", marginBottom: 10 }}>
+                        Ready to build the system that fixes this?
+                      </h3>
+                      <p style={{ fontSize: 15, color: "rgba(255,255,255,0.45)", lineHeight: "1.7", marginBottom: 24, maxWidth: "48ch" }}>
+                        Book a free strategy call. We'll walk through your audit together and map out exactly what to build first.
+                      </p>
+                      <Link href="/contact">
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 24px", borderRadius: 100, background: "#fff", color: TEXT, fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "'Inter', sans-serif" }} className="hover:opacity-85 transition-opacity">
+                          Book a Free Strategy Call <ArrowRight className="w-4 h-4" />
+                        </span>
+                      </Link>
+                    </div>
+                  </motion.div>
+                )}
 
                 <button onClick={reset}
-                  style={{ width: "100%", padding: "13px 0", borderRadius: 12, border: "1.5px solid rgba(11,11,11,0.1)", background: "transparent", fontSize: 14, fontWeight: 600, color: "rgba(11,11,11,0.4)", cursor: "pointer", fontFamily: "'Inter', sans-serif" }}>
+                  style={{ width: "100%", padding: "13px 0", borderRadius: 12, border: "1.5px solid rgba(11,11,11,0.1)", background: "transparent", fontSize: 14, fontWeight: 600, color: "rgba(11,11,11,0.4)", cursor: "pointer", fontFamily: "'Inter', sans-serif", marginTop: 4 }}>
                   Retake the Audit
                 </button>
               </motion.div>

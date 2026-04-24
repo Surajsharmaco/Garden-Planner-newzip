@@ -170,4 +170,31 @@ router.post("/full-time", async (req, res) => {
   res.json({ success: true, message: "Application received! We will review and respond within 7 business days." });
 });
 
+router.post("/newsletter", async (req, res) => {
+  const { email, source } = req.body;
+  if (!email) {
+    res.status(400).json({ error: "email is required" });
+    return;
+  }
+  logger.info({ email, source }, "Newsletter signup");
+
+  try {
+    await resend.emails.send({
+      from: FROM,
+      to: TO,
+      subject: `New Newsletter Signup: ${email}`,
+      html: emailTemplate(
+        "New Newsletter Subscriber",
+        "Newsletter",
+        row("Email", email) +
+        row("Source", source || "Authority Audit")
+      ),
+    });
+  } catch (err) {
+    logger.error(err, "Resend error (newsletter)");
+  }
+
+  res.json({ success: true });
+});
+
 export default router;
