@@ -323,12 +323,9 @@ export default function Home() {
               color: TEXT,
             }}
           >
-            Build Authority
-            <br />
-            That{" "}
+            Build Authority That{" "}
             <span
               style={{
-                display: "inline-block",
                 fontStyle: "italic",
               }}
             >

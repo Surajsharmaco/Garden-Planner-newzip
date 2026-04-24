@@ -123,6 +123,10 @@ body {
   color: #0B0B0B;
 }
 
+h1, h2, h3, h4 {
+  text-wrap: balance;
+}
+
 /* ── Custom cursor ── */
 @media (pointer: fine) {
   html, body, *, *::before, *::after {
