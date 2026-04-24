@@ -82,8 +82,23 @@ export default function About() {
         <div className="max-w-[1100px] mx-auto">
           <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: 48, alignItems: "start" }}>
             <div>
-              <div style={{ width: 80, height: 80, borderRadius: "50%", background: "#0B0B0B", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32, fontWeight: 800, color: "#fff", marginBottom: 20 }}>
-                S
+              <div style={{ width: 96, height: 96, borderRadius: "50%", overflow: "hidden", marginBottom: 20, border: "2px solid rgba(255,255,255,0.12)", flexShrink: 0 }}>
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face"
+                  alt="Suraj Sharma"
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  onError={(e) => {
+                    const el = e.currentTarget.parentElement!;
+                    el.style.background = "#1a1a1a";
+                    el.style.display = "flex";
+                    el.style.alignItems = "center";
+                    el.style.justifyContent = "center";
+                    el.style.fontSize = "32px";
+                    el.style.fontWeight = "800";
+                    el.style.color = "#fff";
+                    el.innerHTML = "S";
+                  }}
+                />
               </div>
               <h3 style={{ fontWeight: 800, fontSize: 20, letterSpacing: "-0.02em", color: "#fff", marginBottom: 4 }}>Suraj Sharma</h3>
               <p style={{ fontSize: 14, color: "rgba(255,255,255,0.35)", marginBottom: 16 }}>Founder & CEO</p>
