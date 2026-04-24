@@ -8,6 +8,7 @@ import Insights from "@/pages/Insights";
 import InsightDetail from "@/pages/InsightDetail";
 import Creators from "@/pages/Creators";
 import Freelancers from "@/pages/Freelancers";
+import FullTime from "@/pages/FullTime";
 import AuthorityAudit from "@/pages/AuthorityAudit";
 import Resources from "@/pages/Resources";
 import About from "@/pages/About";
@@ -31,6 +32,7 @@ function App() {
           <Route path="/insights/:slug" component={InsightDetail} />
           <Route path="/creators" component={Creators} />
           <Route path="/freelancers" component={Freelancers} />
+          <Route path="/full-time" component={FullTime} />
           <Route path="/authority-audit" component={AuthorityAudit} />
           <Route path="/resources" component={Resources} />
           <Route path="/about" component={About} />

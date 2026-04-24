@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
-import { ArrowUpRight, Menu, X } from "lucide-react";
-import { useState, useEffect } from "react";
+import { ArrowUpRight, Menu, X, ChevronDown } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
@@ -8,7 +8,13 @@ const NAV_LINKS = [
   { href: "/work", label: "Work" },
   { href: "/framework", label: "Framework" },
   { href: "/creators", label: "Creators" },
-  { href: "/freelancers", label: "Freelancers" },
+  {
+    label: "Hiring",
+    dropdown: [
+      { href: "/freelancers", label: "Freelancer" },
+      { href: "/full-time", label: "Full Time" },
+    ],
+  },
   { href: "/authority-audit", label: "Authority Audit" },
   { href: "/insights", label: "Blog" },
   { href: "/about", label: "About" },
@@ -18,12 +24,24 @@ export function Navbar() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hiringOpen, setHiringOpen] = useState(false);
+  const hiringRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { setIsOpen(false); }, [location]);
+  useEffect(() => { setIsOpen(false); setHiringOpen(false); }, [location]);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (hiringRef.current && !hiringRef.current.contains(e.target as Node)) {
+        setHiringOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -81,21 +99,90 @@ export function Navbar() {
               background: "rgba(255,255,255,0.6)",
             }}
           >
-            {NAV_LINKS.map((link) => (
-              <Link key={link.href} href={link.href}>
-                <span
-                  className="text-[13px] font-medium cursor-pointer transition-all duration-150 rounded-full px-3.5 py-1.5"
-                  style={{
-                    fontFamily: "'Inter', sans-serif",
-                    color: location === link.href ? "#fff" : "rgba(11,11,11,0.5)",
-                    background: location === link.href ? "#0B0B0B" : "transparent",
-                    fontWeight: location === link.href ? 600 : 500,
-                  }}
-                >
-                  {link.label}
-                </span>
-              </Link>
-            ))}
+            {NAV_LINKS.map((link) => {
+              if (link.dropdown) {
+                const isActive = link.dropdown.some(d => location === d.href);
+                return (
+                  <div key={link.label} ref={hiringRef} style={{ position: "relative" }}>
+                    <button
+                      onClick={() => setHiringOpen(!hiringOpen)}
+                      className="text-[13px] font-medium cursor-pointer transition-all duration-150 rounded-full px-3.5 py-1.5 inline-flex items-center gap-1"
+                      style={{
+                        fontFamily: "'Inter', sans-serif",
+                        color: isActive ? "#fff" : "rgba(11,11,11,0.5)",
+                        background: isActive ? "#0B0B0B" : "transparent",
+                        fontWeight: isActive ? 600 : 500,
+                        border: "none",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {link.label}
+                      <ChevronDown className="w-3 h-3" style={{ transition: "transform 0.15s", transform: hiringOpen ? "rotate(180deg)" : "rotate(0deg)" }} />
+                    </button>
+                    <AnimatePresence>
+                      {hiringOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 6, scale: 0.97 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 6, scale: 0.97 }}
+                          transition={{ duration: 0.15 }}
+                          style={{
+                            position: "absolute",
+                            top: "calc(100% + 8px)",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            background: "#fff",
+                            border: "1.5px solid rgba(11,11,11,0.1)",
+                            borderRadius: 14,
+                            padding: "6px",
+                            minWidth: 140,
+                            boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                            zIndex: 100,
+                          }}
+                        >
+                          {link.dropdown.map((item) => (
+                            <Link key={item.href} href={item.href}>
+                              <span
+                                style={{
+                                  display: "block",
+                                  padding: "9px 14px",
+                                  borderRadius: 9,
+                                  fontSize: 13,
+                                  fontWeight: location === item.href ? 700 : 500,
+                                  color: location === item.href ? "#fff" : "#0B0B0B",
+                                  background: location === item.href ? "#0B0B0B" : "transparent",
+                                  fontFamily: "'Inter', sans-serif",
+                                  cursor: "pointer",
+                                  transition: "background 0.12s",
+                                }}
+                                className="hover:bg-black/5"
+                              >
+                                {item.label}
+                              </span>
+                            </Link>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              }
+              return (
+                <Link key={link.href} href={link.href!}>
+                  <span
+                    className="text-[13px] font-medium cursor-pointer transition-all duration-150 rounded-full px-3.5 py-1.5"
+                    style={{
+                      fontFamily: "'Inter', sans-serif",
+                      color: location === link.href ? "#fff" : "rgba(11,11,11,0.5)",
+                      background: location === link.href ? "#0B0B0B" : "transparent",
+                      fontWeight: location === link.href ? 600 : 500,
+                    }}
+                  >
+                    {link.label}
+                  </span>
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
@@ -154,23 +241,31 @@ export function Navbar() {
             }}
           >
             <nav className="flex flex-col gap-4">
-              {[...NAV_LINKS, { href: "/contact", label: "Contact" }].map((link) => (
-                <Link key={link.href} href={link.href}>
-                  <span
-                    style={{
-                      fontFamily: "'Inter', sans-serif",
-                      fontSize: 20,
-                      fontWeight: 700,
-                      color: location === link.href ? "#0B0B0B" : "rgba(11,11,11,0.45)",
-                      cursor: "pointer",
-                      display: "block",
-                      letterSpacing: "-0.02em",
-                    }}
-                  >
-                    {link.label}
-                  </span>
-                </Link>
-              ))}
+              {[...NAV_LINKS, { href: "/contact", label: "Contact" }].map((link) => {
+                if (link.dropdown) {
+                  return (
+                    <div key={link.label}>
+                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(11,11,11,0.3)", marginBottom: 8 }}>
+                        {link.label}
+                      </p>
+                      {link.dropdown.map((item) => (
+                        <Link key={item.href} href={item.href}>
+                          <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 20, fontWeight: 700, color: location === item.href ? "#0B0B0B" : "rgba(11,11,11,0.45)", cursor: "pointer", display: "block", letterSpacing: "-0.02em", paddingLeft: 8, marginBottom: 4 }}>
+                            {item.label}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  );
+                }
+                return (
+                  <Link key={link.href} href={link.href!}>
+                    <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 20, fontWeight: 700, color: location === link.href ? "#0B0B0B" : "rgba(11,11,11,0.45)", cursor: "pointer", display: "block", letterSpacing: "-0.02em" }}>
+                      {link.label}
+                    </span>
+                  </Link>
+                );
+              })}
               <Link href="/contact">
                 <span
                   className="gb-btn justify-center mt-2"
