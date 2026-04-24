@@ -403,7 +403,7 @@ export default function Home() {
               Most content gets attention. Very little builds authority.
             </h2>
           </FadeUp>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 2, background: "rgba(11,11,11,0.07)", borderRadius: 20, overflow: "hidden" }}>
             {PROBLEMS.map((p, i) => (
               <motion.div
                 key={i}
@@ -412,19 +412,33 @@ export default function Home() {
                 viewport={{ once: true, margin: "-5%" }}
                 transition={{ delay: i * 0.1, duration: 0.55 }}
                 style={{
-                  background: "#fff",
-                  border: "1.5px solid rgba(11,11,11,0.08)",
-                  borderRadius: 16,
-                  padding: "32px 28px",
-                  transition: "border-color 0.2s, box-shadow 0.2s",
+                  background: BG,
+                  padding: "40px 36px",
+                  position: "relative",
+                  overflow: "hidden",
                 }}
-                whileHover={{ borderColor: "rgba(11,11,11,0.25)", boxShadow: "0 4px 20px rgba(0,0,0,0.06)" }}
               >
-                <div style={{ width: 40, height: 40, borderRadius: 10, background: "rgba(11,11,11,0.06)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
-                  <span style={{ fontSize: 18, fontWeight: 800, color: "rgba(11,11,11,0.4)" }}>✕</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+                  <div style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: 12,
+                    background: "#0B0B0B",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M3 3L13 13M13 3L3 13" stroke="#fff" strokeWidth="2.2" strokeLinecap="round"/>
+                    </svg>
+                  </div>
+                  <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(11,11,11,0.3)" }}>
+                    Problem {String(i + 1).padStart(2, "0")}
+                  </span>
                 </div>
-                <h3 style={{ fontWeight: 700, fontSize: 19, letterSpacing: "-0.02em", color: TEXT, marginBottom: 10 }}>{p.title}</h3>
-                <p style={{ fontSize: 14, color: "rgba(11,11,11,0.5)", lineHeight: "1.75" }}>{p.desc}</p>
+                <h3 style={{ fontWeight: 800, fontSize: "clamp(17px, 2vw, 20px)", letterSpacing: "-0.025em", color: TEXT, marginBottom: 14, lineHeight: "1.3" }}>{p.title}</h3>
+                <p style={{ fontSize: 14, color: "rgba(11,11,11,0.5)", lineHeight: "1.8", margin: 0 }}>{p.desc}</p>
               </motion.div>
             ))}
           </div>
