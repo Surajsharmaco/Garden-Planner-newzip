@@ -147,25 +147,23 @@ export default function InsightDetail() {
       {/* Newsletter gate or full content */}
       <AnimatePresence mode="wait">
         {!unlocked ? (
-          <motion.div key="gate" initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ position: "relative" }}>
-            {/* Blurred locked preview */}
-            <div style={{ padding: "0 24px 0", pointerEvents: "none", userSelect: "none", filter: "blur(6px)", opacity: 0.4, maxHeight: 260, overflow: "hidden" }}>
-              <div className="max-w-[760px] mx-auto" style={{ paddingTop: 24 }}>
-                {renderMarkdown(locked)}
+          <motion.div key="gate" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            {/* Blurred locked preview with fade — self-contained so it never overlaps the gate card */}
+            <div style={{ position: "relative", maxHeight: 240, overflow: "hidden" }}>
+              <div style={{ padding: "24px 24px 0", pointerEvents: "none", userSelect: "none", filter: "blur(6px)", opacity: 0.4 }}>
+                <div className="max-w-[760px] mx-auto">
+                  {renderMarkdown(locked)}
+                </div>
               </div>
+              {/* Fade covers only the blurred area */}
+              <div style={{
+                position: "absolute", inset: 0, pointerEvents: "none",
+                background: "linear-gradient(to bottom, rgba(247,247,245,0) 0%, rgba(247,247,245,0.98) 75%)",
+              }} />
             </div>
 
-            {/* Fade + gate card */}
-            <div style={{
-              position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-              background: "linear-gradient(to bottom, rgba(247,247,245,0) 0%, rgba(247,247,245,0.97) 30%)",
-              display: "flex", alignItems: "flex-end", justifyContent: "center",
-              paddingBottom: 0,
-            }}>
-            </div>
-
-            {/* Gate card below */}
-            <div style={{ padding: "0 24px 80px", marginTop: -8 }}>
+            {/* Gate card — in normal flow, fully interactive */}
+            <div style={{ padding: "0 24px 80px", marginTop: 8 }}>
               <div className="max-w-[760px] mx-auto">
                 <div style={{ background: "#fff", border: "2px solid #0B0B0B", borderRadius: 24, padding: "40px 36px", textAlign: "center" }}>
                   <div style={{ width: 48, height: 48, borderRadius: 14, background: "#0B0B0B", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
