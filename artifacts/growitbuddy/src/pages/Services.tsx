@@ -90,7 +90,7 @@ export default function Services() {
           }}
         >
           <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-[1fr_1.2fr] gap-14 md:gap-20 items-start">
-            <motion.div initial={{ opacity: 0, x: -14 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+            <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
                 <div style={{ width: 40, height: 40, borderRadius: 10, background: s.dark ? "rgba(255,255,255,0.1)" : "rgba(11,11,11,0.08)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <span style={{ fontSize: 12, fontWeight: 800, color: s.dark ? "rgba(255,255,255,0.7)" : "#0B0B0B" }}>{s.num}</span>
@@ -127,7 +127,7 @@ export default function Services() {
               </Link>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, x: 14 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.05, duration: 0.6 }}>
+            <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.05, duration: 0.6 }}>
               <ul style={{ borderTop: `1px solid ${s.dark ? "rgba(255,255,255,0.08)" : "rgba(11,11,11,0.08)"}`, display: "flex", flexDirection: "column" }}>
                 {s.features.map((f, fi) => (
                   <li key={fi} style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px 0", borderBottom: `1px solid ${s.dark ? "rgba(255,255,255,0.08)" : "rgba(11,11,11,0.08)"}` }}>

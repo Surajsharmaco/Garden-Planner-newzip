@@ -133,8 +133,8 @@ export default function Framework() {
         >
           <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 items-start">
             <motion.div
-              initial={{ opacity: 0, x: -16 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
@@ -148,8 +148,8 @@ export default function Framework() {
               <p style={{ fontSize: 16, color: "rgba(11,11,11,0.5)", lineHeight: "1.8" }}>{step.desc}</p>
             </motion.div>
             <motion.div
-              initial={{ opacity: 0, x: 16 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.07, duration: 0.6 }}
             >

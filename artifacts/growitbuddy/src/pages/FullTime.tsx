@@ -122,8 +122,8 @@ export default function FullTime() {
               {PERKS.map((perk, i) => (
                 <motion.li
                   key={i}
-                  initial={{ opacity: 0, x: -12 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.07, duration: 0.5 }}
                   style={{ display: "flex", alignItems: "center", gap: 14 }}
