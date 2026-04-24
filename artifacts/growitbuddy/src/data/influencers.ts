@@ -6,6 +6,7 @@ export interface Influencer {
   followers: string;
   engagementRate: string;
   description: string;
+  photo: string;
   about: {
     creates: string;
     audience: string;
@@ -33,6 +34,7 @@ export const influencers: Influencer[] = [
     followers: "284K",
     engagementRate: "4.8%",
     description: "Helping founders build authority through authentic storytelling and strategic content.",
+    photo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face",
     initials: "AR",
     accentColor: "#0B0B0B",
     about: {
@@ -62,11 +64,12 @@ export const influencers: Influencer[] = [
     followers: "512K",
     engagementRate: "6.1%",
     description: "Breaking down wealth-building strategies that actually work for the next generation.",
+    photo: "https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=400&h=400&fit=crop&crop=face",
     initials: "MO",
     accentColor: "#1a1a1a",
     about: {
       creates: "Short-form video explainers, deep-dive threads, and monthly market breakdowns designed to make finance accessible without dumbing it down.",
-      audience: "Millennials and Gen Z professionals building their first real wealth — skeptical of traditional advice and hungry for practical frameworks.",
+      audience: "Millennials and Gen Z professionals building their first real wealth -- skeptical of traditional advice and hungry for practical frameworks.",
     },
     metrics: {
       avgViews: "380K per video",
@@ -91,6 +94,7 @@ export const influencers: Influencer[] = [
     followers: "198K",
     engagementRate: "5.4%",
     description: "Demystifying AI and technology for founders who need to stay ahead without the hype.",
+    photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=face",
     initials: "SC",
     accentColor: "#2a2a2a",
     about: {
@@ -106,7 +110,7 @@ export const influencers: Influencer[] = [
       brands: ["Anthropic", "Midjourney", "Linear", "Zapier"],
       sampleContent: [
         "Breakdown: 'Every AI tool a founder actually needs in 2025'",
-        "Newsletter: 'The week in AI — what matters and what's noise'",
+        "Newsletter: 'The week in AI -- what matters and what's noise'",
         "Video series: 'No-code AI workflows for non-technical teams'",
       ],
     },
@@ -120,6 +124,7 @@ export const influencers: Influencer[] = [
     followers: "341K",
     engagementRate: "5.9%",
     description: "Growth frameworks and marketing strategies built for founders who are playing the long game.",
+    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
     initials: "JW",
     accentColor: "#111111",
     about: {
@@ -149,6 +154,7 @@ export const influencers: Influencer[] = [
     followers: "167K",
     engagementRate: "7.2%",
     description: "Teaching ambitious leaders how to scale themselves so their business can scale too.",
+    photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=face",
     initials: "PN",
     accentColor: "#0d0d0d",
     about: {
@@ -177,7 +183,8 @@ export const influencers: Influencer[] = [
     niche: "E-commerce & DTC",
     followers: "423K",
     engagementRate: "5.5%",
-    description: "Behind-the-scenes of building a real product business — from sourcing to scaling.",
+    description: "Behind-the-scenes of building a real product business -- from sourcing to scaling.",
+    photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face",
     initials: "TR",
     accentColor: "#181818",
     about: {

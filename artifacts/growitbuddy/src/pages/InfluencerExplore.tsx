@@ -3,6 +3,137 @@ import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 import { influencers } from "@/data/influencers";
 import SEOMeta from "@/components/SEOMeta";
+import { useState } from "react";
+
+function InfluencerCard({ inf, i }: { inf: (typeof influencers)[0]; i: number }) {
+  const [imgError, setImgError] = useState(false);
+
+  return (
+    <motion.div
+      key={inf.slug}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: i * 0.05, duration: 0.45 }}
+    >
+      <Link href={`/influencers/${inf.slug}`}>
+        <div
+          style={{
+            background: "#fff",
+            borderRadius: 20,
+            overflow: "hidden",
+            cursor: "pointer",
+            boxShadow: "0 2px 12px rgba(11,11,11,0.05)",
+            border: "1px solid rgba(11,11,11,0.06)",
+            transition: "transform 0.2s ease, box-shadow 0.2s ease",
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLDivElement).style.transform = "scale(1.02)";
+            (e.currentTarget as HTMLDivElement).style.boxShadow = "0 16px 48px rgba(11,11,11,0.12)";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
+            (e.currentTarget as HTMLDivElement).style.boxShadow = "0 2px 12px rgba(11,11,11,0.05)";
+          }}
+        >
+          {/* Photo */}
+          <div style={{ position: "relative", width: "100%", aspectRatio: "4/3", overflow: "hidden", background: inf.accentColor }}>
+            {!imgError ? (
+              <img
+                src={inf.photo}
+                alt={inf.name}
+                onError={() => setImgError(true)}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: "center top",
+                  display: "block",
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#fff",
+                  fontWeight: 800,
+                  fontSize: 48,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                {inf.initials}
+              </div>
+            )}
+
+            {/* Niche badge overlay */}
+            <div
+              style={{
+                position: "absolute",
+                top: 14,
+                left: 14,
+                fontSize: 10,
+                fontWeight: 700,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "#fff",
+                background: "rgba(11,11,11,0.65)",
+                backdropFilter: "blur(8px)",
+                borderRadius: 100,
+                padding: "4px 12px",
+              }}
+            >
+              {inf.niche}
+            </div>
+          </div>
+
+          {/* Info */}
+          <div style={{ padding: "22px 24px 26px" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+              <p style={{ fontWeight: 800, fontSize: 17, color: "#0B0B0B", letterSpacing: "-0.03em" }}>
+                {inf.name}
+              </p>
+              <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(11,11,11,0.35)" }}>
+                {inf.followers}
+              </span>
+            </div>
+
+            <p style={{ fontSize: 13, fontWeight: 500, color: "rgba(11,11,11,0.4)", marginBottom: 14 }}>
+              {inf.username}
+            </p>
+
+            <p style={{ fontSize: 13, color: "rgba(11,11,11,0.55)", lineHeight: 1.6, marginBottom: 16 }}>
+              {inf.description}
+            </p>
+
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <span
+                style={{
+                  fontSize: 11,
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "rgba(11,11,11,0.35)",
+                  background: "rgba(11,11,11,0.05)",
+                  borderRadius: 100,
+                  padding: "3px 10px",
+                }}
+              >
+                {inf.engagementRate} eng.
+              </span>
+              <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 12, fontWeight: 600, color: "#0B0B0B", marginLeft: "auto" }}>
+                View profile <ArrowRight style={{ width: 12, height: 12 }} />
+              </span>
+            </div>
+          </div>
+        </div>
+      </Link>
+    </motion.div>
+  );
+}
 
 export default function InfluencerExplore() {
   return (
@@ -30,7 +161,7 @@ export default function InfluencerExplore() {
             transition={{ delay: 0.1 }}
             style={{ fontSize: 18, color: "rgba(11,11,11,0.5)", lineHeight: "1.75", maxWidth: "52ch", marginBottom: 36 }}
           >
-            Discover creators who build real engagement and drive meaningful results — not just impressions.
+            Discover creators who build real engagement and drive meaningful results -- not just impressions.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 8 }}
@@ -50,85 +181,9 @@ export default function InfluencerExplore() {
       {/* Grid */}
       <section style={{ padding: "72px 24px" }}>
         <div className="max-w-[1100px] mx-auto">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 24 }}>
             {influencers.map((inf, i) => (
-              <motion.div
-                key={inf.slug}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05, duration: 0.45 }}
-              >
-                <Link href={`/influencers/${inf.slug}`}>
-                  <div
-                    style={{
-                      background: "#fff",
-                      borderRadius: 20,
-                      padding: "40px 28px",
-                      cursor: "pointer",
-                      textAlign: "center",
-                      boxShadow: "0 2px 12px rgba(11,11,11,0.05)",
-                      border: "1px solid rgba(11,11,11,0.06)",
-                      transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLDivElement).style.transform = "scale(1.03)";
-                      (e.currentTarget as HTMLDivElement).style.boxShadow = "0 12px 40px rgba(11,11,11,0.1)";
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
-                      (e.currentTarget as HTMLDivElement).style.boxShadow = "0 2px 12px rgba(11,11,11,0.05)";
-                    }}
-                  >
-                    {/* Avatar */}
-                    <div
-                      style={{
-                        width: 80,
-                        height: 80,
-                        borderRadius: "50%",
-                        background: inf.accentColor,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        color: "#fff",
-                        fontWeight: 800,
-                        fontSize: 24,
-                        letterSpacing: "-0.02em",
-                        margin: "0 auto 20px",
-                      }}
-                    >
-                      {inf.initials}
-                    </div>
-
-                    {/* Username */}
-                    <p style={{ fontWeight: 700, fontSize: 16, color: "#0B0B0B", letterSpacing: "-0.02em", marginBottom: 6 }}>
-                      {inf.username}
-                    </p>
-
-                    {/* Followers */}
-                    <p style={{ fontSize: 13, fontWeight: 500, color: "rgba(11,11,11,0.4)", marginBottom: 12 }}>
-                      {inf.followers} followers
-                    </p>
-
-                    {/* Niche */}
-                    <span
-                      style={{
-                        display: "inline-block",
-                        fontSize: 11,
-                        fontWeight: 700,
-                        letterSpacing: "0.1em",
-                        textTransform: "uppercase",
-                        color: "rgba(11,11,11,0.4)",
-                        background: "rgba(11,11,11,0.05)",
-                        borderRadius: 100,
-                        padding: "3px 10px",
-                      }}
-                    >
-                      {inf.niche}
-                    </span>
-                  </div>
-                </Link>
-              </motion.div>
+              <InfluencerCard key={inf.slug} inf={inf} i={i} />
             ))}
           </div>
         </div>
