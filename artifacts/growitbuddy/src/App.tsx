@@ -8,6 +8,8 @@ import Insights from "@/pages/Insights";
 import InsightDetail from "@/pages/InsightDetail";
 import Creators from "@/pages/Creators";
 import Freelancers from "@/pages/Freelancers";
+import InfluencerExplore from "@/pages/InfluencerExplore";
+import InfluencerProfile from "@/pages/InfluencerProfile";
 import FullTime from "@/pages/FullTime";
 import AuthorityAudit from "@/pages/AuthorityAudit";
 import Resources from "@/pages/Resources";
@@ -30,6 +32,8 @@ function App() {
           <Route path="/framework" component={Framework} />
           <Route path="/insights" component={Insights} />
           <Route path="/insights/:slug" component={InsightDetail} />
+          <Route path="/influencers" component={InfluencerExplore} />
+          <Route path="/influencers/:slug" component={InfluencerProfile} />
           <Route path="/creators" component={Creators} />
           <Route path="/freelancers" component={Freelancers} />
           <Route path="/full-time" component={FullTime} />

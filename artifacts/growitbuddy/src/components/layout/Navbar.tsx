@@ -1,13 +1,19 @@
 import { Link, useLocation } from "wouter";
 import { ArrowUpRight, Menu, X, ChevronDown } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
   { href: "/services", label: "Services" },
   { href: "/work", label: "Work" },
   { href: "/framework", label: "Framework" },
-  { href: "/creators", label: "Influencer Network" },
+  {
+    label: "Influencers",
+    dropdown: [
+      { href: "/influencers", label: "Explore Influencers" },
+      { href: "/creators", label: "Join as Influencer" },
+    ],
+  },
   {
     label: "Hiring",
     dropdown: [
@@ -24,25 +30,30 @@ export function Navbar() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [hiringOpen, setHiringOpen] = useState(false);
-  const hiringRef = useRef<HTMLDivElement>(null);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const navRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { setIsOpen(false); setHiringOpen(false); }, [location]);
+  useEffect(() => { setIsOpen(false); setOpenDropdown(null); }, [location]);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const handleClickOutside = useCallback((e: MouseEvent) => {
+    if (navRef.current && !navRef.current.contains(e.target as Node)) {
+      setOpenDropdown(null);
+    }
+  }, []);
+
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (hiringRef.current && !hiringRef.current.contains(e.target as Node)) {
-        setHiringOpen(false);
-      }
-    };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [handleClickOutside]);
+
+  const toggleDropdown = (label: string) => {
+    setOpenDropdown((prev) => (prev === label ? null : label));
+  };
 
   return (
     <>
@@ -90,6 +101,7 @@ export function Navbar() {
           </Link>
 
           <nav
+            ref={navRef}
             className="hidden lg:flex items-center"
             style={{
               border: "1.5px solid rgba(11,11,11,0.1)",
@@ -102,10 +114,11 @@ export function Navbar() {
             {NAV_LINKS.map((link) => {
               if (link.dropdown) {
                 const isActive = link.dropdown.some(d => location === d.href);
+                const isThisOpen = openDropdown === link.label;
                 return (
-                  <div key={link.label} ref={hiringRef} style={{ position: "relative" }}>
+                  <div key={link.label} style={{ position: "relative" }}>
                     <button
-                      onClick={() => setHiringOpen(!hiringOpen)}
+                      onClick={() => toggleDropdown(link.label)}
                       className="text-[13px] font-medium cursor-pointer transition-all duration-150 rounded-full px-3.5 py-1.5 inline-flex items-center gap-1"
                       style={{
                         fontFamily: "'Inter', sans-serif",
@@ -117,10 +130,10 @@ export function Navbar() {
                       }}
                     >
                       {link.label}
-                      <ChevronDown className="w-3 h-3" style={{ transition: "transform 0.15s", transform: hiringOpen ? "rotate(180deg)" : "rotate(0deg)" }} />
+                      <ChevronDown className="w-3 h-3" style={{ transition: "transform 0.15s", transform: isThisOpen ? "rotate(180deg)" : "rotate(0deg)" }} />
                     </button>
                     <AnimatePresence>
-                      {hiringOpen && (
+                      {isThisOpen && (
                         <motion.div
                           initial={{ opacity: 0, y: 6, scale: 0.97 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -135,7 +148,7 @@ export function Navbar() {
                             border: "1.5px solid rgba(11,11,11,0.1)",
                             borderRadius: 14,
                             padding: "6px",
-                            minWidth: 140,
+                            minWidth: 160,
                             boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
                             zIndex: 100,
                           }}
@@ -154,6 +167,7 @@ export function Navbar() {
                                   fontFamily: "'Inter', sans-serif",
                                   cursor: "pointer",
                                   transition: "background 0.12s",
+                                  whiteSpace: "nowrap",
                                 }}
                                 className="hover:bg-black/5"
                               >

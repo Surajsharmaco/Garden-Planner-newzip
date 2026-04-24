@@ -1,0 +1,153 @@
+Act as a senior product designer, UX strategist, and conversion copywriter.
+
+Your task is to create a complete Influencer System inside the GrowitBuddy website.
+
+IMPORTANT:
+- Do NOT change overall website design
+- Maintain premium look
+- Build clear structure for influencers
+
+--------------------------------------------------
+
+🎯 GOAL
+
+Create a system where:
+
+- brands can explore influencers  
+- influencers can join the network  
+- each influencer has a detailed profile  
+
+--------------------------------------------------
+
+🧩 NAVIGATION
+
+Create a menu item:
+
+👉 "Influencers"
+
+Inside this section include:
+
+1. Explore Influencers (default page)
+2. Join as Influencer
+
+--------------------------------------------------
+
+🟢 PAGE 1: EXPLORE INFLUENCERS
+
+--------------------------------------------------
+
+Hero:
+
+Headline:
+Work With Proven Influencers
+
+Subtext:
+Discover creators who build real engagement and drive meaningful results.
+
+--------------------------------------------------
+
+Grid Layout:
+
+Each influencer card must include:
+
+- Name  
+- Username  
+- Niche  
+- Followers  
+- Engagement rate  
+- Short one-line description  
+
+CTA:
+"View Profile"
+
+--------------------------------------------------
+
+🟡 PAGE 2: INFLUENCER PROFILE
+
+--------------------------------------------------
+
+Include:
+
+1. Profile Header
+- Name
+- Username
+- Profile image
+- Niche
+- Followers
+
+2. About Section
+- What they create
+- Audience type
+
+3. Performance Metrics
+- Avg views
+- Engagement rate
+- Audience location
+
+4. Past Work
+- Brands worked with
+- Sample content
+
+5. Services
+- Reels
+- Promotions
+- Collaborations
+
+6. CTA
+"Work With This Influencer"
+
+--------------------------------------------------
+
+🔴 PAGE 3: JOIN AS INFLUENCER
+
+--------------------------------------------------
+
+Hero:
+
+Headline:
+Join the GrowitBuddy Influencer Network
+
+Subtext:
+Get discovered by brands.  
+Unlock collaboration opportunities.
+
+--------------------------------------------------
+
+Steps:
+
+1. Apply  
+2. Get reviewed  
+3. Get listed  
+4. Get opportunities  
+
+--------------------------------------------------
+
+Benefits:
+
+- Brand deals  
+- Collaborations  
+- Growth support  
+
+--------------------------------------------------
+
+CTA:
+"Apply Now"
+
+--------------------------------------------------
+
+🎯 FINAL OUTPUT
+
+The system should feel:
+
+- premium  
+- structured  
+- high-trust  
+- brand-friendly  
+
+NOT:
+
+- random directory  
+- basic listing  
+- cluttered  
+
+--------------------------------------------------
