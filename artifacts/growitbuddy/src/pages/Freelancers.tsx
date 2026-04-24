@@ -31,6 +31,7 @@ const EXPERIENCE_OPTIONS = [
 const schema = z.object({
   name: z.string().min(2, "Full name required"),
   email: z.string().email("Enter a valid email"),
+  phone: z.string().min(7, "Enter a valid contact number"),
   skills: z.array(z.string()).min(1, "Select at least one skill"),
   portfolioUrl: z.string().url("Enter a valid URL").or(z.string().min(0).max(0)),
   experience: z.string().min(1, "Select your experience level"),
@@ -53,7 +54,7 @@ export default function Freelancers() {
 
   const form = useForm<F>({
     resolver: zodResolver(schema),
-    defaultValues: { name: "", email: "", skills: [], portfolioUrl: "", experience: "" },
+    defaultValues: { name: "", email: "", phone: "", skills: [], portfolioUrl: "", experience: "" },
   });
 
   const toggleSkill = (skill: string) => {
@@ -194,6 +195,16 @@ export default function Freelancers() {
                         <FormLabel style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 600, color: "#0B0B0B" }}>Email Address</FormLabel>
                         <FormControl>
                           <input type="email" className="gb-input" placeholder="you@example.com" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
+
+                    <FormField control={form.control} name="phone" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 600, color: "#0B0B0B" }}>Contact Number</FormLabel>
+                        <FormControl>
+                          <input type="tel" className="gb-input" placeholder="+1 234 567 8900" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

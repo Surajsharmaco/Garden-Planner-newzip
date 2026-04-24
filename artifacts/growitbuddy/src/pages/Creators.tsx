@@ -13,6 +13,7 @@ import SEOMeta from "@/components/SEOMeta";
 const schema = z.object({
   name: z.string().min(2, "Full name required"),
   email: z.string().email("Enter a valid email"),
+  phone: z.string().min(7, "Enter a valid contact number"),
   niche: z.string().min(1, "Select your niche"),
   handle: z.string().min(1, "Enter your primary social handle"),
   monthlyViews: z.string().min(1, "Select your monthly views range"),
@@ -55,7 +56,7 @@ export default function Creators() {
 
   const form = useForm<F>({
     resolver: zodResolver(schema),
-    defaultValues: { name: "", email: "", niche: "", handle: "", monthlyViews: "" },
+    defaultValues: { name: "", email: "", phone: "", niche: "", handle: "", monthlyViews: "" },
   });
 
   const onSubmit = async (data: F) => {
@@ -191,6 +192,16 @@ export default function Creators() {
                         <FormLabel style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 600, color: "#0B0B0B" }}>Email Address</FormLabel>
                         <FormControl>
                           <input type="email" className="gb-input" placeholder="you@example.com" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
+
+                    <FormField control={form.control} name="phone" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 600, color: "#0B0B0B" }}>Contact Number</FormLabel>
+                        <FormControl>
+                          <input type="tel" className="gb-input" placeholder="+1 234 567 8900" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
