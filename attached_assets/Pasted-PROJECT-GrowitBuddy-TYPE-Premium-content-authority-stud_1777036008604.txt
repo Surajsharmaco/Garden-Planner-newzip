@@ -1,0 +1,252 @@
+PROJECT: GrowitBuddy
+TYPE: Premium content & authority studio website
+STACK: React + Vite + TypeScript + Tailwind CSS + Framer Motion + Wouter (routing) + React Hook Form + Zod + shadcn/ui (frontend) | Express.js + Resend API (backend)
+MONOREPO: pnpm workspaces
+
+─────────────────────────────────────────
+STRUCTURE
+─────────────────────────────────────────
+
+workspace/
+├── artifacts/
+│   ├── growitbuddy/               ← Frontend
+│   │   └── src/
+│   │       ├── pages/             ← All page components
+│   │       ├── components/
+│   │       │   ├── layout/        ← Navbar.tsx, Footer.tsx, Layout.tsx
+│   │       │   ├── effects/       ← CustomCursor.tsx, PageIntro.tsx, Marquee.tsx
+│   │       │   └── ui/            ← shadcn components
+│   │       ├── data/
+│   │       │   ├── blogPosts.ts   ← 9 blog posts
+│   │       │   └── influencers.ts ← 6 sample influencers
+│   │       └── hooks/
+│   └── api-server/                ← Express backend
+│       └── src/
+│           └── routes/
+│               └── forms.ts       ← All 5 form endpoints
+
+─────────────────────────────────────────
+DESIGN RULES — NEVER BREAK THESE
+─────────────────────────────────────────
+
+Colors:
+  Black:      #0B0B0B
+  Background: #F7F7F5
+  White:      #ffffff
+  No other colors. No grays, no blues, no accents.
+
+Font: Inter (Google Fonts)
+  Headings: weight 800, letter-spacing -0.04em
+  Body: weight 400–600
+
+Buttons: .gb-btn class (black bg, white text, rounded-full)
+Inputs:  .gb-input class
+Section padding: 80px 24px (standard)
+Transitions: 0.15s on hover states
+Animations: vertical fade-in only (y-axis). NO horizontal x-axis slides anywhere.
+No em dashes (—) in any copy.
+No placeholder/mock data visible to users.
+
+─────────────────────────────────────────
+ALL ROUTES
+─────────────────────────────────────────
+
+/                    → Home.tsx
+/services            → Services.tsx
+/work                → Work.tsx
+/framework           → Framework.tsx
+/influencers         → InfluencerExplore.tsx   (2-col grid, minimal cards)
+/influencers/:slug   → InfluencerProfile.tsx   (full profile detail)
+/creators            → Creators.tsx            (Influencer Network — join form)
+/freelancers         → Freelancers.tsx         (Talent Network — apply form)
+/full-time           → FullTime.tsx            (Full-time hiring form)
+/authority-audit     → AuthorityAudit.tsx      (6-question quiz + score + newsletter gate)
+/insights            → Insights.tsx            (Blog listing + tag filter)
+/insights/:slug      → InsightDetail.tsx       (Full post, no gate)
+/resources           → Resources.tsx
+/about               → About.tsx
+/contact             → Contact.tsx
+
+─────────────────────────────────────────
+NAVBAR STRUCTURE
+─────────────────────────────────────────
+
+Services | Work | Framework | Influencers ▾ | Hiring ▾ | Authority Audit | Blog | About
+                                     |                 |
+                         Explore Influencers      Talent Network
+                         Join as Influencer       Full Time
+
+Two independent dropdowns (Influencers + Hiring).
+Mobile hamburger menu mirrors the same structure.
+Navbar is fixed, blurs background on scroll.
+State: openDropdown: string | null (label-keyed, replaces old single hiringOpen bool)
+
+─────────────────────────────────────────
+BLOG SYSTEM
+─────────────────────────────────────────
+
+File: src/data/blogPosts.ts
+Total posts: 9
+Tags (exactly 4, no others): Founders | Brand | Creators | Freelancers
+Filter bar on /insights: All + 4 tag buttons
+No newsletter gate anywhere on blog — full content shown freely.
+
+BlogPost interface:
+  slug: string
+  title: string
+  excerpt: string
+  date: string
+  tag: string
+  readTime: string
+  content: string  ← markdown-style multiline string
+
+─────────────────────────────────────────
+INFLUENCER SYSTEM
+─────────────────────────────────────────
+
+File: src/data/influencers.ts
+Total: 6 sample influencers
+
+Influencer interface:
+  slug: string
+  name: string
+  username: string         ← e.g. @aisharahman
+  niche: string
+  followers: string        ← e.g. "284K"
+  engagementRate: string   ← e.g. "4.8%"
+  description: string      ← one-line summary
+  initials: string         ← e.g. "AR" (used as avatar)
+  accentColor: string      ← dark hex color for avatar bg
+  about: {
+    creates: string
+    audience: string
+  }
+  metrics: {
+    avgViews: string
+    engagementRate: string
+    audienceLocation: string
+  }
+  pastWork: {
+    brands: string[]
+    sampleContent: string[]
+  }
+  services: string[]
+
+Grid page (/influencers):
+  - 2 columns, inline style: gridTemplateColumns: "repeat(2, 1fr)"
+  - Each card shows: avatar (initials), username, followers, niche tag
+  - Hover: scale(1.03) + deeper shadow, 0.2s transition
+  - Clicking opens /influencers/:slug
+
+Profile page (/influencers/:slug):
+  - Back link to /influencers
+  - Header: avatar, name, username, niche, description
+  - Stat strip: followers, engagement rate, avg views
+  - About section: creates + audience type
+  - Dark panel: performance metrics
+  - Past work: brand badges + sample content checklist
+  - Services checklist
+  - Black CTA: "Work With This Influencer" → links to /contact
+
+─────────────────────────────────────────
+FORM SYSTEM (API SERVER)
+─────────────────────────────────────────
+
+File: artifacts/api-server/src/routes/forms.ts
+All forms POST to: ${import.meta.env.BASE_URL}api/forms/<endpoint>
+Email sent via Resend.
+From: "GrowitBuddy <onboarding@resend.dev>"
+To:   process.env.NOTIFY_EMAIL  (growitbuddy@gmail.com)
+
+Endpoints:
+  POST /api/forms/contact
+    Fields: name, email, phone, message
+
+  POST /api/forms/creators
+    Fields: name, email, phone, niche (select), handle, monthlyViews (select)
+    Niches: Business & Entrepreneurship, Personal Finance, Health & Wellness,
+            Technology & AI, Marketing & Growth, Leadership & Management,
+            Real Estate, Coaching & Education, E-commerce, Other
+    Views: Under 10K/month | 10K-50K | 50K-200K | 200K-1M | 1M+
+
+  POST /api/forms/freelancers
+    Fields: name, email, phone, skills[] (multi-select chips), portfolioUrl (optional), experience (select)
+    Skills: Ghostwriting, Video Editing, Graphic Design, Content Strategy,
+            Podcast Editing, SEO & Distribution, LinkedIn Growth,
+            Newsletter Writing, Social Media Management, Copywriting, Other
+    "Other" skill reveals a text input (otherSkill field)
+    Experience: Less than 1 year | 1-2 years | 3-5 years | 5+ years
+
+  POST /api/forms/full-time
+    Fields: name, email, phone, role (select), portfolioUrl (optional), experience (select)
+
+  POST /api/forms/newsletter
+    Fields: email, source
+    Used by: Authority Audit gate only
+
+Phone validation regex: /^\+?[\d\s\-().]{7,20}$/
+
+─────────────────────────────────────────
+AUTHORITY AUDIT PAGE
+─────────────────────────────────────────
+
+File: AuthorityAudit.tsx
+Flow:
+  1. User answers 6 multiple-choice questions
+  2. Score calculated (0–100) shown as circular SVG ring
+  3. Newsletter gate: user enters email to unlock full breakdown
+  4. Full breakdown: blockers, fixes, outcomes
+  5. Email submitted to /api/forms/newsletter
+
+─────────────────────────────────────────
+SPECIAL COMPONENTS
+─────────────────────────────────────────
+
+PageIntro.tsx     — Fullscreen logo animation on every page load.
+                    This is why screenshots always show the intro — it's a pre-existing effect.
+
+CustomCursor.tsx  — Custom cursor on desktop.
+
+Marquee.tsx       — Horizontal ticker component (exists but NOT used on any page currently).
+
+SEOMeta.tsx       — Used on every page for <title> and <meta description>.
+
+─────────────────────────────────────────
+ENVIRONMENT VARIABLES / SECRETS
+─────────────────────────────────────────
+
+RESEND_API_KEY    → (secret) Set in api-server environment
+NOTIFY_EMAIL      → growitbuddy@gmail.com  (set in api-server environment)
+
+─────────────────────────────────────────
+WORKFLOWS
+─────────────────────────────────────────
+
+Frontend:  pnpm --filter @workspace/growitbuddy run dev
+Backend:   pnpm --filter @workspace/api-server run dev
+
+IMPORTANT: Restart the api-server workflow after any changes to forms.ts
+otherwise form submissions return 404.
+
+─────────────────────────────────────────
+BRAND VOICE
+─────────────────────────────────────────
+
+Tone: Premium, confident, selective, not beginner-friendly, not casual.
+Audience: Founders, creators (influencers/personal brands), freelancers (video editors, designers).
+Positioning: High-ticket, authority-first, systems-driven.
+Pages are separated into two clear ecosystems:
+  Influencer Network (/creators) — for influencers & creators seeking growth + collaborations
+  Talent Network (/freelancers)  — for execution freelancers seeking project work
+
+─────────────────────────────────────────
+RECENT CHANGES (latest state)
+─────────────────────────────────────────
+
+1. Blog tags simplified to exactly 4: Founders, Brand, Creators, Freelancers
+2. Creators page renamed → "Influencer Network" throughout
+3. Freelancers page renamed → "Talent Network" throughout
+4. Full Influencer System built: /influencers grid + /influencers/:slug profiles + data file
+5. Influencer grid: 2-col, minimal cards (avatar initials, username, followers, niche)
+6. All horizontal slide animations (x-axis) removed site-wide — vertical fades only
+7. Navbar refactored to support multiple independent dropdowns
