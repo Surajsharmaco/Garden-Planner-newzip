@@ -50,7 +50,7 @@ export default function InfluencerExplore() {
       {/* Grid */}
       <section style={{ padding: "72px 24px" }}>
         <div className="max-w-[1100px] mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 20 }}>
             {influencers.map((inf, i) => (
               <motion.div
                 key={inf.slug}
