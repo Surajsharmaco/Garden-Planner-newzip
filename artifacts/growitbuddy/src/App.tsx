@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layout/Layout";
-import { Switch, Route, Router as WouterRouter } from "wouter";
+import { Switch, Route, Router as WouterRouter, Redirect } from "wouter";
 import Home from "@/pages/Home";
 import Services from "@/pages/Services";
 import Work from "@/pages/Work";
@@ -18,32 +18,85 @@ import Contact from "@/pages/Contact";
 import NotFound from "@/pages/not-found";
 import CustomCursor from "@/components/effects/CustomCursor";
 import PageIntro from "@/components/effects/PageIntro";
+import { AdminProvider, useAdmin } from "@/context/AdminContext";
+import { AdminLayout } from "@/components/admin/AdminLayout";
+import AdminLogin from "@/pages/admin/AdminLogin";
+import AdminDashboard from "@/pages/admin/AdminDashboard";
+import AdminSettings from "@/pages/admin/AdminSettings";
+import AdminInfluencers from "@/pages/admin/AdminInfluencers";
+import AdminBlog from "@/pages/admin/AdminBlog";
+import AdminServices from "@/pages/admin/AdminServices";
+import AdminWork from "@/pages/admin/AdminWork";
+import AdminHome from "@/pages/admin/AdminHome";
+import AdminAbout from "@/pages/admin/AdminAbout";
+import AdminNavbar from "@/pages/admin/AdminNavbar";
+import AdminFooter from "@/pages/admin/AdminFooter";
+
+function AdminGuard({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated } = useAdmin();
+  if (!isAuthenticated) return <Redirect to="/admin/login" />;
+  return <AdminLayout>{children}</AdminLayout>;
+}
 
 function App() {
   return (
     <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-      <PageIntro />
-      <CustomCursor />
-      <Layout>
+      <AdminProvider>
         <Switch>
-          <Route path="/" component={Home} />
-          <Route path="/services" component={Services} />
-          <Route path="/work" component={Work} />
-          <Route path="/framework" component={Framework} />
-          <Route path="/insights" component={Insights} />
-          <Route path="/insights/:slug" component={InsightDetail} />
-          <Route path="/influencers" component={InfluencerExplore} />
-          <Route path="/influencers/:slug" component={InfluencerProfile} />
-          <Route path="/creators" component={Creators} />
-          <Route path="/freelancers" component={Freelancers} />
-          <Route path="/full-time" component={FullTime} />
-          <Route path="/authority-audit" component={AuthorityAudit} />
-          <Route path="/resources" component={Resources} />
-          <Route path="/about" component={About} />
-          <Route path="/contact" component={Contact} />
-          <Route component={NotFound} />
+          {/* Admin login - no layout */}
+          <Route path="/admin/login" component={AdminLogin} />
+
+          {/* Admin panel - guarded */}
+          <Route path="/admin">
+            {() => (
+              <AdminGuard>
+                <Switch>
+                  <Route path="/admin" component={AdminDashboard} />
+                  <Route path="/admin/settings" component={AdminSettings} />
+                  <Route path="/admin/home" component={AdminHome} />
+                  <Route path="/admin/services" component={AdminServices} />
+                  <Route path="/admin/work" component={AdminWork} />
+                  <Route path="/admin/influencers" component={AdminInfluencers} />
+                  <Route path="/admin/blog" component={AdminBlog} />
+                  <Route path="/admin/about" component={AdminAbout} />
+                  <Route path="/admin/navbar" component={AdminNavbar} />
+                  <Route path="/admin/footer" component={AdminFooter} />
+                </Switch>
+              </AdminGuard>
+            )}
+          </Route>
+
+          {/* Public site */}
+          <Route>
+            {() => (
+              <>
+                <PageIntro />
+                <CustomCursor />
+                <Layout>
+                  <Switch>
+                    <Route path="/" component={Home} />
+                    <Route path="/services" component={Services} />
+                    <Route path="/work" component={Work} />
+                    <Route path="/framework" component={Framework} />
+                    <Route path="/insights" component={Insights} />
+                    <Route path="/insights/:slug" component={InsightDetail} />
+                    <Route path="/influencers" component={InfluencerExplore} />
+                    <Route path="/influencers/:slug" component={InfluencerProfile} />
+                    <Route path="/creators" component={Creators} />
+                    <Route path="/freelancers" component={Freelancers} />
+                    <Route path="/full-time" component={FullTime} />
+                    <Route path="/authority-audit" component={AuthorityAudit} />
+                    <Route path="/resources" component={Resources} />
+                    <Route path="/about" component={About} />
+                    <Route path="/contact" component={Contact} />
+                    <Route component={NotFound} />
+                  </Switch>
+                </Layout>
+              </>
+            )}
+          </Route>
         </Switch>
-      </Layout>
+      </AdminProvider>
     </WouterRouter>
   );
 }
