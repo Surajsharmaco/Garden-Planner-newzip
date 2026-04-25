@@ -80,6 +80,7 @@ function App() {
   return (
     <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
       <AdminProvider>
+        <CustomCursor />
         <Switch>
           {/* All admin routes */}
           <Route path="/admin/:rest*" component={AdminRoutes} />
@@ -90,7 +91,6 @@ function App() {
             {() => (
               <>
                 <PageIntro />
-                <CustomCursor />
                 <Layout>
                   <Switch>
                     <Route path="/" component={Home} />
