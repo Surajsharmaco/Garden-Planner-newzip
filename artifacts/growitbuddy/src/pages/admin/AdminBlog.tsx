@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useAdmin } from "@/context/AdminContext";
-import { blogPosts as DEFAULT_POSTS, defaultSeo, type BlogPost, type PostSeo, type FaqItem, type HowToStep } from "@/data/blogPosts";
+import { blogPosts as DEFAULT_POSTS, defaultSeo, type BlogPost, type PostSeo } from "@/data/blogPosts";
+import { ImageCropUploader } from "@/components/admin/ImageCropUploader";
 import { Card } from "@/components/admin/AdminField";
 import {
   Plus, ArrowLeft, Bold, Italic, List, ListOrdered, Quote,
@@ -757,9 +758,11 @@ function PostEditor({
           </SidePanel>
 
           {/* Featured Image */}
-          <SidePanel title="Featured Image" defaultOpen={false}>
-            <input placeholder="Paste image URL..." className="w-full border border-[#0B0B0B]/12 rounded-lg px-2.5 py-1.5 text-[12px] text-[#0B0B0B] outline-none focus:border-[#0B0B0B]/30 bg-white" />
-            <p className="text-[10px] text-[#0B0B0B]/35 mt-1.5">Cover image on the post card</p>
+          <SidePanel title="Featured Image" defaultOpen={true}>
+            <ImageCropUploader
+              value={data.featuredImage ?? ""}
+              onChange={(url) => setField("featuredImage", url)}
+            />
           </SidePanel>
         </div>
       </div>

@@ -32,6 +32,7 @@ export interface BlogPost {
   tag: string;
   readTime: string;
   content: string;
+  featuredImage?: string;
   seo?: Partial<PostSeo>;
 }
 

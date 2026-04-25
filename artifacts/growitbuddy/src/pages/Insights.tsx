@@ -88,7 +88,7 @@ export default function Insights() {
                         background: featured ? "#0B0B0B" : "#F7F7F5",
                         border: featured ? "none" : "1.5px solid rgba(11,11,11,0.08)",
                         borderRadius: 20,
-                        padding: "36px 32px",
+                        overflow: "hidden",
                         cursor: "pointer",
                         transition: "transform 0.2s, box-shadow 0.2s",
                         height: "100%",
@@ -97,34 +97,46 @@ export default function Insights() {
                       }}
                       className="hover:-translate-y-1 hover:shadow-lg"
                     >
-                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
-                        <span style={{
-                          fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase",
-                          padding: "5px 12px", borderRadius: 100,
-                          background: featured ? "rgba(255,255,255,0.15)" : "#0B0B0B",
-                          color: "#fff",
+                      {/* Featured image */}
+                      {post.featuredImage && (
+                        <div style={{ height: 180, overflow: "hidden", flexShrink: 0 }}>
+                          <img
+                            src={post.featuredImage}
+                            alt={post.title}
+                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                          />
+                        </div>
+                      )}
+                      <div style={{ padding: "28px 28px 28px", flex: 1, display: "flex", flexDirection: "column" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
+                          <span style={{
+                            fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase",
+                            padding: "5px 12px", borderRadius: 100,
+                            background: featured ? "rgba(255,255,255,0.15)" : "#0B0B0B",
+                            color: "#fff",
+                          }}>
+                            {post.tag}
+                          </span>
+                          <span style={{ fontSize: 12, color: featured ? "rgba(255,255,255,0.35)" : "rgba(11,11,11,0.35)" }}>{post.readTime}</span>
+                        </div>
+                        <h2 style={{
+                          fontWeight: 800, fontSize: "clamp(20px, 2.5vw, 26px)", letterSpacing: "-0.03em",
+                          lineHeight: 1.2, color: featured ? "#fff" : "#0B0B0B", marginBottom: 16, flex: 1,
                         }}>
-                          {post.tag}
-                        </span>
-                        <span style={{ fontSize: 12, color: featured ? "rgba(255,255,255,0.35)" : "rgba(11,11,11,0.35)" }}>{post.readTime}</span>
-                      </div>
-                      <h2 style={{
-                        fontWeight: 800, fontSize: "clamp(20px, 2.5vw, 26px)", letterSpacing: "-0.03em",
-                        lineHeight: 1.2, color: featured ? "#fff" : "#0B0B0B", marginBottom: 16, flex: 1,
-                      }}>
-                        {post.title}
-                      </h2>
-                      <p style={{
-                        fontSize: 14, color: featured ? "rgba(255,255,255,0.45)" : "rgba(11,11,11,0.5)",
-                        lineHeight: "1.75", marginBottom: 24,
-                      }}>
-                        {post.excerpt}
-                      </p>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 20, borderTop: `1px solid ${featured ? "rgba(255,255,255,0.08)" : "rgba(11,11,11,0.08)"}` }}>
-                        <span style={{ fontSize: 12, color: featured ? "rgba(255,255,255,0.3)" : "rgba(11,11,11,0.35)" }}>{post.date}</span>
-                        <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 13, fontWeight: 700, color: featured ? "rgba(255,255,255,0.8)" : "#0B0B0B" }}>
-                          Read <ArrowRight className="w-3.5 h-3.5" />
-                        </span>
+                          {post.title}
+                        </h2>
+                        <p style={{
+                          fontSize: 14, color: featured ? "rgba(255,255,255,0.45)" : "rgba(11,11,11,0.5)",
+                          lineHeight: "1.75", marginBottom: 20,
+                        }}>
+                          {post.excerpt}
+                        </p>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 16, borderTop: `1px solid ${featured ? "rgba(255,255,255,0.08)" : "rgba(11,11,11,0.08)"}` }}>
+                          <span style={{ fontSize: 12, color: featured ? "rgba(255,255,255,0.3)" : "rgba(11,11,11,0.35)" }}>{post.date}</span>
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 13, fontWeight: 700, color: featured ? "rgba(255,255,255,0.8)" : "#0B0B0B" }}>
+                            Read <ArrowRight className="w-3.5 h-3.5" />
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </Link>
