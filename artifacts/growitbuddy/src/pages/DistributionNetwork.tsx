@@ -257,6 +257,7 @@ export default function DistributionNetwork() {
           gap: 10px;
           flex-wrap: wrap;
         }
+        .filter-dropdown-wrap { flex-shrink: 0; }
         .dist-search-wrap { position: relative; flex: 1; min-width: 180px; }
         .dist-search-input {
           width: 100%;
@@ -280,10 +281,15 @@ export default function DistributionNetwork() {
         @media (max-width: 1024px) {
           .dist-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
         }
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
+          .filter-dropdown-wrap { flex: 1 1 calc(50% - 5px); min-width: 0; }
+          .filter-dropdown-wrap button { min-width: 0 !important; width: 100%; box-sizing: border-box; }
+          .dist-search-wrap { flex: 1 1 100%; min-width: 0; }
+          .dist-filter-count { display: none; }
+        }
+        @media (max-width: 480px) {
           .dist-grid { grid-template-columns: 1fr; gap: 14px; }
-          .dist-filter-row { flex-wrap: wrap; }
-          .dist-search-wrap { flex: 1 1 100%; max-width: 100% !important; }
+          .filter-dropdown-wrap { flex: 1 1 100%; }
         }
       `}</style>
 
@@ -362,7 +368,7 @@ export default function DistributionNetwork() {
                 </button>
               )}
             </div>
-            <span style={{ fontSize: 13, fontWeight: 500, color: "rgba(11,11,11,0.35)", marginLeft: "auto", whiteSpace: "nowrap", flexShrink: 0 }}>
+            <span className="dist-filter-count" style={{ fontSize: 13, fontWeight: 500, color: "rgba(11,11,11,0.35)", marginLeft: "auto", whiteSpace: "nowrap", flexShrink: 0 }}>
               {filtered.length} page{filtered.length !== 1 ? "s" : ""}
             </span>
           </div>

@@ -227,12 +227,27 @@ export function Navbar() {
           </div>
 
           <button
-            className="lg:hidden p-1"
-            style={{ color: "#0B0B0B" }}
+            className="lg:hidden"
+            style={{
+              color: "#0B0B0B",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 8,
+              borderRadius: 8,
+              flexShrink: 0,
+            }}
             onClick={() => setIsOpen(!isOpen)}
             data-testid="button-mobile-menu"
+            aria-label="Toggle menu"
           >
-            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {isOpen
+              ? <X style={{ width: 22, height: 22, stroke: "#0B0B0B", strokeWidth: 2 }} />
+              : <Menu style={{ width: 22, height: 22, stroke: "#0B0B0B", strokeWidth: 2 }} />
+            }
           </button>
         </div>
       </header>
@@ -260,12 +275,12 @@ export function Navbar() {
                 if (link.dropdown) {
                   return (
                     <div key={link.label}>
-                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(11,11,11,0.3)", marginBottom: 8 }}>
+                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(11,11,11,0.28)", marginBottom: 6, paddingLeft: 2 }}>
                         {link.label}
                       </p>
                       {link.dropdown.map((item) => (
                         <Link key={item.href} href={item.href}>
-                          <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 20, fontWeight: 700, color: location === item.href ? "#0B0B0B" : "rgba(11,11,11,0.45)", cursor: "pointer", display: "block", letterSpacing: "-0.02em", paddingLeft: 8, marginBottom: 4 }}>
+                          <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 20, fontWeight: 700, color: location === item.href ? "#0B0B0B" : "rgba(11,11,11,0.45)", cursor: "pointer", display: "block", letterSpacing: "-0.02em", paddingLeft: 16, marginBottom: 4 }}>
                             {item.label}
                           </span>
                         </Link>
