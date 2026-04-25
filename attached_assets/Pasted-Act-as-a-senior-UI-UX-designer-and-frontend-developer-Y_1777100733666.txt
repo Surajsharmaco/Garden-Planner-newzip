@@ -1,0 +1,161 @@
+Act as a senior UI/UX designer and frontend developer.
+
+Your task is to UPDATE the “Join Our Network” flow to remove confusion and create a clear, high-converting selection system.
+
+IMPORTANT:
+
+* Do NOT change overall design system (colors, fonts, layout style)
+* Keep UI minimal, premium, and clean
+* Focus on clarity and user understanding
+
+---
+
+🎯 GOAL
+
+When a user clicks on:
+
+👉 "Join Our Network"
+
+They should land on a selection page where they clearly understand which option to choose.
+
+Avoid confusion between influencer and distribution.
+
+---
+
+🧩 PAGE STRUCTURE
+
+---
+
+🔹 HERO SECTION
+
+Headline:
+Join the GrowitBuddy Network
+
+Subtext:
+Choose how you want to be part of the network.
+
+---
+
+---
+
+🔹 MAIN SELECTION (2 OPTIONS ONLY)
+
+Create 2 large selectable cards.
+
+---
+
+🟢 OPTION 1:
+
+Title:
+I’m an Influencer
+
+Subtext:
+I create content on my personal profile and collaborate with brands.
+
+CTA:
+Continue as Influencer
+
+→ Redirect to Influencer onboarding form
+
+---
+
+---
+
+🔴 OPTION 2:
+
+Title:
+I run a Page (Meme / Theme)
+
+Subtext:
+I manage a content page and distribute content to a large audience.
+
+CTA:
+Continue as Page Owner
+
+→ Redirect to Distribution / Page onboarding form
+
+---
+
+---
+
+🧩 LAYOUT RULES
+
+* Desktop: 2 cards side-by-side
+* Mobile: stacked layout
+* Equal spacing and alignment
+* Large clickable area (entire card clickable)
+
+---
+
+---
+
+🧩 CARD DESIGN
+
+Each card should include:
+
+* Title (bold)
+* Short description
+* CTA button
+* Subtle hover effect:
+
+  * slight scale
+  * soft shadow
+
+---
+
+---
+
+🧩 INTERACTION
+
+* Clicking anywhere on card = same action as CTA button
+* Smooth transition
+* No delay or broken links
+
+---
+
+---
+
+🧩 UX DETAILS
+
+* Make selection obvious (no confusion)
+* Avoid technical words like “distribution network”
+* Use simple human language
+
+---
+
+---
+
+🧩 OPTIONAL (BOTTOM NOTE)
+
+Text:
+Not sure where you fit? Choose the closest option — we’ll guide you from there.
+
+---
+
+---
+
+⚠️ IMPORTANT RULES
+
+* Do NOT add more than 2 options
+* Do NOT use confusing labels like “Creator” or “Distribution”
+* Do NOT merge both into one form
+* Keep onboarding flows separate internally
+
+---
+
+---
+
+🎯 FINAL OUTPUT
+
+A clean, premium selection page where:
+
+* users instantly understand their role
+* choose confidently
+* move to the correct onboarding flow
+
+The experience should feel like:
+
+* a product onboarding system
+* not a basic form
+
+---
