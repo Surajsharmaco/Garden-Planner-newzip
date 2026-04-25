@@ -38,33 +38,52 @@ function AdminGuard({ children }: { children: React.ReactNode }) {
   return <AdminLayout>{children}</AdminLayout>;
 }
 
+function AdminRoutes() {
+  return (
+    <Switch>
+      <Route path="/admin/login" component={AdminLogin} />
+      <Route path="/admin/settings">
+        {() => <AdminGuard><AdminSettings /></AdminGuard>}
+      </Route>
+      <Route path="/admin/home">
+        {() => <AdminGuard><AdminHome /></AdminGuard>}
+      </Route>
+      <Route path="/admin/services">
+        {() => <AdminGuard><AdminServices /></AdminGuard>}
+      </Route>
+      <Route path="/admin/work">
+        {() => <AdminGuard><AdminWork /></AdminGuard>}
+      </Route>
+      <Route path="/admin/influencers">
+        {() => <AdminGuard><AdminInfluencers /></AdminGuard>}
+      </Route>
+      <Route path="/admin/blog">
+        {() => <AdminGuard><AdminBlog /></AdminGuard>}
+      </Route>
+      <Route path="/admin/about">
+        {() => <AdminGuard><AdminAbout /></AdminGuard>}
+      </Route>
+      <Route path="/admin/navbar">
+        {() => <AdminGuard><AdminNavbar /></AdminGuard>}
+      </Route>
+      <Route path="/admin/footer">
+        {() => <AdminGuard><AdminFooter /></AdminGuard>}
+      </Route>
+      <Route path="/admin">
+        {() => <AdminGuard><AdminDashboard /></AdminGuard>}
+      </Route>
+    </Switch>
+  );
+}
+
 function App() {
   return (
     <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
       <AdminProvider>
         <Switch>
-          {/* Admin login - no layout */}
-          <Route path="/admin/login" component={AdminLogin} />
-
-          {/* Admin panel - guarded */}
-          <Route path="/admin">
-            {() => (
-              <AdminGuard>
-                <Switch>
-                  <Route path="/admin" component={AdminDashboard} />
-                  <Route path="/admin/settings" component={AdminSettings} />
-                  <Route path="/admin/home" component={AdminHome} />
-                  <Route path="/admin/services" component={AdminServices} />
-                  <Route path="/admin/work" component={AdminWork} />
-                  <Route path="/admin/influencers" component={AdminInfluencers} />
-                  <Route path="/admin/blog" component={AdminBlog} />
-                  <Route path="/admin/about" component={AdminAbout} />
-                  <Route path="/admin/navbar" component={AdminNavbar} />
-                  <Route path="/admin/footer" component={AdminFooter} />
-                </Switch>
-              </AdminGuard>
-            )}
-          </Route>
+          {/* All admin routes */}
+          <Route path="/admin/:rest*" component={AdminRoutes} />
+          <Route path="/admin" component={AdminRoutes} />
 
           {/* Public site */}
           <Route>
