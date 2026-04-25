@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { influencers as DEFAULT_INFLUENCERS, NICHE_CATEGORIES, COUNTRIES, type Influencer } from "@/data/influencers";
-import { PageHeader, Card, Input, Textarea, SaveBar } from "@/components/admin/AdminField";
-import { Plus, Trash2, Search, X, Eye, EyeOff, ChevronDown, ChevronUp, Settings2 } from "lucide-react";
+import { PageHeader, Card, Input, SaveBar } from "@/components/admin/AdminField";
+import { Plus, Trash2, Search, X, Eye, EyeOff, ChevronDown, ChevronUp, Settings2, Upload } from "lucide-react";
 
 const BLANK: Influencer = {
   slug: "",
@@ -31,7 +31,6 @@ function InfluencerRow({
   inf,
   index,
   genres,
-  countries,
   onChange,
   onDelete,
   defaultOpen = false,
@@ -39,7 +38,6 @@ function InfluencerRow({
   inf: Influencer;
   index: number;
   genres: string[];
-  countries: string[];
   onChange: (i: number, val: Influencer) => void;
   onDelete: (i: number) => void;
   defaultOpen?: boolean;
@@ -112,136 +110,48 @@ function InfluencerRow({
         </div>
       </div>
 
-      {/* Expanded edit form */}
+      {/* Expanded edit form — image, category, followers only */}
       {open && (
-        <div className="border-t border-[#0B0B0B]/8 px-5 py-5 space-y-4">
-          <div className="grid grid-cols-2 gap-3">
-            <Input label="Full Name" value={inf.name} onChange={(e) => set({ name: e.target.value })} />
-            <Input label="Username / Handle" value={inf.username} onChange={(e) => set({ username: e.target.value })} />
-            <Input
-              label="Slug (URL)"
-              value={inf.slug}
-              onChange={(e) => set({ slug: e.target.value.toLowerCase().replace(/\s+/g, "-") })}
-              placeholder="first-last"
-            />
-            <div>
-              <label className="block text-[12px] font-semibold text-[#0B0B0B]/60 mb-1.5 uppercase tracking-wider">Niche / Genre</label>
-              <select
-                value={inf.niche}
-                onChange={(e) => set({ niche: e.target.value })}
-                className="w-full border border-[#0B0B0B]/12 rounded-xl px-3.5 py-2.5 text-[14px] text-[#0B0B0B] outline-none focus:border-[#0B0B0B]/40 bg-white"
-              >
-                {genres.map((n) => <option key={n} value={n}>{n}</option>)}
-              </select>
+        <div className="border-t border-[#0B0B0B]/8 px-5 py-5">
+          <div className="flex gap-5 items-start">
+            {/* Photo preview + URL */}
+            <div className="shrink-0">
+              <label className="block text-[12px] font-semibold text-[#0B0B0B]/60 mb-2 uppercase tracking-wider">Photo</label>
+              <div className="w-20 h-20 rounded-2xl overflow-hidden bg-[#0B0B0B]/8 border border-[#0B0B0B]/10 flex items-center justify-center mb-2">
+                {inf.photo ? (
+                  <img src={inf.photo} alt={inf.name} className="w-full h-full object-cover object-top" />
+                ) : (
+                  <Upload size={18} className="text-[#0B0B0B]/25" />
+                )}
+              </div>
+              <input
+                value={inf.photo}
+                onChange={(e) => set({ photo: e.target.value })}
+                placeholder="Paste image URL..."
+                className="w-44 border border-[#0B0B0B]/12 rounded-xl px-3 py-2 text-[12px] text-[#0B0B0B] placeholder-[#0B0B0B]/30 outline-none focus:border-[#0B0B0B]/30 bg-white"
+              />
             </div>
-            <Input label="Followers" value={inf.followers} onChange={(e) => set({ followers: e.target.value })} placeholder="284K" />
-            <Input label="Engagement Rate" value={inf.engagementRate} onChange={(e) => set({ engagementRate: e.target.value })} placeholder="4.8%" />
-            <Input label="Initials" value={inf.initials} onChange={(e) => set({ initials: e.target.value })} placeholder="AB" />
-            <Input label="Accent Color" value={inf.accentColor} onChange={(e) => set({ accentColor: e.target.value })} placeholder="#0B0B0B" />
-          </div>
 
-          <Input
-            label="Photo URL"
-            value={inf.photo}
-            onChange={(e) => set({ photo: e.target.value })}
-            placeholder="https://images.unsplash.com/..."
-          />
-          <Textarea
-            label="Short Description"
-            value={inf.description}
-            onChange={(e) => set({ description: e.target.value })}
-            rows={2}
-          />
-
-          <div className="grid grid-cols-2 gap-3">
-            <Textarea
-              label="About: What they create"
-              value={inf.about.creates}
-              onChange={(e) => set({ about: { ...inf.about, creates: e.target.value } })}
-              rows={3}
-            />
-            <Textarea
-              label="About: Their audience"
-              value={inf.about.audience}
-              onChange={(e) => set({ about: { ...inf.about, audience: e.target.value } })}
-              rows={3}
-            />
-          </div>
-
-          <div className="grid grid-cols-3 gap-3">
-            <Input
-              label="Avg Views"
-              value={inf.metrics.avgViews}
-              onChange={(e) => set({ metrics: { ...inf.metrics, avgViews: e.target.value } })}
-              placeholder="120K per post"
-            />
-            <Input
-              label="Engagement Rate"
-              value={inf.metrics.engagementRate}
-              onChange={(e) => set({ metrics: { ...inf.metrics, engagementRate: e.target.value } })}
-              placeholder="4.8%"
-            />
-            <Input
-              label="Audience Location"
-              value={inf.metrics.audienceLocation}
-              onChange={(e) => set({ metrics: { ...inf.metrics, audienceLocation: e.target.value } })}
-              placeholder="US (42%), UK (18%)"
-            />
-          </div>
-
-          <div>
-            <label className="block text-[12px] font-semibold text-[#0B0B0B]/60 mb-1.5 uppercase tracking-wider">Audience Countries</label>
-            <div className="flex flex-wrap gap-2">
-              {countries.map((c) => (
-                <button
-                  key={c}
-                  onClick={() => {
-                    const cur = inf.audienceCountries;
-                    set({ audienceCountries: cur.includes(c) ? cur.filter((x) => x !== c) : [...cur, c] });
-                  }}
-                  className={`px-2.5 py-1 rounded-lg text-[12px] font-medium border transition-colors ${
-                    inf.audienceCountries.includes(c)
-                      ? "bg-[#0B0B0B] text-white border-[#0B0B0B]"
-                      : "border-[#0B0B0B]/15 text-[#0B0B0B]/50 hover:border-[#0B0B0B]/30"
-                  }`}
+            {/* Category + Followers */}
+            <div className="flex-1 grid grid-cols-2 gap-3 pt-6">
+              <div>
+                <label className="block text-[12px] font-semibold text-[#0B0B0B]/60 mb-1.5 uppercase tracking-wider">Category / Genre</label>
+                <select
+                  value={inf.niche}
+                  onChange={(e) => set({ niche: e.target.value })}
+                  className="w-full border border-[#0B0B0B]/12 rounded-xl px-3.5 py-2.5 text-[13px] text-[#0B0B0B] outline-none focus:border-[#0B0B0B]/40 bg-white"
                 >
-                  {c}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-[12px] font-semibold text-[#0B0B0B]/60 mb-1.5 uppercase tracking-wider">Past Brands (comma-separated)</label>
+                  {genres.map((n) => <option key={n} value={n}>{n}</option>)}
+                </select>
+              </div>
               <Input
-                value={inf.pastWork.brands.join(", ")}
-                onChange={(e) =>
-                  set({ pastWork: { ...inf.pastWork, brands: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) } })
-                }
-                placeholder="Notion, Stripe, HubSpot"
-              />
-            </div>
-            <div>
-              <label className="block text-[12px] font-semibold text-[#0B0B0B]/60 mb-1.5 uppercase tracking-wider">Services (comma-separated)</label>
-              <Input
-                value={inf.services.join(", ")}
-                onChange={(e) =>
-                  set({ services: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })
-                }
-                placeholder="Sponsored Posts, Brand Collaborations"
+                label="Followers"
+                value={inf.followers}
+                onChange={(e) => set({ followers: e.target.value })}
+                placeholder="284K"
               />
             </div>
           </div>
-
-          <Textarea
-            label="Sample Content (one per line)"
-            value={inf.pastWork.sampleContent.join("\n")}
-            onChange={(e) =>
-              set({ pastWork: { ...inf.pastWork, sampleContent: e.target.value.split("\n").filter(Boolean) } })
-            }
-            rows={3}
-          />
         </div>
       )}
     </Card>
@@ -503,7 +413,6 @@ export default function AdminInfluencers() {
               inf={inf}
               index={realIndex}
               genres={genres}
-              countries={countries}
               onChange={handleChange}
               onDelete={handleDelete}
               defaultOpen={realIndex === newIndex}
