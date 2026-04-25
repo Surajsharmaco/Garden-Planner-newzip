@@ -376,7 +376,7 @@ export default function NetworkApplyForm({ type }: { type: NetworkApplyType }) {
                       {/* ── Page entries ────────────────────────── */}
                       <div>
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-                          <label style={labelStyle}>Page Name &amp; Link</label>
+                          <label style={labelStyle}>Page Link</label>
                           <span style={{ fontSize: 11, color: "rgba(11,11,11,0.35)", fontWeight: 500 }}>{pages.length} page{pages.length !== 1 ? "s" : ""}</span>
                         </div>
 
@@ -406,12 +406,6 @@ export default function NetworkApplyForm({ type }: { type: NetworkApplyType }) {
                                       </button>
                                     )}
                                   </div>
-                                  <input
-                                    className="gb-input"
-                                    placeholder="Page name (e.g. Fitness Memes)"
-                                    value={p.name}
-                                    onChange={(e) => updatePage(i, "name", e.target.value)}
-                                  />
                                   <input
                                     className="gb-input"
                                     placeholder="Page link (e.g. @fitnessmemes or URL)"
