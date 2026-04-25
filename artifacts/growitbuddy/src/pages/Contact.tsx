@@ -12,49 +12,35 @@ function CalEmbed() {
   useEffect(() => {
     const w = window as any;
 
-    // Bootstrap Cal queue accumulator (mirrors the official IIFE)
-    if (!w.Cal) {
-      (function (C: any, A: string, L: string) {
-        const p = (a: any, ar: any) => a.q.push(ar);
-        const d = C.document;
-        C.Cal = C.Cal || function (this: any) {
-          const cal = C.Cal;
-          const ar = arguments;
-          if (!cal.loaded) {
-            cal.ns = {};
-            cal.q = cal.q || [];
-            const s = d.createElement("script");
-            s.src = A;
-            d.head.appendChild(s);
-            cal.loaded = true;
-          }
-          if (ar[0] === L) {
-            const api: any = function () { p(api, arguments); };
-            const ns = ar[1];
-            api.q = api.q || [];
-            if (typeof ns === "string") {
-              cal.ns[ns] = cal.ns[ns] || api;
-              p(cal.ns[ns], ar);
-              p(cal, ["initNamespace", ns]);
-            } else p(cal, ar);
-            return;
-          }
-          p(cal, ar);
-        };
-      })(window, "https://app.cal.com/embed/embed.js", "init");
-    }
+    // Prevent re-initialization across HMR reloads
+    if (w.__gbCalDone) return;
 
-    // Queue all Cal calls — embed.js will process them once loaded
-    w.Cal("init", "growth-strategy-call", { origin: "https://app.cal.com" });
-    w.Cal.ns["growth-strategy-call"]("inline", {
-      elementOrSelector: "#my-cal-inline-growth-strategy-call",
-      config: { layout: "month_view", useSlotsViewOnSmallScreen: "true" },
-      calLink: "growitbuddy.com/growth-strategy-call",
-    });
-    w.Cal.ns["growth-strategy-call"]("ui", {
-      hideEventTypeDetails: false,
-      layout: "month_view",
-    });
+    try {
+      // Run the exact Cal.com bootstrap IIFE — sets up window.Cal as a
+      // queue accumulator and injects embed.js which processes it on load.
+      // Using new Function to avoid TS strict-mode issues with `arguments`.
+      if (!w.Cal) {
+        // eslint-disable-next-line no-new-func
+        new Function("window", `
+          (function(C,A,L){var p=function(a,ar){a.q.push(ar)};var d=C.document;C.Cal=C.Cal||function(){var cal=C.Cal;var ar=arguments;if(!cal.loaded){cal.ns={};cal.q=cal.q||[];d.head.appendChild(d.createElement("script")).src=A;cal.loaded=true}if(ar[0]===L){var api=function(){p(api,arguments)};var namespace=ar[1];api.q=api.q||[];if(typeof namespace==="string"){cal.ns[namespace]=cal.ns[namespace]||api;p(cal.ns[namespace],ar);p(cal,["initNamespace",namespace])}else p(cal,ar);return}p(cal,ar)};})(window,"https://app.cal.com/embed/embed.js","init");
+        `)(window);
+      }
+
+      w.Cal("init", "growth-strategy-call", { origin: "https://app.cal.com" });
+      w.Cal.ns["growth-strategy-call"]("inline", {
+        elementOrSelector: "#my-cal-inline-growth-strategy-call",
+        config: { layout: "month_view", useSlotsViewOnSmallScreen: "true" },
+        calLink: "growitbuddy.com/growth-strategy-call",
+      });
+      w.Cal.ns["growth-strategy-call"]("ui", {
+        hideEventTypeDetails: false,
+        layout: "month_view",
+      });
+
+      w.__gbCalDone = true;
+    } catch (err) {
+      console.warn("Cal embed init error:", err);
+    }
   }, []);
 
   return (
