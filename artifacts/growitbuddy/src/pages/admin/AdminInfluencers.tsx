@@ -242,7 +242,7 @@ export default function AdminInfluencers() {
   const [saved, setSaved] = useState(false);
   const [search, setSearch] = useState("");
   const [nicheFilter, setNicheFilter] = useState("All");
-  const [dateFilter, setDateFilter] = useState<"all" | "today" | "week" | "month">("all");
+  const [dateFilter, setDateFilter] = useState<"all" | "today" | "week" | "month" | "3months" | "6months" | "1year">("all");
   const [newIndex, setNewIndex] = useState<number | null>(null);
   const [listsOpen, setListsOpen] = useState(false);
 
@@ -314,6 +314,9 @@ export default function AdminInfluencers() {
         if (dateFilter === "today") matchDate = updated >= startOfToday.getTime();
         else if (dateFilter === "week") matchDate = updated >= now - 7 * 86400000;
         else if (dateFilter === "month") matchDate = updated >= now - 30 * 86400000;
+        else if (dateFilter === "3months") matchDate = updated >= now - 90 * 86400000;
+        else if (dateFilter === "6months") matchDate = updated >= now - 180 * 86400000;
+        else if (dateFilter === "1year") matchDate = updated >= now - 365 * 86400000;
       }
     }
 
@@ -406,6 +409,9 @@ export default function AdminInfluencers() {
             { key: "today", label: "Today" },
             { key: "week", label: "This week" },
             { key: "month", label: "This month" },
+            { key: "3months", label: "3 months" },
+            { key: "6months", label: "6 months" },
+            { key: "1year", label: "1 year" },
           ] as const).map(({ key, label }) => (
             <button
               key={key}
