@@ -16,7 +16,7 @@ const options = [
     subtitle: "Meme / Theme Page",
     desc: "I manage a content page and distribute content to a large audience.",
     cta: "Continue as Page Owner",
-    href: "/contact",
+    href: "/join/page-owner",
   },
 ];
 

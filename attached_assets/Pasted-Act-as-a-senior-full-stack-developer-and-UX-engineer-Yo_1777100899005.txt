@@ -1,0 +1,168 @@
+Act as a senior full-stack developer and UX engineer.
+
+Your task is to REUSE the existing Influencer onboarding form for the “Page Owner (Meme / Theme)” flow.
+
+IMPORTANT:
+
+* Do NOT create a completely new form UI
+* Reuse the SAME form structure, layout, and styling as the Influencer form
+* Only adapt fields and backend tagging where necessary
+
+---
+
+🎯 GOAL
+
+Ensure both flows:
+
+1. Influencer
+2. Page Owner (Meme / Theme)
+
+use the SAME form UI for consistency, but store data differently.
+
+---
+
+🧩 STEP 1: DUPLICATE FORM STRUCTURE
+
+* Copy the existing Influencer form component
+* Use the same:
+
+  * layout
+  * spacing
+  * input styles
+  * validation
+
+---
+
+🧩 STEP 2: MODIFY LABELS (MINOR CHANGES ONLY)
+
+Where needed, make labels slightly flexible:
+
+Example:
+
+* “Username” → keep same
+* “Platform” → keep same
+* “Niche” → keep same
+* “Followers” → keep same
+
+OPTIONAL:
+If needed, rename one label:
+
+“Profile / Page Link” (works for both influencer + page)
+
+---
+
+---
+
+🧩 STEP 3: ADD HIDDEN FIELD (VERY IMPORTANT)
+
+Add a hidden input field:
+
+For Influencer flow:
+type = "influencer"
+
+For Page Owner flow:
+type = "page"
+
+---
+
+👉 This will allow backend differentiation
+
+---
+
+🧩 STEP 4: ROUTING
+
+When user selects:
+
+* Influencer → open form with type = influencer
+* Page Owner → open same form with type = page
+
+---
+
+---
+
+🧩 STEP 5: BACKEND STORAGE
+
+Ensure:
+
+* All submissions go to same database table OR structured storage
+* But include:
+
+type: influencer / page
+
+---
+
+👉 Example data:
+
+{
+name: "John",
+username: "@fitnessguy",
+followers: "120K",
+type: "influencer"
+}
+
+---
+
+{
+name: "Fitness Memes",
+username: "@fitnessmemes",
+followers: "1.2M",
+type: "page"
+}
+
+---
+
+---
+
+🧩 STEP 6: ADMIN PANEL UPDATE
+
+Update admin panel to:
+
+* Filter by type:
+
+  * Influencers
+  * Pages
+
+* Display separately but from same system
+
+---
+
+---
+
+🧩 STEP 7: UX RULES
+
+* Form should feel identical in both flows
+* No confusion in UI
+* Fast submission
+* Proper success message
+
+---
+
+---
+
+🧩 SUCCESS MESSAGE
+
+After submission:
+
+"Your application has been received.
+Our team will review and get back to you."
+
+---
+
+---
+
+🎯 FINAL OUTPUT
+
+* Single reusable form system
+* Two entry flows (Influencer / Page)
+* Clean backend tagging
+* Scalable structure
+
+---
+
+⚠️ IMPORTANT RULES
+
+* Do NOT duplicate UI unnecessarily
+* Do NOT create separate messy forms
+* Keep system modular and scalable
+
+---

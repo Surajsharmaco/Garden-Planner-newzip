@@ -113,6 +113,40 @@ router.post("/creators", async (req, res) => {
   res.json({ success: true, message: "Welcome! We will review your application and reach out within 48 hours." });
 });
 
+router.post("/page-owner", async (req, res) => {
+  const { name, email, phone, niche, handle, monthlyViews } = req.body;
+  if (!name || !email || !niche) {
+    res.status(400).json({ error: "name, email and niche are required" });
+    return;
+  }
+  logger.info({ name, email, niche }, "Page owner application submission");
+
+  await saveLead("page", name, email, { name, email, phone, niche, handle, monthlyViews });
+
+  try {
+    await resend.emails.send({
+      from: FROM,
+      to: TO,
+      subject: `New Page Owner Application: ${name}`,
+      html: emailTemplate(
+        "New Page Owner Application",
+        "Page Owner",
+        row("Name", name) +
+        row("Email", email) +
+        row("Phone", phone) +
+        row("Niche", niche) +
+        row("Profile / Page Link", handle) +
+        row("Monthly Views / Reach", monthlyViews)
+      ),
+      replyTo: email,
+    });
+  } catch (err) {
+    logger.error(err, "Resend error (page-owner)");
+  }
+
+  res.json({ success: true, message: "Your application has been received. Our team will review and get back to you." });
+});
+
 router.post("/freelancers", async (req, res) => {
   const { name, email, phone, skills, portfolioUrl, experience, otherSkill } = req.body;
   if (!name || !email || !skills) {

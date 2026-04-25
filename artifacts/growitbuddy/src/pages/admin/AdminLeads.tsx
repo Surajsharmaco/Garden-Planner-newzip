@@ -15,7 +15,8 @@ interface Lead {
 
 const TYPE_META: Record<string, { label: string; color: string; bg: string }> = {
   contact:    { label: "Contact",    color: "#2563eb", bg: "#eff6ff" },
-  creator:    { label: "Creator",    color: "#7c3aed", bg: "#f5f3ff" },
+  creator:    { label: "Influencer", color: "#7c3aed", bg: "#f5f3ff" },
+  page:       { label: "Page Owner", color: "#0891b2", bg: "#ecfeff" },
   freelancer: { label: "Freelancer", color: "#059669", bg: "#ecfdf5" },
   "full-time":{ label: "Full-Time",  color: "#d97706", bg: "#fffbeb" },
   newsletter: { label: "Newsletter", color: "#db2777", bg: "#fdf2f8" },

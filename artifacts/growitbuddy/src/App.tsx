@@ -12,6 +12,7 @@ import InfluencerExplore from "@/pages/InfluencerExplore";
 import InfluencerProfile from "@/pages/InfluencerProfile";
 import DistributionNetwork from "@/pages/DistributionNetwork";
 import JoinNetwork from "@/pages/JoinNetwork";
+import PageOwnerApply from "@/pages/PageOwnerApply";
 import FullTime from "@/pages/FullTime";
 import AuthorityAudit from "@/pages/AuthorityAudit";
 import Resources from "@/pages/Resources";
@@ -109,6 +110,7 @@ function App() {
                     <Route path="/influencers/:slug" component={InfluencerProfile} />
                     <Route path="/distribution" component={DistributionNetwork} />
                     <Route path="/join" component={JoinNetwork} />
+                    <Route path="/join/page-owner" component={PageOwnerApply} />
                     <Route path="/creators" component={Creators} />
                     <Route path="/freelancers" component={Freelancers} />
                     <Route path="/full-time" component={FullTime} />
