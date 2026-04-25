@@ -12,7 +12,7 @@ const NAV_LINKS = [
     dropdown: [
       { href: "/influencers", label: "Influencer Network" },
       { href: "/distribution", label: "Distribution Network" },
-      { href: "/creators", label: "Join as Influencer" },
+      { href: "/join", label: "Join Our Network" },
     ],
   },
   {

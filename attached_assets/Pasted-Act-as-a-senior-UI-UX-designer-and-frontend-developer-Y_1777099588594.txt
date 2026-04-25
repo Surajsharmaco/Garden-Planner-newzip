@@ -1,0 +1,138 @@
+Act as a senior UI/UX designer and frontend developer.
+
+Your task is to MODIFY the website navigation and onboarding flow.
+
+IMPORTANT:
+
+* Do NOT change overall design, layout, or styling
+* Only update naming, structure, and linking
+* Keep everything clean and consistent
+
+---
+
+🎯 GOAL
+
+Replace the existing:
+
+👉 "Join as Influencer"
+
+with a unified entry point:
+
+👉 "Join Our Network"
+
+This will act as a central onboarding page.
+
+---
+
+🧩 STEP 1: NAVIGATION UPDATE
+
+* Remove: "Join as Influencer"
+* Add new menu item:
+
+👉 "Join Our Network"
+
+Place it in the same position where "Join as Influencer" existed.
+
+---
+
+🧩 STEP 2: CREATE NEW PAGE → "Join Our Network"
+
+This page should offer 2 clear options:
+
+---
+
+🔹 OPTION 1: Join Influencer Network
+
+Title:
+Join as an Influencer
+
+Subtext:
+Collaborate with brands, grow your presence, and unlock new opportunities.
+
+CTA Button:
+Apply as Influencer
+
+→ Link this to existing Influencer onboarding form/page
+
+---
+
+🔹 OPTION 2: Join Distribution Network
+
+Title:
+Join Distribution Network
+
+Subtext:
+Be part of our meme and theme page network and help distribute content at scale.
+
+CTA Button:
+Apply for Distribution Network
+
+→ Link this to Distribution onboarding form/page
+
+---
+
+---
+
+🧩 LAYOUT
+
+* Two side-by-side cards (desktop)
+* Stacked layout (mobile)
+* Equal visual weight for both options
+* Clean minimal design
+
+---
+
+🧩 DESIGN RULES
+
+* Keep same typography and spacing as rest of website
+* Use subtle hover effects on cards
+* Maintain premium look (no clutter)
+
+---
+
+---
+
+🧩 CTA SECTION (BOTTOM)
+
+Headline:
+Ready to Join the Network?
+
+Subtext:
+Choose your path and become part of a growing ecosystem.
+
+---
+
+---
+
+⚠️ IMPORTANT RULES
+
+* Do NOT merge influencer and distribution flows
+* Keep both onboarding processes separate
+* Do NOT change backend forms (just link correctly)
+
+---
+
+---
+
+🎯 FINAL OUTPUT
+
+* Navigation updated
+* Clean “Join Our Network” page created
+* Two clear entry points:
+
+  * Influencer Network
+  * Distribution Network
+
+The experience should feel:
+
+* simple
+* premium
+* structured
+
+NOT:
+
+* confusing
+* cluttered
+* duplicated
+
+---
