@@ -1,0 +1,223 @@
+Act as a senior full-stack developer, product engineer, and QA tester.
+
+Your task is to audit, fix, and upgrade the entire website — with primary focus on rebuilding a powerful, bug-free, scalable Admin Panel (CMS-like system).
+
+The current admin panel is incomplete, buggy, and not production-ready. Many features are not working, and important controls are missing.
+
+You must first analyze everything, then fix, then upgrade.
+
+---
+
+🔥 STEP 1: FULL WEBSITE AUDIT (MANDATORY)
+
+* Scan entire website (frontend + backend)
+* Identify:
+
+  * broken features
+  * non-working forms
+  * UI bugs
+  * missing connections (frontend not connected to backend)
+  * console errors
+  * API failures
+
+Fix ALL bugs before adding new features.
+
+---
+
+🔥 STEP 2: DATA SYNC (VERY IMPORTANT)
+
+Ensure that ALL existing website content is visible and editable inside the admin panel:
+
+* Influencers (existing)
+* Blogs
+* Pages content (home, services, etc.)
+* Case studies
+* Forms data (leads)
+
+👉 If content exists on frontend → it MUST appear in admin panel.
+
+---
+
+🔥 STEP 3: FIX BROKEN FEATURES
+
+Specifically fix:
+
+* “Add Influencer” → currently not working → must save + display instantly
+* Form submissions → must store properly
+* Blog publishing → ensure live rendering
+* Any non-clickable buttons → fix interactions
+
+---
+
+🔥 STEP 4: REBUILD ADMIN PANEL (CORE TASK)
+
+Create a proper CMS-like Admin Panel with:
+
+---
+
+🧩 DASHBOARD
+
+* Overview stats:
+
+  * total blogs
+  * influencers
+  * leads
+  * recent activity
+
+---
+
+🧩 CONTENT MANAGEMENT
+
+1. Influencer Management
+
+* Add / Edit / Delete influencer
+* Upload image
+* Add username, niche, followers, engagement
+* Auto display in frontend grid
+
+---
+
+2. Blog Management
+
+* Create / Edit / Delete blogs
+* Rich text editor (Notion-like)
+* SEO fields (title, meta, schema)
+* Preview before publish
+
+---
+
+3. Pages Editor (IMPORTANT)
+
+* Edit website content:
+
+  * headings
+  * text
+  * buttons
+  * sections
+
+👉 Make it dynamic (no hardcoding)
+
+---
+
+4. Case Studies Management
+
+* Add case studies
+* Add metrics, results, images
+* Show on portfolio page
+
+---
+
+---
+
+🧩 DESIGN CONTROL (VERY IMPORTANT – MISSING FEATURE)
+
+Add a “Design Settings” panel:
+
+* Change:
+
+  * colors (primary, secondary)
+  * fonts
+  * button styles
+  * spacing
+
+👉 Live preview changes
+
+---
+
+---
+
+🧩 MEDIA LIBRARY
+
+* Upload images/videos
+* Reuse assets
+* Optimize images
+
+---
+
+---
+
+🧩 LEADS / CRM PANEL
+
+* View all form submissions
+* Export data
+* Tag leads
+
+---
+
+---
+
+🧩 SEO CONTROL PANEL
+
+* Edit:
+
+  * meta title
+  * meta description
+  * OG tags
+  * schema
+
+For each page + blog
+
+---
+
+---
+
+🧩 SETTINGS PANEL
+
+* Site name
+* Logo upload
+* Favicon
+* Analytics integration
+
+---
+
+---
+
+🔥 STEP 5: UX IMPROVEMENTS
+
+* Clean UI
+* Fast loading
+* No lag
+* Responsive (mobile + desktop)
+
+---
+
+🔥 STEP 6: ERROR HANDLING
+
+* Show success/error messages
+* Prevent broken states
+* Validate inputs
+
+---
+
+🔥 STEP 7: PERFORMANCE
+
+* Optimize loading
+* Reduce unnecessary API calls
+* Cache data where needed
+
+---
+
+---
+
+🎯 FINAL OUTPUT
+
+Deliver a fully functional system where:
+
+* Admin panel controls EVERYTHING
+* No bugs exist
+* All features work reliably
+* Content updates reflect instantly on frontend
+
+---
+
+⚠️ IMPORTANT RULES
+
+* Do NOT leave partial implementations
+* Do NOT fake functionality
+* Everything must be fully working
+* Prioritize stability over adding too many features
+
+---
+
+Goal:
+Make this feel like a real SaaS-level CMS — not a basic dashboard.

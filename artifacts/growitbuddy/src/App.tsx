@@ -31,6 +31,7 @@ import AdminHome from "@/pages/admin/AdminHome";
 import AdminAbout from "@/pages/admin/AdminAbout";
 import AdminNavbar from "@/pages/admin/AdminNavbar";
 import AdminFooter from "@/pages/admin/AdminFooter";
+import AdminLeads from "@/pages/admin/AdminLeads";
 
 function AdminGuard({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAdmin();
@@ -68,6 +69,9 @@ function AdminRoutes() {
       </Route>
       <Route path="/admin/footer">
         {() => <AdminGuard><AdminFooter /></AdminGuard>}
+      </Route>
+      <Route path="/admin/leads">
+        {() => <AdminGuard><AdminLeads /></AdminGuard>}
       </Route>
       <Route path="/admin">
         {() => <AdminGuard><AdminDashboard /></AdminGuard>}

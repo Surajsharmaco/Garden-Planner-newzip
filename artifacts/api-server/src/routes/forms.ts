@@ -1,12 +1,21 @@
 import { Router } from "express";
 import { Resend } from "resend";
 import { logger } from "../lib/logger";
+import { db, leads } from "@workspace/db";
 
 const router = Router();
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const FROM = "GrowitBuddy <onboarding@resend.dev>";
 const TO = process.env.NOTIFY_EMAIL || "hello@growitbuddy.com";
+
+async function saveLead(type: string, name: string | undefined, email: string, data: Record<string, unknown>) {
+  try {
+    await db.insert(leads).values({ type, name: name || null, email, data });
+  } catch (err) {
+    logger.error(err, "Failed to save lead to DB");
+  }
+}
 
 function row(label: string, value: string | undefined) {
   if (!value) return "";
@@ -45,6 +54,8 @@ router.post("/contact", async (req, res) => {
   }
   logger.info({ name, email, company }, "Contact form submission");
 
+  await saveLead("contact", name, email, { name, email, company, message });
+
   try {
     await resend.emails.send({
       from: FROM,
@@ -74,6 +85,8 @@ router.post("/creators", async (req, res) => {
     return;
   }
   logger.info({ name, email, niche }, "Creator onboarding submission");
+
+  await saveLead("creator", name, email, { name, email, phone, niche, handle, monthlyViews, goals });
 
   try {
     await resend.emails.send({
@@ -109,6 +122,7 @@ router.post("/freelancers", async (req, res) => {
   logger.info({ name, email, skills }, "Freelancer application submission");
 
   const skillsList = Array.isArray(skills) ? skills.join(", ") : skills;
+  await saveLead("freelancer", name, email, { name, email, phone, skills: skillsList, otherSkill, experience, portfolioUrl });
 
   try {
     await resend.emails.send({
@@ -144,6 +158,7 @@ router.post("/full-time", async (req, res) => {
   logger.info({ name, email, role }, "Full-time application submission");
 
   const roleDisplay = role === "Other" && otherRole ? `Other — ${otherRole}` : role;
+  await saveLead("full-time", name, email, { name, email, phone, role: roleDisplay, experience, linkedinUrl, coverNote });
 
   try {
     await resend.emails.send({
@@ -177,6 +192,8 @@ router.post("/newsletter", async (req, res) => {
     return;
   }
   logger.info({ email, source }, "Newsletter signup");
+
+  await saveLead("newsletter", undefined, email, { email, source: source || "Authority Audit" });
 
   try {
     await resend.emails.send({

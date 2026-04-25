@@ -1,8 +1,7 @@
 import { Router } from "express";
 import { randomBytes } from "crypto";
-import { db } from "@workspace/db";
-import { siteContent } from "@workspace/db";
-import { eq } from "drizzle-orm";
+import { db, siteContent, leads } from "@workspace/db";
+import { eq, desc } from "drizzle-orm";
 import { logger } from "../lib/logger";
 
 const router = Router();
@@ -97,6 +96,35 @@ router.put("/content/:section", authMiddleware, async (req, res) => {
     });
   logger.info({ section }, "Admin content updated");
   res.json({ success: true, section });
+});
+
+// ── Leads / CRM ──
+
+router.get("/leads", authMiddleware, async (req, res) => {
+  const { type } = req.query;
+  let rows;
+  if (type && type !== "all") {
+    rows = await db.select().from(leads).where(eq(leads.type, String(type))).orderBy(desc(leads.createdAt));
+  } else {
+    rows = await db.select().from(leads).orderBy(desc(leads.createdAt));
+  }
+  res.json(rows);
+});
+
+router.get("/leads/stats", authMiddleware, async (_req, res) => {
+  const rows = await db.select().from(leads);
+  const byType: Record<string, number> = {};
+  for (const row of rows) {
+    byType[row.type] = (byType[row.type] ?? 0) + 1;
+  }
+  res.json({ total: rows.length, byType });
+});
+
+router.delete("/leads/:id", authMiddleware, async (req, res) => {
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) { res.status(400).json({ error: "Invalid id" }); return; }
+  await db.delete(leads).where(eq(leads.id, id));
+  res.json({ success: true });
 });
 
 export { authMiddleware };
