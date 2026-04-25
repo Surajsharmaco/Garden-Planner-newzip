@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { influencers as DEFAULT_INFLUENCERS, NICHE_CATEGORIES, COUNTRIES, type Influencer } from "@/data/influencers";
 import { PageHeader, Card, Input, Textarea, SaveBar } from "@/components/admin/AdminField";
-import { Plus, Trash2, ChevronDown, ChevronUp, Search } from "lucide-react";
+import { Plus, Trash2, Search, Lock, Unlock } from "lucide-react";
 
 const BLANK: Influencer = {
   slug: "",
@@ -22,6 +22,27 @@ const BLANK: Influencer = {
   services: [],
 };
 
+function isComplete(inf: Influencer) {
+  return inf.name.trim().length > 0;
+}
+
+function DetailToggle({ enabled, onToggle }: { enabled: boolean; onToggle: () => void }) {
+  return (
+    <button
+      onClick={(e) => { e.stopPropagation(); onToggle(); }}
+      title={enabled ? "Lock details (collapse-only view)" : "Unlock details (enable editing)"}
+      className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold border transition-all ${
+        enabled
+          ? "bg-[#0B0B0B] text-white border-[#0B0B0B] hover:bg-[#0B0B0B]/85"
+          : "bg-white text-[#0B0B0B]/40 border-[#0B0B0B]/15 hover:border-[#0B0B0B]/30 hover:text-[#0B0B0B]/60"
+      }`}
+    >
+      {enabled ? <Unlock size={11} /> : <Lock size={11} />}
+      {enabled ? "Editing" : "Locked"}
+    </button>
+  );
+}
+
 function InfluencerRow({
   inf,
   index,
@@ -36,37 +57,72 @@ function InfluencerRow({
   defaultOpen?: boolean;
 }) {
   const [open, setOpen] = useState(defaultOpen);
+  const [detailEnabled, setDetailEnabled] = useState(defaultOpen);
   const set = (patch: Partial<Influencer>) => onChange(index, { ...inf, ...patch });
+
+  function handleHeaderClick() {
+    if (!detailEnabled) return;
+    setOpen((p) => !p);
+  }
+
+  function handleToggle() {
+    setDetailEnabled((p) => {
+      if (p) setOpen(false);
+      return !p;
+    });
+  }
 
   return (
     <Card className="p-0 overflow-hidden">
-      <div className="flex items-center gap-2 pr-3 hover:bg-[#0B0B0B]/3 transition-colors">
-        <button
-          onClick={() => setOpen((p) => !p)}
-          className="flex-1 flex items-center gap-3 px-5 py-3.5 text-left min-w-0"
+      {/* Row header */}
+      <div className="flex items-center gap-2 pr-3">
+        <div
+          onClick={handleHeaderClick}
+          className={`flex-1 flex items-center gap-3 px-5 py-3.5 min-w-0 ${detailEnabled ? "cursor-pointer hover:bg-[#0B0B0B]/3 transition-colors" : "cursor-default"}`}
         >
+          {/* Avatar */}
           {inf.photo ? (
-            <img src={inf.photo} alt={inf.name} className="w-8 h-8 rounded-full object-cover shrink-0" />
+            <img src={inf.photo} alt={inf.name} className="w-9 h-9 rounded-full object-cover shrink-0" />
           ) : (
-            <div className="w-8 h-8 rounded-full bg-[#0B0B0B]/10 flex items-center justify-center text-[11px] font-bold text-[#0B0B0B]/50 shrink-0">
+            <div className="w-9 h-9 rounded-full bg-[#0B0B0B]/10 flex items-center justify-center text-[11px] font-bold text-[#0B0B0B]/50 shrink-0">
               {inf.initials || "?"}
             </div>
           )}
+
+          {/* Info */}
           <div className="flex-1 min-w-0">
-            <p className="text-[13px] font-semibold text-[#0B0B0B] truncate">{inf.name || "Unnamed Influencer"}</p>
-            <p className="text-[11px] text-[#0B0B0B]/40 truncate">{inf.niche} &bull; {inf.followers}</p>
+            <p className="text-[13px] font-semibold text-[#0B0B0B] truncate">
+              {inf.name || <span className="text-[#0B0B0B]/30 italic">Unnamed Influencer</span>}
+            </p>
+            <p className="text-[11px] text-[#0B0B0B]/40 truncate">
+              {inf.niche}
+              {inf.followers ? ` · ${inf.followers}` : ""}
+              {inf.engagementRate ? ` · ${inf.engagementRate} engagement` : ""}
+            </p>
           </div>
-          {open ? <ChevronUp size={14} className="text-[#0B0B0B]/40 shrink-0" /> : <ChevronDown size={14} className="text-[#0B0B0B]/40 shrink-0" />}
-        </button>
-        <button
-          onClick={() => onDelete(index)}
-          className="p-1.5 rounded hover:bg-red-50 hover:text-red-500 text-[#0B0B0B]/30 transition-colors shrink-0"
-        >
-          <Trash2 size={14} />
-        </button>
+
+          {/* Expand hint */}
+          {detailEnabled && (
+            <span className="text-[10px] text-[#0B0B0B]/25 shrink-0 mr-1">
+              {open ? "collapse" : "expand"}
+            </span>
+          )}
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center gap-1.5 shrink-0">
+          <DetailToggle enabled={detailEnabled} onToggle={handleToggle} />
+          <button
+            onClick={() => onDelete(index)}
+            className="p-1.5 rounded hover:bg-red-50 hover:text-red-500 text-[#0B0B0B]/30 transition-colors"
+          >
+            <Trash2 size={14} />
+          </button>
+        </div>
       </div>
 
-      {open && (
+      {/* Expanded edit form — only when detailEnabled AND open */}
+      {detailEnabled && open && (
         <div className="border-t border-[#0B0B0B]/8 px-5 py-5 space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <Input label="Full Name" value={inf.name} onChange={(e) => set({ name: e.target.value })} />
@@ -224,13 +280,24 @@ export default function AdminInfluencers() {
   function handleDelete(i: number) {
     if (!confirm("Remove this influencer?")) return;
     setSaved(false);
-    setItems((p) => p.filter((_, idx) => idx !== i));
+    setItems((p) => {
+      const next = p.filter((_, idx) => idx !== i);
+      if (newIndex !== null) {
+        if (i === newIndex) setNewIndex(null);
+        else if (i < newIndex) setNewIndex(newIndex - 1);
+      }
+      return next;
+    });
   }
 
+  const pendingNew = newIndex !== null && !isComplete(items[newIndex] ?? BLANK);
+
   function addNew() {
+    if (pendingNew) return;
     setSaved(false);
     setItems((p) => {
-      setNewIndex(p.length);
+      const idx = p.length;
+      setNewIndex(idx);
       return [...p, { ...BLANK }];
     });
     setSearch("");
@@ -242,6 +309,7 @@ export default function AdminInfluencers() {
     try {
       await saveContent("influencers", { items });
       setSaved(true);
+      setNewIndex(null);
     } finally {
       setSaving(false);
     }
@@ -279,12 +347,26 @@ export default function AdminInfluencers() {
           <option value="All">All niches</option>
           {NICHE_CATEGORIES.map((n) => <option key={n} value={n}>{n}</option>)}
         </select>
-        <button
-          onClick={addNew}
-          className="flex items-center gap-2 bg-[#0B0B0B] text-white text-[13px] font-semibold px-4 py-2.5 rounded-xl hover:bg-[#0B0B0B]/85 transition-colors"
-        >
-          <Plus size={15} /> Add Influencer
-        </button>
+
+        <div className="relative">
+          <button
+            onClick={addNew}
+            disabled={pendingNew}
+            className={`flex items-center gap-2 text-[13px] font-semibold px-4 py-2.5 rounded-xl transition-all ${
+              pendingNew
+                ? "bg-[#0B0B0B]/20 text-[#0B0B0B]/40 cursor-not-allowed"
+                : "bg-[#0B0B0B] text-white hover:bg-[#0B0B0B]/85 cursor-pointer"
+            }`}
+            title={pendingNew ? "Fill in at least a name for the current influencer first" : ""}
+          >
+            <Plus size={15} /> Add Influencer
+          </button>
+          {pendingNew && (
+            <p className="absolute top-full left-0 mt-1.5 whitespace-nowrap text-[11px] text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1.5 rounded-lg z-10">
+              Fill in the name below before adding another
+            </p>
+          )}
+        </div>
       </div>
 
       <div className="space-y-3">
