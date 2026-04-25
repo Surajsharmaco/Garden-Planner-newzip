@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { influencers as DEFAULT_INFLUENCERS, NICHE_CATEGORIES, COUNTRIES, type Influencer } from "@/data/influencers";
 import { PageHeader, Card, Input, Textarea, SaveBar } from "@/components/admin/AdminField";
-import { Plus, Trash2, Search, Lock, Unlock } from "lucide-react";
+import { Plus, Trash2, Search, Lock, Unlock, X } from "lucide-react";
 
 const BLANK: Influencer = {
   slug: "",
@@ -329,25 +329,22 @@ export default function AdminInfluencers() {
         description={`${items.length} creator${items.length !== 1 ? "s" : ""} in the roster`}
       />
 
-      <div className="flex gap-3 mb-5">
+      {/* Top toolbar */}
+      <div className="flex gap-3 mb-3">
         <div className="relative flex-1">
           <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#0B0B0B]/35" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search influencers..."
-            className="w-full pl-9 pr-4 py-2.5 border border-[#0B0B0B]/12 rounded-xl text-[13px] text-[#0B0B0B] placeholder-[#0B0B0B]/30 outline-none focus:border-[#0B0B0B]/30 bg-white"
+            placeholder="Search by name or niche..."
+            className="w-full pl-9 pr-9 py-2.5 border border-[#0B0B0B]/12 rounded-xl text-[13px] text-[#0B0B0B] placeholder-[#0B0B0B]/30 outline-none focus:border-[#0B0B0B]/30 bg-white"
           />
+          {search && (
+            <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#0B0B0B]/30 hover:text-[#0B0B0B]">
+              <X size={13} />
+            </button>
+          )}
         </div>
-        <select
-          value={nicheFilter}
-          onChange={(e) => setNicheFilter(e.target.value)}
-          className="border border-[#0B0B0B]/12 rounded-xl px-3 py-2.5 text-[13px] text-[#0B0B0B] outline-none focus:border-[#0B0B0B]/30 bg-white"
-        >
-          <option value="All">All niches</option>
-          {NICHE_CATEGORIES.map((n) => <option key={n} value={n}>{n}</option>)}
-        </select>
-
         <div className="relative">
           <button
             onClick={addNew}
@@ -362,11 +359,53 @@ export default function AdminInfluencers() {
             <Plus size={15} /> Add Influencer
           </button>
           {pendingNew && (
-            <p className="absolute top-full left-0 mt-1.5 whitespace-nowrap text-[11px] text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1.5 rounded-lg z-10">
+            <p className="absolute top-full right-0 mt-1.5 whitespace-nowrap text-[11px] text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1.5 rounded-lg z-10">
               Fill in the name below before adding another
             </p>
           )}
         </div>
+      </div>
+
+      {/* Genre / Niche filter chips */}
+      <div className="mb-5">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-hide" style={{ scrollbarWidth: "none" }}>
+          {(["All", ...NICHE_CATEGORIES] as string[]).map((niche) => {
+            const count = niche === "All"
+              ? items.length
+              : items.filter((inf) => inf.niche === niche).length;
+            const active = nicheFilter === niche;
+            if (count === 0 && niche !== "All") return null;
+            return (
+              <button
+                key={niche}
+                onClick={() => setNicheFilter(niche)}
+                className={`flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-full text-[12px] font-semibold border transition-all shrink-0 ${
+                  active
+                    ? "bg-[#0B0B0B] text-white border-[#0B0B0B]"
+                    : "bg-white text-[#0B0B0B]/55 border-[#0B0B0B]/12 hover:border-[#0B0B0B]/30 hover:text-[#0B0B0B]"
+                }`}
+              >
+                {niche === "All" ? "All Genres" : niche}
+                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${active ? "bg-white/20 text-white" : "bg-[#0B0B0B]/8 text-[#0B0B0B]/50"}`}>
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        {(search || nicheFilter !== "All") && (
+          <div className="flex items-center gap-2 mt-2">
+            <span className="text-[12px] text-[#0B0B0B]/40">
+              Showing {filtered.length} of {items.length} influencers
+            </span>
+            <button
+              onClick={() => { setSearch(""); setNicheFilter("All"); }}
+              className="text-[11px] text-[#0B0B0B]/40 hover:text-[#0B0B0B] underline underline-offset-2 transition-colors"
+            >
+              Clear filters
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="space-y-3">
