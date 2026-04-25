@@ -1,45 +1,41 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Plus, Trash2 } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import SEOMeta from "@/components/SEOMeta";
 
-const schema = z.object({
+/* ── Schemas ─────────────────────────────────────────────── */
+const baseFields = {
   name: z.string().min(2, "Enter your full name").max(80, "Name too long").regex(/^[a-zA-Z\s'-]+$/, "Name should only contain letters"),
   email: z.string().email("Enter a valid email address (e.g. you@example.com)"),
   phone: z.string().regex(/^\+?[\d\s\-().]{7,20}$/, "Enter a valid phone number (e.g. +1 234 567 8900)"),
   niche: z.string().min(1, "Please select your niche"),
-  handle: z.string().min(2, "Enter your handle or page URL").max(200, "Too long"),
   monthlyViews: z.string().min(1, "Please select your range"),
-});
-type F = z.infer<typeof schema>;
+};
 
+const influencerSchema = z.object({ ...baseFields, handle: z.string().min(2, "Enter your social handle or profile URL").max(200, "Too long") });
+const pageSchema       = z.object({ ...baseFields });
+
+type InfluencerF = z.infer<typeof influencerSchema>;
+type PageF       = z.infer<typeof pageSchema>;
+
+/* ── Constants ───────────────────────────────────────────── */
 const NICHES = [
-  "Business & Entrepreneurship",
-  "Personal Finance",
-  "Health & Wellness",
-  "Technology & AI",
-  "Marketing & Growth",
-  "Leadership & Management",
-  "Real Estate",
-  "Coaching & Education",
-  "E-commerce",
-  "Other",
+  "Business & Entrepreneurship", "Personal Finance", "Health & Wellness",
+  "Technology & AI", "Marketing & Growth", "Leadership & Management",
+  "Real Estate", "Coaching & Education", "E-commerce", "Other",
 ];
-
 const VIEWS_RANGES = [
-  "Under 10K/month",
-  "10K – 50K/month",
-  "50K – 200K/month",
-  "200K – 1M/month",
-  "1M+/month",
+  "Under 10K/month", "10K – 50K/month", "50K – 200K/month", "200K – 1M/month", "1M+/month",
 ];
+const PAGE_COUNT_OPTIONS = ["1", "2", "3", "4", "5", "More than 5"];
 
+/* ── Config ──────────────────────────────────────────────── */
 const CONFIG = {
   influencer: {
     seoTitle: "Influencer Network - GrowitBuddy",
@@ -63,8 +59,6 @@ const CONFIG = {
     ],
     formTitle: "Join the Network",
     formSubtitle: "Takes less than 2 minutes. Every application is reviewed personally.",
-    handleLabel: "Primary Social Handle",
-    handlePlaceholder: "@yourhandle or profile URL",
     submitLabel: "Join the Influencer Network",
     apiEndpoint: "creators",
     successMsg: "We review every application personally. If you're a fit for the Influencer Network, we'll be in touch within 48 hours.",
@@ -91,8 +85,6 @@ const CONFIG = {
     ],
     formTitle: "Apply as Page Owner",
     formSubtitle: "Takes less than 2 minutes. Every application is reviewed personally.",
-    handleLabel: "Profile / Page Link",
-    handlePlaceholder: "@yourpage or page URL",
     submitLabel: "Apply as Page Owner",
     apiEndpoint: "page-owner",
     successMsg: "Your application has been received. Our team will review and get back to you.",
@@ -101,29 +93,78 @@ const CONFIG = {
 
 export type NetworkApplyType = keyof typeof CONFIG;
 
+/* ── Label style helper ──────────────────────────────────── */
+const labelStyle: React.CSSProperties = { fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 600, color: "#0B0B0B" };
+
+/* ── Component ───────────────────────────────────────────── */
 export default function NetworkApplyForm({ type }: { type: NetworkApplyType }) {
   const cfg = CONFIG[type];
   const { toast } = useToast();
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const form = useForm<F>({
-    resolver: zodResolver(schema),
+  /* Page-owner specific state */
+  const [pageCount, setPageCount]             = useState("");
+  const [pageCountCustom, setPageCountCustom] = useState("");
+  const [pages, setPages]                     = useState([{ name: "", link: "" }]);
+  const [pagesError, setPagesError]           = useState("");
+
+  const isMoreThan5 = pageCount === "More than 5";
+
+  /* Forms — each type uses its own schema */
+  const influencerForm = useForm<InfluencerF>({
+    resolver: zodResolver(influencerSchema),
     defaultValues: { name: "", email: "", phone: "", niche: "", handle: "", monthlyViews: "" },
   });
+  const pageForm = useForm<PageF>({
+    resolver: zodResolver(pageSchema),
+    defaultValues: { name: "", email: "", phone: "", niche: "", monthlyViews: "" },
+  });
 
-  const onSubmit = async (data: F) => {
+  const form = type === "influencer" ? influencerForm : pageForm;
+
+  /* Page entry helpers */
+  function addPage() {
+    setPages((prev) => [...prev, { name: "", link: "" }]);
+  }
+  function removePage(i: number) {
+    setPages((prev) => prev.filter((_, idx) => idx !== i));
+  }
+  function updatePage(i: number, field: "name" | "link", value: string) {
+    setPages((prev) => prev.map((p, idx) => idx === i ? { ...p, [field]: value } : p));
+  }
+
+  /* Submit */
+  const onSubmitInfluencer = async (data: InfluencerF) => {
+    await doSubmit({ ...data, type });
+  };
+  const onSubmitPage = async (data: PageF) => {
+    const filledPages = pages.filter((p) => p.name.trim() || p.link.trim());
+    if (filledPages.length === 0) {
+      setPagesError("Add at least one page name or link.");
+      return;
+    }
+    setPagesError("");
+    const totalPages = isMoreThan5
+      ? (pageCountCustom.trim() || "More than 5")
+      : (pageCount || "Not specified");
+    await doSubmit({ ...data, type, pageCount: totalPages, pages: filledPages });
+  };
+
+  async function doSubmit(payload: Record<string, unknown>) {
     setSubmitting(true);
     try {
       const base = import.meta.env.BASE_URL.replace(/\/$/, "");
       const res = await fetch(`${base}/api/forms/${cfg.apiEndpoint}`.replace(/\/\//g, "/"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, type }),
+        body: JSON.stringify(payload),
       });
       if (res.ok) {
         setSubmitted(true);
         form.reset();
+        setPages([{ name: "", link: "" }]);
+        setPageCount(""); setPageCountCustom("");
       } else {
         toast({ title: "Something went wrong", description: "Please try again.", variant: "destructive" });
       }
@@ -132,8 +173,9 @@ export default function NetworkApplyForm({ type }: { type: NetworkApplyType }) {
     } finally {
       setSubmitting(false);
     }
-  };
+  }
 
+  /* Render */
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta title={cfg.seoTitle} description={cfg.seoDesc} />
@@ -143,17 +185,13 @@ export default function NetworkApplyForm({ type }: { type: NetworkApplyType }) {
         <div className="max-w-[1100px] mx-auto">
           <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>{cfg.eyebrow}</p>
           <motion.h1
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
+            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}
             style={{ fontWeight: 800, fontSize: "clamp(44px, 7vw, 88px)", letterSpacing: "-0.04em", lineHeight: "1.02", color: "#0B0B0B", maxWidth: "18ch", marginBottom: 24 }}
           >
             {cfg.hero}
           </motion.h1>
           <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
+            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
             style={{ fontSize: 18, color: "rgba(11,11,11,0.5)", lineHeight: "1.75", maxWidth: "52ch" }}
           >
             {cfg.heroSubtext}
@@ -164,6 +202,7 @@ export default function NetworkApplyForm({ type }: { type: NetworkApplyType }) {
       {/* Benefits + Form */}
       <section style={{ padding: "80px 24px", background: "#fff" }}>
         <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+
           {/* Left: Benefits */}
           <div>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 3vw, 40px)", letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 32, lineHeight: 1.15 }}>
@@ -173,10 +212,8 @@ export default function NetworkApplyForm({ type }: { type: NetworkApplyType }) {
               {cfg.benefits.map((benefit, i) => (
                 <motion.li
                   key={i}
-                  initial={{ opacity: 0, y: 8 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.07, duration: 0.5 }}
+                  initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }} transition={{ delay: i * 0.07, duration: 0.5 }}
                   style={{ display: "flex", alignItems: "center", gap: 14 }}
                 >
                   <span style={{ width: 26, height: 26, borderRadius: "50%", background: "rgba(11,11,11,0.08)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -186,7 +223,6 @@ export default function NetworkApplyForm({ type }: { type: NetworkApplyType }) {
                 </motion.li>
               ))}
             </ul>
-
             <div style={{ background: "#F7F7F5", borderRadius: 16, padding: "28px", border: "1px solid rgba(11,11,11,0.08)" }}>
               <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 14 }}>{cfg.calloutLabel}</p>
               {cfg.calloutItems.map((item, i) => (
@@ -199,7 +235,7 @@ export default function NetworkApplyForm({ type }: { type: NetworkApplyType }) {
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
             {submitted ? (
               <div style={{ background: "#F7F7F5", border: "1.5px solid rgba(11,11,11,0.15)", borderRadius: 20, padding: "48px 36px", textAlign: "center" }}>
-                <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#0B0B0B", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", fontSize: 28, color: "#fff" }}>
+                <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#0B0B0B", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", color: "#fff" }}>
                   <Check className="w-7 h-7" />
                 </div>
                 <h3 style={{ fontWeight: 800, fontSize: 26, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 12 }}>Application received.</h3>
@@ -210,86 +246,214 @@ export default function NetworkApplyForm({ type }: { type: NetworkApplyType }) {
                 <h3 style={{ fontWeight: 800, fontSize: 24, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 8 }}>{cfg.formTitle}</h3>
                 <p style={{ fontSize: 14, color: "rgba(11,11,11,0.45)", marginBottom: 28 }}>{cfg.formSubtitle}</p>
 
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                {/* ── INFLUENCER FORM ─────────────────────────── */}
+                {type === "influencer" && (
+                  <Form {...influencerForm}>
+                    <form onSubmit={influencerForm.handleSubmit(onSubmitInfluencer)} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                      <FormField control={influencerForm.control} name="name" render={({ field }) => (
+                        <FormItem><FormLabel style={labelStyle}>Full Name</FormLabel>
+                          <FormControl><input className="gb-input" placeholder="Your full name" {...field} /></FormControl>
+                          <FormMessage /></FormItem>
+                      )} />
+                      <FormField control={influencerForm.control} name="email" render={({ field }) => (
+                        <FormItem><FormLabel style={labelStyle}>Email Address</FormLabel>
+                          <FormControl><input type="email" className="gb-input" placeholder="you@example.com" {...field} /></FormControl>
+                          <FormMessage /></FormItem>
+                      )} />
+                      <FormField control={influencerForm.control} name="phone" render={({ field }) => (
+                        <FormItem><FormLabel style={labelStyle}>Contact Number</FormLabel>
+                          <FormControl><input type="tel" className="gb-input" placeholder="+1 234 567 8900" {...field} /></FormControl>
+                          <FormMessage /></FormItem>
+                      )} />
+                      <FormField control={influencerForm.control} name="niche" render={({ field }) => (
+                        <FormItem><FormLabel style={labelStyle}>Your Niche</FormLabel>
+                          <FormControl>
+                            <Select onValueChange={field.onChange} value={field.value}>
+                              <SelectTrigger className="gb-input" style={{ height: 48 }}><SelectValue placeholder="Select your niche" /></SelectTrigger>
+                              <SelectContent>{NICHES.map((n) => <SelectItem key={n} value={n}>{n}</SelectItem>)}</SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage /></FormItem>
+                      )} />
+                      <FormField control={influencerForm.control} name="handle" render={({ field }) => (
+                        <FormItem><FormLabel style={labelStyle}>Primary Social Handle</FormLabel>
+                          <FormControl><input className="gb-input" placeholder="@yourhandle or profile URL" {...field} /></FormControl>
+                          <FormMessage /></FormItem>
+                      )} />
+                      <FormField control={influencerForm.control} name="monthlyViews" render={({ field }) => (
+                        <FormItem><FormLabel style={labelStyle}>Monthly Views / Reach</FormLabel>
+                          <FormControl>
+                            <Select onValueChange={field.onChange} value={field.value}>
+                              <SelectTrigger className="gb-input" style={{ height: 48 }}><SelectValue placeholder="Select your range" /></SelectTrigger>
+                              <SelectContent>{VIEWS_RANGES.map((v) => <SelectItem key={v} value={v}>{v}</SelectItem>)}</SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage /></FormItem>
+                      )} />
+                      <button type="submit" disabled={submitting} className="gb-btn" style={{ justifyContent: "center", marginTop: 8, padding: "14px 0", fontSize: 15 }}>
+                        {submitting ? "Submitting..." : cfg.submitLabel}
+                        {!submitting && <ArrowRight className="w-4 h-4" />}
+                      </button>
+                    </form>
+                  </Form>
+                )}
 
-                    <FormField control={form.control} name="name" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 600, color: "#0B0B0B" }}>Full Name</FormLabel>
-                        <FormControl><input className="gb-input" placeholder="Your full name" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+                {/* ── PAGE OWNER FORM ──────────────────────────── */}
+                {type === "page" && (
+                  <Form {...pageForm}>
+                    <form onSubmit={pageForm.handleSubmit(onSubmitPage)} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
 
-                    <FormField control={form.control} name="email" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 600, color: "#0B0B0B" }}>Email Address</FormLabel>
-                        <FormControl><input type="email" className="gb-input" placeholder="you@example.com" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+                      <FormField control={pageForm.control} name="name" render={({ field }) => (
+                        <FormItem><FormLabel style={labelStyle}>Full Name</FormLabel>
+                          <FormControl><input className="gb-input" placeholder="Your full name" {...field} /></FormControl>
+                          <FormMessage /></FormItem>
+                      )} />
+                      <FormField control={pageForm.control} name="email" render={({ field }) => (
+                        <FormItem><FormLabel style={labelStyle}>Email Address</FormLabel>
+                          <FormControl><input type="email" className="gb-input" placeholder="you@example.com" {...field} /></FormControl>
+                          <FormMessage /></FormItem>
+                      )} />
+                      <FormField control={pageForm.control} name="phone" render={({ field }) => (
+                        <FormItem><FormLabel style={labelStyle}>Contact Number</FormLabel>
+                          <FormControl><input type="tel" className="gb-input" placeholder="+1 234 567 8900" {...field} /></FormControl>
+                          <FormMessage /></FormItem>
+                      )} />
+                      <FormField control={pageForm.control} name="niche" render={({ field }) => (
+                        <FormItem><FormLabel style={labelStyle}>Your Niche</FormLabel>
+                          <FormControl>
+                            <Select onValueChange={field.onChange} value={field.value}>
+                              <SelectTrigger className="gb-input" style={{ height: 48 }}><SelectValue placeholder="Select your niche" /></SelectTrigger>
+                              <SelectContent>{NICHES.map((n) => <SelectItem key={n} value={n}>{n}</SelectItem>)}</SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage /></FormItem>
+                      )} />
+                      <FormField control={pageForm.control} name="monthlyViews" render={({ field }) => (
+                        <FormItem><FormLabel style={labelStyle}>Monthly Views / Reach</FormLabel>
+                          <FormControl>
+                            <Select onValueChange={field.onChange} value={field.value}>
+                              <SelectTrigger className="gb-input" style={{ height: 48 }}><SelectValue placeholder="Select your range" /></SelectTrigger>
+                              <SelectContent>{VIEWS_RANGES.map((v) => <SelectItem key={v} value={v}>{v}</SelectItem>)}</SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage /></FormItem>
+                      )} />
 
-                    <FormField control={form.control} name="phone" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 600, color: "#0B0B0B" }}>Contact Number</FormLabel>
-                        <FormControl><input type="tel" className="gb-input" placeholder="+1 234 567 8900" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+                      {/* ── How many pages ─────────────────────── */}
+                      <div>
+                        <label style={labelStyle}>How Many Pages Do You Own?</label>
+                        <Select value={pageCount} onValueChange={(v) => { setPageCount(v); if (v !== "More than 5") setPageCountCustom(""); }}>
+                          <SelectTrigger className="gb-input" style={{ height: 48, marginTop: 6 }}>
+                            <SelectValue placeholder="Select number of pages" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {PAGE_COUNT_OPTIONS.map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </div>
 
-                    <FormField control={form.control} name="niche" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 600, color: "#0B0B0B" }}>Your Niche</FormLabel>
-                        <FormControl>
-                          <Select onValueChange={field.onChange} value={field.value}>
-                            <SelectTrigger className="gb-input" style={{ height: 48 }}>
-                              <SelectValue placeholder="Select your niche" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {NICHES.map((n) => <SelectItem key={n} value={n}>{n}</SelectItem>)}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+                      <AnimatePresence>
+                        {isMoreThan5 && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0, marginTop: -8 }}
+                            animate={{ opacity: 1, height: "auto", marginTop: 0 }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.2 }}
+                            style={{ overflow: "hidden" }}
+                          >
+                            <label style={{ ...labelStyle, display: "block", marginBottom: 6 }}>How Many Exactly?</label>
+                            <input
+                              className="gb-input"
+                              type="text"
+                              placeholder="e.g. 8 pages"
+                              value={pageCountCustom}
+                              onChange={(e) => setPageCountCustom(e.target.value)}
+                            />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
 
-                    <FormField control={form.control} name="handle" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 600, color: "#0B0B0B" }}>{cfg.handleLabel}</FormLabel>
-                        <FormControl><input className="gb-input" placeholder={cfg.handlePlaceholder} {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+                      {/* ── Page entries ────────────────────────── */}
+                      <div>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+                          <label style={labelStyle}>Page Name &amp; Link</label>
+                          <span style={{ fontSize: 11, color: "rgba(11,11,11,0.35)", fontWeight: 500 }}>{pages.length} page{pages.length !== 1 ? "s" : ""}</span>
+                        </div>
 
-                    <FormField control={form.control} name="monthlyViews" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 600, color: "#0B0B0B" }}>Monthly Views / Reach</FormLabel>
-                        <FormControl>
-                          <Select onValueChange={field.onChange} value={field.value}>
-                            <SelectTrigger className="gb-input" style={{ height: 48 }}>
-                              <SelectValue placeholder="Select your range" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {VIEWS_RANGES.map((v) => <SelectItem key={v} value={v}>{v}</SelectItem>)}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+                        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                          <AnimatePresence initial={false}>
+                            {pages.map((p, i) => (
+                              <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: -8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                                transition={{ duration: 0.18 }}
+                              >
+                                <div style={{ background: "#fff", border: "1.5px solid rgba(11,11,11,0.09)", borderRadius: 12, padding: "14px 14px 14px", display: "flex", flexDirection: "column", gap: 8 }}>
+                                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
+                                    <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(11,11,11,0.3)", flex: 1 }}>
+                                      Page {i + 1}
+                                    </span>
+                                    {pages.length > 1 && (
+                                      <button
+                                        type="button"
+                                        onClick={() => removePage(i)}
+                                        style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 11, fontWeight: 600, color: "rgba(11,11,11,0.35)", background: "none", border: "none", cursor: "pointer", fontFamily: "'Inter', sans-serif", padding: "2px 0" }}
+                                      >
+                                        <Trash2 style={{ width: 12, height: 12 }} />
+                                        Remove
+                                      </button>
+                                    )}
+                                  </div>
+                                  <input
+                                    className="gb-input"
+                                    placeholder="Page name (e.g. Fitness Memes)"
+                                    value={p.name}
+                                    onChange={(e) => updatePage(i, "name", e.target.value)}
+                                  />
+                                  <input
+                                    className="gb-input"
+                                    placeholder="Page link (e.g. @fitnessmemes or URL)"
+                                    value={p.link}
+                                    onChange={(e) => updatePage(i, "link", e.target.value)}
+                                  />
+                                </div>
+                              </motion.div>
+                            ))}
+                          </AnimatePresence>
+                        </div>
 
-                    <button
-                      type="submit"
-                      disabled={submitting}
-                      className="gb-btn"
-                      style={{ justifyContent: "center", marginTop: 8, padding: "14px 0", fontSize: 15 }}
-                    >
-                      {submitting ? "Submitting..." : cfg.submitLabel}
-                      {!submitting && <ArrowRight className="w-4 h-4" />}
-                    </button>
-                  </form>
-                </Form>
+                        {pagesError && (
+                          <p style={{ fontSize: 12, color: "#dc2626", marginTop: 6, fontWeight: 500 }}>{pagesError}</p>
+                        )}
+
+                        <button
+                          type="button"
+                          onClick={addPage}
+                          style={{
+                            display: "flex", alignItems: "center", gap: 6, marginTop: 10,
+                            fontSize: 13, fontWeight: 600, color: "#0B0B0B",
+                            background: "rgba(11,11,11,0.05)", border: "1.5px dashed rgba(11,11,11,0.15)",
+                            borderRadius: 10, padding: "10px 16px", cursor: "pointer",
+                            fontFamily: "'Inter', sans-serif", width: "100%", justifyContent: "center",
+                            transition: "background 0.15s ease",
+                          }}
+                          onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(11,11,11,0.08)")}
+                          onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(11,11,11,0.05)")}
+                        >
+                          <Plus style={{ width: 14, height: 14 }} />
+                          Add Another Page
+                        </button>
+                      </div>
+
+                      <button type="submit" disabled={submitting} className="gb-btn" style={{ justifyContent: "center", marginTop: 8, padding: "14px 0", fontSize: 15 }}>
+                        {submitting ? "Submitting..." : cfg.submitLabel}
+                        {!submitting && <ArrowRight className="w-4 h-4" />}
+                      </button>
+                    </form>
+                  </Form>
+                )}
               </div>
             )}
           </motion.div>

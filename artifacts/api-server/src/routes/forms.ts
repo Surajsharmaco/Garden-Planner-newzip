@@ -114,14 +114,17 @@ router.post("/creators", async (req, res) => {
 });
 
 router.post("/page-owner", async (req, res) => {
-  const { name, email, phone, niche, handle, monthlyViews } = req.body;
+  const { name, email, phone, niche, monthlyViews, pageCount, pages } = req.body;
   if (!name || !email || !niche) {
     res.status(400).json({ error: "name, email and niche are required" });
     return;
   }
-  logger.info({ name, email, niche }, "Page owner application submission");
+  logger.info({ name, email, niche, pageCount }, "Page owner application submission");
 
-  await saveLead("page", name, email, { name, email, phone, niche, handle, monthlyViews });
+  const pagesArr: { name: string; link: string }[] = Array.isArray(pages) ? pages : [];
+  const pagesText = pagesArr.map((p, i) => `${i + 1}. ${p.name || "(unnamed)"} — ${p.link || "(no link)"}`).join("<br/>");
+
+  await saveLead("page", name, email, { name, email, phone, niche, monthlyViews, pageCount, pages: pagesArr });
 
   try {
     await resend.emails.send({
@@ -135,8 +138,9 @@ router.post("/page-owner", async (req, res) => {
         row("Email", email) +
         row("Phone", phone) +
         row("Niche", niche) +
-        row("Profile / Page Link", handle) +
-        row("Monthly Views / Reach", monthlyViews)
+        row("Monthly Views / Reach", monthlyViews) +
+        row("Pages Owned", pageCount) +
+        (pagesText ? `<tr><td style="padding:10px 0;color:#888;font-size:13px;width:160px;vertical-align:top;font-family:Inter,sans-serif;border-bottom:1px solid #f0f0f0">Pages</td><td style="padding:10px 0;color:#0B0B0B;font-size:14px;vertical-align:top;font-family:Inter,sans-serif;border-bottom:1px solid #f0f0f0">${pagesText}</td></tr>` : "")
       ),
       replyTo: email,
     });
