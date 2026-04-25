@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { influencers as DEFAULT_INFLUENCERS, NICHE_CATEGORIES, COUNTRIES, type Influencer } from "@/data/influencers";
 import { PageHeader, Card, Input, Textarea, SaveBar } from "@/components/admin/AdminField";
-import { Plus, Trash2, Search, Lock, Unlock, X } from "lucide-react";
+import { Plus, Trash2, Search, X, Eye, EyeOff, ChevronDown, ChevronUp, Settings2 } from "lucide-react";
 
 const BLANK: Influencer = {
   slug: "",
@@ -13,6 +13,7 @@ const BLANK: Influencer = {
   engagementRate: "",
   description: "",
   photo: "",
+  profileEnabled: true,
   audienceCountries: [],
   initials: "",
   accentColor: "#0B0B0B",
@@ -26,92 +27,82 @@ function isComplete(inf: Influencer) {
   return inf.name.trim().length > 0;
 }
 
-function DetailToggle({ enabled, onToggle }: { enabled: boolean; onToggle: () => void }) {
-  return (
-    <button
-      onClick={(e) => { e.stopPropagation(); onToggle(); }}
-      title={enabled ? "Lock details (collapse-only view)" : "Unlock details (enable editing)"}
-      className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold border transition-all ${
-        enabled
-          ? "bg-[#0B0B0B] text-white border-[#0B0B0B] hover:bg-[#0B0B0B]/85"
-          : "bg-white text-[#0B0B0B]/40 border-[#0B0B0B]/15 hover:border-[#0B0B0B]/30 hover:text-[#0B0B0B]/60"
-      }`}
-    >
-      {enabled ? <Unlock size={11} /> : <Lock size={11} />}
-      {enabled ? "Editing" : "Locked"}
-    </button>
-  );
-}
-
 function InfluencerRow({
   inf,
   index,
+  genres,
+  countries,
   onChange,
   onDelete,
   defaultOpen = false,
 }: {
   inf: Influencer;
   index: number;
+  genres: string[];
+  countries: string[];
   onChange: (i: number, val: Influencer) => void;
   onDelete: (i: number) => void;
   defaultOpen?: boolean;
 }) {
   const [open, setOpen] = useState(defaultOpen);
-  const [detailEnabled, setDetailEnabled] = useState(defaultOpen);
   const set = (patch: Partial<Influencer>) => onChange(index, { ...inf, ...patch });
-
-  function handleHeaderClick() {
-    if (!detailEnabled) return;
-    setOpen((p) => !p);
-  }
-
-  function handleToggle() {
-    setDetailEnabled((p) => {
-      if (p) setOpen(false);
-      return !p;
-    });
-  }
+  const enabled = inf.profileEnabled !== false;
 
   return (
     <Card className="p-0 overflow-hidden">
       {/* Row header */}
       <div className="flex items-center gap-2 pr-3">
         <div
-          onClick={handleHeaderClick}
-          className={`flex-1 flex items-center gap-3 px-5 py-3.5 min-w-0 ${detailEnabled ? "cursor-pointer hover:bg-[#0B0B0B]/3 transition-colors" : "cursor-default"}`}
+          onClick={() => setOpen((p) => !p)}
+          className="flex-1 flex items-center gap-3 px-5 py-3.5 min-w-0 cursor-pointer hover:bg-[#0B0B0B]/3 transition-colors"
         >
           {/* Avatar */}
           {inf.photo ? (
-            <img src={inf.photo} alt={inf.name} className="w-9 h-9 rounded-full object-cover shrink-0" />
+            <img src={inf.photo} alt={inf.name} className={`w-9 h-9 rounded-full object-cover shrink-0 ${!enabled ? "grayscale opacity-50" : ""}`} />
           ) : (
-            <div className="w-9 h-9 rounded-full bg-[#0B0B0B]/10 flex items-center justify-center text-[11px] font-bold text-[#0B0B0B]/50 shrink-0">
+            <div className={`w-9 h-9 rounded-full bg-[#0B0B0B]/10 flex items-center justify-center text-[11px] font-bold text-[#0B0B0B]/50 shrink-0 ${!enabled ? "opacity-40" : ""}`}>
               {inf.initials || "?"}
             </div>
           )}
 
           {/* Info */}
           <div className="flex-1 min-w-0">
-            <p className="text-[13px] font-semibold text-[#0B0B0B] truncate">
-              {inf.name || <span className="text-[#0B0B0B]/30 italic">Unnamed Influencer</span>}
-            </p>
+            <div className="flex items-center gap-2">
+              <p className={`text-[13px] font-semibold truncate ${!enabled ? "text-[#0B0B0B]/35" : "text-[#0B0B0B]"}`}>
+                {inf.name || <span className="text-[#0B0B0B]/30 italic">Unnamed Influencer</span>}
+              </p>
+              {!enabled && (
+                <span className="text-[10px] font-bold uppercase tracking-wider bg-[#0B0B0B]/8 text-[#0B0B0B]/35 px-2 py-0.5 rounded-full shrink-0">
+                  Hidden
+                </span>
+              )}
+            </div>
             <p className="text-[11px] text-[#0B0B0B]/40 truncate">
               {inf.niche}
               {inf.followers ? ` · ${inf.followers}` : ""}
               {inf.engagementRate ? ` · ${inf.engagementRate} engagement` : ""}
             </p>
           </div>
-
-          {/* Expand hint */}
-          {detailEnabled && (
-            <span className="text-[10px] text-[#0B0B0B]/25 shrink-0 mr-1">
-              {open ? "collapse" : "expand"}
-            </span>
-          )}
+          <span className="text-[#0B0B0B]/20 shrink-0">
+            {open ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          </span>
         </div>
 
         {/* Actions */}
         <div className="flex items-center gap-1.5 shrink-0">
-          <DetailToggle enabled={detailEnabled} onToggle={handleToggle} />
+          {/* Profile visibility toggle */}
+          <button
+            onClick={(e) => { e.stopPropagation(); set({ profileEnabled: !enabled }); }}
+            title={enabled ? "Click to hide this profile on the public site" : "Click to make this profile visible on the public site"}
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold border transition-all ${
+              enabled
+                ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100"
+                : "bg-[#0B0B0B]/5 text-[#0B0B0B]/35 border-[#0B0B0B]/10 hover:border-[#0B0B0B]/25 hover:text-[#0B0B0B]/50"
+            }`}
+          >
+            {enabled ? <Eye size={11} /> : <EyeOff size={11} />}
+            {enabled ? "Live" : "Hidden"}
+          </button>
           <button
             onClick={() => onDelete(index)}
             className="p-1.5 rounded hover:bg-red-50 hover:text-red-500 text-[#0B0B0B]/30 transition-colors"
@@ -121,8 +112,8 @@ function InfluencerRow({
         </div>
       </div>
 
-      {/* Expanded edit form — only when detailEnabled AND open */}
-      {detailEnabled && open && (
+      {/* Expanded edit form */}
+      {open && (
         <div className="border-t border-[#0B0B0B]/8 px-5 py-5 space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <Input label="Full Name" value={inf.name} onChange={(e) => set({ name: e.target.value })} />
@@ -134,13 +125,13 @@ function InfluencerRow({
               placeholder="first-last"
             />
             <div>
-              <label className="block text-[12px] font-semibold text-[#0B0B0B]/60 mb-1.5 uppercase tracking-wider">Niche</label>
+              <label className="block text-[12px] font-semibold text-[#0B0B0B]/60 mb-1.5 uppercase tracking-wider">Niche / Genre</label>
               <select
                 value={inf.niche}
                 onChange={(e) => set({ niche: e.target.value })}
                 className="w-full border border-[#0B0B0B]/12 rounded-xl px-3.5 py-2.5 text-[14px] text-[#0B0B0B] outline-none focus:border-[#0B0B0B]/40 bg-white"
               >
-                {NICHE_CATEGORIES.map((n) => <option key={n} value={n}>{n}</option>)}
+                {genres.map((n) => <option key={n} value={n}>{n}</option>)}
               </select>
             </div>
             <Input label="Followers" value={inf.followers} onChange={(e) => set({ followers: e.target.value })} placeholder="284K" />
@@ -201,7 +192,7 @@ function InfluencerRow({
           <div>
             <label className="block text-[12px] font-semibold text-[#0B0B0B]/60 mb-1.5 uppercase tracking-wider">Audience Countries</label>
             <div className="flex flex-wrap gap-2">
-              {COUNTRIES.map((c) => (
+              {countries.map((c) => (
                 <button
                   key={c}
                   onClick={() => {
@@ -257,18 +248,82 @@ function InfluencerRow({
   );
 }
 
+/* ── Tag-list editor for genres / countries ─────────────── */
+function TagListEditor({
+  title,
+  tags,
+  onChange,
+}: {
+  title: string;
+  tags: string[];
+  onChange: (next: string[]) => void;
+}) {
+  const [draft, setDraft] = useState("");
+
+  function addTag() {
+    const v = draft.trim();
+    if (!v || tags.includes(v)) { setDraft(""); return; }
+    onChange([...tags, v]);
+    setDraft("");
+  }
+
+  return (
+    <div>
+      <p className="text-[12px] font-semibold text-[#0B0B0B]/60 uppercase tracking-wider mb-2">{title}</p>
+      <div className="flex flex-wrap gap-2 mb-3">
+        {tags.map((tag) => (
+          <span
+            key={tag}
+            className="flex items-center gap-1.5 bg-[#0B0B0B]/6 text-[#0B0B0B]/70 text-[12px] font-medium px-2.5 py-1 rounded-full"
+          >
+            {tag}
+            <button
+              onClick={() => onChange(tags.filter((t) => t !== tag))}
+              className="text-[#0B0B0B]/30 hover:text-red-500 transition-colors"
+            >
+              <X size={10} />
+            </button>
+          </span>
+        ))}
+      </div>
+      <div className="flex gap-2">
+        <input
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTag(); } }}
+          placeholder={`Add new ${title.toLowerCase().replace(" list", "")}...`}
+          className="flex-1 border border-[#0B0B0B]/12 rounded-xl px-3.5 py-2 text-[13px] text-[#0B0B0B] placeholder-[#0B0B0B]/30 outline-none focus:border-[#0B0B0B]/30 bg-white"
+        />
+        <button
+          onClick={addTag}
+          disabled={!draft.trim()}
+          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#0B0B0B] text-white text-[13px] font-semibold disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          <Plus size={13} /> Add
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function AdminInfluencers() {
   const { getContent, saveContent } = useAdmin();
   const [items, setItems] = useState<Influencer[]>(DEFAULT_INFLUENCERS);
+  const [genres, setGenres] = useState<string[]>([...NICHE_CATEGORIES]);
+  const [countries, setCountries] = useState<string[]>([...COUNTRIES]);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [search, setSearch] = useState("");
   const [nicheFilter, setNicheFilter] = useState("All");
   const [newIndex, setNewIndex] = useState<number | null>(null);
+  const [listsOpen, setListsOpen] = useState(false);
 
   useEffect(() => {
     getContent("influencers").then((d) => {
-      if (d?.items) setItems(d.items as Influencer[]);
+      if (!d) return;
+      if (d.items) setItems(d.items as Influencer[]);
+      if (d.genres) setGenres(d.genres as string[]);
+      if (d.countries) setCountries(d.countries as string[]);
     });
   }, [getContent]);
 
@@ -307,7 +362,7 @@ export default function AdminInfluencers() {
   async function handleSave() {
     setSaving(true);
     try {
-      await saveContent("influencers", { items });
+      await saveContent("influencers", { items, genres, countries });
       setSaved(true);
       setNewIndex(null);
     } finally {
@@ -322,12 +377,44 @@ export default function AdminInfluencers() {
     return matchSearch && matchNiche;
   });
 
+  const liveCount = items.filter((inf) => inf.profileEnabled !== false).length;
+  const hiddenCount = items.length - liveCount;
+
   return (
     <div>
       <PageHeader
         title="Influencers"
-        description={`${items.length} creator${items.length !== 1 ? "s" : ""} in the roster`}
+        description={`${items.length} creator${items.length !== 1 ? "s" : ""} · ${liveCount} live · ${hiddenCount} hidden`}
       />
+
+      {/* Genre & Country list manager (collapsible) */}
+      <Card className="mb-5 overflow-hidden p-0">
+        <button
+          onClick={() => setListsOpen((p) => !p)}
+          className="w-full flex items-center justify-between px-5 py-4 hover:bg-[#0B0B0B]/3 transition-colors"
+        >
+          <div className="flex items-center gap-2.5">
+            <Settings2 size={15} className="text-[#0B0B0B]/40" />
+            <span className="text-[13px] font-semibold text-[#0B0B0B]">Manage Genre &amp; Country Lists</span>
+            <span className="text-[11px] text-[#0B0B0B]/35">{genres.length} genres · {countries.length} countries</span>
+          </div>
+          {listsOpen ? <ChevronUp size={14} className="text-[#0B0B0B]/30" /> : <ChevronDown size={14} className="text-[#0B0B0B]/30" />}
+        </button>
+        {listsOpen && (
+          <div className="border-t border-[#0B0B0B]/8 px-5 py-5 grid grid-cols-2 gap-8">
+            <TagListEditor
+              title="Genre / Niche List"
+              tags={genres}
+              onChange={(next) => { setGenres(next); setSaved(false); }}
+            />
+            <TagListEditor
+              title="Country List"
+              tags={countries}
+              onChange={(next) => { setCountries(next); setSaved(false); }}
+            />
+          </div>
+        )}
+      </Card>
 
       {/* Top toolbar */}
       <div className="flex gap-3 mb-3">
@@ -354,7 +441,6 @@ export default function AdminInfluencers() {
                 ? "bg-[#0B0B0B]/20 text-[#0B0B0B]/40 cursor-not-allowed"
                 : "bg-[#0B0B0B] text-white hover:bg-[#0B0B0B]/85 cursor-pointer"
             }`}
-            title={pendingNew ? "Fill in at least a name for the current influencer first" : ""}
           >
             <Plus size={15} /> Add Influencer
           </button>
@@ -366,10 +452,10 @@ export default function AdminInfluencers() {
         </div>
       </div>
 
-      {/* Genre / Niche filter chips */}
+      {/* Genre filter chips */}
       <div className="mb-5">
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-hide" style={{ scrollbarWidth: "none" }}>
-          {(["All", ...NICHE_CATEGORIES] as string[]).map((niche) => {
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
+          {(["All", ...genres] as string[]).map((niche) => {
             const count = niche === "All"
               ? items.length
               : items.filter((inf) => inf.niche === niche).length;
@@ -416,6 +502,8 @@ export default function AdminInfluencers() {
               key={inf.slug + realIndex}
               inf={inf}
               index={realIndex}
+              genres={genres}
+              countries={countries}
               onChange={handleChange}
               onDelete={handleDelete}
               defaultOpen={realIndex === newIndex}

@@ -7,6 +7,7 @@ export interface Influencer {
   engagementRate: string;
   description: string;
   photo: string;
+  profileEnabled?: boolean;
   audienceCountries: string[];
   about: {
     creates: string;

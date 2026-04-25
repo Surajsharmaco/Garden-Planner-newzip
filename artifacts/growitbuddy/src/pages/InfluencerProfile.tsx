@@ -1,17 +1,32 @@
 import { motion } from "framer-motion";
 import { Link, useParams } from "wouter";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
-import { influencers } from "@/data/influencers";
 import SEOMeta from "@/components/SEOMeta";
+import { useLiveInfluencers } from "@/hooks/useLiveInfluencers";
 
 export default function InfluencerProfile() {
   const { slug } = useParams<{ slug: string }>();
+  const { influencers } = useLiveInfluencers();
   const inf = influencers.find((i) => i.slug === slug);
 
   if (!inf) {
     return (
       <div style={{ background: "#F7F7F5", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 16, fontFamily: "'Inter', sans-serif" }}>
         <p style={{ fontSize: 14, color: "rgba(11,11,11,0.4)" }}>Influencer not found.</p>
+        <Link href="/influencers">
+          <span style={{ fontSize: 14, fontWeight: 700, color: "#0B0B0B", textDecoration: "underline", cursor: "pointer" }}>Back to Explore</span>
+        </Link>
+      </div>
+    );
+  }
+
+  if (inf.profileEnabled === false) {
+    return (
+      <div style={{ background: "#F7F7F5", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 16, fontFamily: "'Inter', sans-serif" }}>
+        <p style={{ fontSize: 28, fontWeight: 800, color: "#0B0B0B", letterSpacing: "-0.04em" }}>Profile Unavailable</p>
+        <p style={{ fontSize: 14, color: "rgba(11,11,11,0.4)", maxWidth: "30ch", textAlign: "center", lineHeight: 1.6 }}>
+          This influencer profile is currently not available. Please check back later.
+        </p>
         <Link href="/influencers">
           <span style={{ fontSize: 14, fontWeight: 700, color: "#0B0B0B", textDecoration: "underline", cursor: "pointer" }}>Back to Explore</span>
         </Link>

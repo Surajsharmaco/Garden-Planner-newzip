@@ -60,6 +60,18 @@ router.get("/verify", authMiddleware, (_req, res) => {
   res.json({ ok: true });
 });
 
+// ── Public (no-auth) read endpoint for public site ──
+router.get("/public/content/:section", async (req, res) => {
+  const { section } = req.params;
+  try {
+    const rows = await db.select().from(siteContent).where(eq(siteContent.section, section));
+    if (rows.length === 0) { res.json({ section, data: null }); return; }
+    res.json(rows[0]);
+  } catch {
+    res.json({ section, data: null });
+  }
+});
+
 router.get("/sections", authMiddleware, async (_req, res) => {
   const rows = await db
     .select({ section: siteContent.section, updatedAt: siteContent.updatedAt })

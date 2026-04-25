@@ -1,12 +1,14 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { ArrowRight, Search, X, SlidersHorizontal, ChevronDown, Check, Globe } from "lucide-react";
-import { influencers, NICHE_CATEGORIES, COUNTRIES } from "@/data/influencers";
 import SEOMeta from "@/components/SEOMeta";
 import { useState, useMemo, useRef, useEffect } from "react";
+import { useLiveInfluencers } from "@/hooks/useLiveInfluencers";
+
+import type { Influencer } from "@/data/influencers";
 
 /* ── Influencer Card ─────────────────────────────────────── */
-function InfluencerCard({ inf, i }: { inf: (typeof influencers)[0]; i: number }) {
+function InfluencerCard({ inf, i }: { inf: Influencer; i: number }) {
   const [imgError, setImgError] = useState(false);
   return (
     <motion.div
@@ -90,7 +92,7 @@ function FilterDropdown({
   icon: React.ReactNode;
   placeholder: string;
   selected: string[];
-  options: readonly string[];
+  options: string[];
   onChange: (vals: string[]) => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -285,12 +287,13 @@ function ActiveTag({ label, onRemove }: { label: string; onRemove: () => void })
 
 /* ── Page ────────────────────────────────────────────────── */
 export default function InfluencerExplore() {
+  const { influencers, genres: NICHE_CATEGORIES, countries: COUNTRIES } = useLiveInfluencers();
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
   const filtered = useMemo(() => {
-    let list = influencers;
+    let list = influencers.filter((inf) => inf.profileEnabled !== false);
     if (selectedGenres.length > 0) {
       list = list.filter((inf) => selectedGenres.includes(inf.niche));
     }
@@ -310,7 +313,7 @@ export default function InfluencerExplore() {
       );
     }
     return list;
-  }, [selectedGenres, selectedCountries, searchQuery]);
+  }, [influencers, selectedGenres, selectedCountries, searchQuery]);
 
   const hasActiveFilters = selectedGenres.length > 0 || selectedCountries.length > 0;
 
