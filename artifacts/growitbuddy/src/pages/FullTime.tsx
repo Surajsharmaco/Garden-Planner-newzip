@@ -53,6 +53,7 @@ export default function FullTime() {
 
   const form = useForm<F>({
     resolver: zodResolver(schema),
+    mode: "onBlur",
     defaultValues: { name: "", email: "", phone: "", role: "", experience: "", linkedinUrl: "", coverNote: "" },
   });
 

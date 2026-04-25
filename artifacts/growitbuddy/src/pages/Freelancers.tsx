@@ -56,6 +56,7 @@ export default function Freelancers() {
 
   const form = useForm<F>({
     resolver: zodResolver(schema),
+    mode: "onBlur",
     defaultValues: { name: "", email: "", phone: "", skills: [], portfolioUrl: "", experience: "" },
   });
 

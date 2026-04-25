@@ -103,7 +103,7 @@ export default function Contact() {
   const { toast } = useToast();
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const form = useForm<F>({ resolver: zodResolver(schema), defaultValues: { name: "", email: "", company: "", message: "" } });
+  const form = useForm<F>({ resolver: zodResolver(schema), mode: "onBlur", defaultValues: { name: "", email: "", company: "", message: "" } });
 
   const onSubmit = async (data: F) => {
     setSubmitting(true);

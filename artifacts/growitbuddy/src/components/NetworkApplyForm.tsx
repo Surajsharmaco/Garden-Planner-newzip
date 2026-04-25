@@ -114,10 +114,12 @@ export default function NetworkApplyForm({ type }: { type: NetworkApplyType }) {
   /* Forms — each type uses its own schema */
   const influencerForm = useForm<InfluencerF>({
     resolver: zodResolver(influencerSchema),
+    mode: "onBlur",
     defaultValues: { name: "", email: "", phone: "", niche: "", handle: "", monthlyViews: "" },
   });
   const pageForm = useForm<PageF>({
     resolver: zodResolver(pageSchema),
+    mode: "onBlur",
     defaultValues: { name: "", email: "", phone: "", niche: "", monthlyViews: "" },
   });
 
