@@ -278,18 +278,48 @@ export default function DistributionNetwork() {
         .dist-search-clear { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: rgba(11,11,11,0.3); display: flex; align-items: center; background: none; border: none; padding: 0; }
         .dist-search-clear:hover { color: #0B0B0B; }
         .dist-step-num { width: 36px; height: 36px; border-radius: 50%; background: #0B0B0B; color: #fff; font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .dist-advantage-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 64px;
+          align-items: center;
+        }
+        .dist-steps-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 32px;
+        }
+        .dist-cta-box {
+          background: #0B0B0B;
+          border-radius: 24px;
+          padding: 56px 48px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          gap: 20px;
+        }
+        .dist-wyg-section { padding: 80px 24px; border-top: 1px solid rgba(11,11,11,0.07); }
+        .dist-hiw-section { padding: 80px 24px; background: #fff; border-top: 1px solid rgba(11,11,11,0.07); }
         @media (max-width: 1024px) {
           .dist-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+          .dist-steps-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
         }
         @media (max-width: 700px) {
           .filter-dropdown-wrap { flex: 1 1 calc(50% - 5px); min-width: 0; }
           .filter-dropdown-wrap button { min-width: 0 !important; width: 100%; box-sizing: border-box; }
           .dist-search-wrap { flex: 1 1 100%; min-width: 0; }
           .dist-filter-count { display: none; }
+          .dist-advantage-grid { grid-template-columns: 1fr; gap: 40px; }
+          .dist-cta-box { padding: 44px 28px; border-radius: 20px; }
+          .dist-wyg-section { padding: 60px 20px; }
+          .dist-hiw-section { padding: 60px 20px; }
         }
         @media (max-width: 480px) {
           .dist-grid { grid-template-columns: 1fr; gap: 14px; }
           .filter-dropdown-wrap { flex: 1 1 100%; }
+          .dist-steps-grid { grid-template-columns: 1fr; gap: 28px; }
+          .dist-cta-box { padding: 36px 20px; }
         }
       `}</style>
 
@@ -404,8 +434,8 @@ export default function DistributionNetwork() {
       </section>
 
       {/* What You Get */}
-      <section style={{ padding: "80px 24px", borderTop: "1px solid rgba(11,11,11,0.07)" }}>
-        <div className="max-w-[1100px] mx-auto" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center" }}>
+      <section className="dist-wyg-section">
+        <div className="max-w-[1100px] mx-auto dist-advantage-grid">
           <div>
             <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 14 }}>The Advantage</p>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(28px, 4vw, 52px)", letterSpacing: "-0.04em", color: "#0B0B0B", lineHeight: 1.08, marginBottom: 20 }}>
@@ -435,13 +465,13 @@ export default function DistributionNetwork() {
       </section>
 
       {/* How It Works */}
-      <section style={{ padding: "80px 24px", background: "#fff", borderTop: "1px solid rgba(11,11,11,0.07)" }}>
+      <section className="dist-hiw-section">
         <div className="max-w-[1100px] mx-auto">
           <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 14 }}>Process</p>
           <h2 style={{ fontWeight: 800, fontSize: "clamp(28px, 4vw, 52px)", letterSpacing: "-0.04em", color: "#0B0B0B", lineHeight: 1.08, marginBottom: 56 }}>
             How It Works
           </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 32 }}>
+          <div className="dist-steps-grid">
             {[
               { num: "01", title: "Choose your niche", desc: "Filter by genre to find pages that match your target audience perfectly." },
               { num: "02", title: "Select relevant pages", desc: "Browse vetted meme and theme pages by reach, country, and engagement." },
@@ -467,7 +497,7 @@ export default function DistributionNetwork() {
       {/* CTA */}
       <section style={{ padding: "0 24px 96px" }}>
         <div className="max-w-[1100px] mx-auto" style={{ paddingTop: 64 }}>
-          <div style={{ background: "#0B0B0B", borderRadius: 24, padding: "56px 48px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 20 }}>
+          <div className="dist-cta-box">
             <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)" }}>Ready to scale?</p>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 4vw, 48px)", letterSpacing: "-0.04em", color: "#fff", lineHeight: 1.1, maxWidth: "22ch" }}>
               Ready to Distribute at Scale?
