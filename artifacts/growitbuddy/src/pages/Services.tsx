@@ -69,6 +69,16 @@ export default function Services() {
         @media (max-width: 520px) {
           .svc-hero-grid { gap: 24px; }
         }
+        .svc-stats-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+        }
+        @media (max-width: 700px) {
+          .svc-stats-grid { grid-template-columns: repeat(2, 1fr); }
+          .svc-stats-grid > div { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.07); padding: 32px 24px; }
+          .svc-stats-grid > div:nth-child(3),
+          .svc-stats-grid > div:nth-child(4) { border-bottom: none; }
+        }
       `}</style>
 
       <SEOMeta
@@ -132,6 +142,49 @@ export default function Services() {
               </span>
             </Link>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Stats strip */}
+      <section style={{ background: "#0B0B0B", padding: "0 24px" }}>
+        <div className="max-w-[1100px] mx-auto svc-stats-grid">
+          {[
+            { num: "700M+", label: "Views Generated" },
+            { num: "200+",  label: "Founders Served" },
+            { num: "10K+",  label: "Content Pieces" },
+            { num: "4x",    label: "Avg Growth Rate" },
+          ].map(({ num, label }, i) => (
+            <motion.div
+              key={label}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.07, duration: 0.5 }}
+              style={{
+                padding: "40px 32px",
+                borderRight: i < 3 ? "1px solid rgba(255,255,255,0.07)" : "none",
+              }}
+            >
+              <p style={{
+                fontWeight: 800,
+                fontSize: "clamp(28px, 3.5vw, 48px)",
+                letterSpacing: "-0.04em",
+                color: "#fff",
+                lineHeight: 1,
+                marginBottom: 8,
+              }}>
+                {num}
+              </p>
+              <p style={{
+                fontSize: 13,
+                fontWeight: 500,
+                color: "rgba(255,255,255,0.38)",
+                letterSpacing: "0.02em",
+              }}>
+                {label}
+              </p>
+            </motion.div>
+          ))}
         </div>
       </section>
 
