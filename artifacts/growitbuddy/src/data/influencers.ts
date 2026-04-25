@@ -8,6 +8,7 @@ export interface Influencer {
   description: string;
   photo: string;
   profileEnabled?: boolean;
+  updatedAt?: string;
   audienceCountries: string[];
   about: {
     creates: string;

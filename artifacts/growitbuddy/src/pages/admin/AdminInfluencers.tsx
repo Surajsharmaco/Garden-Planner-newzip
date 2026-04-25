@@ -2,7 +2,21 @@ import { useEffect, useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { influencers as DEFAULT_INFLUENCERS, NICHE_CATEGORIES, COUNTRIES, type Influencer } from "@/data/influencers";
 import { PageHeader, Card, Input, SaveBar } from "@/components/admin/AdminField";
-import { Plus, Trash2, Search, X, Eye, EyeOff, ChevronDown, ChevronUp, Settings2, Upload } from "lucide-react";
+import { Plus, Trash2, Search, X, Eye, EyeOff, ChevronDown, ChevronUp, Settings2, Upload, Clock } from "lucide-react";
+
+function formatRelativeDate(iso: string | undefined): string {
+  if (!iso) return "Never updated";
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "Just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  if (days === 1) return "Yesterday";
+  if (days < 7) return `${days}d ago`;
+  return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+}
 
 const BLANK: Influencer = {
   slug: "",
@@ -78,7 +92,10 @@ function InfluencerRow({
             <p className="text-[11px] text-[#0B0B0B]/40 truncate">
               {inf.niche}
               {inf.followers ? ` · ${inf.followers}` : ""}
-              {inf.engagementRate ? ` · ${inf.engagementRate} engagement` : ""}
+            </p>
+            <p className="text-[10px] text-[#0B0B0B]/25 flex items-center gap-1 mt-0.5">
+              <Clock size={9} />
+              {formatRelativeDate(inf.updatedAt)}
             </p>
           </div>
           <span className="text-[#0B0B0B]/20 shrink-0">
@@ -225,6 +242,7 @@ export default function AdminInfluencers() {
   const [saved, setSaved] = useState(false);
   const [search, setSearch] = useState("");
   const [nicheFilter, setNicheFilter] = useState("All");
+  const [dateFilter, setDateFilter] = useState<"all" | "today" | "week" | "month">("all");
   const [newIndex, setNewIndex] = useState<number | null>(null);
   const [listsOpen, setListsOpen] = useState(false);
 
@@ -239,7 +257,7 @@ export default function AdminInfluencers() {
 
   function handleChange(i: number, val: Influencer) {
     setSaved(false);
-    setItems((p) => p.map((x, idx) => (idx === i ? val : x)));
+    setItems((p) => p.map((x, idx) => (idx === i ? { ...val, updatedAt: new Date().toISOString() } : x)));
   }
 
   function handleDelete(i: number) {
@@ -284,7 +302,22 @@ export default function AdminInfluencers() {
     const q = search.toLowerCase();
     const matchSearch = !q || inf.name.toLowerCase().includes(q) || inf.niche.toLowerCase().includes(q);
     const matchNiche = nicheFilter === "All" || inf.niche === nicheFilter;
-    return matchSearch && matchNiche;
+
+    let matchDate = true;
+    if (dateFilter !== "all") {
+      if (!inf.updatedAt) {
+        matchDate = false;
+      } else {
+        const updated = new Date(inf.updatedAt).getTime();
+        const now = Date.now();
+        const startOfToday = new Date(); startOfToday.setHours(0, 0, 0, 0);
+        if (dateFilter === "today") matchDate = updated >= startOfToday.getTime();
+        else if (dateFilter === "week") matchDate = updated >= now - 7 * 86400000;
+        else if (dateFilter === "month") matchDate = updated >= now - 30 * 86400000;
+      }
+    }
+
+    return matchSearch && matchNiche && matchDate;
   });
 
   const liveCount = items.filter((inf) => inf.profileEnabled !== false).length;
@@ -362,6 +395,33 @@ export default function AdminInfluencers() {
         </div>
       </div>
 
+      {/* Last Updated filter — segmented control */}
+      <div className="flex items-center gap-2 mb-3">
+        <span className="flex items-center gap-1.5 text-[11px] font-semibold text-[#0B0B0B]/40 uppercase tracking-wider shrink-0">
+          <Clock size={11} /> Last Updated
+        </span>
+        <div className="flex items-center bg-[#0B0B0B]/6 rounded-xl p-1 gap-0.5">
+          {([
+            { key: "all", label: "All time" },
+            { key: "today", label: "Today" },
+            { key: "week", label: "This week" },
+            { key: "month", label: "This month" },
+          ] as const).map(({ key, label }) => (
+            <button
+              key={key}
+              onClick={() => setDateFilter(key)}
+              className={`px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${
+                dateFilter === key
+                  ? "bg-white text-[#0B0B0B] shadow-sm"
+                  : "text-[#0B0B0B]/45 hover:text-[#0B0B0B]/70"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Genre filter chips */}
       <div className="mb-5">
         <div className="flex items-center gap-1.5 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
@@ -389,16 +449,16 @@ export default function AdminInfluencers() {
             );
           })}
         </div>
-        {(search || nicheFilter !== "All") && (
+        {(search || nicheFilter !== "All" || dateFilter !== "all") && (
           <div className="flex items-center gap-2 mt-2">
             <span className="text-[12px] text-[#0B0B0B]/40">
               Showing {filtered.length} of {items.length} influencers
             </span>
             <button
-              onClick={() => { setSearch(""); setNicheFilter("All"); }}
+              onClick={() => { setSearch(""); setNicheFilter("All"); setDateFilter("all"); }}
               className="text-[11px] text-[#0B0B0B]/40 hover:text-[#0B0B0B] underline underline-offset-2 transition-colors"
             >
-              Clear filters
+              Clear all filters
             </button>
           </div>
         )}
