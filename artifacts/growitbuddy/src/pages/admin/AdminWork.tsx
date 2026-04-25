@@ -64,27 +64,27 @@ function WorkRow({
 
   return (
     <Card className="p-0 overflow-hidden">
-      <button
-        onClick={() => setOpen((p) => !p)}
-        className="w-full flex items-center gap-3 px-5 py-3.5 text-left hover:bg-[#0B0B0B]/3 transition-colors"
-      >
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold text-[#0B0B0B]/50 bg-[#0B0B0B]/6 px-2 py-0.5 rounded-full shrink-0">{item.category}</span>
-            <p className="text-[13px] font-semibold text-[#0B0B0B] truncate">{item.title || "Untitled Case Study"}</p>
+      <div className="flex items-center gap-2 pr-3 hover:bg-[#0B0B0B]/3 transition-colors">
+        <button
+          onClick={() => setOpen((p) => !p)}
+          className="flex-1 flex items-center gap-3 px-5 py-3.5 text-left min-w-0"
+        >
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold text-[#0B0B0B]/50 bg-[#0B0B0B]/6 px-2 py-0.5 rounded-full shrink-0">{item.category}</span>
+              <p className="text-[13px] font-semibold text-[#0B0B0B] truncate">{item.title || "Untitled Case Study"}</p>
+            </div>
+            <p className="text-[11px] text-[#0B0B0B]/40 mt-0.5">{item.subtitle}</p>
           </div>
-          <p className="text-[11px] text-[#0B0B0B]/40 mt-0.5">{item.subtitle}</p>
-        </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={(e) => { e.stopPropagation(); onDelete(index); }}
-            className="p-1.5 rounded hover:bg-red-50 hover:text-red-500 text-[#0B0B0B]/30 transition-colors"
-          >
-            <Trash2 size={14} />
-          </button>
-          {open ? <ChevronUp size={14} className="text-[#0B0B0B]/40" /> : <ChevronDown size={14} className="text-[#0B0B0B]/40" />}
-        </div>
-      </button>
+          {open ? <ChevronUp size={14} className="text-[#0B0B0B]/40 shrink-0" /> : <ChevronDown size={14} className="text-[#0B0B0B]/40 shrink-0" />}
+        </button>
+        <button
+          onClick={() => onDelete(index)}
+          className="p-1.5 rounded hover:bg-red-50 hover:text-red-500 text-[#0B0B0B]/30 transition-colors shrink-0"
+        >
+          <Trash2 size={14} />
+        </button>
+      </div>
 
       {open && (
         <div className="border-t border-[#0B0B0B]/8 px-5 py-5 space-y-4">
