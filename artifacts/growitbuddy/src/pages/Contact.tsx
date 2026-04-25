@@ -31,12 +31,13 @@ function CalEmbed() {
       w.Cal("init", "growth-strategy-call", { origin: "https://app.cal.com" });
       w.Cal.ns["growth-strategy-call"]("inline", {
         elementOrSelector: "#my-cal-inline-growth-strategy-call",
-        config: { layout: "month_view", useSlotsViewOnSmallScreen: "true" },
+        config: { layout: "month_view", useSlotsViewOnSmallScreen: true },
         calLink: "growitbuddy.com/growth-strategy-call",
       });
       w.Cal.ns["growth-strategy-call"]("ui", {
         hideEventTypeDetails: false,
         layout: "month_view",
+        styles: { branding: { brandColor: "#0B0B0B" } },
       });
 
       w.__gbCalDone = true;
@@ -85,7 +86,7 @@ function CalEmbed() {
       )}
       <div
         id="my-cal-inline-growth-strategy-call"
-        style={{ width: "100%", minHeight: 600, overflow: "scroll" }}
+        style={{ width: "100%", minHeight: 600 }}
       />
     </div>
   );
