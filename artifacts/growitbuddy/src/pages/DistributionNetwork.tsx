@@ -38,7 +38,7 @@ function PageCard({ page, i }: { page: DistributionPage; i: number }) {
         }}
       >
         {/* Image band */}
-        <div style={{ position: "relative", width: "100%", height: 180, overflow: "hidden", background: page.accentColor, flexShrink: 0 }}>
+        <div style={{ position: "relative", width: "100%", aspectRatio: "1/1", overflow: "hidden", background: page.accentColor, flexShrink: 0 }}>
           {!imgError ? (
             <img
               src={page.photo}

@@ -40,7 +40,7 @@ function InfluencerCard({ inf, i }: { inf: Influencer; i: number }) {
           }}
         >
           {/* Photo */}
-          <div style={{ position: "relative", width: "100%", aspectRatio: "4/3", overflow: "hidden", background: inf.accentColor }}>
+          <div style={{ position: "relative", width: "100%", aspectRatio: "1/1", overflow: "hidden", background: inf.accentColor }}>
             {!imgError ? (
               <img
                 src={inf.photo}
