@@ -114,6 +114,15 @@ function ServiceRow({
   );
 }
 
+interface Stat { num: string; label: string; }
+
+const DEFAULT_STATS: Stat[] = [
+  { num: "700M+", label: "Views Generated" },
+  { num: "200+",  label: "Founders Served" },
+  { num: "10K+",  label: "Content Pieces" },
+  { num: "4x",    label: "Avg Growth Rate" },
+];
+
 export default function AdminServices() {
   const { getContent, saveContent } = useAdmin();
   const [services, setServices] = useState<Service[]>(DEFAULT_SERVICES);
@@ -121,6 +130,10 @@ export default function AdminServices() {
   const [saved, setSaved] = useState(false);
   const [headline, setHeadline] = useState("What we build for you");
   const [subtext, setSubtext] = useState("Four ways we help founders, creators, and brands build the authority that converts.");
+  const [heroHeadline, setHeroHeadline] = useState("The content systems behind authority and inbound demand.");
+  const [heroSubtext, setHeroSubtext] = useState("We don't just create content. We build the content marketing infrastructure that turns your expertise into recognition, trust, and consistent inbound opportunities.");
+  const [heroCTA, setHeroCTA] = useState("Book a strategy call");
+  const [stats, setStats] = useState<Stat[]>(DEFAULT_STATS);
 
   useEffect(() => {
     getContent("services").then((d) => {
@@ -128,18 +141,24 @@ export default function AdminServices() {
       if (d.services) setServices(d.services as Service[]);
       if (d.headline) setHeadline(d.headline as string);
       if (d.subtext) setSubtext(d.subtext as string);
+      if (d.heroHeadline) setHeroHeadline(d.heroHeadline as string);
+      if (d.heroSubtext) setHeroSubtext(d.heroSubtext as string);
+      if (d.heroCTA) setHeroCTA(d.heroCTA as string);
+      if (d.stats) setStats(d.stats as Stat[]);
     });
   }, [getContent]);
 
   async function handleSave() {
     setSaving(true);
     try {
-      await saveContent("services", { headline, subtext, services });
+      await saveContent("services", { headline, subtext, services, heroHeadline, heroSubtext, heroCTA, stats });
       setSaved(true);
     } finally {
       setSaving(false);
     }
   }
+
+  function mark() { setSaved(false); }
 
   function handleChange(i: number, val: Service) {
     setSaved(false);
@@ -159,13 +178,38 @@ export default function AdminServices() {
 
   return (
     <div>
-      <PageHeader title="Services" description="Edit the services offered on the Services page." />
+      <PageHeader title="Services" description="Edit every section of the Services page." />
 
       <Card className="mb-5">
-        <SectionTitle>Section Header</SectionTitle>
+        <SectionTitle>Hero Section</SectionTitle>
         <div className="space-y-3">
-          <Input label="Headline" value={headline} onChange={(e) => { setHeadline(e.target.value); setSaved(false); }} />
-          <Textarea label="Subtext" value={subtext} onChange={(e) => { setSubtext(e.target.value); setSaved(false); }} rows={2} />
+          <Textarea label="Headline" value={heroHeadline} onChange={(e) => { setHeroHeadline(e.target.value); mark(); }} rows={2} />
+          <Textarea label="Subtext" value={heroSubtext} onChange={(e) => { setHeroSubtext(e.target.value); mark(); }} rows={3} />
+          <Input label="CTA Button Text" value={heroCTA} onChange={(e) => { setHeroCTA(e.target.value); mark(); }} />
+        </div>
+      </Card>
+
+      <Card className="mb-5">
+        <SectionTitle>Stats Strip (dark bar below hero)</SectionTitle>
+        <div className="space-y-2">
+          {stats.map((stat, i) => (
+            <div key={i} className="flex gap-2 items-center">
+              <Input value={stat.num} onChange={(e) => { const s = [...stats]; s[i] = { ...stat, num: e.target.value }; setStats(s); mark(); }} placeholder="700M+" />
+              <Input value={stat.label} onChange={(e) => { const s = [...stats]; s[i] = { ...stat, label: e.target.value }; setStats(s); mark(); }} placeholder="Views Generated" />
+              <button onClick={() => { setStats(stats.filter((_, si) => si !== i)); mark(); }} className="p-1.5 text-[#0B0B0B]/25 hover:text-red-500 shrink-0"><Trash2 size={13} /></button>
+            </div>
+          ))}
+          <button onClick={() => { setStats([...stats, { num: "", label: "" }]); mark(); }} className="flex items-center gap-1.5 text-[12px] font-semibold text-[#0B0B0B]/50 hover:text-[#0B0B0B] transition-colors">
+            <Plus size={13} /> Add Stat
+          </button>
+        </div>
+      </Card>
+
+      <Card className="mb-5">
+        <SectionTitle>Services Section Header</SectionTitle>
+        <div className="space-y-3">
+          <Input label="Headline" value={headline} onChange={(e) => { setHeadline(e.target.value); mark(); }} />
+          <Textarea label="Subtext" value={subtext} onChange={(e) => { setSubtext(e.target.value); mark(); }} rows={2} />
         </div>
       </Card>
 

@@ -1,0 +1,168 @@
+import { useEffect, useState } from "react";
+import { useAdmin } from "@/context/AdminContext";
+import { PageHeader, Card, SectionTitle, Input, Textarea, SaveBar } from "@/components/admin/AdminField";
+import { Plus, Trash2 } from "lucide-react";
+
+interface FullTimeData {
+  heroLabel: string;
+  heroHeadline: string;
+  heroSubtext: string;
+  perksHeadline: string;
+  perks: string[];
+  rolesLabel: string;
+  roles: string[];
+  formHeadline: string;
+  formSubtext: string;
+  formSuccessHeadline: string;
+  formSuccessSubtext: string;
+}
+
+const DEFAULTS: FullTimeData = {
+  heroLabel: "Full-Time Careers",
+  heroHeadline: "Build your career at GrowitBuddy.",
+  heroSubtext: "We are a small, high-output team doing some of the most interesting content and authority work in the world. If that sounds like where you want to be, apply below.",
+  perksHeadline: "Why join full-time?",
+  perks: [
+    "Full-time remote role with flexible hours",
+    "Work directly with world-class founders and creators",
+    "Competitive salary + performance bonuses",
+    "Access to GrowitBuddy's proprietary frameworks and training",
+    "Real ownership and impact from day one",
+  ],
+  rolesLabel: "Open roles",
+  roles: [
+    "Content Strategist",
+    "Ghostwriter / Senior Writer",
+    "Video Editor",
+    "Social Media Manager",
+    "Distribution & Growth Specialist",
+    "Brand Designer",
+    "Operations & Project Manager",
+  ],
+  formHeadline: "Apply for a full-time role",
+  formSubtext: "We review every application. Expect a response within 7 business days.",
+  formSuccessHeadline: "Application received!",
+  formSuccessSubtext: "We review every application carefully. If you are a fit, we will reach out within 7 business days.",
+};
+
+export default function AdminFullTime() {
+  const { getContent, saveContent } = useAdmin();
+  const [data, setData] = useState<FullTimeData>(DEFAULTS);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    getContent("fulltime").then((d) => {
+      if (d) setData({ ...DEFAULTS, ...(d as Partial<FullTimeData>) });
+    });
+  }, [getContent]);
+
+  function set<K extends keyof FullTimeData>(key: K, val: FullTimeData[K]) {
+    setSaved(false);
+    setData((p) => ({ ...p, [key]: val }));
+  }
+
+  function setListItem(key: "perks" | "roles", i: number, val: string) {
+    setSaved(false);
+    const next = [...data[key]];
+    next[i] = val;
+    setData((p) => ({ ...p, [key]: next }));
+  }
+
+  function addListItem(key: "perks" | "roles") {
+    setSaved(false);
+    setData((p) => ({ ...p, [key]: [...p[key], ""] }));
+  }
+
+  function removeListItem(key: "perks" | "roles", i: number) {
+    setSaved(false);
+    setData((p) => ({ ...p, [key]: p[key].filter((_, idx) => idx !== i) }));
+  }
+
+  async function handleSave() {
+    setSaving(true);
+    try {
+      await saveContent("fulltime", data as unknown as Record<string, unknown>);
+      setSaved(true);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div>
+      <PageHeader title="Full-Time Careers Page" description="Edit hero, perks, open roles, and form text." />
+
+      <div className="space-y-5">
+        <Card>
+          <SectionTitle>Hero Section</SectionTitle>
+          <div className="space-y-3">
+            <Input label="Section Label" value={data.heroLabel} onChange={(e) => set("heroLabel", e.target.value)} />
+            <Textarea label="Headline" value={data.heroHeadline} onChange={(e) => set("heroHeadline", e.target.value)} rows={2} />
+            <Textarea label="Subtext" value={data.heroSubtext} onChange={(e) => set("heroSubtext", e.target.value)} rows={3} />
+          </div>
+        </Card>
+
+        <Card>
+          <SectionTitle>Why Join Full-Time Perks</SectionTitle>
+          <Input label="Section Heading" value={data.perksHeadline} onChange={(e) => set("perksHeadline", e.target.value)} className="mb-3" />
+          <div className="space-y-2">
+            {data.perks.map((perk, i) => (
+              <div key={i} className="flex gap-2 items-center">
+                <input
+                  className="flex-1 text-[13px] border border-[#0B0B0B]/12 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#0B0B0B]/20 bg-white"
+                  value={perk}
+                  onChange={(e) => setListItem("perks", i, e.target.value)}
+                  placeholder="Perk..."
+                />
+                <button onClick={() => removeListItem("perks", i)} className="p-1.5 text-[#0B0B0B]/25 hover:text-red-500 shrink-0"><Trash2 size={13} /></button>
+              </div>
+            ))}
+            <button onClick={() => addListItem("perks")} className="flex items-center gap-1.5 text-[12px] font-semibold text-[#0B0B0B]/50 hover:text-[#0B0B0B] transition-colors">
+              <Plus size={13} /> Add Perk
+            </button>
+          </div>
+        </Card>
+
+        <Card>
+          <SectionTitle>Open Roles</SectionTitle>
+          <Input label="Roles Box Label" value={data.rolesLabel} onChange={(e) => set("rolesLabel", e.target.value)} className="mb-3" />
+          <div className="space-y-2">
+            {data.roles.map((role, i) => (
+              <div key={i} className="flex gap-2 items-center">
+                <input
+                  className="flex-1 text-[13px] border border-[#0B0B0B]/12 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#0B0B0B]/20 bg-white"
+                  value={role}
+                  onChange={(e) => setListItem("roles", i, e.target.value)}
+                  placeholder="Role title..."
+                />
+                <button onClick={() => removeListItem("roles", i)} className="p-1.5 text-[#0B0B0B]/25 hover:text-red-500 shrink-0"><Trash2 size={13} /></button>
+              </div>
+            ))}
+            <button onClick={() => addListItem("roles")} className="flex items-center gap-1.5 text-[12px] font-semibold text-[#0B0B0B]/50 hover:text-[#0B0B0B] transition-colors">
+              <Plus size={13} /> Add Role
+            </button>
+          </div>
+        </Card>
+
+        <Card>
+          <SectionTitle>Application Form</SectionTitle>
+          <div className="space-y-3">
+            <Input label="Form Heading" value={data.formHeadline} onChange={(e) => set("formHeadline", e.target.value)} />
+            <Input label="Form Subtext" value={data.formSubtext} onChange={(e) => set("formSubtext", e.target.value)} />
+          </div>
+        </Card>
+
+        <Card>
+          <SectionTitle>Success State</SectionTitle>
+          <div className="space-y-3">
+            <Input label="Success Headline" value={data.formSuccessHeadline} onChange={(e) => set("formSuccessHeadline", e.target.value)} />
+            <Textarea label="Success Message" value={data.formSuccessSubtext} onChange={(e) => set("formSuccessSubtext", e.target.value)} rows={2} />
+          </div>
+        </Card>
+      </div>
+
+      <SaveBar onSave={handleSave} saving={saving} saved={saved} />
+    </div>
+  );
+}

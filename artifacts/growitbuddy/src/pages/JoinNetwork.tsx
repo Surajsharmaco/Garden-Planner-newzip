@@ -2,8 +2,23 @@ import { motion } from "framer-motion";
 import { useLocation } from "wouter";
 import { ArrowRight } from "lucide-react";
 import SEOMeta from "@/components/SEOMeta";
+import { usePublicContent } from "@/hooks/usePublicContent";
+
+interface JoinNetworkData {
+  heroLabel: string; heroHeadline: string; heroSubtext: string;
+  card1Num: string; card1Title: string; card1Subtitle: string; card1Desc: string; card1CTA: string;
+  card2Num: string; card2Title: string; card2Subtitle: string; card2Desc: string; card2CTA: string;
+  footerNote: string;
+}
+const JN_DEFAULTS: JoinNetworkData = {
+  heroLabel: "Join Our Network", heroHeadline: "Choose Your Path.", heroSubtext: "Two ways to become part of a growing ecosystem. Pick the one that fits you.",
+  card1Num: "01", card1Title: "I'm an Influencer", card1Subtitle: "", card1Desc: "I create content on my personal profile, build an audience, and collaborate with brands.", card1CTA: "Continue as Influencer",
+  card2Num: "02", card2Title: "I run a Page", card2Subtitle: "Meme / Theme Page", card2Desc: "I manage a content page with a large audience and help distribute content at scale.", card2CTA: "Continue as Page Owner",
+  footerNote: "Not sure where you fit? Choose the closest option — we'll guide you from there.",
+};
 
 export default function JoinNetwork() {
+  const cms = usePublicContent<JoinNetworkData>("joinnetwork", JN_DEFAULTS);
   const [, navigate] = useLocation();
 
   return (
@@ -111,7 +126,7 @@ export default function JoinNetwork() {
       <section style={{ paddingTop: 128, paddingBottom: 56, paddingLeft: 24, paddingRight: 24 }}>
         <div className="jn-wrap">
           <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.3)", marginBottom: 18 }}>
-            Join Our Network
+            {cms.heroLabel}
           </p>
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
@@ -119,7 +134,7 @@ export default function JoinNetwork() {
             transition={{ duration: 0.65 }}
             style={{ fontWeight: 800, fontSize: "clamp(40px, 7vw, 80px)", letterSpacing: "-0.045em", lineHeight: "1.02", color: "#0B0B0B", maxWidth: "16ch", marginBottom: 20 }}
           >
-            Choose Your Path.
+            {cms.heroHeadline}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -127,7 +142,7 @@ export default function JoinNetwork() {
             transition={{ delay: 0.1 }}
             style={{ fontSize: "clamp(15px, 2vw, 17px)", color: "rgba(11,11,11,0.42)", lineHeight: 1.75, maxWidth: "44ch" }}
           >
-            Two ways to become part of a growing ecosystem. Pick the one that fits you.
+            {cms.heroSubtext}
           </motion.p>
         </div>
       </section>
@@ -149,14 +164,14 @@ export default function JoinNetwork() {
               onKeyDown={(e) => e.key === "Enter" && navigate("/creators")}
             >
               <div className="jn-deco jn-deco-dark" />
-              <span className="jn-num">01</span>
-              <h2 className="jn-title">I'm an Influencer</h2>
+              <span className="jn-num">{cms.card1Num}</span>
+              <h2 className="jn-title">{cms.card1Title}</h2>
               <div className="jn-rule" />
               <p className="jn-desc">
-                I create content on my personal profile, build an audience, and collaborate with brands.
+                {cms.card1Desc}
               </p>
               <span className="jn-btn">
-                Continue as Influencer
+                {cms.card1CTA}
                 <ArrowRight style={{ width: 14, height: 14 }} />
               </span>
             </motion.div>
@@ -173,15 +188,15 @@ export default function JoinNetwork() {
               onKeyDown={(e) => e.key === "Enter" && navigate("/join/page-owner")}
             >
               <div className="jn-deco jn-deco-light" />
-              <span className="jn-num">02</span>
-              <h2 className="jn-title">I run a Page</h2>
-              <p className="jn-sub">Meme / Theme Page</p>
+              <span className="jn-num">{cms.card2Num}</span>
+              <h2 className="jn-title">{cms.card2Title}</h2>
+              {cms.card2Subtitle && <p className="jn-sub">{cms.card2Subtitle}</p>}
               <div className="jn-rule" />
               <p className="jn-desc">
-                I manage a content page with a large audience and help distribute content at scale.
+                {cms.card2Desc}
               </p>
               <span className="jn-btn">
-                Continue as Page Owner
+                {cms.card2CTA}
                 <ArrowRight style={{ width: 14, height: 14 }} />
               </span>
             </motion.div>
@@ -194,7 +209,7 @@ export default function JoinNetwork() {
       <section style={{ padding: "0 24px 96px" }}>
         <div className="jn-wrap" style={{ textAlign: "center" }}>
           <p style={{ fontSize: 13, color: "rgba(11,11,11,0.28)", lineHeight: 1.7, borderTop: "1px solid rgba(11,11,11,0.07)", paddingTop: 32 }}>
-            Not sure where you fit? Choose the closest option — we'll guide you from there.
+            {cms.footerNote}
           </p>
         </div>
       </section>

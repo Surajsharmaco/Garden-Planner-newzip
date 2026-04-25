@@ -3,7 +3,7 @@ import { useAdmin } from "@/context/AdminContext";
 import {
   LayoutDashboard, Settings, Users, FileText, Briefcase,
   Home, Layers, Menu as MenuIcon, AlignLeft, Info, LogOut,
-  ChevronRight, Inbox,
+  ChevronRight, Inbox, Mail, GitBranch, UserPlus, Building2, Network,
 } from "lucide-react";
 import { useState } from "react";
 import type { ReactNode } from "react";
@@ -24,10 +24,20 @@ const navGroups: NavGroup[] = [
     items: [
       { label: "Home Page", path: "/admin/home", icon: <Home size={15} /> },
       { label: "Services", path: "/admin/services", icon: <Layers size={15} /> },
+      { label: "Framework", path: "/admin/framework", icon: <GitBranch size={15} /> },
       { label: "Work", path: "/admin/work", icon: <Briefcase size={15} /> },
       { label: "Influencers", path: "/admin/influencers", icon: <Users size={15} /> },
       { label: "Blog / Insights", path: "/admin/blog", icon: <FileText size={15} /> },
       { label: "About", path: "/admin/about", icon: <Info size={15} /> },
+      { label: "Contact", path: "/admin/contact", icon: <Mail size={15} /> },
+    ],
+  },
+  {
+    label: "Network & Hiring",
+    items: [
+      { label: "Join Network", path: "/admin/join-network", icon: <Network size={15} /> },
+      { label: "Freelancers Page", path: "/admin/freelancers-page", icon: <UserPlus size={15} /> },
+      { label: "Full-Time Page", path: "/admin/full-time-page", icon: <Building2 size={15} /> },
     ],
   },
   {

@@ -2,6 +2,26 @@ import { motion } from "framer-motion";
 import { ArrowRight, Check } from "lucide-react";
 import { Link } from "wouter";
 import SEOMeta from "@/components/SEOMeta";
+import { usePublicContent } from "@/hooks/usePublicContent";
+
+interface ServicesPageData {
+  heroHeadline: string;
+  heroSubtext: string;
+  heroCTA: string;
+  stats: { num: string; label: string }[];
+}
+
+const PAGE_DEFAULTS: ServicesPageData = {
+  heroHeadline: "The content systems behind authority and inbound demand.",
+  heroSubtext: "We don't just create content. We build the content marketing infrastructure that turns your expertise into recognition, trust, and consistent inbound opportunities.",
+  heroCTA: "Book a strategy call",
+  stats: [
+    { num: "700M+", label: "Views Generated" },
+    { num: "200+",  label: "Founders Served" },
+    { num: "10K+",  label: "Content Pieces" },
+    { num: "4x",    label: "Avg Growth Rate" },
+  ],
+};
 
 const services = [
   {
@@ -47,6 +67,7 @@ const services = [
 ];
 
 export default function Services() {
+  const cms = usePublicContent<ServicesPageData>("services", PAGE_DEFAULTS);
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <style>{`
@@ -105,7 +126,7 @@ export default function Services() {
                 maxWidth: "18ch",
               }}
             >
-              The content systems behind authority and inbound demand.
+              {cms.heroHeadline}
             </motion.h1>
           </div>
 
@@ -117,7 +138,7 @@ export default function Services() {
             style={{ display: "flex", flexDirection: "column", gap: 28, justifyContent: "flex-end" }}
           >
             <p style={{ fontSize: 17, lineHeight: "1.8", color: "rgba(11,11,11,0.5)", maxWidth: "38ch" }}>
-              We don't just create content. We build the content marketing infrastructure that turns your expertise into recognition, trust, and consistent inbound opportunities.
+              {cms.heroSubtext}
             </p>
             <Link href="/contact">
               <span
@@ -137,7 +158,7 @@ export default function Services() {
                 }}
                 className="hover:opacity-80 transition-opacity"
               >
-                Book a strategy call
+                {cms.heroCTA}
                 <ArrowRight className="w-4 h-4" />
               </span>
             </Link>
@@ -148,12 +169,7 @@ export default function Services() {
       {/* Stats strip */}
       <section style={{ background: "#0B0B0B", padding: "0 24px" }}>
         <div className="max-w-[1100px] mx-auto svc-stats-grid">
-          {[
-            { num: "700M+", label: "Views Generated" },
-            { num: "200+",  label: "Founders Served" },
-            { num: "10K+",  label: "Content Pieces" },
-            { num: "4x",    label: "Avg Growth Rate" },
-          ].map(({ num, label }, i) => (
+          {cms.stats.map(({ num, label }, i) => (
             <motion.div
               key={label}
               initial={{ opacity: 0, y: 10 }}
@@ -162,7 +178,7 @@ export default function Services() {
               transition={{ delay: i * 0.07, duration: 0.5 }}
               style={{
                 padding: "40px 32px",
-                borderRight: i < 3 ? "1px solid rgba(255,255,255,0.07)" : "none",
+                borderRight: i < cms.stats.length - 1 ? "1px solid rgba(255,255,255,0.07)" : "none",
               }}
             >
               <p style={{

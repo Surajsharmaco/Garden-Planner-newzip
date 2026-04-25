@@ -7,6 +7,28 @@ import { ArrowRight, Check } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import SEOMeta from "@/components/SEOMeta";
+import { usePublicContent } from "@/hooks/usePublicContent";
+
+interface FullTimePageData {
+  heroLabel: string; heroHeadline: string; heroSubtext: string;
+  perksHeadline: string; perks: string[];
+  rolesLabel: string; roles: string[];
+  formHeadline: string; formSubtext: string;
+  formSuccessHeadline: string; formSuccessSubtext: string;
+}
+const FT_DEFAULTS: FullTimePageData = {
+  heroLabel: "Full-Time Careers",
+  heroHeadline: "Build your career at GrowitBuddy.",
+  heroSubtext: "We are a small, high-output team doing some of the most interesting content and authority work in the world. If that sounds like where you want to be, apply below.",
+  perksHeadline: "Why join full-time?",
+  perks: ["Full-time remote role with flexible hours", "Work directly with world-class founders and creators", "Competitive salary + performance bonuses", "Access to GrowitBuddy's proprietary frameworks and training", "Real ownership and impact from day one"],
+  rolesLabel: "Open roles",
+  roles: ["Content Strategist", "Ghostwriter / Senior Writer", "Video Editor", "Social Media Manager", "Distribution & Growth Specialist", "Brand Designer", "Operations & Project Manager"],
+  formHeadline: "Apply for a full-time role",
+  formSubtext: "We review every application. Expect a response within 7 business days.",
+  formSuccessHeadline: "Application received!",
+  formSuccessSubtext: "We review every application carefully. If you are a fit, we will reach out within 7 business days.",
+};
 
 const ROLES = [
   "Content Strategist",
@@ -37,15 +59,8 @@ const schema = z.object({
 });
 type F = z.infer<typeof schema>;
 
-const PERKS = [
-  "Full-time remote role with flexible hours",
-  "Work directly with world-class founders and creators",
-  "Competitive salary + performance bonuses",
-  "Access to GrowitBuddy's proprietary frameworks and training",
-  "Real ownership and impact from day one",
-];
-
 export default function FullTime() {
+  const ft = usePublicContent<FullTimePageData>("fulltime", FT_DEFAULTS);
   const { toast } = useToast();
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -91,14 +106,14 @@ export default function FullTime() {
       {/* Hero */}
       <section style={{ paddingTop: 120, paddingBottom: 80, paddingLeft: 24, paddingRight: 24, borderBottom: "1px solid rgba(11,11,11,0.08)" }}>
         <div className="max-w-[1100px] mx-auto">
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Full-Time Careers</p>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>{ft.heroLabel}</p>
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
             style={{ fontWeight: 800, fontSize: "clamp(44px, 7vw, 88px)", letterSpacing: "-0.04em", lineHeight: "1.02", color: "#0B0B0B", maxWidth: "18ch", marginBottom: 24 }}
           >
-            Build your career at GrowitBuddy.
+            {ft.heroHeadline}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -106,7 +121,7 @@ export default function FullTime() {
             transition={{ delay: 0.1 }}
             style={{ fontSize: 18, color: "rgba(11,11,11,0.5)", lineHeight: "1.75", maxWidth: "52ch" }}
           >
-            We are a small, high-output team doing some of the most interesting content and authority work in the world. If that sounds like where you want to be, apply below.
+            {ft.heroSubtext}
           </motion.p>
         </div>
       </section>
@@ -117,10 +132,10 @@ export default function FullTime() {
           {/* Perks */}
           <div>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 3vw, 40px)", letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 32, lineHeight: 1.15 }}>
-              Why join full-time?
+              {ft.perksHeadline}
             </h2>
             <ul style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 40 }}>
-              {PERKS.map((perk, i) => (
+              {ft.perks.map((perk, i) => (
                 <motion.li
                   key={i}
                   initial={{ opacity: 0, y: 8 }}
@@ -138,8 +153,8 @@ export default function FullTime() {
             </ul>
 
             <div style={{ background: "#0B0B0B", borderRadius: 16, padding: "28px 32px" }}>
-              <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 14 }}>Open roles</p>
-              {ROLES.filter(r => r !== "Other").map((role, i) => (
+              <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 14 }}>{ft.rolesLabel}</p>
+              {ft.roles.map((role, i) => (
                 <p key={i} style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", lineHeight: "1.7", marginBottom: 8 }}>{role}</p>
               ))}
             </div>
@@ -154,15 +169,15 @@ export default function FullTime() {
             {submitted ? (
               <div style={{ background: "#F7F7F5", border: "1.5px solid rgba(11,11,11,0.15)", borderRadius: 20, padding: "48px 36px", textAlign: "center" }}>
                 <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#0B0B0B", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", fontSize: 28 }}>✓</div>
-                <h3 style={{ fontWeight: 800, fontSize: 26, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 12 }}>Application received!</h3>
+                <h3 style={{ fontWeight: 800, fontSize: 26, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 12 }}>{ft.formSuccessHeadline}</h3>
                 <p style={{ fontSize: 15, color: "rgba(11,11,11,0.55)", lineHeight: "1.75" }}>
-                  We review every application carefully. If you are a fit, we will reach out within 7 business days.
+                  {ft.formSuccessSubtext}
                 </p>
               </div>
             ) : (
               <div style={{ background: "#F7F7F5", border: "1.5px solid rgba(11,11,11,0.08)", borderRadius: 20, padding: "40px 32px" }}>
-                <h3 style={{ fontWeight: 800, fontSize: 24, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 8 }}>Apply for a full-time role</h3>
-                <p style={{ fontSize: 14, color: "rgba(11,11,11,0.45)", marginBottom: 28 }}>We review every application. Expect a response within 7 business days.</p>
+                <h3 style={{ fontWeight: 800, fontSize: 24, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 8 }}>{ft.formHeadline}</h3>
+                <p style={{ fontSize: 14, color: "rgba(11,11,11,0.45)", marginBottom: 28 }}>{ft.formSubtext}</p>
 
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: 16 }}>

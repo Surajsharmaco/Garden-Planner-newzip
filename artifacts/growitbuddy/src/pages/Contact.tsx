@@ -7,6 +7,36 @@ import { ArrowRight } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import SEOMeta from "@/components/SEOMeta";
+import { usePublicContent } from "@/hooks/usePublicContent";
+
+interface ContactPageData {
+  heroHeadline: string;
+  heroSubtext: string;
+  bookingLabel: string;
+  bookingHeadline: string;
+  formHeadline: string;
+  formSubtext: string;
+  formSuccessHeadline: string;
+  formSuccessSubtext: string;
+  contactInfo: { label: string; value: string; href: string }[];
+}
+
+const CONTACT_DEFAULTS: ContactPageData = {
+  heroHeadline: "Let's build your authority system.",
+  heroSubtext: "We partner with ambitious founders and creators who are serious about authority. One strategy call is all it takes to get started.",
+  bookingLabel: "Book a call",
+  bookingHeadline: "Pick a time that works for you.",
+  formHeadline: "Send us a message",
+  formSubtext: "We respond to every inquiry within 24 hours.",
+  formSuccessHeadline: "Message sent!",
+  formSuccessSubtext: "We'll be in touch within 24 hours to schedule your free strategy call.",
+  contactInfo: [
+    { label: "Email", value: "hello@growitbuddy.com", href: "mailto:hello@growitbuddy.com" },
+    { label: "Response time", value: "Within 24 hours", href: "" },
+    { label: "Based", value: "Global - 4 timezones", href: "" },
+    { label: "Next step", value: "Free 30-min strategy call", href: "" },
+  ],
+};
 
 function CalEmbed() {
   const [loaded, setLoaded] = useState(false);
@@ -52,11 +82,13 @@ function CalEmbed() {
           }
         });
         observer.observe(target, { childList: true, subtree: true });
-        return () => observer.disconnect();
+        return () => { observer.disconnect(); };
       }
+      return undefined;
     } catch (err) {
       console.warn("Cal embed init error:", err);
       setLoaded(true);
+      return undefined;
     }
   }, []);
 
@@ -101,6 +133,7 @@ const schema = z.object({
 type F = z.infer<typeof schema>;
 
 export default function Contact() {
+  const cms = usePublicContent<ContactPageData>("contact", CONTACT_DEFAULTS);
   const { toast } = useToast();
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -145,7 +178,7 @@ export default function Contact() {
               transition={{ duration: 0.7 }}
               style={{ fontWeight: 800, fontSize: "clamp(44px, 6.5vw, 80px)", letterSpacing: "-0.04em", lineHeight: "1.02", color: "#0B0B0B" }}
             >
-              Let's build your authority system.
+              {cms.heroHeadline}
             </motion.h1>
           </div>
           <motion.p
@@ -154,7 +187,7 @@ export default function Contact() {
             transition={{ delay: 0.1 }}
             style={{ fontSize: 18, lineHeight: "1.75", color: "rgba(11,11,11,0.5)", alignSelf: "flex-end" }}
           >
-            We partner with ambitious founders and creators who are serious about authority. One strategy call is all it takes to get started.
+            {cms.heroSubtext}
           </motion.p>
         </div>
       </section>
@@ -162,9 +195,9 @@ export default function Contact() {
       {/* Cal.com Booking */}
       <section style={{ padding: "80px 24px", background: "#fff", borderBottom: "1px solid rgba(11,11,11,0.08)" }}>
         <div className="max-w-[1100px] mx-auto">
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 12 }}>Book a call</p>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 12 }}>{cms.bookingLabel}</p>
           <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 3vw, 40px)", letterSpacing: "-0.04em", color: "#0B0B0B", marginBottom: 40, lineHeight: 1.1 }}>
-            Pick a time that works for you.
+            {cms.bookingHeadline}
           </h2>
           <CalEmbed />
         </div>
@@ -176,12 +209,7 @@ export default function Contact() {
           {/* Info */}
           <div>
             <div style={{ borderTop: "1px solid rgba(11,11,11,0.08)", display: "flex", flexDirection: "column" }}>
-              {[
-                { label: "Email", value: "hello@growitbuddy.com", href: "mailto:hello@growitbuddy.com" },
-                { label: "Response time", value: "Within 24 hours" },
-                { label: "Based", value: "Global - 4 timezones" },
-                { label: "Next step", value: "Free 30-min strategy call" },
-              ].map((item) => (
+              {cms.contactInfo.map((item) => (
                 <div key={item.label} style={{ padding: "20px 0", borderBottom: "1px solid rgba(11,11,11,0.08)" }}>
                   <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 6 }}>{item.label}</p>
                   {item.href
@@ -206,15 +234,15 @@ export default function Contact() {
                 }}
               >
                 <div style={{ width: 72, height: 72, borderRadius: "50%", background: "#0B0B0B", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px", fontSize: 30, fontWeight: 800, color: "#fff" }}>✓</div>
-                <h3 style={{ fontWeight: 800, fontSize: 28, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 12 }}>Message sent!</h3>
+                <h3 style={{ fontWeight: 800, fontSize: 28, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 12 }}>{cms.formSuccessHeadline}</h3>
                 <p style={{ fontSize: 16, color: "rgba(11,11,11,0.5)", lineHeight: "1.75" }}>
-                  We'll be in touch within 24 hours to schedule your free strategy call.
+                  {cms.formSuccessSubtext}
                 </p>
               </div>
             ) : (
               <div style={{ background: "#fff", border: "1.5px solid rgba(11,11,11,0.08)", borderRadius: 20, padding: "40px 36px" }}>
-                <h3 style={{ fontWeight: 800, fontSize: 22, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 8 }}>Send us a message</h3>
-                <p style={{ fontSize: 14, color: "rgba(11,11,11,0.45)", marginBottom: 28 }}>We respond to every inquiry within 24 hours.</p>
+                <h3 style={{ fontWeight: 800, fontSize: 22, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 8 }}>{cms.formHeadline}</h3>
+                <p style={{ fontSize: 14, color: "rgba(11,11,11,0.45)", marginBottom: 28 }}>{cms.formSubtext}</p>
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))", gap: 16 }}>

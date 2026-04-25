@@ -7,6 +7,28 @@ import { ArrowRight, Check } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import SEOMeta from "@/components/SEOMeta";
+import { usePublicContent } from "@/hooks/usePublicContent";
+
+interface FreelancersPageData {
+  heroLabel: string; heroHeadline: string; heroSubtext: string;
+  perksHeadline: string; perks: string[];
+  notForEveryoneTitle: string; notForEveryone: string[];
+  formHeadline: string; formSubtext: string;
+  formSuccessHeadline: string; formSuccessSubtext: string;
+}
+const FL_DEFAULTS: FreelancersPageData = {
+  heroLabel: "Talent Network",
+  heroHeadline: "Join the Talent Network.",
+  heroSubtext: "Work on real projects. Get selected based on performance. Build your career with a system, not random gigs.",
+  perksHeadline: "What You Get.",
+  perks: ["Real client projects, not random gigs", "Consistent work opportunities based on performance", "Performance-based growth within the network", "Access to tools and resources as you level up", "A structured system to sharpen your skills"],
+  notForEveryoneTitle: "Not for everyone",
+  notForEveryone: ["Video editors ready to work on real client projects", "Graphic and motion designers with a strong portfolio", "Content creators who execute, not just ideate", "If you want random gigs, this is not for you"],
+  formHeadline: "Apply for the Talent Network",
+  formSubtext: "Selection is performance-based. Apply now and prove your work.",
+  formSuccessHeadline: "Application received.",
+  formSuccessSubtext: "We review applications based on performance. If you make the cut, we'll be in touch within 7 business days.",
+};
 
 const SKILLS_LIST = [
   "Ghostwriting",
@@ -39,15 +61,8 @@ const schema = z.object({
 });
 type F = z.infer<typeof schema>;
 
-const PERKS = [
-  "Real client projects, not random gigs",
-  "Consistent work opportunities based on performance",
-  "Performance-based growth within the network",
-  "Access to tools and resources as you level up",
-  "A structured system to sharpen your skills",
-];
-
 export default function Freelancers() {
+  const fl = usePublicContent<FreelancersPageData>("freelancers", FL_DEFAULTS);
   const { toast } = useToast();
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -101,14 +116,14 @@ export default function Freelancers() {
       {/* Hero */}
       <section style={{ paddingTop: 120, paddingBottom: 80, paddingLeft: 24, paddingRight: 24, borderBottom: "1px solid rgba(11,11,11,0.08)" }}>
         <div className="max-w-[1100px] mx-auto">
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Talent Network</p>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>{fl.heroLabel}</p>
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
             style={{ fontWeight: 800, fontSize: "clamp(44px, 7vw, 88px)", letterSpacing: "-0.04em", lineHeight: "1.02", color: "#0B0B0B", maxWidth: "18ch", marginBottom: 24 }}
           >
-            Join the Talent Network.
+            {fl.heroHeadline}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -116,7 +131,7 @@ export default function Freelancers() {
             transition={{ delay: 0.1 }}
             style={{ fontSize: 18, color: "rgba(11,11,11,0.5)", lineHeight: "1.75", maxWidth: "52ch" }}
           >
-            Work on real projects. Get selected based on performance. Build your career with a system, not random gigs.
+            {fl.heroSubtext}
           </motion.p>
         </div>
       </section>
@@ -127,10 +142,10 @@ export default function Freelancers() {
           {/* Perks */}
           <div>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 3vw, 40px)", letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 32, lineHeight: 1.15 }}>
-              What You Get.
+              {fl.perksHeadline}
             </h2>
             <ul style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 40 }}>
-              {PERKS.map((perk, i) => (
+              {fl.perks.map((perk, i) => (
                 <motion.li
                   key={i}
                   initial={{ opacity: 0, y: 8 }}
@@ -148,8 +163,8 @@ export default function Freelancers() {
             </ul>
 
             <div style={{ background: "#0B0B0B", borderRadius: 16, padding: "28px 32px" }}>
-              <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 14 }}>Not for everyone</p>
-              {["Video editors ready to work on real client projects", "Graphic and motion designers with a strong portfolio", "Content creators who execute, not just ideate", "If you want random gigs, this is not for you"].map((item, i) => (
+              <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 14 }}>{fl.notForEveryoneTitle}</p>
+              {fl.notForEveryone.map((item, i) => (
                 <p key={i} style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", lineHeight: "1.7", marginBottom: 8 }}>{item}</p>
               ))}
             </div>
@@ -172,15 +187,15 @@ export default function Freelancers() {
                 }}
               >
                 <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#0B0B0B", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", fontSize: 28 }}>✓</div>
-                <h3 style={{ fontWeight: 800, fontSize: 26, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 12 }}>Application received.</h3>
+                <h3 style={{ fontWeight: 800, fontSize: 26, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 12 }}>{fl.formSuccessHeadline}</h3>
                 <p style={{ fontSize: 15, color: "rgba(11,11,11,0.55)", lineHeight: "1.75" }}>
-                  We review applications based on performance. If you make the cut, we'll be in touch within 7 business days.
+                  {fl.formSuccessSubtext}
                 </p>
               </div>
             ) : (
               <div style={{ background: "#F7F7F5", border: "1.5px solid rgba(11,11,11,0.08)", borderRadius: 20, padding: "40px 32px" }}>
-                <h3 style={{ fontWeight: 800, fontSize: 24, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 8 }}>Apply for the Talent Network</h3>
-                <p style={{ fontSize: 14, color: "rgba(11,11,11,0.45)", marginBottom: 28 }}>Selection is performance-based. Apply now and prove your work.</p>
+                <h3 style={{ fontWeight: 800, fontSize: 24, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 8 }}>{fl.formHeadline}</h3>
+                <p style={{ fontSize: 14, color: "rgba(11,11,11,0.45)", marginBottom: 28 }}>{fl.formSubtext}</p>
 
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
