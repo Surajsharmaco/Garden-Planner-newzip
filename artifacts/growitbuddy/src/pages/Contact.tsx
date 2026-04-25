@@ -10,31 +10,51 @@ import SEOMeta from "@/components/SEOMeta";
 
 function CalEmbed() {
   useEffect(() => {
-    const existingScript = document.querySelector('script[src="https://app.cal.com/embed/embed.js"]');
-    if (!existingScript) {
-      const script = document.createElement("script");
-      script.src = "https://app.cal.com/embed/embed.js";
-      script.async = true;
-      script.onload = () => initCal();
-      document.head.appendChild(script);
-    } else {
-      initCal();
+    const w = window as any;
+
+    // Bootstrap Cal queue accumulator (mirrors the official IIFE)
+    if (!w.Cal) {
+      (function (C: any, A: string, L: string) {
+        const p = (a: any, ar: any) => a.q.push(ar);
+        const d = C.document;
+        C.Cal = C.Cal || function (this: any) {
+          const cal = C.Cal;
+          const ar = arguments;
+          if (!cal.loaded) {
+            cal.ns = {};
+            cal.q = cal.q || [];
+            const s = d.createElement("script");
+            s.src = A;
+            d.head.appendChild(s);
+            cal.loaded = true;
+          }
+          if (ar[0] === L) {
+            const api: any = function () { p(api, arguments); };
+            const ns = ar[1];
+            api.q = api.q || [];
+            if (typeof ns === "string") {
+              cal.ns[ns] = cal.ns[ns] || api;
+              p(cal.ns[ns], ar);
+              p(cal, ["initNamespace", ns]);
+            } else p(cal, ar);
+            return;
+          }
+          p(cal, ar);
+        };
+      })(window, "https://app.cal.com/embed/embed.js", "init");
     }
 
-    function initCal() {
-      const w = window as any;
-      if (!w.Cal) return;
-      w.Cal("init", "growth-strategy-call", { origin: "https://app.cal.com" });
-      w.Cal.ns["growth-strategy-call"]("inline", {
-        elementOrSelector: "#my-cal-inline-growth-strategy-call",
-        config: { layout: "month_view", useSlotsViewOnSmallScreen: "true" },
-        calLink: "growitbuddy.com/growth-strategy-call",
-      });
-      w.Cal.ns["growth-strategy-call"]("ui", {
-        hideEventTypeDetails: false,
-        layout: "month_view",
-      });
-    }
+    // Queue all Cal calls — embed.js will process them once loaded
+    w.Cal("init", "growth-strategy-call", { origin: "https://app.cal.com" });
+    w.Cal.ns["growth-strategy-call"]("inline", {
+      elementOrSelector: "#my-cal-inline-growth-strategy-call",
+      config: { layout: "month_view", useSlotsViewOnSmallScreen: "true" },
+      calLink: "growitbuddy.com/growth-strategy-call",
+    });
+    w.Cal.ns["growth-strategy-call"]("ui", {
+      hideEventTypeDetails: false,
+      layout: "month_view",
+    });
   }, []);
 
   return (
