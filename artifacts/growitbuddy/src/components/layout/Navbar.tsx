@@ -8,9 +8,10 @@ const NAV_LINKS = [
   { href: "/work", label: "Work" },
   { href: "/framework", label: "Framework" },
   {
-    label: "Influencers",
+    label: "Network",
     dropdown: [
-      { href: "/influencers", label: "Explore Influencers" },
+      { href: "/influencers", label: "Influencer Network" },
+      { href: "/distribution", label: "Distribution Network" },
       { href: "/creators", label: "Join as Influencer" },
     ],
   },

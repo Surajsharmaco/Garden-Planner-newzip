@@ -1,0 +1,179 @@
+Act as a senior UI/UX designer, product engineer, and conversion-focused copywriter.
+
+Your task is to CREATE a new page called:
+
+👉 "Distribution Network"
+
+This page must showcase meme pages and theme pages that are part of the network.
+
+IMPORTANT:
+
+* Maintain the SAME layout, grid system, and filter structure as the existing "Influencer / Creator Network" page
+* Only change positioning, labels, and purpose
+* Keep UI consistent across both pages
+
+---
+
+🎯 GOAL
+
+Build a premium page that communicates:
+
+* Massive audience reach
+* Content distribution power
+* High-engagement meme/theme pages
+
+This is NOT a creator page.
+This is a **distribution engine page**.
+
+---
+
+🧩 PAGE STRUCTURE
+
+---
+
+🔹 HERO SECTION
+
+Headline:
+Plug Into High-Performing Distribution
+
+Subtext:
+Access a curated network of meme and theme pages with millions of followers.
+Distribute your content at scale and reach the right audience faster.
+
+CTA:
+Run a Campaign
+
+---
+
+---
+
+🔹 FILTER SYSTEM (IMPORTANT)
+
+Use SAME filters as Creator Network:
+
+* Country filter (USA, India, etc.)
+* Genre / Niche filter (Fitness, Business, Motivation, etc.)
+
+DO NOT change filter UI
+DO NOT add complexity
+Keep it identical
+
+---
+
+---
+
+🔹 GRID SYSTEM (SAME AS CREATOR PAGE)
+
+* 2 cards per row (desktop)
+* Minimal design
+* Infinite scroll style
+
+---
+
+🟢 EACH CARD MUST INCLUDE:
+
+* Profile Image
+* Page Name (e.g. @fitnessmemes)
+* Followers count (e.g. 1.2M)
+* Niche (small text)
+
+---
+
+🟡 OPTIONAL:
+
+* Small tag: “High Engagement”
+
+---
+
+🔗 On click:
+→ open detailed page profile (future-ready)
+
+---
+
+---
+
+🔹 SECTION: WHAT YOU GET
+
+Headline:
+What You Get
+
+Points:
+
+* High-reach distribution
+* Access to engaged audiences
+* Faster visibility for your content
+* Scalable content amplification
+
+---
+
+---
+
+🔹 SECTION: HOW IT WORKS
+
+Headline:
+How It Works
+
+Steps:
+
+1. Choose your niche
+2. Select relevant pages
+3. Run your campaign
+4. Track reach and performance
+
+---
+
+---
+
+🔹 CTA SECTION
+
+Headline:
+Ready to Distribute at Scale?
+
+Subtext:
+Leverage our network to get your content in front of the right audience.
+
+CTA:
+Start a Campaign
+
+---
+
+---
+
+🎨 DESIGN RULES
+
+* Keep it minimal, premium
+* No clutter
+* Same spacing and grid as creator page
+* Smooth hover effects
+* Fast loading
+
+---
+
+---
+
+⚠️ IMPORTANT RULES
+
+* Do NOT mix with influencer page
+* Do NOT use “creator” language
+* Do NOT overcomplicate UI
+* Keep focus on distribution, reach, and scale
+
+---
+
+---
+
+🎯 FINAL OUTPUT
+
+The page should feel like:
+
+* a media buying platform
+* a distribution engine
+* a premium network
+
+NOT:
+
+* a freelancer page
+* a creator portfolio
+* a basic listing
+
+---
