@@ -1,0 +1,281 @@
+Act as a senior full-stack developer, AI engineer, and advanced SEO strategist building a next-generation blog system that is significantly more powerful than WordPress + RankMath + Yoast.
+
+This system must not just “support SEO” — it must actively help rank content using automation, AI, and data.
+
+The goal is to build a complete SEO operating system inside my website.
+
+---
+
+🔥 CORE OBJECTIVE
+
+Build a blog + SEO system that:
+
+* Outperforms WordPress SEO plugins
+* Uses AI for optimization
+* Is faster, cleaner, and more scalable
+* Helps content rank, not just get published
+
+---
+
+🔧 ADVANCED FEATURES (BEYOND WORDPRESS)
+
+---
+
+1. 🧠 AI SEO ASSISTANT (BUILT-IN)
+
+* AI suggests:
+
+  * SEO titles
+  * Meta descriptions
+  * Blog outlines
+  * Headings (H1, H2, H3)
+  * FAQs based on search intent
+
+* AI analyzes:
+
+  * Top-ranking pages
+  * Content gaps
+  * Keyword coverage
+
+* “Optimize this article” button (auto improvement)
+
+---
+
+2. 📊 REAL-TIME CONTENT OPTIMIZATION ENGINE
+
+* Show:
+
+  * Keyword usage
+  * Semantic keywords (LSI)
+  * NLP relevance
+  * Topic coverage score
+
+* Compare content with top 10 Google results
+
+* Show:
+
+  * Missing topics
+  * Weak sections
+  * Over-optimization warnings
+
+---
+
+3. 🧬 SEARCH INTENT DETECTOR
+
+* Automatically classify content as:
+
+  * Informational
+  * Transactional
+  * Navigational
+
+* Suggest content structure based on intent
+
+---
+
+4. 🔗 SMART INTERNAL LINKING AI
+
+* Auto-suggest internal links based on:
+
+  * keyword similarity
+  * topic clusters
+
+* Auto-create topic clusters (pillar + supporting pages)
+
+---
+
+5. 📈 KEYWORD RESEARCH BUILT-IN
+
+* Input a seed keyword → generate:
+
+  * long-tail keywords
+  * question-based queries
+  * low competition opportunities
+
+* Show:
+
+  * search intent
+  * estimated difficulty (KD)
+  * opportunity score
+
+---
+
+6. 🧠 E-E-A-T BOOST SYSTEM
+
+* Author credibility scoring
+
+* Author schema auto-generated
+
+* “Expert verified” badge system
+
+* Add:
+
+  * citations
+  * references
+  * sources
+
+* Trust signals:
+
+  * testimonials
+  * case study links
+  * brand mentions
+
+---
+
+7. ⚡ CORE WEB VITALS ENGINE
+
+* Auto optimize:
+
+  * images (next-gen formats)
+  * lazy loading
+  * font loading
+  * JS/CSS splitting
+
+* Real-time performance score
+
+---
+
+8. 🧾 ADVANCED SCHEMA GENERATOR
+
+* Auto-generate:
+
+  * Article
+  * FAQ
+  * HowTo
+  * Breadcrumb
+  * Review schema
+
+* UI to toggle schema types per blog
+
+---
+
+9. 🧠 CONTENT DECAY DETECTOR
+
+* Detect:
+
+  * traffic drop
+  * outdated content
+
+* Suggest:
+
+  * updates
+  * refresh keywords
+  * rewrite sections
+
+---
+
+10. 🔄 AUTO CONTENT REPURPOSING
+
+* Convert blog →
+
+  * Twitter threads
+  * LinkedIn posts
+  * Instagram captions
+  * YouTube script
+
+---
+
+11. 📊 SEO DASHBOARD (LIKE AHREFS)
+
+* Show:
+
+  * keyword rankings
+  * impressions
+  * CTR
+  * traffic trends
+
+* Integrate:
+
+  * Google Search Console
+  * Google Analytics
+
+---
+
+12. 🧠 PROGRAMMATIC SEO SYSTEM
+
+* Create bulk pages dynamically
+* Example:
+
+  * “Best gyms in [city]”
+  * “Top agencies in [niche]”
+
+---
+
+13. 🔍 ADVANCED SEARCH SYSTEM
+
+* AI-powered search inside blog
+* Suggest related articles
+
+---
+
+14. 🧩 MODULAR SEO PANEL
+
+Each blog post should have:
+
+* SEO title
+* meta description
+* focus keyword
+* secondary keywords
+* schema selection
+* canonical URL
+* OG tags
+* readability + SEO score
+
+---
+
+15. 🧠 USER BEHAVIOR SEO
+
+* Track:
+
+  * scroll depth
+  * time on page
+  * click behavior
+
+* Suggest improvements
+
+---
+
+16. 🔐 GATED CONTENT SEO
+
+* Option to:
+
+  * hide part of blog
+  * capture email
+
+* SEO-safe partial content indexing
+
+---
+
+17. 🌍 MULTI-REGION SEO
+
+* Geo-targeting
+* hreflang support
+
+---
+
+18. 🧠 AI BLOG WRITER (OPTIONAL)
+
+* Generate full blog drafts
+* SEO optimized automatically
+
+---
+
+🎯 FINAL OUTPUT
+
+Build a complete SEO system that feels like:
+
+* WordPress (ease)
+* RankMath (SEO control)
+* SurferSEO (optimization)
+* Ahrefs (data)
+* ChatGPT (AI writing)
+
+But all inside one platform.
+
+---
+
+⚠️ IMPORTANT
+
+* Keep UI clean, minimal, premium
+* Avoid clutter
+* Focus on speed + usability
+* Make it scalable and production-ready
