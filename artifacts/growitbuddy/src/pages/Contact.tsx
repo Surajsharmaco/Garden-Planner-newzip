@@ -9,6 +9,8 @@ import { useToast } from "@/hooks/use-toast";
 import SEOMeta from "@/components/SEOMeta";
 
 function CalEmbed() {
+  const [loaded, setLoaded] = useState(false);
+
   useEffect(() => {
     const w = window as any;
 
@@ -38,16 +40,54 @@ function CalEmbed() {
       });
 
       w.__gbCalDone = true;
+
+      // Detect when Cal injects its iframe and mark as loaded
+      const target = document.getElementById("my-cal-inline-growth-strategy-call");
+      if (target) {
+        const observer = new MutationObserver(() => {
+          if (target.querySelector("iframe")) {
+            setLoaded(true);
+            observer.disconnect();
+          }
+        });
+        observer.observe(target, { childList: true, subtree: true });
+        return () => observer.disconnect();
+      }
     } catch (err) {
       console.warn("Cal embed init error:", err);
+      setLoaded(true);
     }
   }, []);
 
   return (
-    <div
-      id="my-cal-inline-growth-strategy-call"
-      style={{ width: "100%", minHeight: 600, overflow: "scroll", borderRadius: 16 }}
-    />
+    <div style={{ position: "relative", borderRadius: 16, overflow: "hidden", minHeight: 600 }}>
+      {!loaded && (
+        <div style={{
+          position: "absolute", inset: 0, zIndex: 1,
+          background: "#f4f4f2",
+          borderRadius: 16,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 12,
+        }}>
+          <div style={{
+            width: 32, height: 32, border: "3px solid rgba(11,11,11,0.12)",
+            borderTopColor: "#0B0B0B", borderRadius: "50%",
+            animation: "spin 0.8s linear infinite",
+          }} />
+          <p style={{ fontSize: 13, fontWeight: 500, color: "rgba(11,11,11,0.4)", fontFamily: "'Inter', sans-serif" }}>
+            Loading calendar...
+          </p>
+          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        </div>
+      )}
+      <div
+        id="my-cal-inline-growth-strategy-call"
+        style={{ width: "100%", minHeight: 600, overflow: "scroll" }}
+      />
+    </div>
   );
 }
 
