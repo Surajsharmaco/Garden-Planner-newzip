@@ -248,7 +248,7 @@ export default function DistributionNetwork() {
       <style>{`
         .dist-grid {
           display: grid;
-          grid-template-columns: repeat(2, 1fr);
+          grid-template-columns: repeat(3, 1fr);
           gap: 24px;
         }
         .dist-filter-row {
@@ -277,8 +277,8 @@ export default function DistributionNetwork() {
         .dist-search-clear { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: rgba(11,11,11,0.3); display: flex; align-items: center; background: none; border: none; padding: 0; }
         .dist-search-clear:hover { color: #0B0B0B; }
         .dist-step-num { width: 36px; height: 36px; border-radius: 50%; background: #0B0B0B; color: #fff; font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        @media (max-width: 900px) {
-          .dist-grid { grid-template-columns: 1fr; gap: 16px; }
+        @media (max-width: 1024px) {
+          .dist-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
         }
         @media (max-width: 600px) {
           .dist-grid { grid-template-columns: 1fr; gap: 14px; }
