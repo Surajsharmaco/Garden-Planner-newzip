@@ -27,13 +27,15 @@ function InfluencerRow({
   index,
   onChange,
   onDelete,
+  defaultOpen = false,
 }: {
   inf: Influencer;
   index: number;
   onChange: (i: number, val: Influencer) => void;
   onDelete: (i: number) => void;
+  defaultOpen?: boolean;
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen);
   const set = (patch: Partial<Influencer>) => onChange(index, { ...inf, ...patch });
 
   return (
@@ -206,6 +208,7 @@ export default function AdminInfluencers() {
   const [saved, setSaved] = useState(false);
   const [search, setSearch] = useState("");
   const [nicheFilter, setNicheFilter] = useState("All");
+  const [newIndex, setNewIndex] = useState<number | null>(null);
 
   useEffect(() => {
     getContent("influencers").then((d) => {
@@ -226,7 +229,12 @@ export default function AdminInfluencers() {
 
   function addNew() {
     setSaved(false);
-    setItems((p) => [...p, { ...BLANK }]);
+    setItems((p) => {
+      setNewIndex(p.length);
+      return [...p, { ...BLANK }];
+    });
+    setSearch("");
+    setNicheFilter("All");
   }
 
   async function handleSave() {
@@ -280,7 +288,7 @@ export default function AdminInfluencers() {
       </div>
 
       <div className="space-y-3">
-        {filtered.map((inf, i) => {
+        {filtered.map((inf) => {
           const realIndex = items.indexOf(inf);
           return (
             <InfluencerRow
@@ -289,6 +297,7 @@ export default function AdminInfluencers() {
               index={realIndex}
               onChange={handleChange}
               onDelete={handleDelete}
+              defaultOpen={realIndex === newIndex}
             />
           );
         })}
