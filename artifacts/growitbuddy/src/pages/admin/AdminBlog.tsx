@@ -10,7 +10,8 @@ import {
   Minus, FileText, Trash2, Edit2, Calendar, Globe, Lock,
   ChevronDown, ChevronUp, Search, Target, Tag, BarChart2,
   CheckCircle, AlertCircle, XCircle, Lightbulb, Share2,
-  Code, HelpCircle, Eye,
+  Code, HelpCircle, Eye, Strikethrough, Underline, Eraser,
+  ImagePlus, Table2, X as XIcon, Pilcrow,
 } from "lucide-react";
 
 // ─────────────────────────────────────
@@ -245,6 +246,76 @@ function ToolBtn({ icon, title, onClick }: { icon: React.ReactNode; title: strin
 
 const TAGS = ["Founders", "Brand", "Creators", "Freelancers", "Strategy", "Tools"];
 
+const POWER_WORDS = ["free","best","proven","ultimate","complete","guide","secret","powerful","easy","quick","simple","new","boost","grow","master","essential","top","expert","step-by-step","how to","why","what","when","discover","unlock","transform","scale","build","win","success","guaranteed","exclusive","advanced","definitive","comprehensive","actionable","effective","smart","winning","profitable"];
+
+function yoastChecks(post: BlogPost, content: string, seo: PostSeo, allPosts: BlogPost[]) {
+  const text = stripHtml(content).toLowerCase();
+  const kw = seo.focusKeyword.toLowerCase().trim();
+  const seoTitle = (seo.seoTitle || post.title).toLowerCase();
+  const metaDesc = seo.metaDescription.toLowerCase();
+  const slug = post.slug.toLowerCase();
+  const wc = wordCount(content);
+  const density = kw ? getKeywordDensity(content, kw) : 0;
+  const first10pct = text.split(" ").slice(0, Math.max(1, Math.ceil(wc * 0.1))).join(" ");
+
+  // Basic SEO
+  const kwInSeoTitle = kw ? seoTitle.includes(kw) : false;
+  const kwInMetaDesc = kw ? metaDesc.includes(kw) : false;
+  const kwInSlug = kw ? (slug.includes(kw) || slug.includes(kw.replace(/\s+/g, "-"))) : false;
+  const kwInFirst = kw ? first10pct.includes(kw) : false;
+  const kwInContent = kw ? text.includes(kw) : false;
+  const wcGood = wc >= 600;
+
+  // Additional
+  const subheadings = content.match(/<h[23][^>]*>(.*?)<\/h[23]>/gi) || [];
+  const kwInSub = kw ? subheadings.some(h => stripHtml(h).toLowerCase().includes(kw)) : false;
+  const hasImages = /<img/i.test(content);
+  const densityOk = density >= 0.5 && density <= 3.0;
+  const urlShort = slug.length <= 75 && slug.length > 0;
+  const hasInternal = /href=["']\//i.test(content);
+  const kwUsedElsewhere = kw ? allPosts.filter(p => p.slug !== post.slug).some(p => (p.seo?.focusKeyword || "").toLowerCase() === kw) : false;
+
+  // Title readability
+  const kwAtStart = kw ? seoTitle.trimStart().startsWith(kw) : false;
+  const titleHasPowerWord = POWER_WORDS.some(w => seoTitle.includes(w));
+  const titleHasNumber = /\d/.test(seo.seoTitle || post.title);
+
+  // Content readability
+  const paragraphs = content.split(/<\/p>/i).filter(p => p.trim());
+  const shortParas = paragraphs.length === 0 || paragraphs.every(p => stripHtml(p).split(" ").length <= 150);
+  const hasMedia = /<img|<video|<iframe/i.test(content);
+  const hasSubheadings = /<h[23]/i.test(content);
+
+  return {
+    basic: [
+      { key: "title-kw", label: "Focus keyword used in SEO title.", pass: kwInSeoTitle, warn: false },
+      { key: "meta-kw", label: "Focus keyword used in meta description.", pass: kwInMetaDesc, warn: false },
+      { key: "slug-kw", label: "Focus keyword used in the URL.", pass: kwInSlug, warn: false },
+      { key: "first10", label: "Focus keyword appears in the first 10% of content.", pass: kwInFirst, warn: false },
+      { key: "content-kw", label: "Focus keyword found in the content.", pass: kwInContent, warn: false },
+      { key: "word-count", label: `Content is ${wc} words long.${wc >= 600 ? " Good job!" : " Aim for 600+ words."}`, pass: wcGood, warn: wc >= 300 && wc < 600 },
+    ],
+    additional: [
+      { key: "sub-kw", label: "Focus keyword found in the subheading(s).", pass: kwInSub, warn: false },
+      { key: "img-kw", label: "Images found in content.", pass: hasImages, warn: false },
+      { key: "density", label: `Keyword density is ${density}%.${densityOk ? " Good." : density > 3 ? " A bit high — avoid over-optimisation." : " Try to use it more."}`, pass: densityOk, warn: density > 3 },
+      { key: "url-len", label: `URL is ${slug.length} characters long.${urlShort ? " Great!" : " Try to keep it under 75."}`, pass: urlShort, warn: false },
+      { key: "internal", label: "Post links to other content on this site.", pass: hasInternal, warn: false },
+      { key: "kw-unique", label: `${kwUsedElsewhere ? "Another post uses this focus keyword — consider a different one." : "You haven't used this focus keyword before."}`, pass: !kwUsedElsewhere, warn: kwUsedElsewhere },
+    ],
+    title: [
+      { key: "kw-start", label: "Focus keyword is at the beginning of the SEO title.", pass: kwAtStart, warn: false },
+      { key: "power", label: `Title contains a power word.${titleHasPowerWord ? " Good!" : ""}`, pass: titleHasPowerWord, warn: false },
+      { key: "number", label: `SEO title ${titleHasNumber ? "contains" : "doesn't contain"} a number.`, pass: titleHasNumber, warn: !titleHasNumber },
+    ],
+    readability: [
+      { key: "short-para", label: "You are using short paragraphs.", pass: shortParas, warn: false },
+      { key: "media", label: "Content contains images and/or videos.", pass: hasMedia, warn: false },
+      { key: "subheadings", label: "Content uses subheadings (H2/H3).", pass: hasSubheadings, warn: false },
+    ],
+  };
+}
+
 // ─────────────────────────────────────
 // MARKDOWN ↔ HTML HELPERS
 // ─────────────────────────────────────
@@ -367,6 +438,15 @@ function PostEditor({
     if (url) exec("createLink", url);
   }
 
+  function insertImagePrompt() {
+    const url = prompt("Enter image URL:");
+    if (url) exec("insertHTML", `<img src="${url}" alt="" style="max-width:100%;border-radius:12px;margin:16px 0;" />`);
+  }
+
+  function insertTable() {
+    exec("insertHTML", `<table style="width:100%;border-collapse:collapse;margin:20px 0"><thead><tr><th style="border:1px solid rgba(11,11,11,0.15);padding:8px 12px;background:rgba(11,11,11,0.04);font-size:13px;text-align:left">Header 1</th><th style="border:1px solid rgba(11,11,11,0.15);padding:8px 12px;background:rgba(11,11,11,0.04);font-size:13px;text-align:left">Header 2</th><th style="border:1px solid rgba(11,11,11,0.15);padding:8px 12px;background:rgba(11,11,11,0.04);font-size:13px;text-align:left">Header 3</th></tr></thead><tbody><tr><td style="border:1px solid rgba(11,11,11,0.15);padding:8px 12px;font-size:13px">Cell</td><td style="border:1px solid rgba(11,11,11,0.15);padding:8px 12px;font-size:13px">Cell</td><td style="border:1px solid rgba(11,11,11,0.15);padding:8px 12px;font-size:13px">Cell</td></tr></tbody></table>`);
+  }
+
   function switchMode(next: "visual" | "text") {
     if (next === "text" && editorRef.current) setField("content", editorRef.current.innerHTML);
     setMode(next);
@@ -392,6 +472,36 @@ function PostEditor({
   const internalLinks = getInternalLinkSuggestions(data.slug, liveContent, allPosts);
   const seoTitleDisplay = seo.seoTitle || data.title;
   const metaDescDisplay = seo.metaDescription || data.excerpt;
+  const yoast = yoastChecks(data, liveContent, seo, allPosts);
+
+  const [kwTagInput, setKwTagInput] = useState("");
+  const kwTags: string[] = [
+    ...(seo.focusKeyword.trim() ? [seo.focusKeyword.trim()] : []),
+    ...(seo.secondaryKeywords ? seo.secondaryKeywords.split(",").map(k => k.trim()).filter(Boolean) : []),
+  ];
+
+  function addKwTag(val: string) {
+    const trimmed = val.trim();
+    if (!trimmed) return;
+    if (!seo.focusKeyword.trim()) { setSeoField("focusKeyword", trimmed); }
+    else {
+      const existing = seo.secondaryKeywords ? seo.secondaryKeywords.split(",").map(k => k.trim()).filter(Boolean) : [];
+      if (!existing.includes(trimmed)) setSeoField("secondaryKeywords", [...existing, trimmed].join(", "));
+    }
+    setKwTagInput("");
+  }
+
+  function removeKwTag(idx: number) {
+    if (idx === 0) {
+      const rest = seo.secondaryKeywords ? seo.secondaryKeywords.split(",").map(k => k.trim()).filter(Boolean) : [];
+      setSeoField("focusKeyword", rest[0] ?? "");
+      setSeoField("secondaryKeywords", rest.slice(1).join(", "));
+    } else {
+      const sec = seo.secondaryKeywords ? seo.secondaryKeywords.split(",").map(k => k.trim()).filter(Boolean) : [];
+      sec.splice(idx - 1, 1);
+      setSeoField("secondaryKeywords", sec.join(", "));
+    }
+  }
 
   return (
     <div style={{ fontFamily: "Inter, sans-serif" }}>
@@ -444,7 +554,7 @@ function PostEditor({
               <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl overflow-hidden shadow-sm">
                 <div className="flex items-center flex-wrap gap-0.5 px-3 py-2 border-b border-[#0B0B0B]/8 bg-[#fafafa]">
                   <select onMouseDown={(e) => e.preventDefault()} onChange={(e) => { exec("formatBlock", e.target.value); e.target.value = "p"; }} defaultValue="p"
-                    className="text-[12px] text-[#0B0B0B]/55 border border-[#0B0B0B]/12 rounded px-2 py-1 mr-1 bg-white outline-none cursor-pointer">
+                    className="text-[12px] text-[#0B0B0B]/55 border border-[#0B0B0B]/12 rounded px-2 py-1 mr-1 bg-white outline-none cursor-pointer shrink-0">
                     <option value="p">Paragraph</option>
                     <option value="h1">Heading 1</option>
                     <option value="h2">Heading 2</option>
@@ -455,6 +565,8 @@ function PostEditor({
                   <div className="w-px h-5 bg-[#0B0B0B]/10 mx-0.5" />
                   <ToolBtn icon={<Bold size={14} />} title="Bold" onClick={() => exec("bold")} />
                   <ToolBtn icon={<Italic size={14} />} title="Italic" onClick={() => exec("italic")} />
+                  <ToolBtn icon={<Underline size={14} />} title="Underline" onClick={() => exec("underline")} />
+                  <ToolBtn icon={<Strikethrough size={14} />} title="Strikethrough" onClick={() => exec("strikeThrough")} />
                   <div className="w-px h-5 bg-[#0B0B0B]/10 mx-0.5" />
                   <ToolBtn icon={<ListOrdered size={14} />} title="Ordered List" onClick={() => exec("insertOrderedList")} />
                   <ToolBtn icon={<List size={14} />} title="Unordered List" onClick={() => exec("insertUnorderedList")} />
@@ -466,7 +578,10 @@ function PostEditor({
                   <ToolBtn icon={<AlignJustify size={14} />} title="Justify" onClick={() => exec("justifyFull")} />
                   <div className="w-px h-5 bg-[#0B0B0B]/10 mx-0.5" />
                   <ToolBtn icon={<Link2 size={14} />} title="Insert Link" onClick={insertLink} />
+                  <ToolBtn icon={<ImagePlus size={14} />} title="Insert Image" onClick={insertImagePrompt} />
+                  <ToolBtn icon={<Table2 size={14} />} title="Insert Table" onClick={insertTable} />
                   <ToolBtn icon={<Minus size={14} />} title="Horizontal Rule" onClick={() => exec("insertHorizontalRule")} />
+                  <ToolBtn icon={<Eraser size={14} />} title="Clear Formatting" onClick={() => exec("removeFormat")} />
                   <div className="flex-1" />
                   <div className="flex rounded-lg overflow-hidden border border-[#0B0B0B]/12 shrink-0">
                     {(["visual", "text"] as const).map((m) => (
@@ -502,56 +617,167 @@ function PostEditor({
 
           {activeTab === "seo" && (
             <div className="space-y-4">
-              {/* Score overview */}
+
+              {/* SERP Snippet Preview */}
               <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl p-5 shadow-sm">
-                <div className="flex items-start justify-between mb-4">
-                  <ScoreRing score={score} />
-                  {seo.searchIntent && (
-                    <div className="text-right">
-                      <p className="text-[10px] font-semibold text-[#0B0B0B]/40 uppercase tracking-widest mb-1">Search Intent</p>
-                      <span className={`text-[12px] font-bold px-2.5 py-1 rounded-full ${INTENT_LABELS[seo.searchIntent]?.color ?? "text-[#0B0B0B]/50 bg-[#0B0B0B]/6"}`}>
-                        {INTENT_LABELS[seo.searchIntent]?.label ?? "Unknown"}
-                      </span>
-                    </div>
-                  )}
+                <p className="text-[10px] font-bold text-[#0B0B0B]/40 uppercase tracking-widest mb-3">Search appearance preview</p>
+                <div className="rounded-xl border border-[#0B0B0B]/8 p-4 bg-[#f8f9fa]">
+                  <p className="text-[11px] text-[#5f6368] mb-0.5">growitbuddy.com/<strong>{data.slug || "post-slug"}</strong></p>
+                  <p className="text-[17px] font-normal text-[#1a0dab] leading-snug mb-1 hover:underline cursor-default">
+                    {(() => {
+                      const kw = seo.focusKeyword.trim();
+                      const title = seoTitleDisplay || "Post title will appear here";
+                      if (!kw) return title;
+                      const idx = title.toLowerCase().indexOf(kw.toLowerCase());
+                      if (idx === -1) return title;
+                      return <>{title.slice(0, idx)}<strong>{title.slice(idx, idx + kw.length)}</strong>{title.slice(idx + kw.length)}</>;
+                    })()}
+                  </p>
+                  <p className="text-[13px] text-[#4d5156] leading-relaxed">
+                    {metaDescDisplay
+                      ? (metaDescDisplay.length > 155 ? metaDescDisplay.slice(0, 152) + "..." : metaDescDisplay)
+                      : <span className="italic text-[#0B0B0B]/30">Meta description will appear here — add one in the sidebar.</span>}
+                  </p>
                 </div>
-                <div className="space-y-2">
-                  {issues.map((issue) => (
-                    <div key={issue.key} className="flex items-start gap-2">
-                      <IssueIcon status={issue.status} />
-                      <div className="min-w-0">
-                        <p className="text-[12px] text-[#0B0B0B]/70">{issue.label}</p>
-                        {issue.tip && issue.status !== "good" && (
-                          <p className="text-[11px] text-[#0B0B0B]/40 mt-0.5">{issue.tip}</p>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <button className="mt-3 text-[12px] font-semibold text-white bg-[#0B0B0B] px-4 py-1.5 rounded-lg hover:bg-[#0B0B0B]/85 transition-colors">Edit Snippet</button>
               </div>
 
-              {/* Keyword analysis */}
+              {/* Focus Keywords */}
               <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl p-5 shadow-sm">
-                <h3 className="text-[12px] font-bold text-[#0B0B0B]/60 uppercase tracking-widest mb-3 flex items-center gap-2"><Search size={13} /> Keyword Analysis</h3>
-                <div className="space-y-2.5">
-                  {[
-                    { label: "Focus keyword", value: seo.focusKeyword || "—" },
-                    { label: "Keyword density", value: seo.focusKeyword ? `${getKeywordDensity(liveContent, seo.focusKeyword)}%` : "—" },
-                    { label: "Total words", value: wc.toString() },
-                    { label: "Readability", value: readability.label },
-                  ].map(({ label, value }) => (
-                    <div key={label} className="flex items-center justify-between py-1.5 border-b border-[#0B0B0B]/5 last:border-0">
-                      <span className="text-[12px] text-[#0B0B0B]/50">{label}</span>
-                      <span className="text-[12px] font-semibold text-[#0B0B0B]">{value}</span>
-                    </div>
-                  ))}
+                <div className="flex items-center gap-2 mb-3">
+                  <h3 className="text-[13px] font-semibold text-[#0B0B0B]">Focus Keyword</h3>
+                  <HelpCircle size={13} className="text-[#0B0B0B]/30" />
                 </div>
+                <div className="flex flex-wrap items-center gap-1.5 min-h-[40px] border border-[#0B0B0B]/15 rounded-xl px-3 py-2 bg-white focus-within:border-[#0B0B0B]/30 mb-3">
+                  {kwTags.map((tag, i) => (
+                    <span key={i} className={`flex items-center gap-1 text-[12px] font-medium px-2.5 py-0.5 rounded-full ${i === 0 ? "bg-emerald-100 text-emerald-800 border border-emerald-200" : "bg-[#0B0B0B]/6 text-[#0B0B0B]/60 border border-[#0B0B0B]/10"}`}>
+                      {tag}
+                      <button onClick={() => removeKwTag(i)} className="hover:text-red-500 transition-colors ml-0.5">
+                        <XIcon size={11} />
+                      </button>
+                    </span>
+                  ))}
+                  <input
+                    value={kwTagInput}
+                    onChange={(e) => setKwTagInput(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === ",") { e.preventDefault(); addKwTag(kwTagInput); } }}
+                    onBlur={() => { if (kwTagInput.trim()) addKwTag(kwTagInput); }}
+                    placeholder={kwTags.length === 0 ? "Add focus keyword..." : "Add more keywords..."}
+                    className="flex-1 min-w-[120px] text-[12px] outline-none bg-transparent"
+                  />
+                </div>
+                <p className="text-[11px] text-[#0B0B0B]/40 mb-4">Press Enter or comma to add. First keyword is the focus keyword (green). Others are secondary.</p>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={!!(seo as any).pillarContent} onChange={(e) => setSeoField("pillarContent" as any, e.target.checked)} className="accent-[#0B0B0B] w-3.5 h-3.5" />
+                  <span className="text-[12px] text-[#0B0B0B]/70 font-medium">This post is Pillar Content</span>
+                  <HelpCircle size={12} className="text-[#0B0B0B]/25" />
+                </label>
               </div>
+
+              {/* Basic SEO */}
+              {(() => {
+                const errors = yoast.basic.filter(c => !c.pass && !c.warn).length;
+                const warns = yoast.basic.filter(c => c.warn).length;
+                const allGood = errors === 0 && warns === 0;
+                return (
+                  <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl p-5 shadow-sm">
+                    <div className="flex items-center gap-3 mb-4">
+                      <h3 className="text-[14px] font-semibold text-[#0B0B0B]">Basic SEO</h3>
+                      <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${allGood ? "bg-emerald-100 text-emerald-700" : errors > 0 ? "bg-red-100 text-red-600" : "bg-amber-100 text-amber-700"}`}>
+                        {allGood ? "All Good" : errors > 0 ? `${errors} Error${errors > 1 ? "s" : ""}` : `${warns} Warning${warns > 1 ? "s" : ""}`}
+                      </span>
+                    </div>
+                    <div className="space-y-3">
+                      {yoast.basic.map(c => (
+                        <div key={c.key} className="flex items-start gap-2.5">
+                          {c.pass ? <CheckCircle size={15} className="text-emerald-500 shrink-0 mt-0.5" /> : c.warn ? <AlertCircle size={15} className="text-amber-500 shrink-0 mt-0.5" /> : <XCircle size={15} className="text-red-400 shrink-0 mt-0.5" />}
+                          <p className="text-[12.5px] text-[#0B0B0B]/70 leading-snug">{c.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Additional */}
+              {(() => {
+                const errors = yoast.additional.filter(c => !c.pass && !c.warn).length;
+                const warns = yoast.additional.filter(c => c.warn).length;
+                const allGood = errors === 0 && warns === 0;
+                return (
+                  <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl p-5 shadow-sm">
+                    <div className="flex items-center gap-3 mb-4">
+                      <h3 className="text-[14px] font-semibold text-[#0B0B0B]">Additional</h3>
+                      <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${allGood ? "bg-emerald-100 text-emerald-700" : errors > 0 ? "bg-red-100 text-red-600" : "bg-amber-100 text-amber-700"}`}>
+                        {allGood ? "All Good" : errors > 0 ? `${errors} Error${errors > 1 ? "s" : ""}` : `${warns} Warning${warns > 1 ? "s" : ""}`}
+                      </span>
+                    </div>
+                    <div className="space-y-3">
+                      {yoast.additional.map(c => (
+                        <div key={c.key} className="flex items-start gap-2.5">
+                          {c.pass ? <CheckCircle size={15} className="text-emerald-500 shrink-0 mt-0.5" /> : c.warn ? <AlertCircle size={15} className="text-amber-500 shrink-0 mt-0.5" /> : <XCircle size={15} className="text-red-400 shrink-0 mt-0.5" />}
+                          <p className="text-[12.5px] text-[#0B0B0B]/70 leading-snug">{c.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Title Readability */}
+              {(() => {
+                const errors = yoast.title.filter(c => !c.pass && !c.warn).length;
+                const warns = yoast.title.filter(c => c.warn).length;
+                const allGood = errors === 0 && warns === 0;
+                return (
+                  <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl p-5 shadow-sm">
+                    <div className="flex items-center gap-3 mb-4">
+                      <h3 className="text-[14px] font-semibold text-[#0B0B0B]">Title Readability</h3>
+                      <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${allGood ? "bg-emerald-100 text-emerald-700" : errors > 0 ? "bg-red-100 text-red-600" : "bg-amber-100 text-amber-700"}`}>
+                        {allGood ? "All Good" : errors > 0 ? `${errors} Error${errors > 1 ? "s" : ""}` : `${warns} Warning${warns > 1 ? "s" : ""}`}
+                      </span>
+                    </div>
+                    <div className="space-y-3">
+                      {yoast.title.map(c => (
+                        <div key={c.key} className="flex items-start gap-2.5">
+                          {c.pass ? <CheckCircle size={15} className="text-emerald-500 shrink-0 mt-0.5" /> : c.warn ? <AlertCircle size={15} className="text-amber-500 shrink-0 mt-0.5" /> : <XCircle size={15} className="text-red-400 shrink-0 mt-0.5" />}
+                          <p className="text-[12.5px] text-[#0B0B0B]/70 leading-snug">{c.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Content Readability */}
+              {(() => {
+                const errors = yoast.readability.filter(c => !c.pass && !c.warn).length;
+                const warns = yoast.readability.filter(c => c.warn).length;
+                const allGood = errors === 0 && warns === 0;
+                return (
+                  <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl p-5 shadow-sm">
+                    <div className="flex items-center gap-3 mb-4">
+                      <h3 className="text-[14px] font-semibold text-[#0B0B0B]">Content Readability</h3>
+                      <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${allGood ? "bg-emerald-100 text-emerald-700" : errors > 0 ? "bg-red-100 text-red-600" : "bg-amber-100 text-amber-700"}`}>
+                        {allGood ? "All Good" : errors > 0 ? `${errors} Error${errors > 1 ? "s" : ""}` : `${warns} Warning${warns > 1 ? "s" : ""}`}
+                      </span>
+                    </div>
+                    <div className="space-y-3">
+                      {yoast.readability.map(c => (
+                        <div key={c.key} className="flex items-start gap-2.5">
+                          {c.pass ? <CheckCircle size={15} className="text-emerald-500 shrink-0 mt-0.5" /> : c.warn ? <AlertCircle size={15} className="text-amber-500 shrink-0 mt-0.5" /> : <XCircle size={15} className="text-red-400 shrink-0 mt-0.5" />}
+                          <p className="text-[12.5px] text-[#0B0B0B]/70 leading-snug">{c.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* Internal link suggestions */}
               {internalLinks.length > 0 && (
                 <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl p-5 shadow-sm">
-                  <h3 className="text-[12px] font-bold text-[#0B0B0B]/60 uppercase tracking-widest mb-3 flex items-center gap-2"><Link2 size={13} /> Internal Link Opportunities</h3>
+                  <h3 className="text-[13px] font-semibold text-[#0B0B0B] mb-3 flex items-center gap-2"><Link2 size={13} /> Internal Link Opportunities</h3>
                   <p className="text-[11px] text-[#0B0B0B]/40 mb-3">Posts with topical overlap — consider linking to them:</p>
                   <div className="space-y-2">
                     {internalLinks.map((p) => (
@@ -560,11 +786,8 @@ function PostEditor({
                           <p className="text-[12px] font-medium text-[#0B0B0B] truncate">{p.title}</p>
                           <p className="text-[10px] text-[#0B0B0B]/40">/{p.slug}</p>
                         </div>
-                        <button
-                          onMouseDown={(e) => e.preventDefault()}
-                          onClick={() => exec("createLink", `/${p.slug}`)}
-                          className="text-[11px] font-semibold text-[#0B0B0B]/50 border border-[#0B0B0B]/12 px-2 py-1 rounded hover:bg-[#0B0B0B]/6 transition-colors shrink-0"
-                        >
+                        <button onMouseDown={(e) => e.preventDefault()} onClick={() => exec("createLink", `/${p.slug}`)}
+                          className="text-[11px] font-semibold text-[#0B0B0B]/50 border border-[#0B0B0B]/12 px-2 py-1 rounded hover:bg-[#0B0B0B]/6 transition-colors shrink-0">
                           Insert link
                         </button>
                       </div>
@@ -573,24 +796,10 @@ function PostEditor({
                 </div>
               )}
 
-              {/* SERP preview */}
-              <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl p-5 shadow-sm">
-                <h3 className="text-[12px] font-bold text-[#0B0B0B]/60 uppercase tracking-widest mb-3 flex items-center gap-2"><Eye size={13} /> SERP Preview</h3>
-                <div className="bg-[#f8f9fa] rounded-xl p-4">
-                  <p className="text-[11px] text-[#0B0B0B]/35 mb-1">growitbuddy.com › {data.slug || "post-slug"}</p>
-                  <p className="text-[16px] font-semibold text-blue-700 leading-snug mb-1 truncate">{seoTitleDisplay || "Post title will appear here"}</p>
-                  <p className={`text-[13px] leading-relaxed ${metaDescDisplay ? "text-[#0B0B0B]/65" : "text-[#0B0B0B]/30 italic"}`}>
-                    {metaDescDisplay
-                      ? (metaDescDisplay.length > 160 ? metaDescDisplay.slice(0, 157) + "..." : metaDescDisplay)
-                      : "Meta description will appear here. Add one in the Meta Tags panel."}
-                  </p>
-                </div>
-              </div>
-
               {/* Schema preview */}
               {seo.schemaType !== "None" && (
                 <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl p-5 shadow-sm">
-                  <h3 className="text-[12px] font-bold text-[#0B0B0B]/60 uppercase tracking-widest mb-3 flex items-center gap-2"><Code size={13} /> Schema Output ({seo.schemaType})</h3>
+                  <h3 className="text-[13px] font-semibold text-[#0B0B0B] mb-3 flex items-center gap-2"><Code size={13} /> Schema Markup ({seo.schemaType})</h3>
                   <pre className="text-[10px] text-[#0B0B0B]/60 bg-[#fafafa] rounded-lg p-3 overflow-x-auto whitespace-pre-wrap font-mono leading-relaxed">
                     {JSON.stringify(generateSchema(data, seo), null, 2).slice(0, 600) + "..."}
                   </pre>
