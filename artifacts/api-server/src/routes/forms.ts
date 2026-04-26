@@ -223,6 +223,41 @@ router.post("/full-time", async (req, res) => {
   res.json({ success: true, message: "Application received! We will review and respond within 7 business days." });
 });
 
+router.post("/internship", async (req, res) => {
+  const { name, email, phone, role, experience, portfolioUrl, whyJoin } = req.body;
+  if (!name || !email || !role) {
+    res.status(400).json({ error: "name, email and role are required" });
+    return;
+  }
+  logger.info({ name, email, role }, "Internship application submission");
+
+  await saveLead("internship", name, email, { name, email, phone: phone || null, role, experience, portfolioUrl: portfolioUrl || null, whyJoin: whyJoin || null });
+
+  try {
+    await resend.emails.send({
+      from: FROM,
+      to: TO,
+      subject: `New Internship Application: ${name} — ${role}`,
+      html: emailTemplate(
+        "New Internship Application",
+        "Internship",
+        row("Name", name) +
+        row("Email", email) +
+        (phone ? row("Phone", phone) : "") +
+        row("Role Applying For", role) +
+        row("Experience Level", experience) +
+        (portfolioUrl ? row("Portfolio / Work Link", portfolioUrl) : "") +
+        (whyJoin ? row("Why they want to join", whyJoin) : "")
+      ),
+      replyTo: email,
+    });
+  } catch (err) {
+    logger.error(err, "Resend error (internship)");
+  }
+
+  res.json({ success: true, message: "Your application has been received. We will review and get back to you." });
+});
+
 router.post("/newsletter", async (req, res) => {
   const { email, source } = req.body;
   if (!email) {

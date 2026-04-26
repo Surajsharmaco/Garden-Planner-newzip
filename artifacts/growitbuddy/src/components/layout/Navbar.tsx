@@ -33,6 +33,7 @@ const NAV_LINKS = [
     dropdown: [
       { href: "/freelancers", label: "Talent Network" },
       { href: "/full-time", label: "Full Time" },
+      { href: "/internship", label: "Internship" },
     ],
   },
   { href: "/authority-audit", label: "Authority Audit" },

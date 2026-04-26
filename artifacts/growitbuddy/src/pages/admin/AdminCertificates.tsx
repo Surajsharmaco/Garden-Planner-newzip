@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { PageHeader, Card, SectionTitle, Input, SaveBar } from "@/components/admin/AdminField";
-import { Plus, Trash2, ChevronDown, ChevronUp, ShieldCheck, ShieldX, Copy, ExternalLink } from "lucide-react";
+import { Plus, Trash2, ChevronDown, ChevronUp, ShieldCheck, ShieldX, Copy, ExternalLink, Download } from "lucide-react";
 
 const API_BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
 
@@ -243,6 +243,30 @@ export default function AdminCertificates() {
   const verified = certs.filter((c) => c.status === "verified").length;
   const revoked = certs.filter((c) => c.status === "revoked").length;
 
+  function exportCSV() {
+    const rows = [
+      ["ID", "Certificate ID", "Name", "Email", "Role", "Issue Date", "Status", "Created At"],
+      ...certs.map((c) => [
+        c.id,
+        c.certificateId,
+        c.name,
+        c.email || "",
+        c.role,
+        c.issueDate,
+        c.status,
+        new Date(c.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+      ]),
+    ];
+    const csv = rows.map((r) => r.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "growitbuddy-certificates.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <div>
       <PageHeader
@@ -263,7 +287,14 @@ export default function AdminCertificates() {
         ))}
       </div>
 
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-end gap-2 mb-4">
+        <button
+          onClick={exportCSV}
+          disabled={certs.length === 0}
+          className="flex items-center gap-2 text-[13px] font-semibold px-4 py-2.5 rounded-xl border border-[#0B0B0B]/12 text-[#0B0B0B]/60 hover:text-[#0B0B0B] hover:border-[#0B0B0B]/25 transition-colors disabled:opacity-30 disabled:cursor-not-allowed bg-white"
+        >
+          <Download size={14} /> Export CSV
+        </button>
         <button
           onClick={() => setShowNew((p) => !p)}
           className="flex items-center gap-2 bg-[#0B0B0B] text-white text-[13px] font-semibold px-4 py-2.5 rounded-xl hover:bg-[#0B0B0B]/85 transition-colors"

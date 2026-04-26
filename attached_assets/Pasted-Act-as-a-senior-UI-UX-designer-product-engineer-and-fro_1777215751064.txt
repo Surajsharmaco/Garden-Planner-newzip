@@ -1,0 +1,161 @@
+Act as a senior UI/UX designer, product engineer, and frontend developer.
+
+Your task is to UPDATE the existing “Talent Network / Hiring” section of the website by adding a new option:
+
+👉 "Internship"
+
+IMPORTANT:
+
+* Do NOT change the overall design system
+* Keep layout, spacing, and UI consistent with existing options (Full-Time, Freelance, etc.)
+* This should feel like a natural extension, not a new design
+
+---
+
+🎯 GOAL
+
+Add an "Internship" option that:
+
+* attracts early-stage talent
+* feels premium (not cheap or basic)
+* fits into the existing hiring ecosystem
+
+---
+
+---
+
+🧩 STEP 1: ADD NEW OPTION CARD
+
+Add a new card alongside existing options:
+
+* Full-Time
+* Freelance
+* (NEW) Internship
+
+---
+
+---
+
+🟢 INTERNSHIP CARD CONTENT
+
+Title:
+Internship
+
+Subtext:
+Work on real projects, gain hands-on experience, and become part of a high-performance team.
+
+CTA Button:
+Apply for Internship
+
+---
+
+---
+
+🧩 STEP 2: REDIRECT FLOW
+
+On click:
+
+👉 redirect to Internship application form/page
+
+---
+
+---
+
+🧩 STEP 3: INTERNSHIP APPLICATION FORM
+
+Create a dedicated form (or reuse existing form with minor changes)
+
+---
+
+🟢 FIELDS:
+
+* Name
+* Email
+* Phone (optional)
+* Role applying for (Editor / Designer / Marketing / etc.)
+* Experience level (Beginner / Intermediate)
+* Portfolio / Work link
+* Why do you want to join?
+
+---
+
+---
+
+🧩 STEP 4: BACKEND TAGGING
+
+Store submissions with:
+
+type: internship
+
+---
+
+👉 So admin can filter:
+
+* Full-time
+* Freelance
+* Internship
+
+---
+
+---
+
+🧩 STEP 5: ADMIN PANEL UPDATE
+
+In admin panel:
+
+* Add filter:
+
+  * Internship applicants
+
+* Show:
+
+  * name
+  * role
+  * experience
+  * links
+
+---
+
+---
+
+🧩 STEP 6: UX RULES
+
+* Keep it minimal
+* No clutter
+* Fast submission
+* Clear success message
+
+---
+
+---
+
+🧩 SUCCESS MESSAGE
+
+"Your application has been received.
+We’ll review and get back to you."
+
+---
+
+---
+
+⚠️ IMPORTANT RULES
+
+* Do NOT position as “free work”
+* Do NOT make it look low-value
+* Keep tone premium and growth-focused
+
+---
+
+---
+
+🎯 FINAL OUTPUT
+
+A clean internship entry point that:
+
+* fits into hiring system
+* attracts talent
+* strengthens talent pipeline
+
+---
+
+---

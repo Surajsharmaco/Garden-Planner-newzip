@@ -20,6 +20,7 @@ const TYPE_META: Record<string, { label: string; color: string; bg: string }> = 
   page:       { label: "Page Owner", color: "#0891b2", bg: "#ecfeff" },
   freelancer: { label: "Freelancer", color: "#059669", bg: "#ecfdf5" },
   "full-time":{ label: "Full-Time",  color: "#d97706", bg: "#fffbeb" },
+  internship: { label: "Internship", color: "#be185d", bg: "#fdf2f8" },
   newsletter: { label: "Newsletter", color: "#db2777", bg: "#fdf2f8" },
 };
 
