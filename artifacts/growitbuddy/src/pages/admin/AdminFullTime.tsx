@@ -1,7 +1,130 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { PageHeader, Card, SectionTitle, Input, Textarea, SaveBar } from "@/components/admin/AdminField";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Download, RefreshCw, ChevronDown, ChevronUp, Briefcase } from "lucide-react";
+import * as XLSX from "xlsx";
+
+const API_BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
+
+interface Lead {
+  id: number;
+  type: string;
+  name: string | null;
+  email: string;
+  data: Record<string, unknown>;
+  createdAt: string;
+}
+
+function fmt(iso: string) {
+  const d = new Date(iso);
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) +
+    " " + d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+}
+
+function ApplicationsPanel({ type, title }: { type: string; title: string }) {
+  const [leads, setLeads] = useState<Lead[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [expanded, setExpanded] = useState<number | null>(null);
+  const token = localStorage.getItem("gb_admin_token");
+  const headers = { Authorization: `Bearer ${token}` };
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const r = await fetch(`${API_BASE}/admin/leads?type=${type}`, { headers });
+      const data = await r.json();
+      setLeads(Array.isArray(data) ? data : []);
+    } catch {
+      setLeads([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [type]);
+
+  useEffect(() => { load(); }, [load]);
+
+  function exportExcel() {
+    const rows = leads.map((l) => ({
+      ID: l.id,
+      Name: l.name ?? "",
+      Email: l.email,
+      Phone: String(l.data.phone ?? ""),
+      "Role Applied For": String(l.data.role ?? ""),
+      Experience: String(l.data.experience ?? ""),
+      "LinkedIn / Portfolio": String(l.data.linkedinUrl ?? ""),
+      "Cover Note": String(l.data.coverNote ?? ""),
+      Date: fmt(l.createdAt),
+    }));
+    const ws = XLSX.utils.json_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, title);
+    XLSX.writeFile(wb, `${title.replace(/\s+/g, "-").toLowerCase()}-applications.xlsx`);
+  }
+
+  return (
+    <Card className="mb-6">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <Briefcase size={15} className="text-[#0B0B0B]/40" />
+          <span className="text-[13px] font-bold text-[#0B0B0B]">{title} Applications</span>
+          <span className="ml-1 text-[11px] font-bold bg-[#0B0B0B] text-white rounded-full px-2 py-0.5">{leads.length}</span>
+        </div>
+        <div className="flex gap-2">
+          <button onClick={load} className="p-2 border border-[#0B0B0B]/12 rounded-lg hover:bg-[#0B0B0B]/5 text-[#0B0B0B]/50 transition-colors" title="Refresh">
+            <RefreshCw size={13} />
+          </button>
+          <button
+            onClick={exportExcel}
+            disabled={leads.length === 0}
+            className="flex items-center gap-1.5 border border-[#0B0B0B]/12 rounded-lg px-3 py-2 text-[12px] font-semibold text-[#0B0B0B]/60 hover:bg-[#0B0B0B]/5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <Download size={13} /> Export Excel
+          </button>
+        </div>
+      </div>
+
+      {loading ? (
+        <p className="text-[13px] text-[#0B0B0B]/35 py-6 text-center">Loading applications...</p>
+      ) : leads.length === 0 ? (
+        <p className="text-[13px] text-[#0B0B0B]/30 py-6 text-center italic">No applications yet.</p>
+      ) : (
+        <div className="rounded-xl border border-[#0B0B0B]/8 overflow-hidden">
+          <div className="grid grid-cols-[1fr_1fr_140px_100px_32px] gap-0 px-4 py-2.5 bg-[#F7F7F5] border-b border-[#0B0B0B]/6">
+            {["Name", "Email", "Role", "Date", ""].map((h) => (
+              <span key={h} className="text-[10px] font-bold text-[#0B0B0B]/35 uppercase tracking-widest">{h}</span>
+            ))}
+          </div>
+          {leads.map((lead) => (
+            <div key={lead.id} className="border-b border-[#0B0B0B]/5 last:border-b-0">
+              <button
+                onClick={() => setExpanded(expanded === lead.id ? null : lead.id)}
+                className="w-full grid grid-cols-[1fr_1fr_140px_100px_32px] gap-0 px-4 py-3 hover:bg-[#0B0B0B]/3 transition-colors text-left items-center"
+              >
+                <span className="text-[13px] font-semibold text-[#0B0B0B] truncate pr-3">{lead.name || <span className="italic text-[#0B0B0B]/30">No name</span>}</span>
+                <span className="text-[12px] text-[#0B0B0B]/55 truncate pr-3">{lead.email}</span>
+                <span className="text-[12px] text-[#0B0B0B]/70 truncate pr-3">{String(lead.data.role ?? "")}</span>
+                <span className="text-[11px] text-[#0B0B0B]/35">{fmt(lead.createdAt)}</span>
+                <span className="text-[#0B0B0B]/30">{expanded === lead.id ? <ChevronUp size={13} /> : <ChevronDown size={13} />}</span>
+              </button>
+              {expanded === lead.id && (
+                <div className="px-4 pb-4 bg-[#FAFAFA]">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-3 pt-3">
+                    {Object.entries(lead.data).filter(([, v]) => v).map(([k, v]) => (
+                      <div key={k}>
+                        <p className="text-[10px] font-bold text-[#0B0B0B]/35 uppercase tracking-wider mb-0.5">{k}</p>
+                        <p className="text-[12px] text-[#0B0B0B] break-words">{String(v)}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </Card>
+  );
+}
 
 interface FullTimeData {
   heroLabel: string;
@@ -92,6 +215,8 @@ export default function AdminFullTime() {
   return (
     <div>
       <PageHeader title="Full-Time Careers Page" description="Edit hero, perks, open roles, and form text." />
+
+      <ApplicationsPanel type="full-time" title="Full-Time Hiring" />
 
       <div className="space-y-5">
         <Card>
