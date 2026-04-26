@@ -362,11 +362,11 @@ function mdToHtml(md: string): string {
 
 const EDITOR_CSS = `
 .blog-editor { font-family: Inter, sans-serif; }
-.blog-editor p { font-size: 17px; color: rgba(11,11,11,0.68); line-height: 1.9; margin-bottom: 18px; }
-.blog-editor h1 { font-weight: 900; font-size: 36px; letter-spacing: -0.04em; color: #0B0B0B; margin-top: 48px; margin-bottom: 16px; line-height: 1.1; }
-.blog-editor h2 { font-weight: 800; font-size: 26px; letter-spacing: -0.03em; color: #0B0B0B; margin-top: 52px; margin-bottom: 18px; line-height: 1.25; padding-bottom: 12px; border-bottom: 2px solid rgba(11,11,11,0.07); }
-.blog-editor h3 { font-weight: 700; font-size: 20px; letter-spacing: -0.02em; color: #0B0B0B; margin-top: 36px; margin-bottom: 12px; line-height: 1.35; }
-.blog-editor h4 { font-weight: 700; font-size: 17px; color: #0B0B0B; margin-top: 28px; margin-bottom: 10px; }
+.blog-editor p { font-size: 17px; color: rgba(11,11,11,0.68); line-height: 1.9; margin: 0 0 18px 0; }
+.blog-editor h1 { font-weight: 900; font-size: 36px; letter-spacing: -0.04em; color: #0B0B0B; margin: 0 0 16px 0; line-height: 1.1; }
+.blog-editor h2 { font-weight: 800; font-size: 26px; letter-spacing: -0.03em; color: #0B0B0B; margin: 0 0 18px 0; line-height: 1.25; padding-bottom: 12px; border-bottom: 2px solid rgba(11,11,11,0.07); }
+.blog-editor h3 { font-weight: 700; font-size: 20px; letter-spacing: -0.02em; color: #0B0B0B; margin: 0 0 12px 0; line-height: 1.35; }
+.blog-editor h4 { font-weight: 700; font-size: 17px; color: #0B0B0B; margin: 0 0 10px 0; }
 .blog-editor blockquote { margin: 28px 0; padding: 18px 22px; border-left: 3px solid #0B0B0B; background: rgba(11,11,11,0.03); border-radius: 0 12px 12px 0; }
 .blog-editor blockquote p, .blog-editor blockquote { font-size: 17px; font-weight: 600; color: #0B0B0B; line-height: 1.7; font-style: italic; }
 .blog-editor ul { margin: 20px 0; padding-left: 22px; list-style: disc; }
@@ -396,6 +396,23 @@ function PostEditor({
   const [status, setStatus] = useState<"draft" | "published">("published");
   const [visibility, setVisibility] = useState<"public" | "private">("public");
   const editorRef = useRef<HTMLDivElement>(null);
+  const savedRangeRef = useRef<Range | null>(null);
+
+  function saveSelection() {
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0 && editorRef.current?.contains(sel.anchorNode)) {
+      savedRangeRef.current = sel.getRangeAt(0).cloneRange();
+    }
+  }
+
+  function restoreSelectionAndExec(cmd: string, val?: string) {
+    editorRef.current?.focus();
+    if (savedRangeRef.current) {
+      const sel = window.getSelection();
+      if (sel) { sel.removeAllRanges(); sel.addRange(savedRangeRef.current); }
+    }
+    document.execCommand(cmd, false, val);
+  }
 
   useEffect(() => {
     if (editorRef.current) editorRef.current.innerHTML = mdToHtml(post.content ?? "");
@@ -553,7 +570,10 @@ function PostEditor({
               {/* Editor */}
               <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl overflow-hidden shadow-sm">
                 <div className="flex items-center flex-wrap gap-0.5 px-3 py-2 border-b border-[#0B0B0B]/8 bg-[#fafafa]">
-                  <select onMouseDown={(e) => e.preventDefault()} onChange={(e) => { exec("formatBlock", e.target.value); e.target.value = "p"; }} defaultValue="p"
+                  <select
+                    onMouseDown={() => saveSelection()}
+                    onChange={(e) => { const v = e.target.value; e.target.value = "p"; restoreSelectionAndExec("formatBlock", v); }}
+                    defaultValue="p"
                     className="text-[12px] text-[#0B0B0B]/55 border border-[#0B0B0B]/12 rounded px-2 py-1 mr-1 bg-white outline-none cursor-pointer shrink-0">
                     <option value="p">Paragraph</option>
                     <option value="h1">Heading 1</option>
@@ -595,6 +615,8 @@ function PostEditor({
                 {mode === "visual" ? (
                   <div ref={editorRef} contentEditable
                     onInput={() => { if (editorRef.current) setField("content", editorRef.current.innerHTML); }}
+                    onMouseUp={saveSelection}
+                    onKeyUp={saveSelection}
                     className="blog-editor min-h-[460px] px-8 py-7 outline-none"
                     suppressContentEditableWarning />
                 ) : (
