@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { X, ImageIcon, Upload } from "lucide-react";
+import { useAdmin } from "@/context/AdminContext";
 
 const API = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
-const token = () => localStorage.getItem("gb_admin_token") ?? "";
 
 interface MediaItem {
   filename: string;
@@ -16,6 +16,7 @@ interface Props {
 }
 
 export function MediaLibrary({ onSelect, onClose }: Props) {
+  const { authFetch } = useAdmin();
   const [items, setItems] = useState<MediaItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -24,9 +25,7 @@ export function MediaLibrary({ onSelect, onClose }: Props) {
   async function load() {
     setLoading(true);
     try {
-      const res = await fetch(`${API}/admin/media`, {
-        headers: { Authorization: `Bearer ${token()}` },
-      });
+      const res = await authFetch(`${API}/admin/media`);
       if (res.ok) setItems(await res.json());
     } finally {
       setLoading(false);
@@ -41,14 +40,11 @@ export function MediaLibrary({ onSelect, onClose }: Props) {
     try {
       const fd = new FormData();
       fd.append("file", file);
-      const res = await fetch(`${API}/admin/upload`, {
+      const res = await authFetch(`${API}/admin/upload`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${token()}` },
         body: fd,
       });
-      if (res.ok) {
-        await load();
-      }
+      if (res.ok) await load();
     } finally {
       setUploading(false);
     }
@@ -76,7 +72,7 @@ export function MediaLibrary({ onSelect, onClose }: Props) {
               className="flex items-center gap-1.5 text-[12px] font-semibold bg-[#0B0B0B] text-white px-3 py-2 rounded-xl hover:bg-[#0B0B0B]/85 transition-colors disabled:opacity-50"
             >
               <Upload size={13} />
-              {uploading ? "Uploading…" : "Upload new"}
+              {uploading ? "Uploading..." : "Upload new"}
             </button>
             <button onClick={onClose} className="p-2 rounded-xl hover:bg-[#0B0B0B]/5 text-[#0B0B0B]/40 hover:text-[#0B0B0B] transition-colors">
               <X size={18} />
@@ -94,7 +90,7 @@ export function MediaLibrary({ onSelect, onClose }: Props) {
         <div className="flex-1 overflow-y-auto p-4">
           {loading ? (
             <div className="flex items-center justify-center h-40">
-              <p className="text-[13px] text-[#0B0B0B]/35">Loading…</p>
+              <p className="text-[13px] text-[#0B0B0B]/35">Loading...</p>
             </div>
           ) : items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-40 gap-3">

@@ -1,9 +1,9 @@
 import { useState, useRef, useCallback, useId } from "react";
 import { Upload, X, RotateCcw, Check, Crop, Images } from "lucide-react";
 import { MediaLibrary } from "./MediaLibrary";
+import { useAdmin } from "@/context/AdminContext";
 
 const API = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
-const getToken = () => localStorage.getItem("gb_admin_token") ?? "";
 
 type Handle = "tl" | "tr" | "bl" | "br" | "move" | "new";
 type AspectKey = "free" | "16:9" | "4:3" | "1:1" | "3:4";
@@ -37,6 +37,7 @@ function roundedRectPath(ctx: CanvasRenderingContext2D, x: number, y: number, w:
 interface Props { value: string; onChange: (url: string) => void; }
 
 export function ImageCropUploader({ value, onChange }: Props) {
+  const { authFetch } = useAdmin();
   const uid = useId();
   const inputId = `img_upload_${uid.replace(/:/g, "")}`;
 
@@ -191,9 +192,8 @@ export function ImageCropUploader({ value, onChange }: Props) {
       );
       const fd = new FormData();
       fd.append("file", blob, "image.png");
-      const res = await fetch(`${API}/admin/upload`, {
+      const res = await authFetch(`${API}/admin/upload`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${getToken()}` },
         body: fd,
       });
       if (res.ok) {

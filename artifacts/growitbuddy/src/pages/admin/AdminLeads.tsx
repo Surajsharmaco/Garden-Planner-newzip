@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { useAdmin } from "@/context/AdminContext";
 import { PageHeader, Card } from "@/components/admin/AdminField";
 import { Trash2, Download, RefreshCw, Search, Mail, User, Clock } from "lucide-react";
 
@@ -44,13 +45,12 @@ export default function AdminLeads() {
   const [search, setSearch] = useState("");
   const [expanded, setExpanded] = useState<number | null>(null);
 
-  const token = localStorage.getItem("gb_admin_token");
-  const headers = { Authorization: `Bearer ${token}` };
+  const { authFetch } = useAdmin();
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const r = await fetch(`${API_BASE}/admin/leads?type=${typeFilter}`, { headers });
+      const r = await authFetch(`${API_BASE}/admin/leads?type=${typeFilter}`);
       const data = await r.json();
       setLeads(Array.isArray(data) ? data : []);
     } catch {
@@ -58,13 +58,13 @@ export default function AdminLeads() {
     } finally {
       setLoading(false);
     }
-  }, [typeFilter]);
+  }, [typeFilter, authFetch]);
 
   useEffect(() => { load(); }, [load]);
 
   async function handleDelete(id: number) {
     if (!confirm("Delete this lead permanently?")) return;
-    await fetch(`${API_BASE}/admin/leads/${id}`, { method: "DELETE", headers });
+    await authFetch(`${API_BASE}/admin/leads/${id}`, { method: "DELETE" });
     setLeads((prev) => prev.filter((l) => l.id !== id));
   }
 

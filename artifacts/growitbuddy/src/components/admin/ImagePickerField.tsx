@@ -1,9 +1,9 @@
 import { useRef, useState, useId } from "react";
 import { Upload, Images, X, UserCircle2 } from "lucide-react";
 import { MediaLibrary } from "./MediaLibrary";
+import { useAdmin } from "@/context/AdminContext";
 
 const API = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
-const getToken = () => localStorage.getItem("gb_admin_token") ?? "";
 
 interface Props {
   value: string;
@@ -14,6 +14,7 @@ interface Props {
 }
 
 export function ImagePickerField({ value, onChange, label, shape = "circle", size = 56 }: Props) {
+  const { authFetch } = useAdmin();
   const uid = useId();
   const inputId = `imgpick_${uid.replace(/:/g, "")}`;
   const fileRef = useRef<HTMLInputElement>(null);
@@ -26,9 +27,8 @@ export function ImagePickerField({ value, onChange, label, shape = "circle", siz
     try {
       const fd = new FormData();
       fd.append("file", file);
-      const res = await fetch(`${API}/admin/upload`, {
+      const res = await authFetch(`${API}/admin/upload`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${getToken()}` },
         body: fd,
       });
       if (res.ok) {
@@ -79,7 +79,7 @@ export function ImagePickerField({ value, onChange, label, shape = "circle", siz
             className="flex items-center gap-1 text-[11px] font-semibold text-[#0B0B0B]/55 hover:text-[#0B0B0B] border border-[#0B0B0B]/12 hover:border-[#0B0B0B]/30 px-2.5 py-1.5 rounded-lg transition-colors disabled:opacity-40"
           >
             <Upload size={11} />
-            {uploading ? "Uploading…" : "Upload"}
+            {uploading ? "Uploading..." : "Upload"}
           </button>
           <button
             onClick={() => setShowLibrary(true)}

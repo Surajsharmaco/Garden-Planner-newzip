@@ -43,21 +43,18 @@ const TYPE_COLORS: Record<string, string> = {
 };
 
 export default function AdminDashboard() {
-  const { getContent } = useAdmin();
+  const { getContent, authFetch } = useAdmin();
   const [sections, setSections] = useState<SectionStatus[]>([]);
   const [stats, setStats] = useState<Stats>({ blogs: 0, influencers: 0, leads: 0, leadsByType: {}, sectionsUpdated: 0 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("gb_admin_token");
-    const h = { Authorization: `Bearer ${token}` };
-
     async function load() {
       setLoading(true);
       try {
         const [secRes, leadsRes, blogData, infData] = await Promise.all([
-          fetch(`${API_BASE}/admin/sections`, { headers: h }).then((r) => r.json()),
-          fetch(`${API_BASE}/admin/leads/stats`, { headers: h }).then((r) => r.json()),
+          authFetch(`${API_BASE}/admin/sections`).then((r) => r.json()),
+          authFetch(`${API_BASE}/admin/leads/stats`).then((r) => r.json()),
           getContent("blog"),
           getContent("influencers"),
         ]);

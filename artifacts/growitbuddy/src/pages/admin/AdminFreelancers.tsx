@@ -22,16 +22,15 @@ function fmt(iso: string) {
 }
 
 function ApplicationsPanel({ type, title }: { type: string; title: string }) {
+  const { authFetch } = useAdmin();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<number | null>(null);
-  const token = localStorage.getItem("gb_admin_token");
-  const headers = { Authorization: `Bearer ${token}` };
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const r = await fetch(`${API_BASE}/admin/leads?type=${type}`, { headers });
+      const r = await authFetch(`${API_BASE}/admin/leads?type=${type}`);
       const data = await r.json();
       setLeads(Array.isArray(data) ? data : []);
     } catch {
@@ -39,7 +38,7 @@ function ApplicationsPanel({ type, title }: { type: string; title: string }) {
     } finally {
       setLoading(false);
     }
-  }, [type]);
+  }, [type, authFetch]);
 
   useEffect(() => { load(); }, [load]);
 

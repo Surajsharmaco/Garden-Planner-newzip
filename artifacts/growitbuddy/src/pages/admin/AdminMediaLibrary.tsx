@@ -1,25 +1,17 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { PageHeader, Card } from "@/components/admin/AdminField";
+import { useAdmin } from "@/context/AdminContext";
 import {
   Upload, Trash2, Copy, Check, RefreshCw, ImageIcon,
   Search, X, ZoomIn,
 } from "lucide-react";
 
 const API = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
-const tok = () => localStorage.getItem("gb_admin_token") ?? "";
 
 interface MediaItem {
   filename: string;
   url: string;
   uploadedAt: number;
-  size?: number;
-}
-
-function fmtBytes(b: number) {
-  if (!b) return "";
-  if (b < 1024) return `${b} B`;
-  if (b < 1024 * 1024) return `${(b / 1024).toFixed(1)} KB`;
-  return `${(b / 1024 / 1024).toFixed(1)} MB`;
 }
 
 function fmtDate(ts: number) {
@@ -32,6 +24,7 @@ function cleanName(filename: string) {
 }
 
 export default function AdminMediaLibrary() {
+  const { authFetch } = useAdmin();
   const [items, setItems] = useState<MediaItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -41,19 +34,16 @@ export default function AdminMediaLibrary() {
   const [preview, setPreview] = useState<MediaItem | null>(null);
   const [dragging, setDragging] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
-  const dropRef = useRef<HTMLDivElement>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API}/admin/media`, {
-        headers: { Authorization: `Bearer ${tok()}` },
-      });
+      const res = await authFetch(`${API}/admin/media`);
       if (res.ok) setItems(await res.json());
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [authFetch]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -65,9 +55,8 @@ export default function AdminMediaLibrary() {
       await Promise.all(arr.map(async (file) => {
         const fd = new FormData();
         fd.append("file", file);
-        await fetch(`${API}/admin/upload`, {
+        await authFetch(`${API}/admin/upload`, {
           method: "POST",
-          headers: { Authorization: `Bearer ${tok()}` },
           body: fd,
         });
       }));
@@ -81,9 +70,8 @@ export default function AdminMediaLibrary() {
     if (!confirm(`Delete "${cleanName(item.filename)}"? This cannot be undone.`)) return;
     setDeleting(item.filename);
     try {
-      await fetch(`${API}/admin/media/${encodeURIComponent(item.filename)}`, {
+      await authFetch(`${API}/admin/media/${encodeURIComponent(item.filename)}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${tok()}` },
       });
       setItems((prev) => prev.filter((i) => i.filename !== item.filename));
       if (preview?.filename === item.filename) setPreview(null);
@@ -119,7 +107,6 @@ export default function AdminMediaLibrary() {
 
       {/* Upload drop zone */}
       <div
-        ref={dropRef}
         onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
         onDragLeave={() => setDragging(false)}
         onDrop={onDrop}
@@ -142,9 +129,9 @@ export default function AdminMediaLibrary() {
         <div className="flex flex-col items-center gap-2 text-center pointer-events-none">
           <Upload size={20} className={`transition-colors ${dragging ? "text-[#0B0B0B]" : "text-[#0B0B0B]/30"}`} />
           <p className="text-[13px] font-semibold text-[#0B0B0B]/50">
-            {uploading ? "Uploading…" : dragging ? "Drop to upload" : "Click or drag images here to upload"}
+            {uploading ? "Uploading..." : dragging ? "Drop to upload" : "Click or drag images here to upload"}
           </p>
-          <p className="text-[11px] text-[#0B0B0B]/30">PNG, JPG, WebP, GIF, SVG — multiple files supported</p>
+          <p className="text-[11px] text-[#0B0B0B]/30">PNG, JPG, WebP, GIF, SVG</p>
         </div>
       </div>
 
@@ -205,7 +192,6 @@ export default function AdminMediaLibrary() {
                   className="group relative rounded-xl overflow-hidden border border-[#0B0B0B]/8 bg-[#F7F7F5] flex flex-col"
                   style={{ aspectRatio: "1" }}
                 >
-                  {/* Image */}
                   <div className="relative flex-1 overflow-hidden">
                     <img
                       src={item.url}
@@ -213,7 +199,6 @@ export default function AdminMediaLibrary() {
                       className="w-full h-full object-cover"
                       loading="lazy"
                     />
-                    {/* Hover overlay */}
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
                       <button
                         onClick={() => setPreview(item)}
@@ -241,8 +226,6 @@ export default function AdminMediaLibrary() {
                       </button>
                     </div>
                   </div>
-
-                  {/* Footer */}
                   <div className="px-2 py-1.5 bg-white border-t border-[#0B0B0B]/6 shrink-0">
                     <p className="text-[10px] font-semibold text-[#0B0B0B]/60 truncate">{cleanName(item.filename)}</p>
                     <p className="text-[9px] text-[#0B0B0B]/30 mt-0.5">{fmtDate(item.uploadedAt)}</p>
@@ -257,11 +240,11 @@ export default function AdminMediaLibrary() {
       {filtered.length > 0 && (
         <p className="text-[11px] text-[#0B0B0B]/30 text-center mt-3">
           {filtered.length} image{filtered.length !== 1 ? "s" : ""}
-          {search ? ` matching "${search}"` : " total"} · hover an image to copy URL or delete
+          {search ? ` matching "${search}"` : " total"} · hover to copy URL or delete
         </p>
       )}
 
-      {/* Lightbox preview */}
+      {/* Lightbox */}
       {preview && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center"
@@ -292,13 +275,13 @@ export default function AdminMediaLibrary() {
                 <button
                   onClick={() => handleDelete(preview)}
                   disabled={deleting === preview.filename}
-                  className="flex items-center gap-1.5 text-[12px] font-semibold text-red-500 hover:text-red-600 border border-red-200 hover:border-red-300 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-xl transition-all disabled:opacity-40"
+                  className="flex items-center gap-1.5 text-[12px] font-semibold text-red-500 border border-red-200 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-xl transition-all disabled:opacity-40"
                 >
                   <Trash2 size={13} /> Delete
                 </button>
                 <button
                   onClick={() => setPreview(null)}
-                  className="p-2 rounded-xl hover:bg-[#0B0B0B]/5 text-[#0B0B0B]/40 hover:text-[#0B0B0B] transition-colors"
+                  className="p-2 rounded-xl hover:bg-[#0B0B0B]/5 text-[#0B0B0B]/40 transition-colors"
                 >
                   <X size={16} />
                 </button>
