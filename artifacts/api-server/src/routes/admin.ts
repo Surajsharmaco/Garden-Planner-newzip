@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { randomBytes } from "crypto";
+import { randomBytes, createHmac, timingSafeEqual } from "crypto";
 import { db, siteContent, leads } from "@workspace/db";
 import { eq, desc } from "drizzle-orm";
 import { logger } from "../lib/logger";
@@ -36,11 +36,34 @@ const upload = multer({
 
 const router = Router();
 
-const activeSessions = new Map<string, number>();
-const SESSION_TTL = 24 * 60 * 60 * 1000;
+const SESSION_TTL = 7 * 24 * 60 * 60 * 1000;
+const revokedTokens = new Set<string>();
+
+function getSecret(): string {
+  return process.env.ADMIN_PASSWORD ?? randomBytes(16).toString("hex");
+}
 
 function generateToken(): string {
-  return randomBytes(32).toString("hex");
+  const expiry = String(Date.now() + SESSION_TTL);
+  const nonce = randomBytes(8).toString("hex");
+  const payload = `${expiry}.${nonce}`;
+  const sig = createHmac("sha256", getSecret()).update(payload).digest("hex");
+  return `${payload}.${sig}`;
+}
+
+function verifyToken(token: string): boolean {
+  if (revokedTokens.has(token)) return false;
+  const parts = token.split(".");
+  if (parts.length !== 3) return false;
+  const [expiry, nonce, sig] = parts;
+  const expMs = Number(expiry);
+  if (isNaN(expMs) || Date.now() > expMs) return false;
+  const payload = `${expiry}.${nonce}`;
+  const expected = createHmac("sha256", getSecret()).update(payload).digest("hex");
+  const eSig = Buffer.from(sig, "hex");
+  const eExp = Buffer.from(expected, "hex");
+  if (eSig.length !== eExp.length) return false;
+  return timingSafeEqual(eSig, eExp);
 }
 
 function authMiddleware(
@@ -54,10 +77,8 @@ function authMiddleware(
     return;
   }
   const token = auth.slice(7);
-  const expiry = activeSessions.get(token);
-  if (!expiry || Date.now() > expiry) {
-    activeSessions.delete(token);
-    res.status(401).json({ error: "Session expired" });
+  if (!verifyToken(token)) {
+    res.status(401).json({ error: "Session expired or invalid" });
     return;
   }
   next();
@@ -75,14 +96,13 @@ router.post("/login", (req, res) => {
     return;
   }
   const token = generateToken();
-  activeSessions.set(token, Date.now() + SESSION_TTL);
   logger.info("Admin login successful");
   res.json({ token });
 });
 
 router.post("/logout", authMiddleware, (req, res) => {
   const token = req.headers.authorization?.slice(7);
-  if (token) activeSessions.delete(token);
+  if (token) revokedTokens.add(token);
   res.json({ success: true });
 });
 
