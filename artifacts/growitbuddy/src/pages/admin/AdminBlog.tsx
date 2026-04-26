@@ -12,6 +12,7 @@ import {
   CheckCircle, AlertCircle, XCircle, Lightbulb, Share2,
   Code, HelpCircle, Eye, Strikethrough, Underline, Eraser,
   ImagePlus, Table2, X as XIcon, Pilcrow,
+  Sparkles, Zap, TrendingUp, RefreshCw, Layers,
 } from "lucide-react";
 
 // ─────────────────────────────────────
@@ -382,11 +383,28 @@ const EDITOR_CSS = `
 // POST EDITOR
 // ─────────────────────────────────────
 
+type AiAnalysis = {
+  aiScore: number;
+  scoreBreakdown: { semanticCoverage: number; topicCompleteness: number; searchIntent: number; readability: number; structure: number };
+  intent: "informational" | "commercial" | "transactional";
+  intentExplanation: string;
+  idealStructure: string[];
+  contentGaps: string[];
+  semanticKeywords: Array<{ term: string; placement: string }>;
+  titleVariations: Array<{ title: string; ctrScore: number; hook: string }>;
+  criticalIssues: string[];
+  improvements: string[];
+  advanced: string[];
+  internalLinkSuggestions: Array<{ slug: string; title: string; anchorText: string; reason: string }>;
+};
+
 function PostEditor({
   post, isNew, onBack, onSave, allPosts,
 }: {
   post: BlogPost; isNew: boolean; onBack: () => void; onSave: (p: BlogPost) => Promise<void>; allPosts: BlogPost[];
 }) {
+  const { authFetch } = useAdmin();
+  const AI_SEO_URL = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api/admin/ai-seo/analyze";
   const [data, setData] = useState<BlogPost>(post);
   const [seo, setSeo] = useState<PostSeo>({ ...defaultSeo(), ...post.seo });
   const [mode, setMode] = useState<"visual" | "text">("visual");
@@ -398,6 +416,9 @@ function PostEditor({
   const [toasts, setToasts] = useState<{ id: number; msg: string; type: "success" | "error" | "info" }[]>([]);
   const [currentBlock, setCurrentBlock] = useState("p");
   const [blockDropOpen, setBlockDropOpen] = useState(false);
+  const [aiAnalysis, setAiAnalysis] = useState<AiAnalysis | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
 
   function showToast(msg: string, type: "success" | "error" | "info" = "success") {
     const id = Date.now();
@@ -477,6 +498,34 @@ function PostEditor({
   function captureContent(): string {
     if (mode === "visual" && editorRef.current) return editorRef.current.innerHTML;
     return data.content;
+  }
+
+  async function runAiAnalysis() {
+    setAiLoading(true);
+    setAiError(null);
+    try {
+      const r = await authFetch(AI_SEO_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content: captureContent(),
+          title: data.title,
+          keyword: seo.focusKeyword,
+          excerpt: data.excerpt,
+          allPosts: allPosts.map((p) => ({ slug: p.slug, title: p.title, excerpt: p.excerpt })),
+        }),
+      });
+      const json = await r.json();
+      if (!json.ok) throw new Error(json.error || "Analysis failed");
+      setAiAnalysis(json.analysis as AiAnalysis);
+      showToast("AI analysis complete!", "success");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "AI analysis failed";
+      setAiError(msg);
+      showToast("AI analysis failed. Try again.", "error");
+    } finally {
+      setAiLoading(false);
+    }
   }
 
   function exec(cmd: string, val?: string) {
@@ -731,6 +780,227 @@ function PostEditor({
 
           {activeTab === "seo" && (
             <div className="space-y-4">
+
+              {/* ── AI Intelligence ── */}
+              <div className="bg-gradient-to-br from-[#0e0e0e] to-[#181818] border border-white/10 rounded-2xl p-5 shadow-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <Sparkles size={14} className="text-amber-400" />
+                    <h3 className="text-[13px] font-bold text-white">AI Intelligence</h3>
+                    <span className="text-[9px] font-semibold text-white/25 border border-white/12 px-1.5 py-0.5 rounded-full uppercase tracking-wide">GPT</span>
+                  </div>
+                  <button
+                    onClick={runAiAnalysis}
+                    disabled={aiLoading}
+                    className="flex items-center gap-1.5 text-[12px] font-semibold bg-amber-400 text-[#0B0B0B] px-3 py-1.5 rounded-lg hover:bg-amber-300 transition-colors disabled:opacity-50"
+                  >
+                    {aiLoading
+                      ? <RefreshCw size={11} className="animate-spin" />
+                      : <Sparkles size={11} />}
+                    {aiLoading ? "Analyzing..." : aiAnalysis ? "Re-analyze" : "Analyze with AI"}
+                  </button>
+                </div>
+
+                {!aiAnalysis && !aiLoading && !aiError && (
+                  <p className="text-[12px] text-white/30 leading-relaxed text-center py-3">
+                    AI-powered score, intent detection, content gaps, semantic keywords, title variations, and internal link suggestions.
+                  </p>
+                )}
+                {aiLoading && (
+                  <div className="flex flex-col items-center gap-2 py-6">
+                    <RefreshCw size={18} className="text-amber-400 animate-spin" />
+                    <p className="text-[12px] text-white/40">Analyzing your content...</p>
+                  </div>
+                )}
+                {aiError && !aiLoading && (
+                  <div className="text-[12px] text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-3 py-2 mt-1">{aiError}</div>
+                )}
+
+                {aiAnalysis && !aiLoading && (() => {
+                  const a = aiAnalysis;
+                  const scoreColor = a.aiScore >= 75 ? "#34d399" : a.aiScore >= 50 ? "#fbbf24" : "#f87171";
+                  const circumference = 2 * Math.PI * 28;
+                  const dash = (a.aiScore / 100) * circumference;
+                  return (
+                    <>
+                      {/* Score + Intent */}
+                      <div className="flex items-center gap-4 mb-5">
+                        <div className="relative w-[72px] h-[72px] shrink-0">
+                          <svg viewBox="0 0 64 64" className="w-full h-full -rotate-90">
+                            <circle cx="32" cy="32" r="28" fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="6" />
+                            <circle cx="32" cy="32" r="28" fill="none" stroke={scoreColor} strokeWidth="6"
+                              strokeLinecap="round" strokeDasharray={`${dash} ${circumference}`} />
+                          </svg>
+                          <div className="absolute inset-0 flex flex-col items-center justify-center">
+                            <span className="text-[18px] font-black leading-none" style={{ color: scoreColor }}>{a.aiScore}</span>
+                            <span className="text-[7px] text-white/25 font-bold uppercase tracking-wider">score</span>
+                          </div>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1.5 mb-2.5">
+                            <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide
+                              ${a.intent === "informational" ? "bg-blue-500/20 text-blue-300" : a.intent === "commercial" ? "bg-purple-500/20 text-purple-300" : "bg-emerald-500/20 text-emerald-300"}`}>
+                              {a.intent}
+                            </span>
+                            <span className="text-[10px] text-white/30 leading-snug truncate">{a.intentExplanation}</span>
+                          </div>
+                          {Object.entries(a.scoreBreakdown).map(([k, v]) => {
+                            const lbl: Record<string, string> = { semanticCoverage: "Semantic", topicCompleteness: "Topic", searchIntent: "Intent", readability: "Readability", structure: "Structure" };
+                            const c = v >= 75 ? "bg-emerald-400" : v >= 50 ? "bg-amber-400" : "bg-red-400";
+                            return (
+                              <div key={k} className="flex items-center gap-2 mb-1">
+                                <span className="text-[9px] text-white/30 w-[68px] shrink-0">{lbl[k] ?? k}</span>
+                                <div className="flex-1 h-1 bg-white/8 rounded-full overflow-hidden">
+                                  <div className={`h-full rounded-full ${c}`} style={{ width: `${v}%` }} />
+                                </div>
+                                <span className="text-[9px] text-white/25 w-5 text-right">{v}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Critical Issues */}
+                      {a.criticalIssues.length > 0 && (
+                        <div className="mb-4">
+                          <p className="text-[9px] font-bold text-red-400 uppercase tracking-widest mb-2">Critical Issues</p>
+                          <div className="space-y-1.5">
+                            {a.criticalIssues.map((issue, i) => (
+                              <div key={i} className="flex items-start gap-2 bg-red-500/8 border border-red-500/15 rounded-lg px-3 py-2">
+                                <XCircle size={11} className="text-red-400 shrink-0 mt-0.5" />
+                                <p className="text-[11.5px] text-white/65 leading-snug">{issue}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Content Gaps */}
+                      {a.contentGaps.length > 0 && (
+                        <div className="mb-4">
+                          <p className="text-[9px] font-bold text-amber-400 uppercase tracking-widest mb-2">Content Gaps</p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {a.contentGaps.map((gap, i) => (
+                              <span key={i} className="text-[11px] text-amber-300 bg-amber-400/8 border border-amber-400/15 px-2.5 py-0.5 rounded-lg">+ {gap}</span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Improvements */}
+                      {a.improvements.length > 0 && (
+                        <div className="mb-4">
+                          <p className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest mb-2">Improvements</p>
+                          <div className="space-y-1.5">
+                            {a.improvements.map((item, i) => (
+                              <div key={i} className="flex items-start gap-2">
+                                <span className="text-[10px] font-bold text-emerald-400/60 shrink-0 mt-0.5 w-3">{i + 1}.</span>
+                                <p className="text-[11.5px] text-white/55 leading-snug">{item}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Semantic Keywords */}
+                      {a.semanticKeywords.length > 0 && (
+                        <div className="mb-4">
+                          <p className="text-[9px] font-bold text-blue-400 uppercase tracking-widest mb-2">Semantic Keywords</p>
+                          <div className="space-y-1.5">
+                            {a.semanticKeywords.map((kw, i) => (
+                              <div key={i} className="flex items-center gap-2">
+                                <span className="text-[12px] font-medium text-white/65">{kw.term}</span>
+                                <span className="text-[9px] text-white/20 bg-white/5 px-2 py-0.5 rounded-full shrink-0">{kw.placement}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Title Variations */}
+                      {a.titleVariations.length > 0 && (
+                        <div className="mb-4">
+                          <p className="text-[9px] font-bold text-purple-400 uppercase tracking-widest mb-2">Title Variations</p>
+                          <div className="space-y-2">
+                            {a.titleVariations.map((tv, i) => (
+                              <div key={i} className="bg-white/4 border border-white/8 rounded-xl px-3 py-2.5">
+                                <div className="flex items-start gap-2 mb-1.5">
+                                  <p className="text-[11.5px] font-medium text-white/75 leading-snug flex-1">{tv.title}</p>
+                                  <button
+                                    onClick={() => setSeoField("seoTitle", tv.title)}
+                                    className="text-[9px] font-bold text-amber-400 border border-amber-400/25 px-2 py-0.5 rounded hover:bg-amber-400/8 transition-colors shrink-0"
+                                  >Use</button>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <div className="flex gap-0.5">
+                                    {Array.from({ length: 10 }).map((_, j) => (
+                                      <div key={j} className={`w-1.5 h-1 rounded-sm ${j < tv.ctrScore ? "bg-amber-400/70" : "bg-white/8"}`} />
+                                    ))}
+                                  </div>
+                                  <span className="text-[9px] text-white/25">CTR {tv.ctrScore}/10</span>
+                                  <span className="text-[9px] text-white/18 truncate">{tv.hook}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* AI Internal Links */}
+                      {a.internalLinkSuggestions.length > 0 && (
+                        <div className="mb-4">
+                          <p className="text-[9px] font-bold text-white/35 uppercase tracking-widest mb-2">AI Internal Links</p>
+                          <div className="space-y-2">
+                            {a.internalLinkSuggestions.map((link, i) => (
+                              <div key={i} className="bg-white/4 border border-white/8 rounded-xl px-3 py-2.5">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <p className="text-[11px] font-medium text-white/65 truncate flex-1">{link.title}</p>
+                                  <button
+                                    onMouseDown={(e) => e.preventDefault()}
+                                    onClick={() => exec("createLink", `/${link.slug}`)}
+                                    className="text-[9px] font-bold text-white/35 border border-white/12 px-2 py-0.5 rounded hover:bg-white/6 transition-colors shrink-0"
+                                  >Insert</button>
+                                </div>
+                                <p className="text-[9px] text-white/25">"{link.anchorText}" — {link.reason}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Ideal Structure */}
+                      {a.idealStructure.length > 0 && (
+                        <div className="mb-4">
+                          <p className="text-[9px] font-bold text-white/35 uppercase tracking-widest mb-2">Ideal Structure</p>
+                          <div className="space-y-1">
+                            {a.idealStructure.map((s, i) => (
+                              <div key={i} className="flex items-center gap-2">
+                                <span className="text-[9px] text-white/15 w-4 shrink-0">{i + 1}.</span>
+                                <span className="text-[11px] text-white/40">{s}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Advanced */}
+                      {a.advanced.length > 0 && (
+                        <div>
+                          <p className="text-[9px] font-bold text-white/35 uppercase tracking-widest mb-2">Advanced</p>
+                          <div className="space-y-1.5">
+                            {a.advanced.map((tip, i) => (
+                              <div key={i} className="flex items-start gap-2">
+                                <Zap size={10} className="text-white/20 shrink-0 mt-0.5" />
+                                <p className="text-[11px] text-white/40 leading-snug">{tip}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  );
+                })()}
+              </div>
 
               {/* SERP Snippet Preview */}
               <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl p-5 shadow-sm">

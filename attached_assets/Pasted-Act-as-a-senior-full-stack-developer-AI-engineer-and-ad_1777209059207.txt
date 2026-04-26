@@ -1,0 +1,194 @@
+Act as a senior full-stack developer, AI engineer, and advanced SEO strategist.
+
+Your task is to build a **next-generation AI SEO system** inside my website’s blog section that goes far beyond traditional WordPress plugins (like Yoast or RankMath).
+
+This system must not just check SEO — it must actively help content rank using AI, data, and real-time analysis.
+
+---
+
+🎯 GOAL
+
+Create an AI-powered SEO engine that:
+
+* analyzes content
+* improves content
+* predicts ranking potential
+* gives actionable insights
+
+---
+
+---
+
+🧠 CORE FEATURE 1: AI SEO SCORE ENGINE
+
+Create a dynamic SEO score (0–100) based on:
+
+* semantic keyword coverage
+* topic completeness
+* heading structure
+* search intent alignment
+* internal linking
+* readability
+* entity relevance
+
+---
+
+👉 This is NOT a basic keyword score
+👉 This must be AI-driven
+
+---
+
+---
+
+🧠 CORE FEATURE 2: AI CONTENT GAP ANALYZER
+
+* Analyze top-ranking pages (simulate or approximate)
+* Suggest:
+
+  * missing headings
+  * missing subtopics
+  * weak sections
+
+---
+
+---
+
+🧠 CORE FEATURE 3: SEARCH INTENT DETECTION
+
+Automatically detect:
+
+* informational
+* commercial
+* transactional
+
+---
+
+Suggest:
+
+* ideal structure for that intent
+
+---
+
+---
+
+🧠 CORE FEATURE 4: SEMANTIC + NLP KEYWORDS
+
+* Generate related terms
+* Suggest where to place them
+* Avoid keyword stuffing
+
+---
+
+---
+
+🧠 CORE FEATURE 5: AI INTERNAL LINKING
+
+* Suggest internal links from existing blogs
+* Recommend anchor text
+* Show link opportunities
+
+---
+
+---
+
+🧠 CORE FEATURE 6: AI TITLE + CTR OPTIMIZER
+
+* Suggest multiple title variations
+* Predict CTR score
+
+---
+
+---
+
+🧠 CORE FEATURE 7: CONTENT DECAY DETECTOR
+
+* Identify blogs losing performance
+* Suggest updates
+* Recommend refresh cycle
+
+---
+
+---
+
+🧠 CORE FEATURE 8: USER BEHAVIOR SEO
+
+Track:
+
+* scroll depth
+* time on page
+* engagement
+
+Suggest improvements based on behavior
+
+---
+
+---
+
+🧠 CORE FEATURE 9: TOPICAL AUTHORITY SYSTEM
+
+* Map content clusters
+* Show:
+
+  * covered topics
+  * missing topics
+
+---
+
+---
+
+🧠 CORE FEATURE 10: PROGRAMMATIC SEO SYSTEM
+
+* Generate multiple pages based on templates
+* Example:
+
+  * "Best [service] in [city]"
+
+---
+
+---
+
+🧠 UI REQUIREMENTS
+
+* Clean dashboard
+* Show SEO score clearly
+* Show suggestions in sections:
+
+  * Critical issues
+  * Improvements
+  * Advanced suggestions
+
+---
+
+---
+
+🧠 ADMIN PANEL INTEGRATION
+
+* Each blog must have SEO panel
+* Real-time updates while writing
+
+---
+
+---
+
+⚠️ IMPORTANT RULES
+
+* Do NOT build a basic SEO checker
+* Do NOT copy WordPress plugins
+* Focus on intelligence, not checklists
+* Keep system fast and usable
+
+---
+
+---
+
+🎯 FINAL OUTPUT
+
+A powerful AI SEO system that feels like:
+
+* SurferSEO + Ahrefs + ChatGPT combined
+
+Inside my own website
+
+---
+
+---
