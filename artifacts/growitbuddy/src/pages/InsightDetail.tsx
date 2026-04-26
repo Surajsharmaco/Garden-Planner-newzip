@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useParams } from "wouter";
 import { ArrowLeft, ArrowRight, Clock, Calendar } from "lucide-react";
-import { blogPosts } from "@/data/blogPosts";
+import { blogPosts as DEFAULT_POSTS, type BlogPost } from "@/data/blogPosts";
+import { usePublicContent } from "@/hooks/usePublicContent";
 import SEOMeta from "@/components/SEOMeta";
 
 const ARTICLE_CSS = `
@@ -154,6 +155,8 @@ function ReadingProgress() {
 
 export default function InsightDetail() {
   const params = useParams<{ slug: string }>();
+  const { posts } = usePublicContent<{ posts: BlogPost[] }>("blog", { posts: DEFAULT_POSTS });
+  const blogPosts = posts?.length ? posts : DEFAULT_POSTS;
   const post = blogPosts.find((p) => p.slug === params.slug);
   const related = blogPosts.filter((p) => p.slug !== params.slug).slice(0, 3);
 

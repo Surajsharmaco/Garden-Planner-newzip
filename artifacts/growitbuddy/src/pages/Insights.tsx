@@ -2,11 +2,14 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
-import { blogPosts } from "@/data/blogPosts";
+import { blogPosts as DEFAULT_POSTS, type BlogPost } from "@/data/blogPosts";
+import { usePublicContent } from "@/hooks/usePublicContent";
 import SEOMeta from "@/components/SEOMeta";
 
 export default function Insights() {
   const [activeTag, setActiveTag] = useState("All");
+  const { posts } = usePublicContent<{ posts: BlogPost[] }>("blog", { posts: DEFAULT_POSTS });
+  const blogPosts = posts?.length ? posts : DEFAULT_POSTS;
 
   const allTags = ["All", ...Array.from(new Set(blogPosts.map(p => p.tag)))];
   const filtered = activeTag === "All" ? blogPosts : blogPosts.filter(p => p.tag === activeTag);
