@@ -50,9 +50,17 @@ import AdminInfluencerExplore from "@/pages/admin/AdminInfluencerExplore";
 import AdminAuthorityAudit from "@/pages/admin/AdminAuthorityAudit";
 import AdminResources from "@/pages/admin/AdminResources";
 import AdminMediaLibrary from "@/pages/admin/AdminMediaLibrary";
+import AdminTeamMembers from "@/pages/admin/AdminTeamMembers";
 
 function AdminGuard({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAdmin();
+  const { isAuthenticated, verifying } = useAdmin();
+  if (verifying) {
+    return (
+      <div className="min-h-screen bg-[#F7F7F5] flex items-center justify-center">
+        <div className="w-5 h-5 border-2 border-[#0B0B0B]/20 border-t-[#0B0B0B] rounded-full animate-spin" />
+      </div>
+    );
+  }
   if (!isAuthenticated) return <Redirect to="/admin/login" />;
   return <AdminLayout>{children}</AdminLayout>;
 }
@@ -126,6 +134,9 @@ function AdminRoutes() {
       </Route>
       <Route path="/admin/media">
         {() => <AdminGuard><AdminMediaLibrary /></AdminGuard>}
+      </Route>
+      <Route path="/admin/team">
+        {() => <AdminGuard><AdminTeamMembers /></AdminGuard>}
       </Route>
       <Route path="/admin">
         {() => <AdminGuard><AdminDashboard /></AdminGuard>}

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { randomBytes, createHmac, timingSafeEqual } from "crypto";
-import { db, siteContent, leads, certificates } from "@workspace/db";
+import { randomBytes, createHmac, timingSafeEqual, scrypt } from "crypto";
+import { db, siteContent, leads, certificates, teamMembers } from "@workspace/db";
 import { eq, desc } from "drizzle-orm";
 import { logger } from "../lib/logger";
 import multer from "multer";
@@ -39,31 +39,89 @@ const router = Router();
 const SESSION_TTL = 7 * 24 * 60 * 60 * 1000;
 const revokedTokens = new Set<string>();
 
+type AdminRole = "super" | "member";
+
+interface TokenPayload {
+  role: AdminRole;
+  permissions: string[];
+}
+
 function getSecret(): string {
   return process.env.ADMIN_PASSWORD ?? randomBytes(16).toString("hex");
 }
 
-function generateToken(): string {
+function generateToken(role: AdminRole, permissions: string[]): string {
   const expiry = String(Date.now() + SESSION_TTL);
   const nonce = randomBytes(8).toString("hex");
-  const payload = `${expiry}.${nonce}`;
+  const permsB64 = Buffer.from(JSON.stringify(permissions)).toString("base64url");
+  const payload = `${expiry}.${nonce}.${role}.${permsB64}`;
   const sig = createHmac("sha256", getSecret()).update(payload).digest("hex");
   return `${payload}.${sig}`;
 }
 
-function verifyToken(token: string): boolean {
-  if (revokedTokens.has(token)) return false;
+function verifyToken(token: string): { valid: false } | ({ valid: true } & TokenPayload) {
+  if (revokedTokens.has(token)) return { valid: false };
   const parts = token.split(".");
-  if (parts.length !== 3) return false;
-  const [expiry, nonce, sig] = parts;
-  const expMs = Number(expiry);
-  if (isNaN(expMs) || Date.now() > expMs) return false;
-  const payload = `${expiry}.${nonce}`;
-  const expected = createHmac("sha256", getSecret()).update(payload).digest("hex");
-  const eSig = Buffer.from(sig, "hex");
-  const eExp = Buffer.from(expected, "hex");
-  if (eSig.length !== eExp.length) return false;
-  return timingSafeEqual(eSig, eExp);
+
+  if (parts.length === 5) {
+    const [expiry, nonce, role, permsB64, sig] = parts;
+    const expMs = Number(expiry);
+    if (isNaN(expMs) || Date.now() > expMs) return { valid: false };
+    const payload = `${expiry}.${nonce}.${role}.${permsB64}`;
+    const expected = createHmac("sha256", getSecret()).update(payload).digest("hex");
+    const eSig = Buffer.from(sig, "hex");
+    const eExp = Buffer.from(expected, "hex");
+    if (eSig.length !== eExp.length) return { valid: false };
+    if (!timingSafeEqual(eSig, eExp)) return { valid: false };
+    let permissions: string[] = [];
+    try {
+      permissions = JSON.parse(Buffer.from(permsB64, "base64url").toString());
+    } catch {
+      return { valid: false };
+    }
+    return { valid: true, role: role as AdminRole, permissions };
+  }
+
+  if (parts.length === 3) {
+    const [expiry, nonce, sig] = parts;
+    const expMs = Number(expiry);
+    if (isNaN(expMs) || Date.now() > expMs) return { valid: false };
+    const payload = `${expiry}.${nonce}`;
+    const expected = createHmac("sha256", getSecret()).update(payload).digest("hex");
+    const eSig = Buffer.from(sig, "hex");
+    const eExp = Buffer.from(expected, "hex");
+    if (eSig.length !== eExp.length) return { valid: false };
+    if (!timingSafeEqual(eSig, eExp)) return { valid: false };
+    return { valid: true, role: "super", permissions: ["all"] };
+  }
+
+  return { valid: false };
+}
+
+async function hashPassword(password: string): Promise<string> {
+  const salt = randomBytes(16).toString("hex");
+  const hash = await new Promise<Buffer>((resolve, reject) => {
+    scrypt(password, salt, 64, (err, key) => (err ? reject(err) : resolve(key)));
+  });
+  return `${salt}:${hash.toString("hex")}`;
+}
+
+async function verifyPassword(password: string, stored: string): Promise<boolean> {
+  const [salt, hash] = stored.split(":");
+  if (!salt || !hash) return false;
+  const hashBuffer = Buffer.from(hash, "hex");
+  const derivedKey = await new Promise<Buffer>((resolve, reject) => {
+    scrypt(password, salt, 64, (err, key) => (err ? reject(err) : resolve(key)));
+  });
+  if (derivedKey.length !== hashBuffer.length) return false;
+  return timingSafeEqual(derivedKey, hashBuffer);
+}
+
+declare module "express" {
+  interface Request {
+    adminRole?: AdminRole;
+    adminPermissions?: string[];
+  }
 }
 
 function authMiddleware(
@@ -77,12 +135,29 @@ function authMiddleware(
     return;
   }
   const token = auth.slice(7);
-  if (!verifyToken(token)) {
+  const result = verifyToken(token);
+  if (!result.valid) {
     res.status(401).json({ error: "Session expired or invalid" });
+    return;
+  }
+  req.adminRole = result.role;
+  req.adminPermissions = result.permissions;
+  next();
+}
+
+function superAdminOnly(
+  req: import("express").Request,
+  res: import("express").Response,
+  next: import("express").NextFunction,
+) {
+  if (req.adminRole !== "super") {
+    res.status(403).json({ error: "Super admin access required" });
     return;
   }
   next();
 }
+
+// ── Auth ──
 
 router.post("/login", (req, res) => {
   const { password } = req.body;
@@ -95,9 +170,40 @@ router.post("/login", (req, res) => {
     res.status(401).json({ error: "Invalid password" });
     return;
   }
-  const token = generateToken();
-  logger.info("Admin login successful");
-  res.json({ token });
+  const token = generateToken("super", ["all"]);
+  logger.info("Super admin login successful");
+  res.json({ token, role: "super", permissions: ["all"] });
+});
+
+router.post("/team/login", async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    res.status(400).json({ error: "Email and password required" });
+    return;
+  }
+  try {
+    const rows = await db.select().from(teamMembers).where(eq(teamMembers.email, email.toLowerCase().trim()));
+    if (rows.length === 0) {
+      res.status(401).json({ error: "Invalid credentials" });
+      return;
+    }
+    const member = rows[0];
+    if (!member.isActive) {
+      res.status(401).json({ error: "Account is disabled" });
+      return;
+    }
+    const valid = await verifyPassword(password, member.passwordHash);
+    if (!valid) {
+      res.status(401).json({ error: "Invalid credentials" });
+      return;
+    }
+    const token = generateToken("member", member.permissions as string[]);
+    logger.info({ email }, "Team member login successful");
+    res.json({ token, role: "member", name: member.name, permissions: member.permissions });
+  } catch (err) {
+    logger.error({ err }, "Team login error");
+    res.status(500).json({ error: "Login failed" });
+  }
 });
 
 router.post("/logout", authMiddleware, (req, res) => {
@@ -106,8 +212,95 @@ router.post("/logout", authMiddleware, (req, res) => {
   res.json({ success: true });
 });
 
-router.get("/verify", authMiddleware, (_req, res) => {
-  res.json({ ok: true });
+router.get("/verify", authMiddleware, (req, res) => {
+  res.json({ ok: true, role: req.adminRole, permissions: req.adminPermissions });
+});
+
+// ── Team Members (super admin only) ──
+
+router.get("/team", authMiddleware, superAdminOnly, async (_req, res) => {
+  try {
+    const rows = await db
+      .select({
+        id: teamMembers.id,
+        name: teamMembers.name,
+        email: teamMembers.email,
+        permissions: teamMembers.permissions,
+        isActive: teamMembers.isActive,
+        createdAt: teamMembers.createdAt,
+        updatedAt: teamMembers.updatedAt,
+      })
+      .from(teamMembers)
+      .orderBy(desc(teamMembers.createdAt));
+    res.json(rows);
+  } catch (err) {
+    logger.error({ err }, "Failed to list team members");
+    res.status(500).json({ error: "Failed to fetch team members" });
+  }
+});
+
+router.post("/team", authMiddleware, superAdminOnly, async (req, res) => {
+  const { name, email, password, permissions } = req.body;
+  if (!name || !email || !password) {
+    res.status(400).json({ error: "name, email, and password are required" });
+    return;
+  }
+  try {
+    const passwordHash = await hashPassword(password);
+    const rows = await db
+      .insert(teamMembers)
+      .values({
+        name,
+        email: email.toLowerCase().trim(),
+        passwordHash,
+        permissions: permissions ?? [],
+        isActive: true,
+      })
+      .returning();
+    logger.info({ email }, "Team member created");
+    const { passwordHash: _ph, ...safe } = rows[0];
+    res.status(201).json(safe);
+  } catch (err: unknown) {
+    if ((err as { code?: string }).code === "23505") {
+      res.status(409).json({ error: "Email already exists" });
+    } else {
+      logger.error({ err }, "Failed to create team member");
+      res.status(500).json({ error: "Failed to create team member" });
+    }
+  }
+});
+
+router.put("/team/:id", authMiddleware, superAdminOnly, async (req, res) => {
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) { res.status(400).json({ error: "Invalid id" }); return; }
+  const { name, permissions, isActive, password } = req.body;
+  try {
+    const updateData: Record<string, unknown> = { updatedAt: new Date() };
+    if (name !== undefined) updateData.name = name;
+    if (permissions !== undefined) updateData.permissions = permissions;
+    if (isActive !== undefined) updateData.isActive = isActive;
+    if (password) updateData.passwordHash = await hashPassword(password);
+    const rows = await db
+      .update(teamMembers)
+      .set(updateData)
+      .where(eq(teamMembers.id, id))
+      .returning();
+    if (rows.length === 0) { res.status(404).json({ error: "Team member not found" }); return; }
+    logger.info({ id }, "Team member updated");
+    const { passwordHash: _ph, ...safe } = rows[0];
+    res.json(safe);
+  } catch (err) {
+    logger.error({ err }, "Failed to update team member");
+    res.status(500).json({ error: "Failed to update team member" });
+  }
+});
+
+router.delete("/team/:id", authMiddleware, superAdminOnly, async (req, res) => {
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) { res.status(400).json({ error: "Invalid id" }); return; }
+  await db.delete(teamMembers).where(eq(teamMembers.id, id));
+  logger.info({ id }, "Team member deleted");
+  res.json({ success: true });
 });
 
 // ── Public (no-auth) read endpoint for public site ──

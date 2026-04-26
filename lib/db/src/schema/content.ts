@@ -1,4 +1,4 @@
-import { pgTable, text, jsonb, timestamp, serial, unique } from "drizzle-orm/pg-core";
+import { pgTable, text, jsonb, timestamp, serial, boolean } from "drizzle-orm/pg-core";
 
 export const siteContent = pgTable("site_content", {
   section: text("section").primaryKey(),
@@ -35,3 +35,17 @@ export const certificates = pgTable("certificates", {
 
 export type Certificate = typeof certificates.$inferSelect;
 export type InsertCertificate = typeof certificates.$inferInsert;
+
+export const teamMembers = pgTable("team_members", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
+  permissions: text("permissions").array().notNull().default([]),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type TeamMember = typeof teamMembers.$inferSelect;
+export type InsertTeamMember = typeof teamMembers.$inferInsert;

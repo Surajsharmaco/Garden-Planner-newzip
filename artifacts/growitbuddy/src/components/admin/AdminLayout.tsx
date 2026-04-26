@@ -4,66 +4,72 @@ import {
   LayoutDashboard, Settings, Users, FileText, Briefcase,
   Home, Layers, Menu as MenuIcon, AlignLeft, Info, LogOut,
   ChevronRight, Inbox, Mail, GitBranch, UserPlus, Building2, Network, Image,
-  Share2, Scan, BookOpen, ShieldCheck,
+  Share2, Scan, BookOpen, ShieldCheck, UserCog,
 } from "lucide-react";
 import { useState } from "react";
 import type { ReactNode } from "react";
 
 interface NavGroup { label: string; items: NavItem[]; }
-interface NavItem { label: string; path: string; icon: ReactNode; }
+interface NavItem { label: string; path: string; icon: ReactNode; permission?: string; superOnly?: boolean; }
 
 const navGroups: NavGroup[] = [
   {
     label: "Overview",
     items: [
       { label: "Dashboard", path: "/admin", icon: <LayoutDashboard size={15} /> },
-      { label: "Leads & CRM", path: "/admin/leads", icon: <Inbox size={15} /> },
-      { label: "Certificates", path: "/admin/certificates", icon: <ShieldCheck size={15} /> },
+      { label: "Leads & CRM", path: "/admin/leads", icon: <Inbox size={15} />, permission: "leads" },
+      { label: "Certificates", path: "/admin/certificates", icon: <ShieldCheck size={15} />, permission: "certificates" },
     ],
   },
   {
     label: "Content",
     items: [
-      { label: "Home Page", path: "/admin/home", icon: <Home size={15} /> },
-      { label: "Services", path: "/admin/services", icon: <Layers size={15} /> },
-      { label: "Framework", path: "/admin/framework", icon: <GitBranch size={15} /> },
-      { label: "Work", path: "/admin/work", icon: <Briefcase size={15} /> },
-      { label: "Blog / Insights", path: "/admin/blog", icon: <FileText size={15} /> },
-      { label: "Resources", path: "/admin/resources", icon: <BookOpen size={15} /> },
-      { label: "About", path: "/admin/about", icon: <Info size={15} /> },
-      { label: "Contact", path: "/admin/contact", icon: <Mail size={15} /> },
+      { label: "Home Page", path: "/admin/home", icon: <Home size={15} />, permission: "home" },
+      { label: "Services", path: "/admin/services", icon: <Layers size={15} />, permission: "services" },
+      { label: "Framework", path: "/admin/framework", icon: <GitBranch size={15} />, permission: "framework" },
+      { label: "Work", path: "/admin/work", icon: <Briefcase size={15} />, permission: "work" },
+      { label: "Blog / Insights", path: "/admin/blog", icon: <FileText size={15} />, permission: "blog" },
+      { label: "Resources", path: "/admin/resources", icon: <BookOpen size={15} />, permission: "resources" },
+      { label: "About", path: "/admin/about", icon: <Info size={15} />, permission: "about" },
+      { label: "Contact", path: "/admin/contact", icon: <Mail size={15} />, permission: "contact" },
     ],
   },
   {
     label: "Network & Hiring",
     items: [
-      { label: "Influencers", path: "/admin/influencers", icon: <Users size={15} /> },
-      { label: "Distribution Network", path: "/admin/distribution-network", icon: <Share2 size={15} /> },
-      { label: "Distribution Pages", path: "/admin/distribution-pages", icon: <Network size={15} /> },
-      { label: "Authority Audit", path: "/admin/authority-audit", icon: <Scan size={15} /> },
-      { label: "Join Network", path: "/admin/join-network", icon: <Network size={15} /> },
-      { label: "Freelancers Page", path: "/admin/freelancers-page", icon: <UserPlus size={15} /> },
-      { label: "Full-Time Page", path: "/admin/full-time-page", icon: <Building2 size={15} /> },
+      { label: "Influencers", path: "/admin/influencers", icon: <Users size={15} />, permission: "influencers" },
+      { label: "Distribution Network", path: "/admin/distribution-network", icon: <Share2 size={15} />, permission: "distribution-network" },
+      { label: "Distribution Pages", path: "/admin/distribution-pages", icon: <Network size={15} />, permission: "distribution-pages" },
+      { label: "Authority Audit", path: "/admin/authority-audit", icon: <Scan size={15} />, permission: "authority-audit" },
+      { label: "Join Network", path: "/admin/join-network", icon: <Network size={15} />, permission: "join-network" },
+      { label: "Freelancers Page", path: "/admin/freelancers-page", icon: <UserPlus size={15} />, permission: "freelancers" },
+      { label: "Full-Time Page", path: "/admin/full-time-page", icon: <Building2 size={15} />, permission: "full-time" },
     ],
   },
   {
     label: "Assets",
     items: [
-      { label: "Media Library", path: "/admin/media", icon: <Image size={15} /> },
+      { label: "Media Library", path: "/admin/media", icon: <Image size={15} />, permission: "media" },
     ],
   },
   {
     label: "Site",
     items: [
-      { label: "Navbar", path: "/admin/navbar", icon: <MenuIcon size={15} /> },
-      { label: "Footer", path: "/admin/footer", icon: <AlignLeft size={15} /> },
-      { label: "Settings", path: "/admin/settings", icon: <Settings size={15} /> },
+      { label: "Navbar", path: "/admin/navbar", icon: <MenuIcon size={15} />, permission: "navbar" },
+      { label: "Footer", path: "/admin/footer", icon: <AlignLeft size={15} />, permission: "footer" },
+      { label: "Settings", path: "/admin/settings", icon: <Settings size={15} />, permission: "settings" },
+    ],
+  },
+  {
+    label: "Team",
+    items: [
+      { label: "Team Members", path: "/admin/team", icon: <UserCog size={15} />, superOnly: true },
     ],
   },
 ];
 
 export function AdminLayout({ children }: { children: ReactNode }) {
-  const { logout } = useAdmin();
+  const { logout, hasPermission, isSuperAdmin, role } = useAdmin();
   const [location] = useLocation();
   const [collapsed, setCollapsed] = useState(false);
 
@@ -72,16 +78,30 @@ export function AdminLayout({ children }: { children: ReactNode }) {
     return location.startsWith(path);
   }
 
+  function canSee(item: NavItem): boolean {
+    if (item.superOnly) return isSuperAdmin;
+    if (!item.permission) return true;
+    return hasPermission(item.permission);
+  }
+
+  const visibleGroups = navGroups
+    .map((g) => ({ ...g, items: g.items.filter(canSee) }))
+    .filter((g) => g.items.length > 0);
+
   return (
     <div className="min-h-screen flex bg-[#F7F7F5]" style={{ fontFamily: "Inter, sans-serif" }}>
       <aside
         className={`flex flex-col bg-[#0B0B0B] text-white transition-all duration-200 shrink-0 ${collapsed ? "w-14" : "w-56"}`}
         style={{ minHeight: "100vh", position: "sticky", top: 0, height: "100vh" }}
       >
-        {/* Logo / collapse */}
         <div className="flex items-center justify-between px-3 py-4 border-b border-white/10">
           {!collapsed && (
-            <span className="text-[13px] font-black tracking-tighter text-white">GrowitBuddy</span>
+            <div>
+              <span className="text-[13px] font-black tracking-tighter text-white">GrowitBuddy</span>
+              {role === "member" && (
+                <span className="block text-[9px] text-white/30 mt-0.5 tracking-widest uppercase">Team</span>
+              )}
+            </div>
           )}
           <button
             onClick={() => setCollapsed((p) => !p)}
@@ -91,9 +111,8 @@ export function AdminLayout({ children }: { children: ReactNode }) {
           </button>
         </div>
 
-        {/* Nav */}
         <nav className="flex-1 py-3 overflow-y-auto">
-          {navGroups.map((group) => (
+          {visibleGroups.map((group) => (
             <div key={group.label} className="mb-1">
               {!collapsed && (
                 <p className="px-4 mb-1 text-[9px] font-bold tracking-[0.15em] text-white/25 uppercase">{group.label}</p>
@@ -117,7 +136,6 @@ export function AdminLayout({ children }: { children: ReactNode }) {
           ))}
         </nav>
 
-        {/* Footer */}
         <div className="border-t border-white/10 p-2">
           <button
             onClick={logout}
