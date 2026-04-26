@@ -1,0 +1,253 @@
+Act as a senior full-stack developer, product designer, and UX engineer.
+
+Your task is to build a **Certificate Verification System** inside the existing website.
+
+IMPORTANT:
+
+* DO NOT change the existing UI design system
+* Maintain same colors, typography, spacing, and layout
+* Only add new components consistent with current UI
+* Keep system clean, fast, and accessible
+
+---
+
+🎯 GOAL
+
+Create a system where users can verify certificates issued by GrowitBuddy using:
+
+* Certificate ID (manual input)
+* QR code (redirect link)
+
+---
+
+🧩 SYSTEM OVERVIEW
+
+The system has 3 parts:
+
+1. Admin Certificate Management
+2. Public Verification Page
+3. Individual Certificate Pages (optional but recommended)
+
+---
+
+---
+
+🧩 STEP 1: ADMIN PANEL (BACKEND)
+
+Create a new section:
+
+👉 "Certificates"
+
+Admin should be able to:
+
+* Add new certificate
+* Edit certificate
+* Delete certificate
+* Change status
+
+---
+
+🟢 FIELDS:
+
+* Name
+* Email (optional)
+* Role (Intern / Contributor / etc.)
+* Certificate ID (unique)
+* Issue Date
+* Status:
+
+  * Verified
+  * Revoked
+
+---
+
+---
+
+🧩 STEP 2: PUBLIC VERIFICATION PAGE
+
+Route:
+
+👉 /verify
+
+---
+
+🎯 UI STRUCTURE
+
+---
+
+🔹 HEADER
+
+Title:
+Verify Credentials
+
+Subtext:
+Check the authenticity of certificates issued by GrowitBuddy.
+
+---
+
+---
+
+🔹 INPUT SECTION
+
+* Input field:
+  "Enter Certificate ID"
+
+* Button:
+  "Verify"
+
+---
+
+Optional:
+Small text:
+"Or scan the QR code on your certificate"
+
+---
+
+---
+
+🧩 STEP 3: RESULT STATES
+
+---
+
+🟢 VERIFIED
+
+Show:
+
+* Name
+* Role
+* Issued by GrowitBuddy
+* Issue Date
+* Status: Verified
+
+---
+
+UI RULE:
+
+* DO NOT change overall theme
+* Only add a **green tick icon** for verified
+
+---
+
+---
+
+🔴 REVOKED
+
+Show:
+
+* Same details
+* Status: Revoked
+
+---
+
+UI:
+
+* Use red or yellow indicator (subtle, not aggressive)
+* Keep design consistent
+
+---
+
+---
+
+⚠️ NOT FOUND
+
+Show:
+
+"Certificate not found. Please check the ID."
+
+---
+
+---
+
+🧩 STEP 4: UNIQUE CERTIFICATE PAGE (RECOMMENDED)
+
+Route:
+
+👉 /verify/[certificate-id]
+
+---
+
+This page should:
+
+* Automatically show certificate details
+* Be shareable
+* Same UI as result card
+
+---
+
+---
+
+🧩 STEP 5: QR CODE FLOW
+
+* Each certificate should have a QR code
+* QR redirects to:
+
+👉 /verify/[certificate-id]
+
+---
+
+---
+
+🧩 STEP 6: DATABASE LOGIC
+
+* Store all certificates in structured database
+* Ensure certificate ID is unique
+* Fast lookup system
+
+---
+
+---
+
+🧩 STEP 7: UX RULES
+
+* Fast response time
+* No page reload delays
+* Clean feedback messages
+* Mobile responsive
+
+---
+
+---
+
+🧩 STEP 8: NAVIGATION
+
+* DO NOT add in main navbar
+* Add link in footer:
+
+👉 "Verify Certificate"
+
+---
+
+Optional:
+Add link in relevant pages (internship, join pages)
+
+---
+
+---
+
+🧩 STEP 9: SECURITY
+
+* Prevent duplicate certificate IDs
+* Validate input
+* Avoid exposing sensitive data
+
+---
+
+---
+
+🎯 FINAL OUTPUT
+
+A clean, reliable, and scalable certificate verification system that:
+
+* builds trust
+* works instantly
+* integrates seamlessly with existing website
+
+---
+
+⚠️ IMPORTANT RULES
+
+* No UI redesign
+* No unnecessary features
+* Keep system lightweight and fast
+
+---

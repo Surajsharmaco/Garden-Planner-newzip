@@ -223,7 +223,21 @@ export function Footer() {
           >
             &copy; {data.legalText}
           </p>
-          <div style={{ display: "flex", gap: 20 }}>
+          <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
+            <Link href="/verify">
+              <span
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: 12,
+                  color: "rgba(255,255,255,0.2)",
+                  textDecoration: "none",
+                  cursor: "pointer",
+                }}
+                className="hover:text-white/50 transition-colors"
+              >
+                Verify Certificate
+              </span>
+            </Link>
             {["Privacy", "Terms"].map((l) => (
               <a
                 key={l}

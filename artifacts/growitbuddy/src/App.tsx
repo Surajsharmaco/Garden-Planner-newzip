@@ -18,6 +18,8 @@ import AuthorityAudit from "@/pages/AuthorityAudit";
 import Resources from "@/pages/Resources";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
+import Verify from "@/pages/Verify";
+import VerifyCertificate from "@/pages/VerifyCertificate";
 import NotFound from "@/pages/not-found";
 import CustomCursor from "@/components/effects/CustomCursor";
 import PageIntro from "@/components/effects/PageIntro";
@@ -35,6 +37,7 @@ import AdminAbout from "@/pages/admin/AdminAbout";
 import AdminNavbar from "@/pages/admin/AdminNavbar";
 import AdminFooter from "@/pages/admin/AdminFooter";
 import AdminLeads from "@/pages/admin/AdminLeads";
+import AdminCertificates from "@/pages/admin/AdminCertificates";
 import AdminContact from "@/pages/admin/AdminContact";
 import AdminJoinNetwork from "@/pages/admin/AdminJoinNetwork";
 import AdminFreelancers from "@/pages/admin/AdminFreelancers";
@@ -85,6 +88,9 @@ function AdminRoutes() {
       </Route>
       <Route path="/admin/leads">
         {() => <AdminGuard><AdminLeads /></AdminGuard>}
+      </Route>
+      <Route path="/admin/certificates">
+        {() => <AdminGuard><AdminCertificates /></AdminGuard>}
       </Route>
       <Route path="/admin/contact">
         {() => <AdminGuard><AdminContact /></AdminGuard>}
@@ -158,6 +164,8 @@ function App() {
                     <Route path="/resources" component={Resources} />
                     <Route path="/about" component={About} />
                     <Route path="/contact" component={Contact} />
+                    <Route path="/verify/:id" component={VerifyCertificate} />
+                    <Route path="/verify" component={Verify} />
                     <Route component={NotFound} />
                   </Switch>
                 </Layout>

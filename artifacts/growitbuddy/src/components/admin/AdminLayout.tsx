@@ -4,7 +4,7 @@ import {
   LayoutDashboard, Settings, Users, FileText, Briefcase,
   Home, Layers, Menu as MenuIcon, AlignLeft, Info, LogOut,
   ChevronRight, Inbox, Mail, GitBranch, UserPlus, Building2, Network, Image,
-  Share2, Scan, BookOpen,
+  Share2, Scan, BookOpen, ShieldCheck,
 } from "lucide-react";
 import { useState } from "react";
 import type { ReactNode } from "react";
@@ -18,6 +18,7 @@ const navGroups: NavGroup[] = [
     items: [
       { label: "Dashboard", path: "/admin", icon: <LayoutDashboard size={15} /> },
       { label: "Leads & CRM", path: "/admin/leads", icon: <Inbox size={15} /> },
+      { label: "Certificates", path: "/admin/certificates", icon: <ShieldCheck size={15} /> },
     ],
   },
   {

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { randomBytes, createHmac, timingSafeEqual } from "crypto";
-import { db, siteContent, leads } from "@workspace/db";
+import { db, siteContent, leads, certificates } from "@workspace/db";
 import { eq, desc } from "drizzle-orm";
 import { logger } from "../lib/logger";
 import multer from "multer";
@@ -233,6 +233,81 @@ router.delete("/media/:filename", authMiddleware, async (req, res) => {
   } catch {
     res.status(404).json({ error: "File not found" });
   }
+});
+
+// ── Certificates ──
+
+router.get("/public/certificate/:certificateId", async (req, res) => {
+  const { certificateId } = req.params;
+  try {
+    const rows = await db
+      .select()
+      .from(certificates)
+      .where(eq(certificates.certificateId, certificateId));
+    if (rows.length === 0) {
+      res.status(404).json({ error: "Certificate not found" });
+      return;
+    }
+    const cert = rows[0];
+    res.json({
+      certificateId: cert.certificateId,
+      name: cert.name,
+      role: cert.role,
+      issueDate: cert.issueDate,
+      status: cert.status,
+    });
+  } catch {
+    res.status(500).json({ error: "Lookup failed" });
+  }
+});
+
+router.get("/certificates", authMiddleware, async (_req, res) => {
+  const rows = await db.select().from(certificates).orderBy(desc(certificates.createdAt));
+  res.json(rows);
+});
+
+router.post("/certificates", authMiddleware, async (req, res) => {
+  const { certificateId, name, email, role, issueDate, status } = req.body;
+  if (!certificateId || !name || !role || !issueDate) {
+    res.status(400).json({ error: "certificateId, name, role, and issueDate are required" });
+    return;
+  }
+  const existing = await db
+    .select()
+    .from(certificates)
+    .where(eq(certificates.certificateId, certificateId));
+  if (existing.length > 0) {
+    res.status(409).json({ error: "Certificate ID already exists" });
+    return;
+  }
+  const rows = await db
+    .insert(certificates)
+    .values({ certificateId, name, email: email || null, role, issueDate, status: status || "verified" })
+    .returning();
+  logger.info({ certificateId }, "Certificate created");
+  res.status(201).json(rows[0]);
+});
+
+router.put("/certificates/:id", authMiddleware, async (req, res) => {
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) { res.status(400).json({ error: "Invalid id" }); return; }
+  const { name, email, role, issueDate, status } = req.body;
+  const rows = await db
+    .update(certificates)
+    .set({ name, email: email || null, role, issueDate, status, updatedAt: new Date() })
+    .where(eq(certificates.id, id))
+    .returning();
+  if (rows.length === 0) { res.status(404).json({ error: "Certificate not found" }); return; }
+  logger.info({ id }, "Certificate updated");
+  res.json(rows[0]);
+});
+
+router.delete("/certificates/:id", authMiddleware, async (req, res) => {
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) { res.status(400).json({ error: "Invalid id" }); return; }
+  await db.delete(certificates).where(eq(certificates.id, id));
+  logger.info({ id }, "Certificate deleted");
+  res.json({ success: true });
 });
 
 export { authMiddleware };
