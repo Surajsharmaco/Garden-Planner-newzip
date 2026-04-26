@@ -395,6 +395,13 @@ function PostEditor({
   const [saved, setSaved] = useState(false);
   const [status, setStatus] = useState<"draft" | "published">("published");
   const [visibility, setVisibility] = useState<"public" | "private">("public");
+  const [toasts, setToasts] = useState<{ id: number; msg: string; type: "success" | "error" | "info" }[]>([]);
+
+  function showToast(msg: string, type: "success" | "error" | "info" = "success") {
+    const id = Date.now();
+    setToasts((t) => [...t, { id, msg, type }]);
+    setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 3500);
+  }
   const editorRef = useRef<HTMLDivElement>(null);
   const savedRangeRef = useRef<Range | null>(null);
 
@@ -470,16 +477,38 @@ function PostEditor({
     if (next === "visual") setTimeout(() => { if (editorRef.current) editorRef.current.innerHTML = mdToHtml(data.content); }, 0);
   }
 
-  async function handleSave() {
+  async function handleSave(mode: "draft" | "publish" = "draft") {
     const content = captureContent();
     const finalPost: BlogPost = { ...data, content, seo };
     setSaving(true);
     try {
       await onSave(finalPost);
       setSaved(true);
+      if (mode === "publish") {
+        showToast("Post published successfully!", "success");
+      } else {
+        showToast("Draft saved.", "info");
+      }
+    } catch {
+      showToast(mode === "publish" ? "Failed to publish. Please try again." : "Failed to save draft.", "error");
     } finally {
       setSaving(false);
     }
+  }
+
+  function insertLinkWithFeedback() {
+    const url = prompt("Enter URL:");
+    if (url) { exec("createLink", url); showToast("Link inserted.", "info"); }
+  }
+
+  function insertImageWithFeedback() {
+    const url = prompt("Enter image URL:");
+    if (url) { exec("insertHTML", `<img src="${url}" alt="" style="max-width:100%;border-radius:12px;margin:16px 0;" />`); showToast("Image inserted.", "info"); }
+  }
+
+  function insertTableWithFeedback() {
+    insertTable();
+    showToast("Table inserted.", "info");
   }
 
   const liveContent = mode === "visual" && editorRef.current ? editorRef.current.innerHTML : data.content;
@@ -522,6 +551,19 @@ function PostEditor({
 
   return (
     <div style={{ fontFamily: "Inter, sans-serif" }}>
+      {/* Toast notifications */}
+      <div className="fixed bottom-6 right-6 z-[9999] flex flex-col gap-2 pointer-events-none">
+        {toasts.map((t) => (
+          <div key={t.id} className={`flex items-center gap-3 px-4 py-3 rounded-2xl shadow-lg text-[13px] font-medium pointer-events-auto transition-all
+            ${t.type === "success" ? "bg-emerald-600 text-white" : t.type === "error" ? "bg-red-500 text-white" : "bg-[#0B0B0B] text-white"}`}>
+            {t.type === "success" && <CheckCircle size={15} className="shrink-0" />}
+            {t.type === "error" && <XCircle size={15} className="shrink-0" />}
+            {t.type === "info" && <AlertCircle size={15} className="shrink-0 text-white/70" />}
+            {t.msg}
+          </div>
+        ))}
+      </div>
+
       {/* Top bar */}
       <div className="flex items-center gap-3 mb-5">
         <button onClick={onBack} className="flex items-center gap-1.5 text-[13px] text-[#0B0B0B]/45 hover:text-[#0B0B0B] transition-colors">
@@ -529,10 +571,10 @@ function PostEditor({
         </button>
         <h1 className="text-[19px] font-black tracking-tight text-[#0B0B0B] flex-1">{isNew ? "Add New Post" : "Edit Post"}</h1>
         {saved && <span className="text-[12px] text-emerald-600 font-medium">Saved</span>}
-        <button onClick={handleSave} disabled={saving} className="text-[13px] font-medium text-[#0B0B0B]/55 border border-[#0B0B0B]/15 px-3.5 py-2 rounded-xl hover:border-[#0B0B0B]/30 transition-colors disabled:opacity-40">
+        <button onClick={() => handleSave("draft")} disabled={saving} className="text-[13px] font-medium text-[#0B0B0B]/55 border border-[#0B0B0B]/15 px-3.5 py-2 rounded-xl hover:border-[#0B0B0B]/30 transition-colors disabled:opacity-40">
           Save Draft
         </button>
-        <button onClick={handleSave} disabled={saving} className="bg-[#0B0B0B] text-white text-[13px] font-semibold px-5 py-2 rounded-xl hover:bg-[#0B0B0B]/85 disabled:opacity-40 transition-colors">
+        <button onClick={() => handleSave("publish")} disabled={saving} className="bg-[#0B0B0B] text-white text-[13px] font-semibold px-5 py-2 rounded-xl hover:bg-[#0B0B0B]/85 disabled:opacity-40 transition-colors">
           {saving ? "Saving..." : "Publish"}
         </button>
       </div>
@@ -597,9 +639,9 @@ function PostEditor({
                   <ToolBtn icon={<AlignRight size={14} />} title="Align Right" onClick={() => exec("justifyRight")} />
                   <ToolBtn icon={<AlignJustify size={14} />} title="Justify" onClick={() => exec("justifyFull")} />
                   <div className="w-px h-5 bg-[#0B0B0B]/10 mx-0.5" />
-                  <ToolBtn icon={<Link2 size={14} />} title="Insert Link" onClick={insertLink} />
-                  <ToolBtn icon={<ImagePlus size={14} />} title="Insert Image" onClick={insertImagePrompt} />
-                  <ToolBtn icon={<Table2 size={14} />} title="Insert Table" onClick={insertTable} />
+                  <ToolBtn icon={<Link2 size={14} />} title="Insert Link" onClick={insertLinkWithFeedback} />
+                  <ToolBtn icon={<ImagePlus size={14} />} title="Insert Image" onClick={insertImageWithFeedback} />
+                  <ToolBtn icon={<Table2 size={14} />} title="Insert Table" onClick={insertTableWithFeedback} />
                   <ToolBtn icon={<Minus size={14} />} title="Horizontal Rule" onClick={() => exec("insertHorizontalRule")} />
                   <ToolBtn icon={<Eraser size={14} />} title="Clear Formatting" onClick={() => exec("removeFormat")} />
                   <div className="flex-1" />
@@ -838,7 +880,7 @@ function PostEditor({
             <div className="flex items-center justify-between px-4 py-3 bg-[#0B0B0B]/4">
               <span className="text-[11px] font-bold text-[#0B0B0B]/70 uppercase tracking-widest">Publish</span>
               <div className="flex gap-1.5">
-                <button onClick={handleSave} className="text-[11px] font-semibold bg-white border border-[#0B0B0B]/15 text-[#0B0B0B]/55 px-2.5 py-1 rounded hover:bg-[#f5f5f5] transition-colors">
+                <button onClick={() => handleSave("draft")} className="text-[11px] font-semibold bg-white border border-[#0B0B0B]/15 text-[#0B0B0B]/55 px-2.5 py-1 rounded hover:bg-[#f5f5f5] transition-colors">
                   Save Draft
                 </button>
                 <button className="text-[11px] font-semibold bg-white border border-[#0B0B0B]/15 text-[#0B0B0B]/55 px-2.5 py-1 rounded hover:bg-[#f5f5f5] transition-colors">
@@ -867,7 +909,7 @@ function PostEditor({
               </FieldRow>
             </div>
             <div className="px-4 pb-4 pt-1">
-              <button onClick={handleSave} disabled={saving} className="w-full bg-[#0B0B0B] text-white text-[13px] font-semibold py-2.5 rounded-lg hover:bg-[#0B0B0B]/85 disabled:opacity-40 transition-colors">
+              <button onClick={() => handleSave("publish")} disabled={saving} className="w-full bg-[#0B0B0B] text-white text-[13px] font-semibold py-2.5 rounded-lg hover:bg-[#0B0B0B]/85 disabled:opacity-40 transition-colors">
                 {saving ? "Saving..." : "Publish"}
               </button>
             </div>
