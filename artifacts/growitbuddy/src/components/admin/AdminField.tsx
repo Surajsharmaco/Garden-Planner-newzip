@@ -1,4 +1,5 @@
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
+import { CheckCircle, XCircle } from "lucide-react";
 
 interface FieldProps {
   label: string;
@@ -50,28 +51,63 @@ export function Textarea({ label, hint, className = "", ...props }: TextareaProp
   return <Field label={label} hint={hint}>{el}</Field>;
 }
 
+type ToastState = { msg: string; type: "success" | "error" } | null;
+
 export function SaveBar({
   onSave,
   saving,
   saved,
+  successMsg = "Changes saved successfully!",
+  errorMsg = "Failed to save. Please try again.",
 }: {
   onSave: () => void;
   saving: boolean;
   saved: boolean;
+  successMsg?: string;
+  errorMsg?: string;
 }) {
+  const [toast, setToast] = useState<ToastState>(null);
+  const prevSaving = useRef(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (prevSaving.current && !saving) {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      setToast(saved
+        ? { msg: successMsg, type: "success" }
+        : { msg: errorMsg, type: "error" }
+      );
+      timerRef.current = setTimeout(() => setToast(null), 3500);
+    }
+    prevSaving.current = saving;
+  }, [saving, saved, successMsg, errorMsg]);
+
   return (
-    <div className="flex items-center justify-between pt-5 border-t border-[#0B0B0B]/8 mt-6">
-      <span className="text-[12px] text-[#0B0B0B]/40">
-        {saved ? "Saved successfully" : "Unsaved changes"}
-      </span>
-      <button
-        onClick={onSave}
-        disabled={saving}
-        className="bg-[#0B0B0B] text-white text-[13px] font-semibold px-5 py-2.5 rounded-xl hover:bg-[#0B0B0B]/85 transition-colors disabled:opacity-40"
-      >
-        {saving ? "Saving..." : "Save changes"}
-      </button>
-    </div>
+    <>
+      {toast && (
+        <div
+          className={`fixed bottom-6 right-6 z-[9999] flex items-center gap-2.5 px-4 py-3 rounded-2xl shadow-lg text-[13px] font-medium text-white pointer-events-none
+            ${toast.type === "success" ? "bg-emerald-600" : "bg-red-500"}`}
+        >
+          {toast.type === "success"
+            ? <CheckCircle size={15} className="shrink-0" />
+            : <XCircle size={15} className="shrink-0" />}
+          {toast.msg}
+        </div>
+      )}
+      <div className="flex items-center justify-between pt-5 border-t border-[#0B0B0B]/8 mt-6">
+        <span className="text-[12px] text-[#0B0B0B]/40">
+          {saving ? "Saving..." : saved ? "All changes saved" : "Unsaved changes"}
+        </span>
+        <button
+          onClick={onSave}
+          disabled={saving}
+          className="bg-[#0B0B0B] text-white text-[13px] font-semibold px-5 py-2.5 rounded-xl hover:bg-[#0B0B0B]/85 transition-colors disabled:opacity-40"
+        >
+          {saving ? "Saving..." : "Save changes"}
+        </button>
+      </div>
+    </>
   );
 }
 
