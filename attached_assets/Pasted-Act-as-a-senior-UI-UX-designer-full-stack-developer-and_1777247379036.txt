@@ -1,0 +1,250 @@
+Act as a senior UI/UX designer, full-stack developer, and conversion-focused strategist.
+
+Your task is to build a **high-conversion “Work / Proof Page”** for a premium agency (GrowitBuddy), along with full Admin Panel control.
+
+IMPORTANT:
+
+* Keep UI minimal, premium, and clean
+* Avoid clutter
+* Focus on structured proof (not random screenshots)
+* Everything must be editable from admin panel
+
+---
+
+# 🎯 GOAL
+
+Create a Work page that:
+
+* builds trust instantly
+* showcases real performance
+* highlights distribution advantage
+* avoids looking messy or amateur
+
+---
+
+# 🧩 PAGE STRUCTURE
+
+---
+
+## 🔥 SECTION 1: HERO (TOP PROOF)
+
+Headline:
+700M+ Views Generated
+
+Subtext:
+Across content and distribution systems
+
+---
+
+Add 3 micro stats:
+
+* 22M+ Monthly Views
+* Multi-Page Distribution
+* Organic Growth Systems
+
+---
+
+---
+
+## 🔥 SECTION 2: CLEAN PERFORMANCE STATS
+
+Display in card format (NO screenshots here):
+
+* 22.6M views in 30 days
+* 98% reach from reels
+* Majority audience from non-followers
+
+---
+
+Design:
+
+* Minimal stat cards
+* Bold numbers
+* Subtext explanation
+
+---
+
+---
+
+## 🔥 SECTION 3: “VIEW REAL PROOF” (MODAL SYSTEM)
+
+Add button:
+👉 “View Real Data”
+
+On click:
+
+Open modal with:
+
+* screenshots (uploaded from admin)
+* optional short video (20–30 sec)
+
+---
+
+IMPORTANT:
+
+* Keep modal clean
+* Allow multiple uploads
+* Do NOT show all proof on main page
+
+---
+
+---
+
+## 🔥 SECTION 4: CLIENT LOGOS (IMPORTANT)
+
+Create a responsive logo grid:
+
+* 5–6 logos per row (desktop)
+* auto-wrap for more logos
+* consistent size
+* grayscale → color on hover
+
+---
+
+Add heading:
+Worked with creators, brands & high-growth accounts
+
+---
+
+---
+
+## 🔥 SECTION 5: CASE SNAPSHOTS
+
+Show 2–3 simple case cards:
+
+Each card includes:
+
+* Niche (e.g. Doctor, Creator, Brand)
+* Short result (e.g. 1M+ followers, 14M impressions)
+
+---
+
+Keep minimal (no long text)
+
+---
+
+---
+
+## 🔥 SECTION 6: SYSTEM EXPLANATION
+
+Show simple flow:
+
+Content → Distribution → Authority
+
+---
+
+Add short text:
+We don’t just create content — we amplify it through distribution.
+
+---
+
+---
+
+## 🔥 SECTION 7: CTA
+
+Text:
+See how this could work for your brand
+
+Button:
+Book Strategy Call
+
+---
+
+---
+
+# 🧠 ADMIN PANEL (VERY IMPORTANT)
+
+Create full control system:
+
+---
+
+## 🧩 1. WORK PAGE CONTROL
+
+Admin can edit:
+
+* headline
+* stats
+* section text
+
+---
+
+---
+
+## 🧩 2. PROOF MANAGEMENT
+
+* upload screenshots
+* upload videos
+* manage modal content
+
+---
+
+---
+
+## 🧩 3. CLIENT LOGOS SYSTEM
+
+* upload multiple logos
+* auto grid layout
+* reorder logos
+* delete logos
+
+---
+
+---
+
+## 🧩 4. CASE MANAGEMENT
+
+* add case
+* edit case
+* delete case
+
+Fields:
+
+* niche
+* result text
+
+---
+
+---
+
+## 🧩 5. UI CONTROL (BASIC)
+
+* spacing
+* section visibility toggle (on/off)
+
+---
+
+---
+
+# 🎨 DESIGN RULES
+
+* minimal white theme
+* subtle gradients in background only
+* no heavy colors on text
+* clean spacing
+* fast loading
+
+---
+
+---
+
+# ⚠️ IMPORTANT RULES
+
+* Do NOT dump raw screenshots on page
+* Keep proof structured
+* Focus on clarity, not overload
+* Everything must be scalable
+
+---
+
+---
+
+# 🎯 FINAL OUTPUT
+
+A premium Work page that:
+
+* builds authority instantly
+* looks clean and structured
+* supports proof without clutter
+* is fully controllable via admin
+
+---
