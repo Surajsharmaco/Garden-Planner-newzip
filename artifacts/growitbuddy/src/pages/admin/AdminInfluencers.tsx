@@ -3,7 +3,8 @@ import { useAdmin } from "@/context/AdminContext";
 import { influencers as DEFAULT_INFLUENCERS, NICHE_CATEGORIES, COUNTRIES, type Influencer } from "@/data/influencers";
 import { PageHeader, Card, Input, SaveBar } from "@/components/admin/AdminField";
 import { ImagePickerField } from "@/components/admin/ImagePickerField";
-import { Plus, Trash2, Search, X, Eye, EyeOff, ChevronDown, ChevronUp, Settings2, Clock } from "lucide-react";
+import { Plus, Trash2, Search, X, Eye, EyeOff, ChevronDown, ChevronUp, Settings2, Clock, Download } from "lucide-react";
+import * as XLSX from "xlsx";
 
 function formatRelativeDate(iso: string | undefined): string {
   if (!iso) return "Never updated";
@@ -236,6 +237,7 @@ export default function AdminInfluencers() {
   const [saved, setSaved] = useState(false);
   const [search, setSearch] = useState("");
   const [nicheFilter, setNicheFilter] = useState("All");
+  const [countryFilter, setCountryFilter] = useState("All");
   const [dateFilter, setDateFilter] = useState<"all" | "today" | "week" | "month" | "3months" | "6months" | "1year">("all");
   const [newIndex, setNewIndex] = useState<number | null>(null);
   const [listsOpen, setListsOpen] = useState(false);
@@ -296,6 +298,7 @@ export default function AdminInfluencers() {
     const q = search.toLowerCase();
     const matchSearch = !q || inf.name.toLowerCase().includes(q) || inf.niche.toLowerCase().includes(q);
     const matchNiche = nicheFilter === "All" || inf.niche === nicheFilter;
+    const matchCountry = countryFilter === "All" || (inf.audienceCountries ?? []).includes(countryFilter);
 
     let matchDate = true;
     if (dateFilter !== "all") {
@@ -314,8 +317,42 @@ export default function AdminInfluencers() {
       }
     }
 
-    return matchSearch && matchNiche && matchDate;
+    return matchSearch && matchNiche && matchCountry && matchDate;
   });
+
+  function exportExcel() {
+    const dateLabel: Record<typeof dateFilter, string> = {
+      all: "All time", today: "Today", week: "This week",
+      month: "This month", "3months": "3 months", "6months": "6 months", "1year": "1 year",
+    };
+    const rows = filtered.map((inf) => ({
+      Name: inf.name,
+      Username: inf.username,
+      Genre: inf.niche,
+      Followers: inf.followers,
+      "Engagement Rate": inf.engagementRate,
+      "Audience Countries": (inf.audienceCountries ?? []).join(", "),
+      Status: inf.profileEnabled !== false ? "Live" : "Hidden",
+      "Last Updated": inf.updatedAt ? new Date(inf.updatedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "Never",
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(rows);
+    ws["!cols"] = [
+      { wch: 22 }, { wch: 20 }, { wch: 28 }, { wch: 12 },
+      { wch: 16 }, { wch: 32 }, { wch: 10 }, { wch: 18 },
+    ];
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Influencers");
+
+    const parts: string[] = [];
+    if (nicheFilter !== "All") parts.push(nicheFilter.replace(/\s+/g, "-").toLowerCase());
+    if (countryFilter !== "All") parts.push(countryFilter.toLowerCase());
+    if (dateFilter !== "all") parts.push(dateLabel[dateFilter].replace(/\s+/g, "-").toLowerCase());
+    const suffix = parts.length ? `-${parts.join("-")}` : "";
+
+    XLSX.writeFile(wb, `influencers${suffix}.xlsx`);
+  }
 
   const liveCount = items.filter((inf) => inf.profileEnabled !== false).length;
   const hiddenCount = items.length - liveCount;
@@ -372,6 +409,30 @@ export default function AdminInfluencers() {
             </button>
           )}
         </div>
+
+        {/* Country filter */}
+        <select
+          value={countryFilter}
+          onChange={(e) => setCountryFilter(e.target.value)}
+          className={`border rounded-xl px-3.5 py-2.5 text-[13px] outline-none bg-white transition-colors ${
+            countryFilter !== "All"
+              ? "border-[#0B0B0B] text-[#0B0B0B] font-semibold"
+              : "border-[#0B0B0B]/12 text-[#0B0B0B]/60 hover:border-[#0B0B0B]/30"
+          }`}
+        >
+          <option value="All">All Countries</option>
+          {countries.map((c) => <option key={c} value={c}>{c}</option>)}
+        </select>
+
+        {/* Export Excel */}
+        <button
+          onClick={exportExcel}
+          disabled={filtered.length === 0}
+          className="flex items-center gap-2 border border-[#0B0B0B]/12 rounded-xl px-3.5 py-2.5 text-[13px] font-semibold text-[#0B0B0B]/60 hover:bg-[#0B0B0B]/5 hover:border-[#0B0B0B]/25 transition-colors disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
+        >
+          <Download size={14} /> Export Excel
+        </button>
+
         <div className="relative">
           <button
             onClick={addNew}
@@ -449,13 +510,13 @@ export default function AdminInfluencers() {
             );
           })}
         </div>
-        {(search || nicheFilter !== "All" || dateFilter !== "all") && (
+        {(search || nicheFilter !== "All" || countryFilter !== "All" || dateFilter !== "all") && (
           <div className="flex items-center gap-2 mt-2">
             <span className="text-[12px] text-[#0B0B0B]/40">
               Showing {filtered.length} of {items.length} influencers
             </span>
             <button
-              onClick={() => { setSearch(""); setNicheFilter("All"); setDateFilter("all"); }}
+              onClick={() => { setSearch(""); setNicheFilter("All"); setCountryFilter("All"); setDateFilter("all"); }}
               className="text-[11px] text-[#0B0B0B]/40 hover:text-[#0B0B0B] underline underline-offset-2 transition-colors"
             >
               Clear all filters
