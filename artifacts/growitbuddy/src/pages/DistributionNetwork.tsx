@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { ArrowRight, Search, X, SlidersHorizontal, ChevronDown, Check, Globe, Zap } from "lucide-react";
-import { distributionPages, DISTRIBUTION_NICHES, DISTRIBUTION_COUNTRIES, type DistributionPage } from "@/data/distributionPages";
+import { distributionPages as DEFAULT_DIST_PAGES, DISTRIBUTION_NICHES, DISTRIBUTION_COUNTRIES, type DistributionPage } from "@/data/distributionPages";
 import SEOMeta from "@/components/SEOMeta";
 import { useState, useMemo, useRef, useEffect } from "react";
 import { usePublicContent } from "@/hooks/usePublicContent";
@@ -276,6 +276,9 @@ function ActiveTag({ label, onRemove }: { label: string; onRemove: () => void })
 /* ── Page ────────────────────────────────────────────────── */
 export default function DistributionNetwork() {
   const cms = usePublicContent<DistributionNetworkData>("distribution-network", DN_DEFAULTS);
+  const distPagesDb = usePublicContent<{ items?: DistributionPage[] }>("distribution-pages", { items: DEFAULT_DIST_PAGES });
+  const distributionPages = (distPagesDb.items && distPagesDb.items.length > 0) ? distPagesDb.items : DEFAULT_DIST_PAGES;
+
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");

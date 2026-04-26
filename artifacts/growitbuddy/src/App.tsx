@@ -45,6 +45,7 @@ import AdminFreelancers from "@/pages/admin/AdminFreelancers";
 import AdminFullTime from "@/pages/admin/AdminFullTime";
 import AdminFramework from "@/pages/admin/AdminFramework";
 import AdminDistributionNetwork from "@/pages/admin/AdminDistributionNetwork";
+import AdminDistributionPages from "@/pages/admin/AdminDistributionPages";
 import AdminInfluencerExplore from "@/pages/admin/AdminInfluencerExplore";
 import AdminAuthorityAudit from "@/pages/admin/AdminAuthorityAudit";
 import AdminResources from "@/pages/admin/AdminResources";
@@ -110,6 +111,9 @@ function AdminRoutes() {
       </Route>
       <Route path="/admin/distribution-network">
         {() => <AdminGuard><AdminDistributionNetwork /></AdminGuard>}
+      </Route>
+      <Route path="/admin/distribution-pages">
+        {() => <AdminGuard><AdminDistributionPages /></AdminGuard>}
       </Route>
       <Route path="/admin/influencer-explore">
         {() => <AdminGuard><AdminInfluencerExplore /></AdminGuard>}
