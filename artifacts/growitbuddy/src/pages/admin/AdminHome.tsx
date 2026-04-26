@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { PageHeader, Card, SectionTitle, Input, Textarea, SaveBar } from "@/components/admin/AdminField";
+import { ImagePickerField } from "@/components/admin/ImagePickerField";
 import { Plus, Trash2 } from "lucide-react";
 
 interface Stat { value: string; label: string; }
@@ -56,6 +57,7 @@ interface HomeData {
   auditSubtext: string;
   auditCTA: string;
   founderLabel: string;
+  founderPhoto: string;
   founderInitials: string;
   founderName: string;
   founderQuote: string;
@@ -165,6 +167,7 @@ const DEFAULTS: HomeData = {
   auditSubtext: "Answer 6 questions and get a personalized breakdown of exactly what's holding your content marketing back - free, in under 2 minutes.",
   auditCTA: "Get My Growth Diagnosis",
   founderLabel: "Founder",
+  founderPhoto: "",
   founderInitials: "SS",
   founderName: "Suraj Sharma",
   founderQuote: "\"I built GrowitBuddy after watching brilliant founders lose market position to louder, less qualified voices. Authority isn't given - it's built. We built the systems to do it consistently.\"",
@@ -456,7 +459,11 @@ export default function AdminHome() {
           <div className="space-y-3">
             <div className="flex gap-2">
               <Input label="Section label" value={data.founderLabel} onChange={(e) => set("founderLabel", e.target.value)} />
-              <Input label="Initials (avatar)" value={data.founderInitials} onChange={(e) => set("founderInitials", e.target.value)} hint="Shown in dark square" />
+              <Input label="Initials (fallback)" value={data.founderInitials} onChange={(e) => set("founderInitials", e.target.value)} hint="Shown when no photo is set" />
+            </div>
+            <div>
+              <label className="block text-[10px] font-semibold text-[#0B0B0B]/45 mb-2 uppercase tracking-widest">Founder Photo</label>
+              <ImagePickerField label="" value={data.founderPhoto} onChange={(url) => set("founderPhoto", url)} shape="square" size={72} />
             </div>
             <Input label="Name" value={data.founderName} onChange={(e) => set("founderName", e.target.value)} />
             <Textarea label="Quote" value={data.founderQuote} onChange={(e) => set("founderQuote", e.target.value)} rows={3} />

@@ -889,9 +889,13 @@ export default function Home() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              style={{ aspectRatio: "1", borderRadius: 24, background: "linear-gradient(135deg, #1a1a1a 0%, #0B0B0B 100%)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 80, fontWeight: 800, color: "rgba(255,255,255,0.15)", letterSpacing: "-0.04em" }}
+              style={{ aspectRatio: "1", borderRadius: 24, overflow: "hidden", background: "linear-gradient(135deg, #1a1a1a 0%, #0B0B0B 100%)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 80, fontWeight: 800, color: "rgba(255,255,255,0.15)", letterSpacing: "-0.04em" }}
             >
-              {hm.founderInitials}
+              {hm.founderPhoto ? (
+                <img src={hm.founderPhoto} alt={hm.founderName} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              ) : (
+                hm.founderInitials
+              )}
             </motion.div>
 
             <FadeUp>
