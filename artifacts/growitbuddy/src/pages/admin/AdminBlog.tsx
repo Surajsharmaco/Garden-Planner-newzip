@@ -865,9 +865,18 @@ function PostList({ posts, onEdit, onDelete, onAdd }: {
               return (
                 <tr key={post.slug + i} className="border-b border-[#0B0B0B]/5 hover:bg-[#0B0B0B]/2 group transition-colors last:border-0">
                   <td className="px-5 py-3.5">
-                    <button onClick={() => onEdit(post)} className="text-left w-full">
-                      <p className="text-[13px] font-semibold text-[#0B0B0B] hover:underline">{post.title || "(no title)"}</p>
-                      {post.excerpt && <p className="text-[11px] text-[#0B0B0B]/38 truncate max-w-[320px] mt-0.5">{post.excerpt}</p>}
+                    <button onClick={() => onEdit(post)} className="text-left w-full flex items-center gap-3">
+                      <div className="shrink-0 w-14 h-10 rounded-lg overflow-hidden bg-[#0B0B0B]/6 flex items-center justify-center">
+                        {post.featuredImage ? (
+                          <img src={post.featuredImage} alt={post.title} className="w-full h-full object-cover" />
+                        ) : (
+                          <span className="text-[9px] font-bold text-[#0B0B0B]/20 uppercase tracking-widest">No img</span>
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[13px] font-semibold text-[#0B0B0B] hover:underline">{post.title || "(no title)"}</p>
+                        {post.excerpt && <p className="text-[11px] text-[#0B0B0B]/38 truncate max-w-[280px] mt-0.5">{post.excerpt}</p>}
+                      </div>
                     </button>
                   </td>
                   <td className="px-3 py-3.5">
