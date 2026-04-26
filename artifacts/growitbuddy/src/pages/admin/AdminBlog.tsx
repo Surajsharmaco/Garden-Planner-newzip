@@ -266,7 +266,7 @@ function mdToHtml(md: string): string {
   let i = 0;
   while (i < lines.length) {
     const t = lines[i].trim();
-    if (!t) { html += "<p><br></p>"; i++; continue; }
+    if (!t) { i++; continue; }
     if (t.startsWith("## ")) { html += `<h2>${inlineFormat(t.slice(3))}</h2>`; i++; continue; }
     if (t.startsWith("### ")) { html += `<h3>${inlineFormat(t.slice(4))}</h3>`; i++; continue; }
     if (t.startsWith("> ")) { html += `<blockquote>${inlineFormat(t.slice(2))}</blockquote>`; i++; continue; }
