@@ -2,6 +2,19 @@ import { Link, useLocation } from "wouter";
 import { ArrowUpRight, Menu, X, ChevronDown } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePublicContent } from "@/hooks/usePublicContent";
+
+interface NavbarData {
+  logo: string;
+  ctaLabel: string;
+  ctaPath: string;
+}
+
+const NAVBAR_DEFAULTS: NavbarData = {
+  logo: "GrowitBuddy",
+  ctaLabel: "Book a Call",
+  ctaPath: "/contact",
+};
 
 const NAV_LINKS = [
   { href: "/services", label: "Services" },
@@ -30,6 +43,7 @@ const NAV_LINKS = [
 export function Navbar() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const navbar = usePublicContent<NavbarData>("navbar", NAVBAR_DEFAULTS);
   const [scrolled, setScrolled] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
@@ -96,7 +110,7 @@ export function Navbar() {
                   letterSpacing: "-0.03em",
                 }}
               >
-                GrowitBuddy
+                {navbar.logo}
               </span>
             </span>
           </Link>
@@ -215,13 +229,13 @@ export function Navbar() {
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </span>
             </Link>
-            <Link href="/contact">
+            <Link href={navbar.ctaPath}>
               <span
                 className="gb-btn text-[15px] px-5 py-2"
                 style={{ borderRadius: 100 }}
                 data-testid="button-book-call-nav"
               >
-                Book a Call
+                {navbar.ctaLabel}
               </span>
             </Link>
           </div>
@@ -296,12 +310,12 @@ export function Navbar() {
                   </Link>
                 );
               })}
-              <Link href="/contact">
+              <Link href={navbar.ctaPath}>
                 <span
                   className="gb-btn justify-center mt-2"
                   style={{ width: "100%", borderRadius: 12, padding: "14px 0", fontSize: 15 }}
                 >
-                  Book a Call
+                  {navbar.ctaLabel}
                 </span>
               </Link>
             </nav>

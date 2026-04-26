@@ -1,6 +1,68 @@
 import { Link } from "wouter";
+import { usePublicContent } from "@/hooks/usePublicContent";
+
+interface FooterLink { label: string; path: string; }
+interface FooterColumn { title: string; links: FooterLink[]; }
+
+interface FooterData {
+  tagline: string;
+  email: string;
+  linkedin: string;
+  twitter: string;
+  instagram: string;
+  columns: FooterColumn[];
+  legalText: string;
+}
+
+const DEFAULTS: FooterData = {
+  tagline: "Content & Authority Studio for founders, creators and growing brands.",
+  email: "hello@growitbuddy.com",
+  linkedin: "",
+  twitter: "",
+  instagram: "",
+  columns: [
+    {
+      title: "Services",
+      links: [
+        { label: "Authority Strategy", path: "/services" },
+        { label: "Content Systems", path: "/services" },
+        { label: "Video Editing", path: "/services" },
+        { label: "Distribution", path: "/services" },
+      ],
+    },
+    {
+      title: "Company",
+      links: [
+        { label: "About", path: "/about" },
+        { label: "Work", path: "/work" },
+        { label: "Framework", path: "/framework" },
+        { label: "Blog", path: "/insights" },
+        { label: "Contact", path: "/contact" },
+      ],
+    },
+    {
+      title: "Join Us",
+      links: [
+        { label: "Influencer Network", path: "/creators" },
+        { label: "Talent Network", path: "/freelancers" },
+        { label: "Authority Audit", path: "/authority-audit" },
+      ],
+    },
+  ],
+  legalText: `${new Date().getFullYear()} GrowitBuddy. All rights reserved.`,
+};
+
+const socialLinks = [
+  { key: "linkedin" as const, label: "LinkedIn" },
+  { key: "twitter" as const, label: "Twitter" },
+  { key: "instagram" as const, label: "Instagram" },
+];
 
 export function Footer() {
+  const data = usePublicContent<FooterData>("footer", DEFAULTS);
+
+  const activeSocials = socialLinks.filter((s) => data[s.key]);
+
   return (
     <footer
       style={{
@@ -62,10 +124,10 @@ export function Footer() {
                 marginTop: 4,
               }}
             >
-              Content & Authority Studio for founders, creators and growing brands.
+              {data.tagline}
             </p>
             <a
-              href="mailto:hello@growitbuddy.com"
+              href={`mailto:${data.email}`}
               style={{
                 display: "inline-block",
                 marginTop: 16,
@@ -77,127 +139,68 @@ export function Footer() {
               }}
               className="hover:text-white transition-colors"
             >
-              hello@growitbuddy.com
+              {data.email}
             </a>
-          </div>
-
-          <div>
-            <h4
-              style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: 11,
-                fontWeight: 700,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: "rgba(255,255,255,0.25)",
-                marginBottom: 18,
-              }}
-            >
-              Services
-            </h4>
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {[
-                { href: "/services", label: "Authority Strategy" },
-                { href: "/services", label: "Content Systems" },
-                { href: "/services", label: "Video Editing" },
-                { href: "/services", label: "Distribution" },
-              ].map((l) => (
-                <Link key={l.label} href={l.href}>
-                  <span
+            {activeSocials.length > 0 && (
+              <div style={{ display: "flex", gap: 14, marginTop: 14 }}>
+                {activeSocials.map((s) => (
+                  <a
+                    key={s.key}
+                    href={data[s.key]}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     style={{
                       fontFamily: "'Inter', sans-serif",
-                      fontSize: 14,
-                      color: "rgba(255,255,255,0.4)",
-                      cursor: "pointer",
-                      display: "block",
-                      transition: "color 0.15s",
-                    }}
-                    className="hover:text-white"
-                  >
-                    {l.label}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h4
-              style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: 11,
-                fontWeight: 700,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: "rgba(255,255,255,0.25)",
-                marginBottom: 18,
-              }}
-            >
-              Company
-            </h4>
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {[
-                { href: "/about", label: "About" },
-                { href: "/work", label: "Work" },
-                { href: "/framework", label: "Framework" },
-                { href: "/insights", label: "Blog" },
-                { href: "/contact", label: "Contact" },
-              ].map((l) => (
-                <Link key={l.href} href={l.href}>
-                  <span
-                    style={{
-                      fontFamily: "'Inter', sans-serif",
-                      fontSize: 14,
-                      color: "rgba(255,255,255,0.4)",
-                      cursor: "pointer",
-                      display: "block",
+                      fontSize: 13,
+                      fontWeight: 600,
+                      color: "rgba(255,255,255,0.45)",
+                      textDecoration: "none",
                     }}
                     className="hover:text-white transition-colors"
                   >
-                    {l.label}
-                  </span>
-                </Link>
-              ))}
-            </div>
+                    {s.label}
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
 
-          <div>
-            <h4
-              style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: 11,
-                fontWeight: 700,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: "rgba(255,255,255,0.25)",
-                marginBottom: 18,
-              }}
-            >
-              Join Us
-            </h4>
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {[
-                { href: "/creators", label: "Influencer Network" },
-                { href: "/freelancers", label: "Talent Network" },
-                { href: "/authority-audit", label: "Authority Audit" },
-              ].map((l) => (
-                <Link key={l.href} href={l.href}>
-                  <span
-                    style={{
-                      fontFamily: "'Inter', sans-serif",
-                      fontSize: 14,
-                      color: "rgba(255,255,255,0.4)",
-                      cursor: "pointer",
-                      display: "block",
-                    }}
-                    className="hover:text-white transition-colors"
-                  >
-                    {l.label}
-                  </span>
-                </Link>
-              ))}
+          {data.columns.map((col, ci) => (
+            <div key={ci}>
+              <h4
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: 11,
+                  fontWeight: 700,
+                  letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.25)",
+                  marginBottom: 18,
+                }}
+              >
+                {col.title}
+              </h4>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {col.links.map((l, li) => (
+                  <Link key={li} href={l.path}>
+                    <span
+                      style={{
+                        fontFamily: "'Inter', sans-serif",
+                        fontSize: 14,
+                        color: "rgba(255,255,255,0.4)",
+                        cursor: "pointer",
+                        display: "block",
+                        transition: "color 0.15s",
+                      }}
+                      className="hover:text-white"
+                    >
+                      {l.label}
+                    </span>
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
+          ))}
         </div>
 
         <div
@@ -218,7 +221,7 @@ export function Footer() {
               color: "rgba(255,255,255,0.2)",
             }}
           >
-            &copy; {new Date().getFullYear()} GrowitBuddy. All rights reserved.
+            &copy; {data.legalText}
           </p>
           <div style={{ display: "flex", gap: 20 }}>
             {["Privacy", "Terms"].map((l) => (
