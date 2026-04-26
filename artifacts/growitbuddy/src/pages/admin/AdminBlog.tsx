@@ -364,7 +364,7 @@ const EDITOR_CSS = `
 .blog-editor { font-family: Inter, sans-serif; }
 .blog-editor p { font-size: 17px; color: rgba(11,11,11,0.68); line-height: 1.9; margin: 0 0 18px 0; }
 .blog-editor h1 { font-weight: 900; font-size: 36px; letter-spacing: -0.04em; color: #0B0B0B; margin: 0 0 16px 0; line-height: 1.1; }
-.blog-editor h2 { font-weight: 800; font-size: 26px; letter-spacing: -0.03em; color: #0B0B0B; margin: 0 0 18px 0; line-height: 1.25; padding-bottom: 12px; border-bottom: 2px solid rgba(11,11,11,0.07); }
+.blog-editor h2 { font-weight: 800; font-size: 26px; letter-spacing: -0.03em; color: #0B0B0B; margin: 0 0 18px 0; line-height: 1.25; }
 .blog-editor h3 { font-weight: 700; font-size: 20px; letter-spacing: -0.02em; color: #0B0B0B; margin: 0 0 12px 0; line-height: 1.35; }
 .blog-editor h4 { font-weight: 700; font-size: 17px; color: #0B0B0B; margin: 0 0 10px 0; }
 .blog-editor blockquote { margin: 28px 0; padding: 18px 22px; border-left: 3px solid #0B0B0B; background: rgba(11,11,11,0.03); border-radius: 0 12px 12px 0; }
