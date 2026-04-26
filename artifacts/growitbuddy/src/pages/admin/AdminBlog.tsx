@@ -1333,7 +1333,9 @@ export default function AdminBlog() {
       updated = posts.map((p) => (p.slug === editing?.post.slug ? post : p));
     }
     await persist(updated);
-    setEditing(null);
+    if (editing?.isNew) {
+      setEditing({ post, isNew: false });
+    }
   }
 
   function handleDelete(slug: string, idx: number) {
