@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { blogPosts as DEFAULT_POSTS, defaultSeo, type BlogPost, type PostSeo } from "@/data/blogPosts";
 import { ImageCropUploader } from "@/components/admin/ImageCropUploader";
+import { ImagePickerField } from "@/components/admin/ImagePickerField";
 import { Card } from "@/components/admin/AdminField";
 import {
   Plus, ArrowLeft, Bold, Italic, List, ListOrdered, Quote,
@@ -658,8 +659,8 @@ function PostEditor({
                 <textarea value={seo.ogDescription} onChange={(e) => setSeoField("ogDescription", e.target.value)} placeholder={metaDescDisplay} rows={2} className="w-full border border-[#0B0B0B]/12 rounded-lg px-2.5 py-1.5 text-[12px] text-[#0B0B0B] outline-none focus:border-[#0B0B0B]/30 bg-white resize-none" />
               </div>
               <div>
-                <label className="block text-[10px] font-semibold text-[#0B0B0B]/45 mb-1 uppercase tracking-widest">OG Image URL</label>
-                <input value={seo.ogImage} onChange={(e) => setSeoField("ogImage", e.target.value)} placeholder="https://..." className="w-full border border-[#0B0B0B]/12 rounded-lg px-2.5 py-1.5 text-[12px] text-[#0B0B0B] outline-none focus:border-[#0B0B0B]/30 bg-white" />
+                <label className="block text-[10px] font-semibold text-[#0B0B0B]/45 mb-2 uppercase tracking-widest">OG Image</label>
+                <ImagePickerField label="" value={seo.ogImage} onChange={(url) => setSeoField("ogImage", url)} shape="square" size={56} />
               </div>
               {(seo.ogImage || seo.ogTitle || seo.ogDescription) && (
                 <div className="rounded-xl overflow-hidden border border-[#0B0B0B]/10 mt-2">

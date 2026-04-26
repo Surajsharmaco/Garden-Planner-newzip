@@ -4,6 +4,7 @@ import {
   PageHeader, Card, SectionTitle, Input, Textarea, SaveBar,
 } from "@/components/admin/AdminField";
 import { ImageCropUploader } from "@/components/admin/ImageCropUploader";
+import { ImagePickerField } from "@/components/admin/ImagePickerField";
 
 interface Settings {
   companyName: string;
@@ -140,33 +141,8 @@ export default function AdminSettings() {
             </div>
             <div>
               <label className="block text-[12px] font-semibold text-[#0B0B0B]/60 mb-3 uppercase tracking-wider">Favicon</label>
-              <div className="border-2 border-dashed border-[#0B0B0B]/15 rounded-xl p-4 bg-[#fafafa]">
-                {data.faviconUrl ? (
-                  <div className="flex items-center gap-3">
-                    <img src={data.faviconUrl} alt="favicon" className="w-10 h-10 rounded object-contain border border-[#0B0B0B]/10" />
-                    <div>
-                      <p className="text-[12px] font-semibold text-[#0B0B0B]">Favicon set</p>
-                      <button onClick={() => set("faviconUrl", "")} className="text-[11px] text-red-500 hover:text-red-600">Remove</button>
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    <Input
-                      label=""
-                      value=""
-                      placeholder="Paste favicon URL (PNG/ICO, 32x32)"
-                      onChange={(e) => set("faviconUrl", e.target.value)}
-                    />
-                  </div>
-                )}
-              </div>
-              <Input
-                label=""
-                value={data.faviconUrl}
-                placeholder="Or paste favicon URL..."
-                onChange={(e) => set("faviconUrl", e.target.value)}
-                className="mt-2"
-              />
+              <ImagePickerField label="" value={data.faviconUrl} onChange={(url) => set("faviconUrl", url)} shape="square" size={56} />
+              <p className="text-[10px] text-[#0B0B0B]/35 mt-1.5">Use a 32x32 PNG or ICO for best results</p>
             </div>
           </div>
 
