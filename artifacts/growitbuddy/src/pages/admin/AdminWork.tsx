@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { PageHeader, Card, SectionTitle, Input, Textarea, SaveBar } from "@/components/admin/AdminField";
+import { ImageCropUploader } from "@/components/admin/ImageCropUploader";
 import { Plus, Trash2, ChevronDown, ChevronUp } from "lucide-react";
 
 interface WorkStat {
@@ -92,7 +93,10 @@ function WorkRow({
             <Input label="Title" value={item.title} onChange={(e) => set({ title: e.target.value })} />
             <Input label="Subtitle" value={item.subtitle} onChange={(e) => set({ subtitle: e.target.value })} />
             <Input label="Category" value={item.category} onChange={(e) => set({ category: e.target.value })} placeholder="Founder Brand" />
-            <Input label="Image URL (optional)" value={item.imageUrl} onChange={(e) => set({ imageUrl: e.target.value })} />
+            <div className="col-span-2">
+              <label className="block text-[12px] font-semibold text-[#0B0B0B]/60 mb-2 uppercase tracking-wider">Case Study Image</label>
+              <ImageCropUploader value={item.imageUrl} onChange={(url) => set({ imageUrl: url })} />
+            </div>
             <Input label="Key Metric" value={item.metric} onChange={(e) => set({ metric: e.target.value })} placeholder="10x" />
             <Input label="Metric Label" value={item.metricLabel} onChange={(e) => set({ metricLabel: e.target.value })} placeholder="inbound leads in 90 days" />
           </div>

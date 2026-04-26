@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { PageHeader, Card, SectionTitle, Input, Textarea, SaveBar } from "@/components/admin/AdminField";
+import { ImagePickerField } from "@/components/admin/ImagePickerField";
 import { Plus, Trash2 } from "lucide-react";
 
 interface TeamMember { name: string; role: string; photo: string; }
@@ -75,7 +76,9 @@ export default function AdminAbout() {
           <div className="grid grid-cols-2 gap-3">
             <Input label="Name" value={data.founderName} onChange={(e) => set("founderName", e.target.value)} />
             <Input label="Role / Title" value={data.founderRole} onChange={(e) => set("founderRole", e.target.value)} />
-            <Input label="Photo URL" value={data.founderPhoto} onChange={(e) => set("founderPhoto", e.target.value)} className="col-span-2" placeholder="https://..." />
+            <div className="col-span-2">
+              <ImagePickerField label="Photo" value={data.founderPhoto} onChange={(url) => set("founderPhoto", url)} shape="circle" size={72} />
+            </div>
             <Textarea label="Bio" value={data.founderBio} onChange={(e) => set("founderBio", e.target.value)} rows={4} className="col-span-2" />
             <Input label="LinkedIn URL" value={data.founderLinkedin} onChange={(e) => set("founderLinkedin", e.target.value)} placeholder="https://linkedin.com/in/..." />
             <Input label="Twitter / X URL" value={data.founderTwitter} onChange={(e) => set("founderTwitter", e.target.value)} placeholder="https://x.com/..." />
@@ -115,7 +118,9 @@ export default function AdminAbout() {
                 <div className="flex-1 grid grid-cols-2 gap-2">
                   <Input value={m.name} onChange={(e) => { const tm = [...data.team]; tm[i] = { ...m, name: e.target.value }; set("team", tm); }} placeholder="Name" />
                   <Input value={m.role} onChange={(e) => { const tm = [...data.team]; tm[i] = { ...m, role: e.target.value }; set("team", tm); }} placeholder="Role" />
-                  <Input value={m.photo} onChange={(e) => { const tm = [...data.team]; tm[i] = { ...m, photo: e.target.value }; set("team", tm); }} placeholder="Photo URL" className="col-span-2" />
+                  <div className="col-span-2">
+                    <ImagePickerField value={m.photo} onChange={(url) => { const tm = [...data.team]; tm[i] = { ...m, photo: url }; set("team", tm); }} shape="circle" />
+                  </div>
                 </div>
                 <button onClick={() => set("team", data.team.filter((_, ti) => ti !== i))} className="p-1.5 text-[#0B0B0B]/25 hover:text-red-500 shrink-0"><Trash2 size={13} /></button>
               </div>

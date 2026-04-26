@@ -3,6 +3,36 @@ import { randomBytes } from "crypto";
 import { db, siteContent, leads } from "@workspace/db";
 import { eq, desc } from "drizzle-orm";
 import { logger } from "../lib/logger";
+import multer from "multer";
+import path from "path";
+import { fileURLToPath } from "url";
+import { readdir, mkdir } from "fs/promises";
+import { existsSync } from "fs";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const UPLOADS_DIR = path.resolve(__dirname, "../../uploads");
+
+if (!existsSync(UPLOADS_DIR)) {
+  await mkdir(UPLOADS_DIR, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, UPLOADS_DIR),
+  filename: (_req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase() || ".png";
+    const safe = path.basename(file.originalname, ext).replace(/[^a-zA-Z0-9_-]/g, "_").slice(0, 40);
+    cb(null, `${Date.now()}_${safe}${ext}`);
+  },
+});
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 8 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype.startsWith("image/")) cb(null, true);
+    else cb(new Error("Only image files are allowed"));
+  },
+});
 
 const router = Router();
 
@@ -137,6 +167,36 @@ router.delete("/leads/:id", authMiddleware, async (req, res) => {
   if (isNaN(id)) { res.status(400).json({ error: "Invalid id" }); return; }
   await db.delete(leads).where(eq(leads.id, id));
   res.json({ success: true });
+});
+
+// ── Media uploads ──
+
+router.post("/upload", authMiddleware, upload.single("file"), (req, res) => {
+  const file = req.file;
+  if (!file) {
+    res.status(400).json({ error: "No file uploaded" });
+    return;
+  }
+  const url = `/uploads/${file.filename}`;
+  res.json({ url, filename: file.filename, size: file.size });
+});
+
+router.get("/media", authMiddleware, async (_req, res) => {
+  try {
+    const files = await readdir(UPLOADS_DIR);
+    const images = files
+      .filter((f) => /\.(png|jpe?g|webp|gif|svg)$/i.test(f))
+      .sort()
+      .reverse()
+      .map((filename) => ({
+        filename,
+        url: `/uploads/${filename}`,
+        uploadedAt: parseInt(filename.split("_")[0] || "0", 10),
+      }));
+    res.json(images);
+  } catch {
+    res.json([]);
+  }
 });
 
 export { authMiddleware };

@@ -1,5 +1,9 @@
-import { useState, useRef, useCallback } from "react";
-import { Upload, X, RotateCcw, Check, Crop } from "lucide-react";
+import { useState, useRef, useCallback, useId } from "react";
+import { Upload, X, RotateCcw, Check, Crop, Images } from "lucide-react";
+import { MediaLibrary } from "./MediaLibrary";
+
+const API = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
+const getToken = () => localStorage.getItem("gb_admin_token") ?? "";
 
 type Handle = "tl" | "tr" | "bl" | "br" | "move" | "new";
 type AspectKey = "free" | "16:9" | "4:3" | "1:1" | "3:4";
@@ -30,13 +34,18 @@ function roundedRectPath(ctx: CanvasRenderingContext2D, x: number, y: number, w:
   ctx.closePath();
 }
 
-interface Props { value: string; onChange: (dataUrl: string) => void; }
+interface Props { value: string; onChange: (url: string) => void; }
 
 export function ImageCropUploader({ value, onChange }: Props) {
+  const uid = useId();
+  const inputId = `img_upload_${uid.replace(/:/g, "")}`;
+
   const [stage, setStage] = useState<"empty" | "crop" | "done">(value ? "done" : "empty");
   const [rawSrc, setRawSrc] = useState<string>("");
   const [finalSrc, setFinalSrc] = useState<string>(value || "");
   const [hovering, setHovering] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [showLibrary, setShowLibrary] = useState(false);
 
   const [aspectKey, setAspectKey] = useState<AspectKey>("free");
   const [roundness, setRoundness] = useState(0);
@@ -151,7 +160,7 @@ export function ImageCropUploader({ value, onChange }: Props) {
 
   function onPointerUp() { dragState.current = null; }
 
-  function applyCrop() {
+  async function applyCrop() {
     const img = imgRef.current;
     if (!img) return;
     const scaleX = img.naturalWidth / imgDisplay.w;
@@ -174,156 +183,196 @@ export function ImageCropUploader({ value, onChange }: Props) {
       crop.w * scaleX, crop.h * scaleY,
       0, 0, outW, outH
     );
-    const dataUrl = canvas.toDataURL("image/png", 0.92);
-    setFinalSrc(dataUrl);
-    setStage("done");
-    onChange(dataUrl);
+
+    setUploading(true);
+    try {
+      const blob = await new Promise<Blob>((resolve, reject) =>
+        canvas.toBlob((b) => b ? resolve(b) : reject(new Error("canvas empty")), "image/png", 0.92)
+      );
+      const fd = new FormData();
+      fd.append("file", blob, "image.png");
+      const res = await fetch(`${API}/admin/upload`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${getToken()}` },
+        body: fd,
+      });
+      if (res.ok) {
+        const { url } = await res.json() as { url: string };
+        setFinalSrc(url);
+        setStage("done");
+        onChange(url);
+      } else {
+        const dataUrl = canvas.toDataURL("image/png", 0.92);
+        setFinalSrc(dataUrl);
+        setStage("done");
+        onChange(dataUrl);
+      }
+    } catch {
+      const dataUrl = canvas.toDataURL("image/png", 0.92);
+      setFinalSrc(dataUrl);
+      setStage("done");
+      onChange(dataUrl);
+    } finally {
+      setUploading(false);
+    }
   }
 
   function reset() {
     setStage("empty"); setRawSrc(""); setFinalSrc(""); onChange("");
   }
 
-  const svgRx = roundness > 0 ? (Math.min(crop.w, crop.h) * roundness) / 100 : 0;
-
-  // ── Empty / Upload ──
-  if (stage === "empty") {
-    return (
-      <div
-        onDragOver={(e) => { e.preventDefault(); setHovering(true); }}
-        onDragLeave={() => setHovering(false)}
-        onDrop={(e) => { e.preventDefault(); setHovering(false); const f = e.dataTransfer.files[0]; if (f) handleFileSelect(f); }}
-        onClick={() => document.getElementById("__img_upload__")?.click()}
-        className={`border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-2.5 transition-colors cursor-pointer ${hovering ? "border-[#0B0B0B]/40 bg-[#0B0B0B]/5" : "border-[#0B0B0B]/15 bg-[#fafafa] hover:border-[#0B0B0B]/30 hover:bg-[#0B0B0B]/3"}`}
-        style={{ minHeight: 130 }}
-      >
-        <input id="__img_upload__" type="file" accept="image/*" className="hidden"
-          onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFileSelect(f); }} />
-        <Upload size={20} className="text-[#0B0B0B]/30" />
-        <div className="text-center">
-          <p className="text-[13px] font-semibold text-[#0B0B0B]/50">Click to upload or drag & drop</p>
-          <p className="text-[10px] text-[#0B0B0B]/30 mt-0.5">PNG, JPG, WebP</p>
-        </div>
-      </div>
-    );
+  function handleLibrarySelect(url: string) {
+    setFinalSrc(url);
+    setStage("done");
+    onChange(url);
+    setShowLibrary(false);
   }
 
-  // ── Done / Preview ──
-  if (stage === "done") {
-    return (
-      <div className="space-y-2">
-        <div className="relative rounded-xl overflow-hidden group" style={{ height: 150 }}>
-          <img src={finalSrc} alt="Featured" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
-            <button onClick={() => setStage("crop")}
-              className="bg-white text-[#0B0B0B] text-[11px] font-semibold px-3 py-1.5 rounded-lg hover:bg-[#f5f5f5] flex items-center gap-1">
-              <Crop size={11} /> Re-crop
-            </button>
+  const svgRx = roundness > 0 ? (Math.min(crop.w, crop.h) * roundness) / 100 : 0;
+
+  return (
+    <>
+      {showLibrary && <MediaLibrary onSelect={handleLibrarySelect} onClose={() => setShowLibrary(false)} />}
+
+      {stage === "empty" && (
+        <div className="space-y-2">
+          <div
+            onDragOver={(e) => { e.preventDefault(); setHovering(true); }}
+            onDragLeave={() => setHovering(false)}
+            onDrop={(e) => { e.preventDefault(); setHovering(false); const f = e.dataTransfer.files[0]; if (f) handleFileSelect(f); }}
+            onClick={() => document.getElementById(inputId)?.click()}
+            className={`border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-2.5 transition-colors cursor-pointer ${hovering ? "border-[#0B0B0B]/40 bg-[#0B0B0B]/5" : "border-[#0B0B0B]/15 bg-[#fafafa] hover:border-[#0B0B0B]/30 hover:bg-[#0B0B0B]/3"}`}
+            style={{ minHeight: 120 }}
+          >
+            <input id={inputId} type="file" accept="image/*" className="hidden"
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFileSelect(f); e.currentTarget.value = ""; }} />
+            <Upload size={20} className="text-[#0B0B0B]/30" />
+            <div className="text-center">
+              <p className="text-[13px] font-semibold text-[#0B0B0B]/50">Click to upload or drag & drop</p>
+              <p className="text-[10px] text-[#0B0B0B]/30 mt-0.5">PNG, JPG, WebP · max 8 MB</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowLibrary(true)}
+            className="w-full flex items-center justify-center gap-1.5 text-[11px] font-semibold text-[#0B0B0B]/40 hover:text-[#0B0B0B] border border-[#0B0B0B]/10 hover:border-[#0B0B0B]/25 rounded-xl py-2 transition-colors"
+          >
+            <Images size={13} /> Choose from library
+          </button>
+        </div>
+      )}
+
+      {stage === "done" && (
+        <div className="space-y-2">
+          <div className="relative rounded-xl overflow-hidden group" style={{ height: 150 }}>
+            <img src={finalSrc} alt="Featured" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
+              <button onClick={() => setStage("crop")}
+                className="bg-white text-[#0B0B0B] text-[11px] font-semibold px-3 py-1.5 rounded-lg hover:bg-[#f5f5f5] flex items-center gap-1">
+                <Crop size={11} /> Re-crop
+              </button>
+              <button onClick={() => setShowLibrary(true)}
+                className="bg-white text-[#0B0B0B] text-[11px] font-semibold px-3 py-1.5 rounded-lg hover:bg-[#f5f5f5] flex items-center gap-1">
+                <Images size={11} /> Library
+              </button>
+              <button onClick={reset}
+                className="bg-white text-red-600 text-[11px] font-semibold px-3 py-1.5 rounded-lg hover:bg-red-50 flex items-center gap-1">
+                <X size={11} /> Remove
+              </button>
+            </div>
+          </div>
+          <p className="text-[10px] text-[#0B0B0B]/35 text-center">Hover to re-crop, pick from library, or remove</p>
+        </div>
+      )}
+
+      {stage === "crop" && (
+        <div className="space-y-3">
+          <div
+            ref={containerRef}
+            className="relative rounded-xl overflow-hidden bg-black select-none"
+            style={{ cursor: "crosshair", maxHeight: 340 }}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+          >
+            <img
+              ref={imgRef}
+              src={rawSrc}
+              alt="crop source"
+              className="w-full block"
+              style={{ maxHeight: 340, objectFit: "contain", pointerEvents: "none", userSelect: "none" }}
+              onLoad={initCrop}
+              draggable={false}
+            />
+            {imgDisplay.w > 0 && (
+              <svg
+                className="absolute inset-0 pointer-events-none"
+                width={imgDisplay.w}
+                height={imgDisplay.h}
+                style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
+                viewBox={`0 0 ${imgDisplay.w} ${imgDisplay.h}`}
+                preserveAspectRatio="none"
+              >
+                <defs>
+                  <mask id={`cmask_${inputId}`}>
+                    <rect width={imgDisplay.w} height={imgDisplay.h} fill="white" />
+                    <rect x={crop.x} y={crop.y} width={crop.w} height={crop.h} rx={svgRx} fill="black" />
+                  </mask>
+                </defs>
+                <rect width={imgDisplay.w} height={imgDisplay.h} fill="rgba(0,0,0,0.55)" mask={`url(#cmask_${inputId})`} />
+                <rect x={crop.x} y={crop.y} width={crop.w} height={crop.h} rx={svgRx}
+                  fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth={1.5} strokeDasharray="5 3" />
+                {[1, 2].map((n) => (
+                  <g key={n}>
+                    <line x1={crop.x + (crop.w * n) / 3} y1={crop.y} x2={crop.x + (crop.w * n) / 3} y2={crop.y + crop.h} stroke="rgba(255,255,255,0.2)" strokeWidth={1} />
+                    <line x1={crop.x} y1={crop.y + (crop.h * n) / 3} x2={crop.x + crop.w} y2={crop.y + (crop.h * n) / 3} stroke="rgba(255,255,255,0.2)" strokeWidth={1} />
+                  </g>
+                ))}
+                {([["tl", crop.x, crop.y, "nwse-resize"], ["tr", crop.x + crop.w, crop.y, "nesw-resize"], ["bl", crop.x, crop.y + crop.h, "nesw-resize"], ["br", crop.x + crop.w, crop.y + crop.h, "nwse-resize"]] as [string, number, number, string][]).map(([, cx, cy, cur], i) => (
+                  <rect key={i} x={cx - 7} y={cy - 7} width={14} height={14} rx={3} fill="white" stroke="rgba(0,0,0,0.15)" strokeWidth={1} style={{ cursor: cur, pointerEvents: "none" }} />
+                ))}
+                <rect x={crop.x} y={crop.y} width={crop.w} height={crop.h} rx={svgRx} fill="transparent" style={{ cursor: "move", pointerEvents: "none" }} />
+              </svg>
+            )}
+          </div>
+
+          <p className="text-[10px] text-[#0B0B0B]/35 text-center">
+            {Math.round(crop.w)} × {Math.round(crop.h)} px &bull; Drag to move &bull; Drag corners to resize
+          </p>
+
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-[10px] font-bold text-[#0B0B0B]/40 uppercase tracking-widest mr-0.5">Ratio</span>
+            {ASPECTS.map((a) => (
+              <button key={a.key} onClick={() => setAspectKey(a.key)}
+                className={`text-[11px] font-semibold px-2.5 py-1 rounded-lg border transition-colors ${aspectKey === a.key ? "bg-[#0B0B0B] text-white border-[#0B0B0B]" : "text-[#0B0B0B]/50 border-[#0B0B0B]/15 hover:border-[#0B0B0B]/30 bg-white"}`}>
+                {a.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold text-[#0B0B0B]/40 uppercase tracking-widest shrink-0">Round</span>
+            <input type="range" min={0} max={50} value={roundness}
+              onChange={(e) => setRoundness(Number(e.target.value))}
+              className="flex-1 accent-[#0B0B0B]" style={{ height: 4 }} />
+            <span className="text-[11px] text-[#0B0B0B]/45 font-mono w-8 text-right">{roundness}%</span>
+          </div>
+
+          <div className="flex gap-2 pt-1">
             <button onClick={reset}
-              className="bg-white text-red-600 text-[11px] font-semibold px-3 py-1.5 rounded-lg hover:bg-red-50 flex items-center gap-1">
-              <X size={11} /> Remove
+              className="flex items-center gap-1.5 text-[12px] text-[#0B0B0B]/45 hover:text-[#0B0B0B] px-3 py-2 rounded-xl border border-[#0B0B0B]/12 hover:border-[#0B0B0B]/25 transition-colors">
+              <RotateCcw size={12} /> Cancel
+            </button>
+            <button onClick={applyCrop} disabled={uploading}
+              className="flex-1 flex items-center justify-center gap-1.5 text-[12px] font-semibold bg-[#0B0B0B] text-white px-3 py-2 rounded-xl hover:bg-[#0B0B0B]/85 transition-colors disabled:opacity-50">
+              {uploading ? (
+                <>Uploading…</>
+              ) : (
+                <><Check size={12} /> Apply & Upload</>
+              )}
             </button>
           </div>
         </div>
-        <p className="text-[10px] text-[#0B0B0B]/35 text-center">Hover to re-crop or remove</p>
-      </div>
-    );
-  }
-
-  // ── Crop stage ──
-  return (
-    <div className="space-y-3">
-      {/* Crop canvas */}
-      <div
-        ref={containerRef}
-        className="relative rounded-xl overflow-hidden bg-black select-none"
-        style={{ cursor: "crosshair", maxHeight: 340 }}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-      >
-        <img
-          ref={imgRef}
-          src={rawSrc}
-          alt="crop source"
-          className="w-full block"
-          style={{ maxHeight: 340, objectFit: "contain", pointerEvents: "none", userSelect: "none" }}
-          onLoad={initCrop}
-          draggable={false}
-        />
-        {imgDisplay.w > 0 && (
-          <svg
-            className="absolute inset-0 pointer-events-none"
-            width={imgDisplay.w}
-            height={imgDisplay.h}
-            style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
-            viewBox={`0 0 ${imgDisplay.w} ${imgDisplay.h}`}
-            preserveAspectRatio="none"
-          >
-            <defs>
-              <mask id="cmask">
-                <rect width={imgDisplay.w} height={imgDisplay.h} fill="white" />
-                <rect x={crop.x} y={crop.y} width={crop.w} height={crop.h} rx={svgRx} fill="black" />
-              </mask>
-            </defs>
-            {/* Shadow outside crop */}
-            <rect width={imgDisplay.w} height={imgDisplay.h} fill="rgba(0,0,0,0.55)" mask="url(#cmask)" />
-            {/* Crop border */}
-            <rect x={crop.x} y={crop.y} width={crop.w} height={crop.h} rx={svgRx}
-              fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth={1.5} strokeDasharray="5 3" />
-            {/* Rule of thirds */}
-            {[1, 2].map((n) => (
-              <g key={n}>
-                <line x1={crop.x + (crop.w * n) / 3} y1={crop.y} x2={crop.x + (crop.w * n) / 3} y2={crop.y + crop.h} stroke="rgba(255,255,255,0.2)" strokeWidth={1} />
-                <line x1={crop.x} y1={crop.y + (crop.h * n) / 3} x2={crop.x + crop.w} y2={crop.y + (crop.h * n) / 3} stroke="rgba(255,255,255,0.2)" strokeWidth={1} />
-              </g>
-            ))}
-            {/* Corner handles */}
-            {([["tl", crop.x, crop.y, "nwse-resize"], ["tr", crop.x + crop.w, crop.y, "nesw-resize"], ["bl", crop.x, crop.y + crop.h, "nesw-resize"], ["br", crop.x + crop.w, crop.y + crop.h, "nwse-resize"]] as [string, number, number, string][]).map(([, cx, cy, cur], i) => (
-              <rect key={i} x={cx - 7} y={cy - 7} width={14} height={14} rx={3} fill="white" stroke="rgba(0,0,0,0.15)" strokeWidth={1} style={{ cursor: cur, pointerEvents: "none" }} />
-            ))}
-            {/* Move cursor hint */}
-            <rect x={crop.x} y={crop.y} width={crop.w} height={crop.h} rx={svgRx} fill="transparent" style={{ cursor: "move", pointerEvents: "none" }} />
-          </svg>
-        )}
-      </div>
-
-      {/* Size display */}
-      <p className="text-[10px] text-[#0B0B0B]/35 text-center">
-        {Math.round(crop.w)} × {Math.round(crop.h)} px &bull; Drag to move &bull; Drag corners to resize
-      </p>
-
-      {/* Aspect ratio */}
-      <div className="flex items-center gap-1.5 flex-wrap">
-        <span className="text-[10px] font-bold text-[#0B0B0B]/40 uppercase tracking-widest mr-0.5">Ratio</span>
-        {ASPECTS.map((a) => (
-          <button key={a.key} onClick={() => setAspectKey(a.key)}
-            className={`text-[11px] font-semibold px-2.5 py-1 rounded-lg border transition-colors ${aspectKey === a.key ? "bg-[#0B0B0B] text-white border-[#0B0B0B]" : "text-[#0B0B0B]/50 border-[#0B0B0B]/15 hover:border-[#0B0B0B]/30 bg-white"}`}>
-            {a.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Roundness */}
-      <div className="flex items-center gap-2">
-        <span className="text-[10px] font-bold text-[#0B0B0B]/40 uppercase tracking-widest shrink-0">Round</span>
-        <input type="range" min={0} max={50} value={roundness}
-          onChange={(e) => setRoundness(Number(e.target.value))}
-          className="flex-1 accent-[#0B0B0B]" style={{ height: 4 }} />
-        <span className="text-[11px] text-[#0B0B0B]/45 font-mono w-8 text-right">{roundness}%</span>
-      </div>
-
-      {/* Actions */}
-      <div className="flex gap-2 pt-1">
-        <button onClick={reset}
-          className="flex items-center gap-1.5 text-[12px] text-[#0B0B0B]/45 hover:text-[#0B0B0B] px-3 py-2 rounded-xl border border-[#0B0B0B]/12 hover:border-[#0B0B0B]/25 transition-colors">
-          <RotateCcw size={12} /> Cancel
-        </button>
-        <button onClick={applyCrop}
-          className="flex-1 flex items-center justify-center gap-1.5 text-[12px] font-semibold bg-[#0B0B0B] text-white px-3 py-2 rounded-xl hover:bg-[#0B0B0B]/85 transition-colors">
-          <Check size={12} /> Apply Crop
-        </button>
-      </div>
-    </div>
+      )}
+    </>
   );
 }

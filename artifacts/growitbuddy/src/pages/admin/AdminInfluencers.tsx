@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { influencers as DEFAULT_INFLUENCERS, NICHE_CATEGORIES, COUNTRIES, type Influencer } from "@/data/influencers";
 import { PageHeader, Card, Input, SaveBar } from "@/components/admin/AdminField";
-import { Plus, Trash2, Search, X, Eye, EyeOff, ChevronDown, ChevronUp, Settings2, Upload, Clock } from "lucide-react";
+import { ImagePickerField } from "@/components/admin/ImagePickerField";
+import { Plus, Trash2, Search, X, Eye, EyeOff, ChevronDown, ChevronUp, Settings2, Clock } from "lucide-react";
 
 function formatRelativeDate(iso: string | undefined): string {
   if (!iso) return "Never updated";
@@ -131,21 +132,14 @@ function InfluencerRow({
       {open && (
         <div className="border-t border-[#0B0B0B]/8 px-5 py-5">
           <div className="flex gap-5 items-start">
-            {/* Photo preview + URL */}
+            {/* Photo */}
             <div className="shrink-0">
-              <label className="block text-[12px] font-semibold text-[#0B0B0B]/60 mb-2 uppercase tracking-wider">Photo</label>
-              <div className="w-20 h-20 rounded-2xl overflow-hidden bg-[#0B0B0B]/8 border border-[#0B0B0B]/10 flex items-center justify-center mb-2">
-                {inf.photo ? (
-                  <img src={inf.photo} alt={inf.name} className="w-full h-full object-cover object-top" />
-                ) : (
-                  <Upload size={18} className="text-[#0B0B0B]/25" />
-                )}
-              </div>
-              <input
+              <ImagePickerField
+                label="Photo"
                 value={inf.photo}
-                onChange={(e) => set({ photo: e.target.value })}
-                placeholder="Paste image URL..."
-                className="w-44 border border-[#0B0B0B]/12 rounded-xl px-3 py-2 text-[12px] text-[#0B0B0B] placeholder-[#0B0B0B]/30 outline-none focus:border-[#0B0B0B]/30 bg-white"
+                onChange={(url) => set({ photo: url })}
+                shape="circle"
+                size={80}
               />
             </div>
 
