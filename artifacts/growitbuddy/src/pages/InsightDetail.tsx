@@ -101,6 +101,20 @@ export default function InsightDetail() {
         </div>
       </section>
 
+      {/* Cover image */}
+      {post.featuredImage && (
+        <div style={{ width: "100%", maxHeight: 480, overflow: "hidden", background: "#e8e8e6" }}>
+          <motion.img
+            src={post.featuredImage}
+            alt={post.title}
+            initial={{ opacity: 0, scale: 1.03 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7 }}
+            style={{ width: "100%", height: "100%", maxHeight: 480, objectFit: "cover", display: "block" }}
+          />
+        </div>
+      )}
+
       {/* Full content */}
       <section style={{ padding: "64px 24px 80px" }}>
         <div className="max-w-[760px] mx-auto">
