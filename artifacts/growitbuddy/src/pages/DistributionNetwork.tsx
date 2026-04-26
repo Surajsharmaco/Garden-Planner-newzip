@@ -4,6 +4,56 @@ import { ArrowRight, Search, X, SlidersHorizontal, ChevronDown, Check, Globe, Za
 import { distributionPages, DISTRIBUTION_NICHES, DISTRIBUTION_COUNTRIES, type DistributionPage } from "@/data/distributionPages";
 import SEOMeta from "@/components/SEOMeta";
 import { useState, useMemo, useRef, useEffect } from "react";
+import { usePublicContent } from "@/hooks/usePublicContent";
+
+interface AdvItem { label: string; desc: string; }
+interface DistStep { num: string; title: string; desc: string; }
+
+interface DistributionNetworkData {
+  heroEyebrow: string;
+  heroHeadline: string;
+  heroSubtext: string;
+  heroCTA: string;
+  advantageLabel: string;
+  advantageHeadline: string;
+  advantageSubtext: string;
+  advantageItems: AdvItem[];
+  hiwLabel: string;
+  hiwHeadline: string;
+  hiwSteps: DistStep[];
+  ctaLabel: string;
+  ctaHeadline: string;
+  ctaSubtext: string;
+  ctaButton: string;
+}
+
+const DN_DEFAULTS: DistributionNetworkData = {
+  heroEyebrow: "Distribution Network",
+  heroHeadline: "Plug Into High-Performing Distribution.",
+  heroSubtext: "Access a curated network of meme and theme pages with millions of followers. Distribute your content at scale and reach the right audience faster.",
+  heroCTA: "Run a Campaign",
+  advantageLabel: "The Advantage",
+  advantageHeadline: "What You Get",
+  advantageSubtext: "Every page in our network is vetted for real engagement. You get access to distribution that actually converts.",
+  advantageItems: [
+    { label: "High-reach distribution", desc: "Tap into pages with millions of engaged followers across every major niche." },
+    { label: "Access to engaged audiences", desc: "Not just followers — communities that interact, share, and act." },
+    { label: "Faster visibility for your content", desc: "Skip the slow ramp. Get in front of the right people from day one." },
+    { label: "Scalable content amplification", desc: "Run campaigns across multiple pages simultaneously for compound reach." },
+  ],
+  hiwLabel: "Process",
+  hiwHeadline: "How It Works",
+  hiwSteps: [
+    { num: "01", title: "Choose your niche", desc: "Filter by genre to find pages that match your target audience perfectly." },
+    { num: "02", title: "Select relevant pages", desc: "Browse vetted meme and theme pages by reach, country, and engagement." },
+    { num: "03", title: "Run your campaign", desc: "We coordinate content distribution across your selected pages simultaneously." },
+    { num: "04", title: "Track reach and performance", desc: "Get full reporting on reach, impressions, and campaign performance." },
+  ],
+  ctaLabel: "Ready to scale?",
+  ctaHeadline: "Ready to Distribute at Scale?",
+  ctaSubtext: "Leverage our network to get your content in front of the right audience. Fast, targeted, and measurable.",
+  ctaButton: "Start a Campaign",
+};
 
 /* ── Card ────────────────────────────────────────────────── */
 function PageCard({ page, i }: { page: DistributionPage; i: number }) {
@@ -225,6 +275,7 @@ function ActiveTag({ label, onRemove }: { label: string; onRemove: () => void })
 
 /* ── Page ────────────────────────────────────────────────── */
 export default function DistributionNetwork() {
+  const cms = usePublicContent<DistributionNetworkData>("distribution-network", DN_DEFAULTS);
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -331,14 +382,14 @@ export default function DistributionNetwork() {
       {/* Hero */}
       <section style={{ paddingTop: 120, paddingBottom: 72, paddingLeft: 24, paddingRight: 24, borderBottom: "1px solid rgba(11,11,11,0.08)" }}>
         <div className="max-w-[1100px] mx-auto">
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Distribution Network</p>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>{cms.heroEyebrow}</p>
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
             style={{ fontWeight: 800, fontSize: "clamp(36px, 7vw, 80px)", letterSpacing: "-0.04em", lineHeight: "1.02", color: "#0B0B0B", maxWidth: "18ch", marginBottom: 20 }}
           >
-            Plug Into High-Performing Distribution.
+            {cms.heroHeadline}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -346,12 +397,12 @@ export default function DistributionNetwork() {
             transition={{ delay: 0.1 }}
             style={{ fontSize: "clamp(15px, 2.5vw, 18px)", color: "rgba(11,11,11,0.5)", lineHeight: "1.75", maxWidth: "52ch", marginBottom: 32 }}
           >
-            Access a curated network of meme and theme pages with millions of followers. Distribute your content at scale and reach the right audience faster.
+            {cms.heroSubtext}
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }}>
             <Link href="/contact">
               <span className="gb-btn" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                Run a Campaign
+                {cms.heroCTA}
                 <ArrowRight className="w-4 h-4" />
               </span>
             </Link>
@@ -437,21 +488,16 @@ export default function DistributionNetwork() {
       <section className="dist-wyg-section">
         <div className="max-w-[1100px] mx-auto dist-advantage-grid">
           <div>
-            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 14 }}>The Advantage</p>
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 14 }}>{cms.advantageLabel}</p>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(28px, 4vw, 52px)", letterSpacing: "-0.04em", color: "#0B0B0B", lineHeight: 1.08, marginBottom: 20 }}>
-              What You Get
+              {cms.advantageHeadline}
             </h2>
             <p style={{ fontSize: 16, color: "rgba(11,11,11,0.45)", lineHeight: 1.75, maxWidth: "40ch" }}>
-              Every page in our network is vetted for real engagement. You get access to distribution that actually converts.
+              {cms.advantageSubtext}
             </p>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            {[
-              { label: "High-reach distribution", desc: "Tap into pages with millions of engaged followers across every major niche." },
-              { label: "Access to engaged audiences", desc: "Not just followers — communities that interact, share, and act." },
-              { label: "Faster visibility for your content", desc: "Skip the slow ramp. Get in front of the right people from day one." },
-              { label: "Scalable content amplification", desc: "Run campaigns across multiple pages simultaneously for compound reach." },
-            ].map(({ label, desc }) => (
+            {cms.advantageItems.map(({ label, desc }) => (
               <div key={label} style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
                 <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#0B0B0B", marginTop: 8, flexShrink: 0 }} />
                 <div>
@@ -467,17 +513,12 @@ export default function DistributionNetwork() {
       {/* How It Works */}
       <section className="dist-hiw-section">
         <div className="max-w-[1100px] mx-auto">
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 14 }}>Process</p>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.35)", marginBottom: 14 }}>{cms.hiwLabel}</p>
           <h2 style={{ fontWeight: 800, fontSize: "clamp(28px, 4vw, 52px)", letterSpacing: "-0.04em", color: "#0B0B0B", lineHeight: 1.08, marginBottom: 56 }}>
-            How It Works
+            {cms.hiwHeadline}
           </h2>
           <div className="dist-steps-grid">
-            {[
-              { num: "01", title: "Choose your niche", desc: "Filter by genre to find pages that match your target audience perfectly." },
-              { num: "02", title: "Select relevant pages", desc: "Browse vetted meme and theme pages by reach, country, and engagement." },
-              { num: "03", title: "Run your campaign", desc: "We coordinate content distribution across your selected pages simultaneously." },
-              { num: "04", title: "Track reach and performance", desc: "Get full reporting on reach, impressions, and campaign performance." },
-            ].map(({ num, title, desc }) => (
+            {cms.hiwSteps.map(({ num, title, desc }) => (
               <motion.div
                 key={num}
                 initial={{ opacity: 0, y: 16 }}
@@ -498,16 +539,16 @@ export default function DistributionNetwork() {
       <section style={{ padding: "0 24px 96px" }}>
         <div className="max-w-[1100px] mx-auto" style={{ paddingTop: 64 }}>
           <div className="dist-cta-box">
-            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)" }}>Ready to scale?</p>
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)" }}>{cms.ctaLabel}</p>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 4vw, 48px)", letterSpacing: "-0.04em", color: "#fff", lineHeight: 1.1, maxWidth: "22ch" }}>
-              Ready to Distribute at Scale?
+              {cms.ctaHeadline}
             </h2>
             <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: "rgba(255,255,255,0.5)", maxWidth: "44ch", lineHeight: 1.7 }}>
-              Leverage our network to get your content in front of the right audience. Fast, targeted, and measurable.
+              {cms.ctaSubtext}
             </p>
             <Link href="/contact">
               <span style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#fff", color: "#0B0B0B", fontWeight: 700, fontSize: 14, borderRadius: 100, padding: "12px 24px", cursor: "pointer" }}>
-                Start a Campaign
+                {cms.ctaButton}
                 <ArrowRight className="w-4 h-4" />
               </span>
             </Link>

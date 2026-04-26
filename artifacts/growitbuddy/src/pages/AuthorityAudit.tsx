@@ -3,9 +3,57 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronLeft } from "lucide-react";
 import { Link } from "wouter";
 import SEOMeta from "@/components/SEOMeta";
+import { usePublicContent } from "@/hooks/usePublicContent";
 
 const TEXT = "#0B0B0B";
 type Answers = Record<string, string>;
+
+interface AuditQuestion {
+  id: string;
+  type: "text" | "choice";
+  question: string;
+  placeholder?: string;
+  options?: string[];
+}
+
+interface AuditCmsData {
+  heroEyebrow: string;
+  heroHeadline: string;
+  heroSubtext: string;
+  seoTitle: string;
+  seoDesc: string;
+  introFreeTitle: string;
+  introFreeDesc: string;
+  introFreeButton: string;
+  introPaidTitle: string;
+  introPaidDesc: string;
+  introPaidButton: string;
+  questions: AuditQuestion[];
+}
+
+const AUDIT_DEFAULTS: AuditCmsData = {
+  heroEyebrow: "Authority Audit",
+  heroHeadline: "Find out what's limiting your authority.",
+  heroSubtext: "8 targeted questions. You get your authority stage, your specific content gap, your #1 priority action, and a personalized plan - free, in under 3 minutes.",
+  seoTitle: "Authority Audit - GrowitBuddy",
+  seoDesc: "8 targeted questions. Get your authority stage, content gap, and #1 priority action - free, in under 3 minutes.",
+  introFreeTitle: "Free Authority Audit",
+  introFreeDesc: "8 targeted questions. You get your authority stage, your specific content gap, your #1 priority action, and a personalized breakdown.",
+  introFreeButton: "Start Free Audit",
+  introPaidTitle: "Expert Authority Audit",
+  introPaidDesc: "Skip the self-serve. Book a 1-on-1 audit call with our team. We go deep into your content, your positioning, and your platform performance.",
+  introPaidButton: "Book Audit Call",
+  questions: [
+    { id: "name",        type: "text",   question: "First, what's your name?",                                     placeholder: "Your first name" },
+    { id: "role",        type: "choice", question: "What best describes you?",                                     options: ["Founder / Startup CEO", "Coach or Consultant", "Content Creator", "Freelancer or Agency Owner"] },
+    { id: "platform",    type: "choice", question: "Where do you mainly publish content?",                         options: ["LinkedIn", "Instagram", "YouTube", "X / Twitter", "TikTok", "Newsletter", "Podcast"] },
+    { id: "tenure",      type: "choice", question: "How long have you been creating content?",                     options: ["Less than 3 months", "3-12 months", "1-2 years", "2+ years"] },
+    { id: "frequency",   type: "choice", question: "How often do you post right now?",                             options: ["Daily", "3-5x per week", "1-2x per week", "A few times a month", "Rarely or never"] },
+    { id: "problem",     type: "choice", question: "What frustrates you most about your content right now?",       options: ["Not getting enough views or reach", "Content isn't converting to clients or revenue", "I don't know what to post", "I can't stay consistent", "My content feels scattered or unclear"] },
+    { id: "contentType", type: "choice", question: "What type of content do you mostly create?",                   options: ["Educational / how-to content", "Personal stories and opinions", "Case studies and results", "Industry news and commentary", "Mixed - no clear theme"] },
+    { id: "goal",        type: "choice", question: "What does winning look like for you in the next 6 months?",    options: ["Be a recognized name in my niche", "Get consistent inbound leads from content", "Grow to 10K+ engaged followers", "Create a new income stream from content"] },
+  ],
+};
 
 interface Report {
   score: number;
@@ -263,6 +311,9 @@ function buildReport(a: Answers): Report {
 // ── Main component ───────────────────────────────────────────────────────────
 
 export default function AuthorityAudit() {
+  const cms = usePublicContent<AuditCmsData>("authority-audit", AUDIT_DEFAULTS);
+  const QUESTIONS = cms.questions.length > 0 ? cms.questions : AUDIT_DEFAULTS.questions;
+
   const [step, setStep]                       = useState(-1);
   const [answers, setAnswers]                 = useState<Answers>({});
   const [textInput, setTextInput]             = useState("");
@@ -301,25 +352,25 @@ export default function AuthorityAudit() {
   return (
     <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
       <SEOMeta
-        title="Authority Audit - GrowitBuddy"
-        description="8 targeted questions. Get your authority stage, content gap, and #1 priority action - free, in under 3 minutes."
+        title={cms.seoTitle}
+        description={cms.seoDesc}
       />
 
       {/* ── Hero (always visible, matches site pattern) ── */}
       <section style={{ paddingTop: 120, paddingBottom: 60, paddingLeft: 24, paddingRight: 24, background: "#fff", borderBottom: "1px solid rgba(11,11,11,0.08)" }}>
         <div className="max-w-[1100px] mx-auto">
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Authority Audit</p>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>{cms.heroEyebrow}</p>
           <motion.h1
             initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}
             style={{ fontWeight: 800, fontSize: "clamp(40px, 7vw, 84px)", letterSpacing: "-0.04em", lineHeight: "1.02", color: TEXT, maxWidth: "18ch", marginBottom: 20 }}
           >
-            Find out what's limiting your authority.
+            {cms.heroHeadline}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
             style={{ fontSize: 18, color: "rgba(11,11,11,0.5)", lineHeight: "1.75", maxWidth: "52ch" }}
           >
-            8 targeted questions. You get your authority stage, your specific content gap, your #1 priority action, and a personalized plan - free, in under 3 minutes.
+            {cms.heroSubtext}
           </motion.p>
         </div>
       </section>
@@ -341,10 +392,10 @@ export default function AuthorityAudit() {
                     <div>
                       <span style={{ display: "inline-block", fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", background: "#F7F7F5", borderRadius: 100, padding: "4px 12px", marginBottom: 14 }}>Free - instant results - 3 minutes</span>
                       <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 3.5vw, 36px)", letterSpacing: "-0.04em", color: TEXT, margin: 0, lineHeight: 1.1 }}>
-                        Start the Audit yourself
+                        {cms.introFreeTitle}
                       </h2>
                       <p style={{ fontSize: 15, color: "rgba(11,11,11,0.5)", marginTop: 10, maxWidth: "46ch", lineHeight: 1.7 }}>
-                        Answer 8 questions. Get a full authority diagnosis specific to your role, platform, and goals - instantly.
+                        {cms.introFreeDesc}
                       </p>
                     </div>
                   </div>
@@ -372,7 +423,7 @@ export default function AuthorityAudit() {
                       className="gb-btn hover:opacity-85 transition-opacity"
                       style={{ fontSize: 15, padding: "14px 32px" }}
                     >
-                      Start the Audit <ArrowRight className="w-4 h-4" />
+                      {cms.introFreeButton} <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
@@ -382,10 +433,10 @@ export default function AuthorityAudit() {
                   <div style={{ flex: 1, minWidth: 240 }}>
                     <span style={{ display: "inline-block", fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 12 }}>Done with you</span>
                     <h2 style={{ fontWeight: 800, fontSize: "clamp(20px, 2.5vw, 28px)", letterSpacing: "-0.04em", color: "#fff", margin: "0 0 10px", lineHeight: 1.15 }}>
-                      Get your audit from GrowitBuddy's team
+                      {cms.introPaidTitle}
                     </h2>
                     <p style={{ fontSize: 14, color: "rgba(255,255,255,0.45)", lineHeight: "1.7", margin: 0, maxWidth: "48ch" }}>
-                      Our team reviews your content, positioning, and audience - then hands you a full plan built for your goals.
+                      {cms.introPaidDesc}
                     </p>
                   </div>
                   <a
@@ -393,7 +444,7 @@ export default function AuthorityAudit() {
                     style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 26px", borderRadius: 100, background: "#fff", color: "#0B0B0B", fontSize: 14, fontWeight: 700, cursor: "pointer", textDecoration: "none", fontFamily: "'Inter', sans-serif", whiteSpace: "nowrap", flexShrink: 0 }}
                     className="hover:opacity-85 transition-opacity"
                   >
-                    Book a Call <ArrowRight className="w-4 h-4" />
+                    {cms.introPaidButton} <ArrowRight className="w-4 h-4" />
                   </a>
                 </div>
               </motion.div>

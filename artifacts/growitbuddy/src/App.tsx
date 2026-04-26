@@ -40,6 +40,10 @@ import AdminJoinNetwork from "@/pages/admin/AdminJoinNetwork";
 import AdminFreelancers from "@/pages/admin/AdminFreelancers";
 import AdminFullTime from "@/pages/admin/AdminFullTime";
 import AdminFramework from "@/pages/admin/AdminFramework";
+import AdminDistributionNetwork from "@/pages/admin/AdminDistributionNetwork";
+import AdminInfluencerExplore from "@/pages/admin/AdminInfluencerExplore";
+import AdminAuthorityAudit from "@/pages/admin/AdminAuthorityAudit";
+import AdminResources from "@/pages/admin/AdminResources";
 
 function AdminGuard({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAdmin();
@@ -95,6 +99,18 @@ function AdminRoutes() {
       </Route>
       <Route path="/admin/framework">
         {() => <AdminGuard><AdminFramework /></AdminGuard>}
+      </Route>
+      <Route path="/admin/distribution-network">
+        {() => <AdminGuard><AdminDistributionNetwork /></AdminGuard>}
+      </Route>
+      <Route path="/admin/influencer-explore">
+        {() => <AdminGuard><AdminInfluencerExplore /></AdminGuard>}
+      </Route>
+      <Route path="/admin/authority-audit">
+        {() => <AdminGuard><AdminAuthorityAudit /></AdminGuard>}
+      </Route>
+      <Route path="/admin/resources">
+        {() => <AdminGuard><AdminResources /></AdminGuard>}
       </Route>
       <Route path="/admin">
         {() => <AdminGuard><AdminDashboard /></AdminGuard>}

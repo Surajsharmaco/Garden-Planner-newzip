@@ -1,41 +1,158 @@
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { Link } from "wouter";
+import SEOMeta from "@/components/SEOMeta";
+import { usePublicContent } from "@/hooks/usePublicContent";
+
+interface ResourceItem {
+  title: string;
+  desc: string;
+  tag: string;
+  link: string;
+}
+
+interface ResourcesData {
+  heroEyebrow: string;
+  heroHeadline: string;
+  heroSubtext: string;
+  items: ResourceItem[];
+  seoTitle: string;
+  seoDesc: string;
+}
+
+const DEFAULTS: ResourcesData = {
+  heroEyebrow: "Resources",
+  heroHeadline: "Open-source frameworks.",
+  heroSubtext: "Free templates, guides and playbooks from our internal agency toolkit.",
+  items: [],
+  seoTitle: "Resources - GrowitBuddy",
+  seoDesc: "Free templates, guides and playbooks from our internal agency toolkit.",
+};
 
 export default function Resources() {
+  const cms = usePublicContent<ResourcesData>("resources", DEFAULTS);
+
   return (
-    <div className="w-full bg-white">
-      <section className="pt-28 pb-20 px-6 md:px-12 lg:px-20" style={{ background: "#F6F6F6", borderBottom: "1px solid rgba(0,0,0,0.08)" }}>
-        <div className="max-w-[1200px] mx-auto">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] mb-5" style={{ color: "rgba(0,0,0,0.35)", fontFamily: "'Instrument Sans', sans-serif" }}>Resources</p>
+    <div style={{ background: "#F7F7F5", fontFamily: "'Inter', sans-serif" }}>
+      <SEOMeta title={cms.seoTitle} description={cms.seoDesc} />
+
+      {/* Hero */}
+      <section style={{ paddingTop: 120, paddingBottom: 80, paddingLeft: 24, paddingRight: 24, borderBottom: "1px solid rgba(11,11,11,0.08)" }}>
+        <div className="max-w-[1100px] mx-auto">
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>
+            {cms.heroEyebrow}
+          </p>
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="omc-heading leading-[1.05]"
-            style={{ fontSize: "clamp(44px, 6.5vw, 80px)", color: "#000", maxWidth: "16ch" }}
+            style={{ fontWeight: 800, fontSize: "clamp(44px, 7vw, 88px)", letterSpacing: "-0.04em", lineHeight: "1.02", color: "#0B0B0B", maxWidth: "18ch", marginBottom: 24 }}
           >
-            Open-source frameworks.
+            {cms.heroHeadline}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="mt-7 text-[17px] leading-[1.7] max-w-[50ch]"
-            style={{ color: "rgba(0,0,0,0.5)", fontFamily: "'Instrument Sans', sans-serif" }}
+            style={{ fontSize: 18, color: "rgba(11,11,11,0.5)", lineHeight: "1.75", maxWidth: "52ch" }}
           >
-            Free templates, guides and playbooks from our internal agency toolkit.
+            {cms.heroSubtext}
           </motion.p>
         </div>
       </section>
-      <section className="py-16 px-6 md:px-12 lg:px-20 pb-32">
-        <div className="max-w-[1200px] mx-auto">
-          <div
-            className="flex items-center justify-center"
-            style={{ background: "#F6F6F6", borderRadius: "5px", height: "400px", border: "1px solid rgba(0,0,0,0.08)" }}
-          >
-            <span className="text-[14px]" style={{ color: "rgba(0,0,0,0.3)", fontFamily: "'Instrument Sans', sans-serif" }}>Content coming soon</span>
-          </div>
+
+      {/* Resources grid */}
+      <section style={{ padding: "60px 24px 100px", background: "#fff" }}>
+        <div className="max-w-[1100px] mx-auto">
+          {cms.items.length === 0 ? (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "#F7F7F5",
+                borderRadius: 12,
+                height: 320,
+                border: "1px solid rgba(11,11,11,0.08)",
+              }}
+            >
+              <span style={{ fontSize: 14, color: "rgba(11,11,11,0.3)" }}>Content coming soon</span>
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+                gap: 20,
+              }}
+            >
+              {cms.items.map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05, duration: 0.45 }}
+                >
+                  {item.link ? (
+                    <a href={item.link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", display: "block", height: "100%" }}>
+                      <ResourceCard item={item} />
+                    </a>
+                  ) : (
+                    <ResourceCard item={item} />
+                  )}
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
+    </div>
+  );
+}
+
+function ResourceCard({ item }: { item: ResourceItem }) {
+  return (
+    <div
+      style={{
+        background: "#F7F7F5",
+        border: "1.5px solid rgba(11,11,11,0.08)",
+        borderRadius: 20,
+        padding: "28px 28px 24px",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        cursor: item.link ? "pointer" : "default",
+        transition: "transform 0.2s, box-shadow 0.2s",
+      }}
+      className={item.link ? "hover:-translate-y-1 hover:shadow-md" : ""}
+    >
+      <span style={{
+        display: "inline-block",
+        fontSize: 10,
+        fontWeight: 700,
+        letterSpacing: "0.14em",
+        textTransform: "uppercase",
+        padding: "4px 12px",
+        borderRadius: 100,
+        background: "#0B0B0B",
+        color: "#fff",
+        marginBottom: 20,
+        alignSelf: "flex-start",
+      }}>
+        {item.tag}
+      </span>
+      <h3 style={{ fontWeight: 800, fontSize: 18, letterSpacing: "-0.03em", color: "#0B0B0B", marginBottom: 10, lineHeight: 1.3 }}>
+        {item.title}
+      </h3>
+      <p style={{ fontSize: 14, color: "rgba(11,11,11,0.5)", lineHeight: 1.7, flex: 1 }}>
+        {item.desc}
+      </p>
+      {item.link && (
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 5, marginTop: 20, fontSize: 13, fontWeight: 700, color: "#0B0B0B" }}>
+          Download <ArrowRight style={{ width: 14, height: 14 }} />
+        </span>
+      )}
     </div>
   );
 }

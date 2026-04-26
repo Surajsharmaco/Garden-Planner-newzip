@@ -5,7 +5,7 @@ import { Card } from "@/components/admin/AdminField";
 import {
   Settings, Users, FileText, Briefcase, Home, Layers,
   Info, AlignLeft, Menu as MenuIcon, Inbox, TrendingUp,
-  CheckCircle2, Clock,
+  CheckCircle2, Clock, Network, Share2, BarChart2, BookOpen,
 } from "lucide-react";
 
 const API_BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
@@ -30,6 +30,10 @@ const SECTION_META: Record<string, { label: string; icon: React.ReactNode; path:
   about:       { label: "About",        icon: <Info size={16} />,       path: "/admin/about",       desc: "Founder, team, values" },
   navbar:      { label: "Navbar",       icon: <MenuIcon size={16} />,   path: "/admin/navbar",      desc: "Navigation links" },
   footer:      { label: "Footer",       icon: <AlignLeft size={16} />,  path: "/admin/footer",      desc: "Footer & contact links" },
+  "distribution-network": { label: "Distribution Network", icon: <Network size={16} />,  path: "/admin/distribution-network", desc: "Hero, benefits & steps" },
+  "influencer-explore":   { label: "Influencer Explore",  icon: <Users size={16} />,     path: "/admin/influencer-explore",   desc: "Explore page hero & CTA" },
+  "authority-audit":      { label: "Authority Audit",     icon: <BarChart2 size={16} />, path: "/admin/authority-audit",      desc: "Quiz questions & hero" },
+  resources:              { label: "Resources",           icon: <BookOpen size={16} />,  path: "/admin/resources",            desc: "Frameworks & resource items" },
 };
 
 const TYPE_COLORS: Record<string, string> = {

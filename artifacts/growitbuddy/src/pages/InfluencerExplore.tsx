@@ -4,8 +4,35 @@ import { ArrowRight, Search, X, SlidersHorizontal, ChevronDown, Check, Globe } f
 import SEOMeta from "@/components/SEOMeta";
 import { useState, useMemo, useRef, useEffect } from "react";
 import { useLiveInfluencers } from "@/hooks/useLiveInfluencers";
+import { usePublicContent } from "@/hooks/usePublicContent";
 
 import type { Influencer } from "@/data/influencers";
+
+interface InfluencerExploreData {
+  heroEyebrow: string;
+  heroHeadline: string;
+  heroSubtext: string;
+  heroCTA: string;
+  ctaEyebrow: string;
+  ctaHeadline: string;
+  ctaSubtext: string;
+  ctaButton: string;
+  seoTitle: string;
+  seoDesc: string;
+}
+
+const IE_DEFAULTS: InfluencerExploreData = {
+  heroEyebrow: "Influencer Network",
+  heroHeadline: "Work With Proven Influencers.",
+  heroSubtext: "Discover creators who build real engagement and drive meaningful results -- not just impressions.",
+  heroCTA: "Join as Influencer",
+  ctaEyebrow: "Are you a creator?",
+  ctaHeadline: "Ready to Get Discovered?",
+  ctaSubtext: "Apply to join the Influencer Network. Get reviewed, get listed, and unlock real brand opportunities.",
+  ctaButton: "Apply Now",
+  seoTitle: "Explore Influencers - GrowitBuddy",
+  seoDesc: "Discover proven influencers and content creators who build real engagement and drive meaningful results for ambitious brands.",
+};
 
 /* ── Influencer Card ─────────────────────────────────────── */
 function InfluencerCard({ inf, i }: { inf: Influencer; i: number }) {
@@ -287,6 +314,7 @@ function ActiveTag({ label, onRemove }: { label: string; onRemove: () => void })
 
 /* ── Page ────────────────────────────────────────────────── */
 export default function InfluencerExplore() {
+  const cms = usePublicContent<InfluencerExploreData>("influencer-explore", IE_DEFAULTS);
   const { influencers, genres: NICHE_CATEGORIES, countries: COUNTRIES } = useLiveInfluencers();
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
@@ -375,21 +403,21 @@ export default function InfluencerExplore() {
       `}</style>
 
       <SEOMeta
-        title="Explore Influencers - GrowitBuddy"
-        description="Discover proven influencers and content creators who build real engagement and drive meaningful results for ambitious brands."
+        title={cms.seoTitle}
+        description={cms.seoDesc}
       />
 
       {/* Hero */}
       <section className="influencer-hero" style={{ paddingTop: 120, paddingBottom: 72, paddingLeft: 24, paddingRight: 24, borderBottom: "1px solid rgba(11,11,11,0.08)" }}>
         <div className="max-w-[1100px] mx-auto">
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>Influencer Network</p>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(11,11,11,0.4)", marginBottom: 16 }}>{cms.heroEyebrow}</p>
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
             style={{ fontWeight: 800, fontSize: "clamp(36px, 7vw, 88px)", letterSpacing: "-0.04em", lineHeight: "1.02", color: "#0B0B0B", maxWidth: "16ch", marginBottom: 20 }}
           >
-            Work With Proven Influencers.
+            {cms.heroHeadline}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -397,12 +425,12 @@ export default function InfluencerExplore() {
             transition={{ delay: 0.1 }}
             style={{ fontSize: "clamp(15px, 2.5vw, 18px)", color: "rgba(11,11,11,0.5)", lineHeight: "1.75", maxWidth: "52ch", marginBottom: 32 }}
           >
-            Discover creators who build real engagement and drive meaningful results -- not just impressions.
+            {cms.heroSubtext}
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }}>
             <Link href="/creators">
               <span className="gb-btn" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                Join as Influencer
+                {cms.heroCTA}
                 <ArrowRight className="w-4 h-4" />
               </span>
             </Link>
@@ -515,16 +543,16 @@ export default function InfluencerExplore() {
       <section className="influencer-cta-section" style={{ padding: "0 24px 96px" }}>
         <div className="max-w-[1100px] mx-auto">
           <div className="influencer-cta-box" style={{ background: "#0B0B0B", borderRadius: 24, padding: "56px 48px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 20 }}>
-            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)" }}>Are you a creator?</p>
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)" }}>{cms.ctaEyebrow}</p>
             <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 4vw, 48px)", letterSpacing: "-0.04em", color: "#fff", lineHeight: 1.1, maxWidth: "20ch" }}>
-              Ready to Get Discovered?
+              {cms.ctaHeadline}
             </h2>
             <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: "rgba(255,255,255,0.5)", maxWidth: "44ch", lineHeight: 1.7 }}>
-              Apply to join the Influencer Network. Get reviewed, get listed, and unlock real brand opportunities.
+              {cms.ctaSubtext}
             </p>
             <Link href="/creators">
               <span style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#fff", color: "#0B0B0B", fontWeight: 700, fontSize: 14, borderRadius: 100, padding: "12px 24px", cursor: "pointer" }}>
-                Apply Now
+                {cms.ctaButton}
                 <ArrowRight className="w-4 h-4" />
               </span>
             </Link>
