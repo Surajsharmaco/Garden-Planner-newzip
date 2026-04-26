@@ -25,26 +25,74 @@ interface WorkItem {
 const DEFAULT_WORK: WorkItem[] = [
   {
     id: "1",
-    title: "Series A SaaS Founder",
+    title: "Tech Founder to Industry Voice",
     subtitle: "LinkedIn Authority Campaign",
-    category: "Founder Brand",
-    metric: "10x",
-    metricLabel: "inbound leads in 90 days",
-    description: "We built a complete LinkedIn authority engine for a B2B SaaS founder, generating qualified inbound pipeline through consistent, strategic content.",
-    tags: ["LinkedIn", "B2B SaaS", "Content Strategy"],
-    stats: [{ label: "Inbound leads", value: "+420%" }, { label: "Follower growth", value: "0 to 18K" }, { label: "Close rate", value: "34%" }],
+    category: "B2B SaaS · LinkedIn",
+    metric: "14M",
+    metricLabel: "impressions",
+    description: "A full content marketing system took this founder from zero online presence to the most-cited authority in their SaaS niche - in 6 months.",
+    tags: ["LinkedIn", "B2B SaaS"],
+    stats: [],
     imageUrl: "",
   },
   {
     id: "2",
-    title: "D2C Brand Campaign",
-    subtitle: "Creator Partnership Rollout",
-    category: "Creator Campaign",
-    metric: "2.4M",
-    metricLabel: "organic reach in 30 days",
-    description: "Matched a premium D2C brand with 6 vetted creators in our roster to run a coordinated launch campaign that drove organic reach and conversions.",
-    tags: ["Creator Marketing", "D2C", "Organic Reach"],
-    stats: [{ label: "Organic reach", value: "2.4M" }, { label: "Avg engagement", value: "7.8%" }, { label: "Revenue attributed", value: "$180K" }],
+    title: "Agency Owner Authority Engine",
+    subtitle: "Multi-channel content strategy",
+    category: "Services · Multi-channel",
+    metric: "$2.4M",
+    metricLabel: "inbound pipeline",
+    description: "A systematic content strategy and distribution system drove inbound pipeline that exceeded prior annual revenue.",
+    tags: ["Content Strategy"],
+    stats: [],
+    imageUrl: "",
+  },
+  {
+    id: "3",
+    title: "Creator Monetization System",
+    subtitle: "YouTube authority build",
+    category: "Creator Economy · YouTube",
+    metric: "250K",
+    metricLabel: "subscribers",
+    description: "A content strategy built around a proprietary framework compounded into 250K subscribers and $40K/mo in revenue.",
+    tags: ["YouTube", "Creator"],
+    stats: [],
+    imageUrl: "",
+  },
+  {
+    id: "4",
+    title: "Executive Personal Brand",
+    subtitle: "Podcast & PR strategy",
+    category: "Leadership · Podcast & PR",
+    metric: "15+",
+    metricLabel: "speaking invites / qtr",
+    description: "Personal branding strategy turned a quiet operator into a recognized industry thought leader with consistent media placement.",
+    tags: ["Personal Brand", "PR"],
+    stats: [],
+    imageUrl: "",
+  },
+  {
+    id: "5",
+    title: "E-commerce Founder Growth",
+    subtitle: "X / Twitter brand build",
+    category: "E-commerce · X / Twitter",
+    metric: "400%",
+    metricLabel: "branded search growth",
+    description: "A personal brand-first content marketing approach made this founder synonymous with their product category.",
+    tags: ["X / Twitter", "E-commerce"],
+    stats: [],
+    imageUrl: "",
+  },
+  {
+    id: "6",
+    title: "VC Authority Engine",
+    subtitle: "LinkedIn positioning",
+    category: "Finance · LinkedIn",
+    metric: "3x",
+    metricLabel: "deal flow growth",
+    description: "Content strategy and personal branding positioned this venture firm as the category expert - attracting better deals at higher velocity.",
+    tags: ["Finance", "LinkedIn"],
+    stats: [],
     imageUrl: "",
   },
 ];
@@ -167,8 +215,8 @@ export default function AdminWork() {
   const [items, setItems] = useState<WorkItem[]>(DEFAULT_WORK);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [headline, setHeadline] = useState("Work that speaks for itself");
-  const [subtext, setSubtext] = useState("A selection of campaigns, brand builds, and creator partnerships we're proud of.");
+  const [headline, setHeadline] = useState("Proof of authority at scale.");
+  const [subtext, setSubtext] = useState("Our clients expect outcomes. We measure our success by theirs. Here's the proof.");
 
   useEffect(() => {
     getContent("work").then((d) => {

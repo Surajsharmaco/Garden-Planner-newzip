@@ -4,11 +4,22 @@ import { Link } from "wouter";
 import SEOMeta from "@/components/SEOMeta";
 import { usePublicContent } from "@/hooks/usePublicContent";
 
+interface ServiceItem {
+  id: string;
+  title: string;
+  subtitle?: string;
+  headline: string;
+  description: string;
+  features: string[];
+  badge?: string;
+}
+
 interface ServicesPageData {
   heroHeadline: string;
   heroSubtext: string;
   heroCTA: string;
   stats: { num: string; label: string }[];
+  services: ServiceItem[];
 }
 
 const PAGE_DEFAULTS: ServicesPageData = {
@@ -21,50 +32,14 @@ const PAGE_DEFAULTS: ServicesPageData = {
     { num: "10K+",  label: "Content Pieces" },
     { num: "4x",    label: "Avg Growth Rate" },
   ],
+  services: [
+    { id: "1", title: "Personal Branding Strategy", subtitle: "Positioning & Narrative", headline: "Define exactly how you are positioned before you create a single piece of content.", description: "We design your personal branding strategy, narrative, and content direction so every piece you put out reinforces exactly what you want to be known for.", features: ["Positioning & Narrative Design", "Target Audience Research", "90-Day Content Roadmap", "Competitive Landscape Analysis", "Content Themes & Pillars"] },
+    { id: "2", title: "Content Strategy Services", subtitle: "Done-For-You Production", headline: "A content strategy that produces great content consistently.", description: "We build a repeatable content engine around your expertise — ghostwriting, visual assets, newsletters, and platform-native formats that produce results week after week.", features: ["Ghostwriting", "Visual Asset Creation", "Newsletter Systems", "Platform-Native Formatting", "Content Calendar"] },
+    { id: "3", title: "Video Marketing", subtitle: "Short & Long-Form", headline: "Video marketing that captures attention and keeps it.", description: "High-retention editing for short and long-form video — structured to perform on the algorithm and built to make your expertise look as sharp as it actually is.", features: ["Short-Form Clips", "Long-Form Editing", "Thumbnail Design", "Retention Optimization", "Caption Systems"] },
+    { id: "4", title: "Content Distribution Strategy", subtitle: "Reach & Amplification", headline: "A content distribution strategy that reaches the right people every time.", description: "Make sure your content doesn't just get posted — it gets seen by the people who actually matter. Structured distribution across the platforms and channels where your audience lives.", features: ["Platform Growth Strategy", "Cross-Platform Reach", "Engagement Optimization", "Community Building", "Paid Amplification"] },
+    { id: "5", title: "Personal Brand Growth", subtitle: "Full-Stack Authority", headline: "Become the most recognized name in your category.", description: "Profile optimization, media placement, network expansion, and speaking opportunities — a full-stack personal branding approach to owning your space in the market.", features: ["Profile Optimization", "Network Expansion", "Monetization Strategy", "PR & Media Placements", "Speaking Outreach"] },
+  ],
 };
-
-const services = [
-  {
-    num: "01",
-    title: "Personal Branding Strategy",
-    headline: "Define exactly how you are positioned before you create a single piece of content.",
-    description: "We design your personal branding strategy, narrative, and content direction so every piece you put out reinforces exactly what you want to be known for.",
-    features: ["Positioning & Narrative Design", "Target Audience Research", "90-Day Content Roadmap", "Competitive Landscape Analysis", "Content Themes & Pillars"],
-    dark: false,
-  },
-  {
-    num: "02",
-    title: "Content Strategy Services",
-    headline: "A content strategy that produces great content consistently.",
-    description: "We build a repeatable content engine around your expertise — ghostwriting, visual assets, newsletters, and platform-native formats that produce results week after week.",
-    features: ["Ghostwriting", "Visual Asset Creation", "Newsletter Systems", "Platform-Native Formatting", "Content Calendar"],
-    dark: true,
-  },
-  {
-    num: "03",
-    title: "Video Marketing",
-    headline: "Video marketing that captures attention and keeps it.",
-    description: "High-retention editing for short and long-form video — structured to perform on the algorithm and built to make your expertise look as sharp as it actually is.",
-    features: ["Short-Form Clips", "Long-Form Editing", "Thumbnail Design", "Retention Optimization", "Caption Systems"],
-    dark: false,
-  },
-  {
-    num: "04",
-    title: "Content Distribution Strategy",
-    headline: "A content distribution strategy that reaches the right people every time.",
-    description: "Make sure your content doesn't just get posted — it gets seen by the people who actually matter. Structured distribution across the platforms and channels where your audience lives.",
-    features: ["Platform Growth Strategy", "Cross-Platform Reach", "Engagement Optimization", "Community Building", "Paid Amplification"],
-    dark: true,
-  },
-  {
-    num: "05",
-    title: "Personal Brand Growth",
-    headline: "Become the most recognized name in your category.",
-    description: "Profile optimization, media placement, network expansion, and speaking opportunities — a full-stack personal branding approach to owning your space in the market.",
-    features: ["Profile Optimization", "Network Expansion", "Monetization Strategy", "PR & Media Placements", "Speaking Outreach"],
-    dark: false,
-  },
-];
 
 export default function Services() {
   const cms = usePublicContent<ServicesPageData>("services", PAGE_DEFAULTS);
@@ -205,120 +180,124 @@ export default function Services() {
       </section>
 
       {/* Service sections */}
-      {services.map((s, i) => (
-        <section
-          key={i}
-          style={{
-            padding: "88px 24px",
-            background: s.dark ? "#0B0B0B" : (i % 2 === 0 ? "#fff" : "#F7F7F5"),
-            borderTop: "1px solid rgba(11,11,11,0.07)",
-          }}
-        >
-          <div className="max-w-[1100px] mx-auto svc-section-grid">
-            {/* Left: headline block */}
-            <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }}>
-              {/* Number + label row */}
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
-                <span style={{
-                  fontSize: 11, fontWeight: 800,
-                  color: s.dark ? "rgba(255,255,255,0.25)" : "rgba(11,11,11,0.25)",
-                  letterSpacing: "0.08em",
-                  fontVariantNumeric: "tabular-nums",
+      {(cms.services || PAGE_DEFAULTS.services).map((s, i) => {
+        const dark = i % 2 === 1;
+        const num = String(i + 1).padStart(2, "0");
+        return (
+          <section
+            key={s.id || i}
+            style={{
+              padding: "88px 24px",
+              background: dark ? "#0B0B0B" : (i % 4 === 0 ? "#fff" : "#F7F7F5"),
+              borderTop: "1px solid rgba(11,11,11,0.07)",
+            }}
+          >
+            <div className="max-w-[1100px] mx-auto svc-section-grid">
+              {/* Left: headline block */}
+              <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }}>
+                {/* Number + label row */}
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
+                  <span style={{
+                    fontSize: 11, fontWeight: 800,
+                    color: dark ? "rgba(255,255,255,0.25)" : "rgba(11,11,11,0.25)",
+                    letterSpacing: "0.08em",
+                    fontVariantNumeric: "tabular-nums",
+                  }}>
+                    {num}
+                  </span>
+                  <span style={{ width: 1, height: 12, background: dark ? "rgba(255,255,255,0.15)" : "rgba(11,11,11,0.15)", flexShrink: 0 }} />
+                  <span style={{
+                    fontSize: 11, fontWeight: 700,
+                    letterSpacing: "0.14em",
+                    textTransform: "uppercase",
+                    color: dark ? "rgba(255,255,255,0.3)" : "rgba(11,11,11,0.35)",
+                  }}>
+                    {s.title}
+                  </span>
+                </div>
+
+                {/* Headline */}
+                <h2 style={{
+                  fontWeight: 800,
+                  fontSize: "clamp(26px, 3.2vw, 44px)",
+                  letterSpacing: "-0.04em",
+                  lineHeight: "1.12",
+                  color: dark ? "#fff" : "#0B0B0B",
+                  marginBottom: 20,
+                  maxWidth: "22ch",
                 }}>
-                  {s.num}
-                </span>
-                <span style={{ width: 1, height: 12, background: s.dark ? "rgba(255,255,255,0.15)" : "rgba(11,11,11,0.15)", flexShrink: 0 }} />
-                <span style={{
-                  fontSize: 11, fontWeight: 700,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: s.dark ? "rgba(255,255,255,0.3)" : "rgba(11,11,11,0.35)",
+                  {s.headline}
+                </h2>
+
+                {/* Description */}
+                <p style={{
+                  fontSize: 15,
+                  lineHeight: "1.85",
+                  color: dark ? "rgba(255,255,255,0.45)" : "rgba(11,11,11,0.5)",
+                  marginBottom: 32,
+                  maxWidth: "38ch",
                 }}>
-                  {s.title}
-                </span>
-              </div>
+                  {s.description}
+                </p>
 
-              {/* Headline */}
-              <h2 style={{
-                fontWeight: 800,
-                fontSize: "clamp(26px, 3.2vw, 44px)",
-                letterSpacing: "-0.04em",
-                lineHeight: "1.12",
-                color: s.dark ? "#fff" : "#0B0B0B",
-                marginBottom: 20,
-                maxWidth: "22ch",
-              }}>
-                {s.headline}
-              </h2>
-
-              {/* Description */}
-              <p style={{
-                fontSize: 15,
-                lineHeight: "1.85",
-                color: s.dark ? "rgba(255,255,255,0.45)" : "rgba(11,11,11,0.5)",
-                marginBottom: 32,
-                maxWidth: "38ch",
-              }}>
-                {s.description}
-              </p>
-
-              <Link href="/contact">
-                <span
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 8,
-                    padding: "11px 20px",
-                    borderRadius: 100,
-                    background: s.dark ? "#fff" : "#0B0B0B",
-                    color: s.dark ? "#0B0B0B" : "#fff",
-                    fontSize: 13,
-                    fontWeight: 700,
-                    cursor: "pointer",
-                    fontFamily: "'Inter', sans-serif",
-                  }}
-                  className="hover:opacity-80 transition-opacity"
-                >
-                  Get started
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </span>
-              </Link>
-            </motion.div>
-
-            {/* Right: features list */}
-            <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.06, duration: 0.55 }}>
-              <ul style={{
-                borderTop: `1px solid ${s.dark ? "rgba(255,255,255,0.08)" : "rgba(11,11,11,0.08)"}`,
-                display: "flex",
-                flexDirection: "column",
-              }}>
-                {s.features.map((f, fi) => (
-                  <li
-                    key={fi}
+                <Link href="/contact">
+                  <span
                     style={{
-                      display: "flex",
+                      display: "inline-flex",
                       alignItems: "center",
-                      gap: 14,
-                      padding: "18px 0",
-                      borderBottom: `1px solid ${s.dark ? "rgba(255,255,255,0.06)" : "rgba(11,11,11,0.07)"}`,
+                      gap: 8,
+                      padding: "11px 20px",
+                      borderRadius: 100,
+                      background: dark ? "#fff" : "#0B0B0B",
+                      color: dark ? "#0B0B0B" : "#fff",
+                      fontSize: 13,
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      fontFamily: "'Inter', sans-serif",
                     }}
+                    className="hover:opacity-80 transition-opacity"
                   >
-                    <span style={{
-                      width: 22, height: 22, borderRadius: "50%",
-                      background: s.dark ? "rgba(255,255,255,0.1)" : "rgba(11,11,11,0.07)",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      flexShrink: 0,
-                    }}>
-                      <Check className="w-3 h-3" style={{ color: s.dark ? "#fff" : "#0B0B0B" }} />
-                    </span>
-                    <span style={{ fontSize: 15, fontWeight: 500, color: s.dark ? "rgba(255,255,255,0.72)" : "#0B0B0B" }}>{f}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          </div>
-        </section>
-      ))}
+                    Get started
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </Link>
+              </motion.div>
+
+              {/* Right: features list */}
+              <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.06, duration: 0.55 }}>
+                <ul style={{
+                  borderTop: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(11,11,11,0.08)"}`,
+                  display: "flex",
+                  flexDirection: "column",
+                }}>
+                  {(s.features || []).map((f, fi) => (
+                    <li
+                      key={fi}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 14,
+                        padding: "18px 0",
+                        borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.06)" : "rgba(11,11,11,0.07)"}`,
+                      }}
+                    >
+                      <span style={{
+                        width: 22, height: 22, borderRadius: "50%",
+                        background: dark ? "rgba(255,255,255,0.1)" : "rgba(11,11,11,0.07)",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        flexShrink: 0,
+                      }}>
+                        <Check className="w-3 h-3" style={{ color: dark ? "#fff" : "#0B0B0B" }} />
+                      </span>
+                      <span style={{ fontSize: 15, fontWeight: 500, color: dark ? "rgba(255,255,255,0.72)" : "#0B0B0B" }}>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            </div>
+          </section>
+        );
+      })}
 
       {/* CTA */}
       <section style={{ padding: "96px 24px", background: "#0B0B0B" }}>
