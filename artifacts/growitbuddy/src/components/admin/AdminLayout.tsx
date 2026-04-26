@@ -17,6 +17,7 @@ const navGroups: NavGroup[] = [
     label: "Overview",
     items: [
       { label: "Dashboard", path: "/admin", icon: <LayoutDashboard size={15} /> },
+      { label: "Team Members", path: "/admin/team", icon: <UserCog size={15} />, superOnly: true },
       { label: "Leads & CRM", path: "/admin/leads", icon: <Inbox size={15} />, permission: "leads" },
       { label: "Certificates", path: "/admin/certificates", icon: <ShieldCheck size={15} />, permission: "certificates" },
     ],
@@ -58,12 +59,6 @@ const navGroups: NavGroup[] = [
       { label: "Navbar", path: "/admin/navbar", icon: <MenuIcon size={15} />, permission: "navbar" },
       { label: "Footer", path: "/admin/footer", icon: <AlignLeft size={15} />, permission: "footer" },
       { label: "Settings", path: "/admin/settings", icon: <Settings size={15} />, permission: "settings" },
-    ],
-  },
-  {
-    label: "Team",
-    items: [
-      { label: "Team Members", path: "/admin/team", icon: <UserCog size={15} />, superOnly: true },
     ],
   },
 ];
