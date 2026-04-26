@@ -1,9 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useParams } from "wouter";
-import { ArrowLeft, ArrowRight, Clock, Calendar, Tag } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, Calendar } from "lucide-react";
 import { blogPosts } from "@/data/blogPosts";
 import SEOMeta from "@/components/SEOMeta";
+
+const ARTICLE_CSS = `
+.article-body { font-family: Inter, sans-serif; }
+.article-body p { font-size: 17px; color: rgba(11,11,11,0.68); line-height: 1.9; margin-bottom: 20px; }
+.article-body h1 { font-weight: 900; font-size: clamp(28px, 4vw, 42px); letter-spacing: -0.04em; color: #0B0B0B; margin-top: 56px; margin-bottom: 20px; line-height: 1.1; }
+.article-body h2 { font-weight: 800; font-size: clamp(22px, 3vw, 28px); letter-spacing: -0.03em; color: #0B0B0B; margin-top: 56px; margin-bottom: 20px; line-height: 1.25; padding-bottom: 12px; border-bottom: 2px solid rgba(11,11,11,0.06); }
+.article-body h3 { font-weight: 700; font-size: clamp(17px, 2vw, 21px); letter-spacing: -0.02em; color: #0B0B0B; margin-top: 36px; margin-bottom: 12px; line-height: 1.35; }
+.article-body h4 { font-weight: 700; font-size: 17px; color: #0B0B0B; margin-top: 28px; margin-bottom: 10px; }
+.article-body blockquote { margin: 32px 0; padding: 20px 24px; border-left: 3px solid #0B0B0B; background: rgba(11,11,11,0.03); border-radius: 0 12px 12px 0; }
+.article-body blockquote p, .article-body blockquote { font-size: 18px; font-weight: 600; color: #0B0B0B; line-height: 1.7; font-style: italic; margin: 0; }
+.article-body ul { margin: 24px 0; padding-left: 22px; list-style: disc; }
+.article-body ol { margin: 24px 0; padding-left: 22px; list-style: decimal; }
+.article-body li { font-size: 17px; color: rgba(11,11,11,0.7); line-height: 1.8; margin-bottom: 12px; padding-left: 4px; }
+.article-body strong { font-weight: 700; color: #0B0B0B; }
+.article-body em { font-style: italic; }
+.article-body a { color: #0B0B0B; text-decoration: underline; }
+.article-body hr { border: none; border-top: 1.5px solid rgba(11,11,11,0.1); margin: 40px 0; }
+`;
+
+function isHtml(text: string): boolean {
+  return /<(h[1-6]|p|blockquote|ul|ol|li|strong|em|br)\b/i.test(text);
+}
 
 function parseInline(text: string): React.ReactNode[] {
   const parts: React.ReactNode[] = [];
@@ -135,7 +157,17 @@ export default function InsightDetail() {
   const post = blogPosts.find((p) => p.slug === params.slug);
   const related = blogPosts.filter((p) => p.slug !== params.slug).slice(0, 3);
 
-  useEffect(() => { window.scrollTo(0, 0); }, [params.slug]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const existing = document.getElementById("article-styles");
+    if (!existing) {
+      const s = document.createElement("style");
+      s.id = "article-styles";
+      s.textContent = ARTICLE_CSS;
+      document.head.appendChild(s);
+    }
+    return () => { document.getElementById("article-styles")?.remove(); };
+  }, [params.slug]);
 
   if (!post) {
     return (
@@ -220,8 +252,11 @@ export default function InsightDetail() {
 
       {/* Article body */}
       <section style={{ padding: "64px 24px 80px", background: "#fff" }}>
-        <div className="max-w-[680px] mx-auto">
-          {renderMarkdown(post.content)}
+        <div className="article-body max-w-[680px] mx-auto">
+          {isHtml(post.content)
+            ? <div dangerouslySetInnerHTML={{ __html: post.content }} />
+            : renderMarkdown(post.content)
+          }
 
           {/* End-of-article CTA */}
           <div style={{ marginTop: 64, padding: "36px 40px", background: "#0B0B0B", borderRadius: 20, textAlign: "center" }}>

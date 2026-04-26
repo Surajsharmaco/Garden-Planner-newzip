@@ -246,6 +246,68 @@ function ToolBtn({ icon, title, onClick }: { icon: React.ReactNode; title: strin
 const TAGS = ["Founders", "Brand", "Creators", "Freelancers", "Strategy", "Tools"];
 
 // ─────────────────────────────────────
+// MARKDOWN ↔ HTML HELPERS
+// ─────────────────────────────────────
+
+function inlineFormat(text: string): string {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.+?)\*/g, "<em>$1</em>");
+}
+
+function isHtmlContent(text: string): boolean {
+  return /<(h[1-6]|p|blockquote|ul|ol|li|strong|em|br)\b/i.test(text);
+}
+
+function mdToHtml(md: string): string {
+  if (!md || isHtmlContent(md)) return md;
+  const lines = md.split("\n");
+  let html = "";
+  let i = 0;
+  while (i < lines.length) {
+    const t = lines[i].trim();
+    if (!t) { html += "<p><br></p>"; i++; continue; }
+    if (t.startsWith("## ")) { html += `<h2>${inlineFormat(t.slice(3))}</h2>`; i++; continue; }
+    if (t.startsWith("### ")) { html += `<h3>${inlineFormat(t.slice(4))}</h3>`; i++; continue; }
+    if (t.startsWith("> ")) { html += `<blockquote>${inlineFormat(t.slice(2))}</blockquote>`; i++; continue; }
+    if (t.startsWith("- ") || t.startsWith("* ")) {
+      html += "<ul>";
+      while (i < lines.length && (lines[i].trim().startsWith("- ") || lines[i].trim().startsWith("* "))) {
+        html += `<li>${inlineFormat(lines[i].trim().slice(2))}</li>`; i++;
+      }
+      html += "</ul>"; continue;
+    }
+    if (/^\d+\.\s/.test(t)) {
+      html += "<ol>";
+      while (i < lines.length && /^\d+\.\s/.test(lines[i].trim())) {
+        html += `<li>${inlineFormat(lines[i].trim().replace(/^\d+\.\s/, ""))}</li>`; i++;
+      }
+      html += "</ol>"; continue;
+    }
+    html += `<p>${inlineFormat(t)}</p>`; i++;
+  }
+  return html;
+}
+
+const EDITOR_CSS = `
+.blog-editor { font-family: Inter, sans-serif; }
+.blog-editor p { font-size: 17px; color: rgba(11,11,11,0.68); line-height: 1.9; margin-bottom: 18px; }
+.blog-editor h1 { font-weight: 900; font-size: 36px; letter-spacing: -0.04em; color: #0B0B0B; margin-top: 48px; margin-bottom: 16px; line-height: 1.1; }
+.blog-editor h2 { font-weight: 800; font-size: 26px; letter-spacing: -0.03em; color: #0B0B0B; margin-top: 52px; margin-bottom: 18px; line-height: 1.25; padding-bottom: 12px; border-bottom: 2px solid rgba(11,11,11,0.07); }
+.blog-editor h3 { font-weight: 700; font-size: 20px; letter-spacing: -0.02em; color: #0B0B0B; margin-top: 36px; margin-bottom: 12px; line-height: 1.35; }
+.blog-editor h4 { font-weight: 700; font-size: 17px; color: #0B0B0B; margin-top: 28px; margin-bottom: 10px; }
+.blog-editor blockquote { margin: 28px 0; padding: 18px 22px; border-left: 3px solid #0B0B0B; background: rgba(11,11,11,0.03); border-radius: 0 12px 12px 0; }
+.blog-editor blockquote p, .blog-editor blockquote { font-size: 17px; font-weight: 600; color: #0B0B0B; line-height: 1.7; font-style: italic; }
+.blog-editor ul { margin: 20px 0; padding-left: 22px; list-style: disc; }
+.blog-editor ol { margin: 20px 0; padding-left: 22px; list-style: decimal; }
+.blog-editor li { font-size: 16px; color: rgba(11,11,11,0.7); line-height: 1.8; margin-bottom: 10px; padding-left: 4px; }
+.blog-editor strong { font-weight: 700; color: #0B0B0B; }
+.blog-editor em { font-style: italic; }
+.blog-editor a { color: #0B0B0B; text-decoration: underline; }
+.blog-editor hr { border: none; border-top: 1.5px solid rgba(11,11,11,0.1); margin: 36px 0; }
+`;
+
+// ─────────────────────────────────────
 // POST EDITOR
 // ─────────────────────────────────────
 
@@ -265,7 +327,15 @@ function PostEditor({
   const editorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (editorRef.current) editorRef.current.innerHTML = post.content ?? "";
+    if (editorRef.current) editorRef.current.innerHTML = mdToHtml(post.content ?? "");
+    const existing = document.getElementById("blog-editor-styles");
+    if (!existing) {
+      const s = document.createElement("style");
+      s.id = "blog-editor-styles";
+      s.textContent = EDITOR_CSS;
+      document.head.appendChild(s);
+    }
+    return () => { document.getElementById("blog-editor-styles")?.remove(); };
   }, []);
 
   function setField<K extends keyof BlogPost>(key: K, val: BlogPost[K]) {
@@ -300,7 +370,7 @@ function PostEditor({
   function switchMode(next: "visual" | "text") {
     if (next === "text" && editorRef.current) setField("content", editorRef.current.innerHTML);
     setMode(next);
-    if (next === "visual") setTimeout(() => { if (editorRef.current) editorRef.current.innerHTML = data.content; }, 0);
+    if (next === "visual") setTimeout(() => { if (editorRef.current) editorRef.current.innerHTML = mdToHtml(data.content); }, 0);
   }
 
   async function handleSave() {
@@ -410,8 +480,8 @@ function PostEditor({
                 {mode === "visual" ? (
                   <div ref={editorRef} contentEditable
                     onInput={() => { if (editorRef.current) setField("content", editorRef.current.innerHTML); }}
-                    className="min-h-[460px] px-7 py-6 text-[14px] text-[#0B0B0B] leading-[1.75] outline-none prose prose-sm max-w-none"
-                    suppressContentEditableWarning style={{ fontFamily: "Inter, sans-serif" }} />
+                    className="blog-editor min-h-[460px] px-8 py-7 outline-none"
+                    suppressContentEditableWarning />
                 ) : (
                   <textarea value={data.content} onChange={(e) => setField("content", e.target.value)}
                     className="w-full min-h-[460px] px-7 py-6 text-[13px] text-[#0B0B0B]/65 font-mono leading-relaxed outline-none resize-none bg-[#fafafa]"
