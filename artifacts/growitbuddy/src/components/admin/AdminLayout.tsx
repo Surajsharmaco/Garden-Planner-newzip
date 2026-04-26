@@ -4,6 +4,7 @@ import {
   LayoutDashboard, Settings, Users, FileText, Briefcase,
   Home, Layers, Menu as MenuIcon, AlignLeft, Info, LogOut,
   ChevronRight, Inbox, Mail, GitBranch, UserPlus, Building2, Network, Image,
+  Share2, Scan, BookOpen,
 } from "lucide-react";
 import { useState } from "react";
 import type { ReactNode } from "react";
@@ -26,8 +27,8 @@ const navGroups: NavGroup[] = [
       { label: "Services", path: "/admin/services", icon: <Layers size={15} /> },
       { label: "Framework", path: "/admin/framework", icon: <GitBranch size={15} /> },
       { label: "Work", path: "/admin/work", icon: <Briefcase size={15} /> },
-      { label: "Influencers", path: "/admin/influencers", icon: <Users size={15} /> },
       { label: "Blog / Insights", path: "/admin/blog", icon: <FileText size={15} /> },
+      { label: "Resources", path: "/admin/resources", icon: <BookOpen size={15} /> },
       { label: "About", path: "/admin/about", icon: <Info size={15} /> },
       { label: "Contact", path: "/admin/contact", icon: <Mail size={15} /> },
     ],
@@ -35,6 +36,9 @@ const navGroups: NavGroup[] = [
   {
     label: "Network & Hiring",
     items: [
+      { label: "Influencers", path: "/admin/influencers", icon: <Users size={15} /> },
+      { label: "Distribution Network", path: "/admin/distribution-network", icon: <Share2 size={15} /> },
+      { label: "Authority Audit", path: "/admin/authority-audit", icon: <Scan size={15} /> },
       { label: "Join Network", path: "/admin/join-network", icon: <Network size={15} /> },
       { label: "Freelancers Page", path: "/admin/freelancers-page", icon: <UserPlus size={15} /> },
       { label: "Full-Time Page", path: "/admin/full-time-page", icon: <Building2 size={15} /> },

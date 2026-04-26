@@ -52,6 +52,7 @@ interface HomeData {
   auditSubtext: string;
   auditCTA: string;
   founderLabel: string;
+  founderPhoto: string;
   founderInitials: string;
   founderName: string;
   founderQuote: string;
@@ -213,6 +214,7 @@ const DEFAULTS: HomeData = {
     "Answer 6 questions and get a personalized breakdown of exactly what's holding your content marketing back - free, in under 2 minutes.",
   auditCTA: "Get My Growth Diagnosis",
   founderLabel: "Founder",
+  founderPhoto: "",
   founderInitials: "SS",
   founderName: "Suraj Sharma",
   founderQuote:
