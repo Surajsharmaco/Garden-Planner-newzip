@@ -44,6 +44,7 @@ import AdminDistributionNetwork from "@/pages/admin/AdminDistributionNetwork";
 import AdminInfluencerExplore from "@/pages/admin/AdminInfluencerExplore";
 import AdminAuthorityAudit from "@/pages/admin/AdminAuthorityAudit";
 import AdminResources from "@/pages/admin/AdminResources";
+import AdminMediaLibrary from "@/pages/admin/AdminMediaLibrary";
 
 function AdminGuard({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAdmin();
@@ -111,6 +112,9 @@ function AdminRoutes() {
       </Route>
       <Route path="/admin/resources">
         {() => <AdminGuard><AdminResources /></AdminGuard>}
+      </Route>
+      <Route path="/admin/media">
+        {() => <AdminGuard><AdminMediaLibrary /></AdminGuard>}
       </Route>
       <Route path="/admin">
         {() => <AdminGuard><AdminDashboard /></AdminGuard>}

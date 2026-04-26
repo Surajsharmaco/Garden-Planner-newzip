@@ -5,7 +5,7 @@ import { Card } from "@/components/admin/AdminField";
 import {
   Settings, Users, FileText, Briefcase, Home, Layers,
   Info, AlignLeft, Menu as MenuIcon, Inbox, TrendingUp,
-  CheckCircle2, Clock, Network, Share2, BarChart2, BookOpen,
+  CheckCircle2, Clock, Network, Share2, BarChart2, BookOpen, Image,
 } from "lucide-react";
 
 const API_BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
@@ -34,6 +34,7 @@ const SECTION_META: Record<string, { label: string; icon: React.ReactNode; path:
   "influencer-explore":   { label: "Influencer Explore",  icon: <Users size={16} />,     path: "/admin/influencer-explore",   desc: "Explore page hero & CTA" },
   "authority-audit":      { label: "Authority Audit",     icon: <BarChart2 size={16} />, path: "/admin/authority-audit",      desc: "Quiz questions & hero" },
   resources:              { label: "Resources",           icon: <BookOpen size={16} />,  path: "/admin/resources",            desc: "Frameworks & resource items" },
+  media:                  { label: "Media Library",       icon: <Image size={16} />,     path: "/admin/media",                desc: "Upload & manage images" },
 };
 
 const TYPE_COLORS: Record<string, string> = {

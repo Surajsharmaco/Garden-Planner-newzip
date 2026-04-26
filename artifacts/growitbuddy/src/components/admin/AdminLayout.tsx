@@ -3,7 +3,7 @@ import { useAdmin } from "@/context/AdminContext";
 import {
   LayoutDashboard, Settings, Users, FileText, Briefcase,
   Home, Layers, Menu as MenuIcon, AlignLeft, Info, LogOut,
-  ChevronRight, Inbox, Mail, GitBranch, UserPlus, Building2, Network,
+  ChevronRight, Inbox, Mail, GitBranch, UserPlus, Building2, Network, Image,
 } from "lucide-react";
 import { useState } from "react";
 import type { ReactNode } from "react";
@@ -38,6 +38,12 @@ const navGroups: NavGroup[] = [
       { label: "Join Network", path: "/admin/join-network", icon: <Network size={15} /> },
       { label: "Freelancers Page", path: "/admin/freelancers-page", icon: <UserPlus size={15} /> },
       { label: "Full-Time Page", path: "/admin/full-time-page", icon: <Building2 size={15} /> },
+    ],
+  },
+  {
+    label: "Assets",
+    items: [
+      { label: "Media Library", path: "/admin/media", icon: <Image size={15} /> },
     ],
   },
   {

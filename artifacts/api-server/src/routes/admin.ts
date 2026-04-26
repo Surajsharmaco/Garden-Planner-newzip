@@ -177,7 +177,7 @@ router.post("/upload", authMiddleware, upload.single("file"), (req, res) => {
     res.status(400).json({ error: "No file uploaded" });
     return;
   }
-  const url = `/uploads/${file.filename}`;
+  const url = `/api/uploads/${file.filename}`;
   res.json({ url, filename: file.filename, size: file.size });
 });
 
@@ -190,12 +190,28 @@ router.get("/media", authMiddleware, async (_req, res) => {
       .reverse()
       .map((filename) => ({
         filename,
-        url: `/uploads/${filename}`,
+        url: `/api/uploads/${filename}`,
         uploadedAt: parseInt(filename.split("_")[0] || "0", 10),
       }));
     res.json(images);
   } catch {
     res.json([]);
+  }
+});
+
+router.delete("/media/:filename", authMiddleware, async (req, res) => {
+  const { filename } = req.params;
+  if (!filename || filename.includes("/") || filename.includes("..")) {
+    res.status(400).json({ error: "Invalid filename" });
+    return;
+  }
+  const filePath = path.join(UPLOADS_DIR, filename);
+  try {
+    const { unlink } = await import("fs/promises");
+    await unlink(filePath);
+    res.json({ success: true });
+  } catch {
+    res.status(404).json({ error: "File not found" });
   }
 });
 
