@@ -396,6 +396,8 @@ function PostEditor({
   const [status, setStatus] = useState<"draft" | "published">("published");
   const [visibility, setVisibility] = useState<"public" | "private">("public");
   const [toasts, setToasts] = useState<{ id: number; msg: string; type: "success" | "error" | "info" }[]>([]);
+  const [currentBlock, setCurrentBlock] = useState("p");
+  const [blockDropOpen, setBlockDropOpen] = useState(false);
 
   function showToast(msg: string, type: "success" | "error" | "info" = "success") {
     const id = Date.now();
@@ -430,7 +432,32 @@ function PostEditor({
       s.textContent = EDITOR_CSS;
       document.head.appendChild(s);
     }
-    return () => { document.getElementById("blog-editor-styles")?.remove(); };
+
+    function onSelectionChange() {
+      if (!editorRef.current) return;
+      const sel = window.getSelection();
+      if (!sel || sel.rangeCount === 0) return;
+      if (!editorRef.current.contains(sel.anchorNode)) return;
+      let node: Node | null = sel.getRangeAt(0).commonAncestorContainer;
+      if (node.nodeType === Node.TEXT_NODE) node = node.parentNode;
+      while (node && node !== editorRef.current) {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          const tag = (node as Element).tagName.toLowerCase();
+          if (["p", "h1", "h2", "h3", "h4", "h5", "pre", "blockquote"].includes(tag)) {
+            setCurrentBlock(tag);
+            return;
+          }
+        }
+        node = (node as Node).parentNode;
+      }
+      setCurrentBlock("p");
+    }
+
+    document.addEventListener("selectionchange", onSelectionChange);
+    return () => {
+      document.getElementById("blog-editor-styles")?.remove();
+      document.removeEventListener("selectionchange", onSelectionChange);
+    };
   }, []);
 
   function setField<K extends keyof BlogPost>(key: K, val: BlogPost[K]) {
@@ -612,18 +639,41 @@ function PostEditor({
               {/* Editor */}
               <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl overflow-hidden shadow-sm">
                 <div className="flex items-center flex-wrap gap-0.5 px-3 py-2 border-b border-[#0B0B0B]/8 bg-[#fafafa]">
-                  <select
-                    onMouseDown={() => saveSelection()}
-                    onChange={(e) => { const v = e.target.value; e.target.value = "p"; restoreSelectionAndExec("formatBlock", v); }}
-                    defaultValue="p"
-                    className="text-[12px] text-[#0B0B0B]/55 border border-[#0B0B0B]/12 rounded px-2 py-1 mr-1 bg-white outline-none cursor-pointer shrink-0">
-                    <option value="p">Paragraph</option>
-                    <option value="h1">Heading 1</option>
-                    <option value="h2">Heading 2</option>
-                    <option value="h3">Heading 3</option>
-                    <option value="h4">Heading 4</option>
-                    <option value="pre">Code</option>
-                  </select>
+                  {/* Block format custom dropdown */}
+                  <div className="relative mr-1 shrink-0">
+                    <button
+                      onMouseDown={(e) => { e.preventDefault(); setBlockDropOpen((o) => !o); }}
+                      className="flex items-center gap-1.5 text-[12px] text-[#0B0B0B]/65 border border-[#0B0B0B]/12 rounded px-2.5 py-1 bg-white hover:bg-[#f5f5f5] transition-colors min-w-[108px] justify-between"
+                    >
+                      <span>{{ p: "Paragraph", h1: "Heading 1", h2: "Heading 2", h3: "Heading 3", h4: "Heading 4", h5: "Heading 5", pre: "Code", blockquote: "Quote" }[currentBlock] ?? "Paragraph"}</span>
+                      <ChevronDown size={11} className="opacity-50" />
+                    </button>
+                    {blockDropOpen && (
+                      <div className="absolute top-full left-0 z-50 mt-1 bg-white border border-[#0B0B0B]/12 rounded-xl shadow-xl py-1 min-w-[140px]">
+                        {([
+                          { val: "p", label: "Paragraph" },
+                          { val: "h1", label: "Heading 1" },
+                          { val: "h2", label: "Heading 2" },
+                          { val: "h3", label: "Heading 3" },
+                          { val: "h4", label: "Heading 4" },
+                          { val: "pre", label: "Code block" },
+                        ] as const).map(({ val, label }) => (
+                          <button
+                            key={val}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              exec("formatBlock", val);
+                              setCurrentBlock(val);
+                              setBlockDropOpen(false);
+                            }}
+                            className={`w-full text-left px-3 py-2 text-[12px] transition-colors hover:bg-[#0B0B0B]/5 ${currentBlock === val ? "font-semibold text-[#0B0B0B]" : "text-[#0B0B0B]/65"}`}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                   <div className="w-px h-5 bg-[#0B0B0B]/10 mx-0.5" />
                   <ToolBtn icon={<Bold size={14} />} title="Bold" onClick={() => exec("bold")} />
                   <ToolBtn icon={<Italic size={14} />} title="Italic" onClick={() => exec("italic")} />
