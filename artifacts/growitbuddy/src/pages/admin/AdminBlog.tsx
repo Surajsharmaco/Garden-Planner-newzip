@@ -249,15 +249,28 @@ const TAGS = ["Founders", "Brand", "Creators", "Freelancers", "Strategy", "Tools
 
 const POWER_WORDS = ["free","best","proven","ultimate","complete","guide","secret","powerful","easy","quick","simple","new","boost","grow","master","essential","top","expert","step-by-step","how to","why","what","when","discover","unlock","transform","scale","build","win","success","guaranteed","exclusive","advanced","definitive","comprehensive","actionable","effective","smart","winning","profitable"];
 
-function yoastChecks(post: BlogPost, content: string, seo: PostSeo, allPosts: BlogPost[]) {
+type CheckFix = {
+  tip: string;
+  copy?: string;
+  applyField?: string;
+  applyValue?: string;
+  insertInContent?: string;
+};
+type CheckItem = { key: string; label: string; pass: boolean; warn: boolean; fix?: CheckFix };
+
+function yoastChecks(post: BlogPost, content: string, seo: PostSeo, allPosts: BlogPost[]): {
+  basic: CheckItem[]; additional: CheckItem[]; title: CheckItem[]; readability: CheckItem[]; seo2026: CheckItem[];
+} {
   const text = stripHtml(content).toLowerCase();
+  const rawTitle = seo.seoTitle || post.title;
   const kw = seo.focusKeyword.toLowerCase().trim();
-  const seoTitle = (seo.seoTitle || post.title).toLowerCase();
+  const seoTitle = rawTitle.toLowerCase();
   const metaDesc = seo.metaDescription.toLowerCase();
   const slug = post.slug.toLowerCase();
   const wc = wordCount(content);
   const density = kw ? getKeywordDensity(content, kw) : 0;
   const first10pct = text.split(" ").slice(0, Math.max(1, Math.ceil(wc * 0.1))).join(" ");
+  const year = new Date().getFullYear();
 
   // Basic SEO
   const kwInSeoTitle = kw ? seoTitle.includes(kw) : false;
@@ -279,7 +292,7 @@ function yoastChecks(post: BlogPost, content: string, seo: PostSeo, allPosts: Bl
   // Title readability
   const kwAtStart = kw ? seoTitle.trimStart().startsWith(kw) : false;
   const titleHasPowerWord = POWER_WORDS.some(w => seoTitle.includes(w));
-  const titleHasNumber = /\d/.test(seo.seoTitle || post.title);
+  const titleHasNumber = /\d/.test(rawTitle);
 
   // Content readability
   const paragraphs = content.split(/<\/p>/i).filter(p => p.trim());
@@ -287,63 +300,302 @@ function yoastChecks(post: BlogPost, content: string, seo: PostSeo, allPosts: Bl
   const hasMedia = /<img|<video|<iframe/i.test(content);
   const hasSubheadings = /<h[23]/i.test(content);
 
+  const kwSuggested = kw || "your keyword";
+  const titleSuggested = kw ? `${kw.charAt(0).toUpperCase() + kw.slice(1)}: ${rawTitle}` : rawTitle;
+  const metaSuggested = kw
+    ? `${rawTitle} — Learn everything about ${kw} in this complete guide. Practical tips, real examples, and expert strategies for ${year}.`
+    : "";
+  const slugSuggested = kw ? kw.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") : slug;
+  const wordsNeeded = Math.max(0, 600 - wc);
+
   return {
     basic: [
-      { key: "title-kw", label: "Focus keyword used in SEO title.", pass: kwInSeoTitle, warn: false },
-      { key: "meta-kw", label: "Focus keyword used in meta description.", pass: kwInMetaDesc, warn: false },
-      { key: "slug-kw", label: "Focus keyword used in the URL.", pass: kwInSlug, warn: false },
-      { key: "first10", label: "Focus keyword appears in the first 10% of content.", pass: kwInFirst, warn: false },
-      { key: "content-kw", label: "Focus keyword found in the content.", pass: kwInContent, warn: false },
-      { key: "word-count", label: `Content is ${wc} words long.${wc >= 600 ? " Good job!" : " Aim for 600+ words."}`, pass: wcGood, warn: wc >= 300 && wc < 600 },
+      {
+        key: "title-kw",
+        label: kwInSeoTitle ? "Focus keyword used in SEO title." : `SEO title is missing the focus keyword "${kw}".`,
+        pass: kwInSeoTitle, warn: false,
+        fix: kwInSeoTitle || !kw ? undefined : {
+          tip: `Add "${kw}" to the start of your SEO title. Below is a ready-made version — click Apply to use it.`,
+          copy: titleSuggested,
+          applyField: "seoTitle",
+          applyValue: titleSuggested,
+        },
+      },
+      {
+        key: "meta-kw",
+        label: kwInMetaDesc ? "Focus keyword used in meta description." : `Meta description is missing the focus keyword "${kw}".`,
+        pass: kwInMetaDesc, warn: false,
+        fix: kwInMetaDesc || !kw ? undefined : {
+          tip: `Your meta description must naturally contain "${kw}". Below is a suggested one — click Apply to use it.`,
+          copy: metaSuggested,
+          applyField: "metaDescription",
+          applyValue: metaSuggested,
+        },
+      },
+      {
+        key: "slug-kw",
+        label: kwInSlug ? "Focus keyword used in the URL." : `URL slug is missing the focus keyword "${kw}".`,
+        pass: kwInSlug, warn: false,
+        fix: kwInSlug || !kw ? undefined : {
+          tip: `Update your URL slug to include "${kw}". Suggested slug:`,
+          copy: slugSuggested,
+          applyField: "slug",
+          applyValue: slugSuggested,
+        },
+      },
+      {
+        key: "first10",
+        label: kwInFirst ? "Focus keyword appears in the first 10% of content." : `Focus keyword "${kw}" is missing from the opening paragraph.`,
+        pass: kwInFirst, warn: false,
+        fix: kwInFirst || !kw ? undefined : {
+          tip: `Start your first paragraph with "${kw}" — this signals relevance to search engines immediately. Add this sentence to your intro:`,
+          copy: `${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is one of the most effective strategies for growing your business online. In this guide, we'll walk through everything you need to know about ${kwSuggested}.`,
+          insertInContent: `<p>${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is one of the most effective strategies for growing your business online. In this guide, we'll walk through everything you need to know about ${kwSuggested}.</p>`,
+        },
+      },
+      {
+        key: "content-kw",
+        label: kwInContent ? "Focus keyword found in the content." : `Focus keyword "${kw}" not found anywhere in the content.`,
+        pass: kwInContent, warn: false,
+        fix: kwInContent || !kw ? undefined : {
+          tip: `"${kw}" doesn't appear anywhere in your post body. Use it naturally 3-5 times. Add a sentence like:`,
+          copy: `Understanding ${kwSuggested} is essential for anyone looking to improve their results. The key principles of ${kwSuggested} include consistency, data-driven decisions, and a clear strategy.`,
+        },
+      },
+      {
+        key: "word-count",
+        label: `Content is ${wc} words long.${wc >= 600 ? " Good job!" : ` Aim for 600+ words (${wordsNeeded} more needed).`}`,
+        pass: wcGood, warn: wc >= 300 && wc < 600,
+        fix: wcGood ? undefined : {
+          tip: `Add ${wordsNeeded} more words. Expand your content by adding these sections as H2 headings:`,
+          copy: `<h2>Common Mistakes to Avoid with ${kwSuggested}</h2>\n<p>Many people make the mistake of...</p>\n\n<h2>Step-by-Step Guide to ${kwSuggested}</h2>\n<p>Follow these steps to get started:</p>\n<ol><li>Step one...</li><li>Step two...</li><li>Step three...</li></ol>\n\n<h2>Frequently Asked Questions</h2>\n<h3>What is ${kwSuggested}?</h3>\n<p>${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is...</p>`,
+          insertInContent: `<h2>Common Mistakes to Avoid with ${kwSuggested}</h2>\n<p>Many people make the mistake of...</p>\n\n<h2>Step-by-Step Guide to ${kwSuggested}</h2>\n<p>Follow these steps to get started:</p>\n<ol><li>Step one...</li><li>Step two...</li><li>Step three...</li></ol>`,
+        },
+      },
     ],
     additional: [
-      { key: "sub-kw", label: "Focus keyword found in the subheading(s).", pass: kwInSub, warn: false },
-      { key: "img-kw", label: "Images found in content.", pass: hasImages, warn: false },
-      { key: "density", label: `Keyword density is ${density}%.${densityOk ? " Good." : density > 3 ? " A bit high — avoid over-optimisation." : " Try to use it more."}`, pass: densityOk, warn: density > 3 },
-      { key: "url-len", label: `URL is ${slug.length} characters long.${urlShort ? " Great!" : " Try to keep it under 75."}`, pass: urlShort, warn: false },
-      { key: "internal", label: "Post links to other content on this site.", pass: hasInternal, warn: false },
-      { key: "kw-unique", label: `${kwUsedElsewhere ? "Another post uses this focus keyword — consider a different one." : "You haven't used this focus keyword before."}`, pass: !kwUsedElsewhere, warn: kwUsedElsewhere },
+      {
+        key: "sub-kw",
+        label: kwInSub ? "Focus keyword found in the subheading(s)." : `Focus keyword "${kw}" not found in any H2/H3 heading.`,
+        pass: kwInSub, warn: false,
+        fix: kwInSub || !kw ? undefined : {
+          tip: `Add an H2 heading containing "${kw}". This helps search engines understand the main topic. Copy and insert this heading:`,
+          copy: `<h2>What is ${kwSuggested} and Why Does It Matter?</h2>`,
+          insertInContent: `<h2>What is ${kwSuggested} and Why Does It Matter?</h2>\n<p>Understanding ${kwSuggested} is the first step to achieving real results. Here's everything you need to know.</p>`,
+        },
+      },
+      {
+        key: "img-kw",
+        label: hasImages ? "Images found in content." : "No images found in content.",
+        pass: hasImages, warn: false,
+        fix: hasImages ? undefined : {
+          tip: "Add at least one relevant image with a descriptive alt text. Use the Image button in the toolbar, or copy this HTML snippet and replace the src:",
+          copy: `<img src="/uploads/your-image.jpg" alt="${kwSuggested} guide" width="800" height="450" />`,
+        },
+      },
+      {
+        key: "density",
+        label: `Keyword density is ${density}%.${densityOk ? " Good." : density > 3 ? " Too high — reduce usage to avoid over-optimisation." : ` Too low — use "${kw}" more often.`}`,
+        pass: densityOk, warn: density > 3,
+        fix: densityOk ? undefined : density > 3 ? {
+          tip: `Keyword density is ${density}% — over the 3% threshold. Remove or vary some instances of "${kw}" with synonyms or related phrases to keep content natural.`,
+        } : {
+          tip: `Keyword density is only ${density}%. Aim for 1-2%. Add "${kw}" ${Math.max(1, Math.ceil(wc * 0.01) - (content.match(new RegExp(kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi")) || []).length)} more times naturally in your body text.`,
+        },
+      },
+      {
+        key: "url-len",
+        label: `URL is ${slug.length} characters long.${urlShort ? " Great!" : " Try to keep it under 75 characters."}`,
+        pass: urlShort, warn: false,
+        fix: urlShort ? undefined : {
+          tip: `Your slug is too long. Shorten it to the most important keywords only:`,
+          copy: slugSuggested.split("-").slice(0, 5).join("-"),
+          applyField: "slug",
+          applyValue: slugSuggested.split("-").slice(0, 5).join("-"),
+        },
+      },
+      {
+        key: "internal",
+        label: hasInternal ? "Post links to other content on this site." : "Post has no internal links to other pages.",
+        pass: hasInternal, warn: false,
+        fix: hasInternal ? undefined : {
+          tip: "Add 2-3 internal links to related posts on your site. Internal links improve crawlability and keep readers engaged. Example snippet to copy:",
+          copy: `<a href="/blog/related-post-slug">Learn more about this topic</a>`,
+        },
+      },
+      {
+        key: "kw-unique",
+        label: kwUsedElsewhere ? `Another post already uses "${kw}" as focus keyword — keyword cannibalisation risk.` : "Focus keyword is unique across all posts.",
+        pass: !kwUsedElsewhere, warn: kwUsedElsewhere,
+        fix: kwUsedElsewhere ? {
+          tip: `Two posts targeting the same keyword compete against each other and can hurt both rankings. Add a qualifier to differentiate: try adding a year, location, or modifier.`,
+          copy: `${kw} ${year}`,
+          applyField: "focusKeyword",
+          applyValue: `${kw} ${year}`,
+        } : undefined,
+      },
     ],
     title: [
-      { key: "kw-start", label: "Focus keyword is at the beginning of the SEO title.", pass: kwAtStart, warn: false },
-      { key: "power", label: `Title contains a power word.${titleHasPowerWord ? " Good!" : ""}`, pass: titleHasPowerWord, warn: false },
-      { key: "number", label: `SEO title ${titleHasNumber ? "contains" : "doesn't contain"} a number.`, pass: titleHasNumber, warn: !titleHasNumber },
+      {
+        key: "kw-start",
+        label: kwAtStart ? "Focus keyword is at the beginning of the SEO title." : `Focus keyword "${kw}" is not at the start of the SEO title.`,
+        pass: kwAtStart, warn: false,
+        fix: kwAtStart || !kw ? undefined : {
+          tip: `Move "${kw}" to the very beginning of your SEO title. Google weights words at the start of a title more heavily.`,
+          copy: titleSuggested,
+          applyField: "seoTitle",
+          applyValue: titleSuggested,
+        },
+      },
+      {
+        key: "power",
+        label: titleHasPowerWord ? "Title contains a power word. Good!" : "Title is missing a power word (boosts click-through rate).",
+        pass: titleHasPowerWord, warn: false,
+        fix: titleHasPowerWord ? undefined : {
+          tip: "Power words like Ultimate, Proven, Complete, Expert, Step-by-Step dramatically increase click-through rates. Try one of these title variations:",
+          copy: `The Ultimate Guide to ${rawTitle} (${year})`,
+          applyField: "seoTitle",
+          applyValue: `The Ultimate Guide to ${rawTitle} (${year})`,
+        },
+      },
+      {
+        key: "number",
+        label: titleHasNumber ? "SEO title contains a number." : "SEO title doesn't contain a number — numbers boost CTR.",
+        pass: titleHasNumber, warn: !titleHasNumber,
+        fix: titleHasNumber ? undefined : {
+          tip: "Titles with numbers get 36% more clicks. Add a number to your title:",
+          copy: `7 ${rawTitle} Strategies That Actually Work`,
+          applyField: "seoTitle",
+          applyValue: `7 ${rawTitle} Strategies That Actually Work`,
+        },
+      },
     ],
     readability: [
-      { key: "short-para", label: "You are using short paragraphs.", pass: shortParas, warn: false },
-      { key: "media", label: "Content contains images and/or videos.", pass: hasMedia, warn: false },
-      { key: "subheadings", label: "Content uses subheadings (H2/H3).", pass: hasSubheadings, warn: false },
+      {
+        key: "short-para",
+        label: shortParas ? "You are using short paragraphs." : "Some paragraphs are too long (over 150 words).",
+        pass: shortParas, warn: false,
+        fix: shortParas ? undefined : {
+          tip: "Break long paragraphs into 2-3 sentence chunks. Long blocks of text increase bounce rate. Rule of thumb: max 3 sentences per paragraph.",
+        },
+      },
+      {
+        key: "media",
+        label: hasMedia ? "Content contains images and/or videos." : "No images or videos found in content.",
+        pass: hasMedia, warn: false,
+        fix: hasMedia ? undefined : {
+          tip: "Posts with images get 94% more views. Add at least one image using the Image button in the toolbar, or copy this HTML:",
+          copy: `<img src="/uploads/your-image.jpg" alt="${kwSuggested}" width="800" height="450" />`,
+        },
+      },
+      {
+        key: "subheadings",
+        label: hasSubheadings ? "Content uses subheadings (H2/H3)." : "Content has no H2/H3 subheadings.",
+        pass: hasSubheadings, warn: false,
+        fix: hasSubheadings ? undefined : {
+          tip: "Break your content into sections with H2 headings. This improves readability, SEO, and dwell time. Copy these starter headings:",
+          copy: `<h2>What is ${kwSuggested}?</h2>\n<h2>How ${kwSuggested} Works</h2>\n<h2>Key Benefits of ${kwSuggested}</h2>\n<h2>Getting Started with ${kwSuggested}</h2>`,
+          insertInContent: `<h2>What is ${kwSuggested}?</h2>\n<p>Content here...</p>\n<h2>How ${kwSuggested} Works</h2>\n<p>Content here...</p>`,
+        },
+      },
     ],
     seo2026: (() => {
       const textFull = stripHtml(content).toLowerCase();
-      // GEO: direct answer in intro
       const hasDirectIntroAnswer = kw ? textFull.slice(0, 300).includes(kw) : false;
-      // E-E-A-T: first-person experience
       const hasFirstPerson = /\b(i |we |our |my |i've|we've)\b/.test(textFull);
-      // E-E-A-T: external citations
       const hasCitations = /<a\s[^>]*href=["']https?:\/\/(?!growitbuddy)/i.test(content);
-      // Visual SEO: all images have alt text
       const imgs = content.match(/<img[^>]*>/gi) || [];
       const allImgsHaveAlt = imgs.length === 0 || imgs.every(img => /alt=["'][^"']+["']/i.test(img));
-      // Voice: FAQ section present
       const hasFAQSection = /\b(faq|frequently asked|q:|\bq\.)\b/i.test(textFull);
-      // Voice: question-style headings
       const heads = content.match(/<h[2-4][^>]*>(.*?)<\/h[2-4]>/gi) || [];
       const hasQuestionHeadings = heads.some(h => /\?/i.test(stripHtml(h)));
-      // PAA: numbered list or list present (structured for snippets)
       const hasNumberedList = /<ol/i.test(content);
-      // GEO: uses definitions
       const hasDefinitionPattern = /\b(is\s+a|are\s+a|refers to|is defined as|means)\b/i.test(textFull.slice(0, 500));
+      const missingAltImgs = imgs.filter(img => !/alt=["'][^"']+["']/i.test(img));
 
       return [
-        { key: "geo-intro", label: kw ? `Focus keyword "${kw}" appears in the first paragraph for GEO/AI snippet targeting.` : "Set a focus keyword to check GEO intro optimization.", pass: hasDirectIntroAnswer, warn: false },
-        { key: "eeat-first-person", label: `Content uses first-person language (I/We/Our) to signal lived experience.${hasFirstPerson ? "" : " Add personal experience to boost E-E-A-T."}`, pass: hasFirstPerson, warn: !hasFirstPerson },
-        { key: "eeat-citations", label: `Content links to external authoritative sources for trust signals.${hasCitations ? "" : " Add 1-2 outbound links to reputable sources."}`, pass: hasCitations, warn: !hasCitations },
-        { key: "visual-alt", label: imgs.length === 0 ? "No images found — add at least one image with descriptive alt text." : `${imgs.filter(img => /alt=["'][^"']+["']/i.test(img)).length}/${imgs.length} images have alt text.`, pass: allImgsHaveAlt && imgs.length > 0, warn: imgs.length === 0 },
-        { key: "voice-faq", label: `Content ${hasFAQSection ? "includes" : "is missing"} an FAQ section. FAQs are used by voice assistants and PAA boxes.`, pass: hasFAQSection, warn: !hasFAQSection },
-        { key: "voice-q-headings", label: `${hasQuestionHeadings ? "Some headings are phrased as questions" : "No question-style headings found"} — question headings capture voice search traffic.`, pass: hasQuestionHeadings, warn: !hasQuestionHeadings },
-        { key: "geo-definition", label: `Content ${hasDefinitionPattern ? "uses" : "lacks"} a definition or 'is a' pattern in the intro — used by AI Overviews for featured snippets.`, pass: hasDefinitionPattern, warn: !hasDefinitionPattern },
-        { key: "paa-list", label: `Numbered list ${hasNumberedList ? "found" : "not found"} — ordered lists are cited verbatim in AI Overviews and PAA boxes.`, pass: hasNumberedList, warn: !hasNumberedList },
+        {
+          key: "geo-intro",
+          label: hasDirectIntroAnswer ? `Focus keyword "${kw}" found in opening paragraph — strong GEO signal.` : `Opening paragraph missing "${kw}" — weakens AI overview citation chances.`,
+          pass: hasDirectIntroAnswer, warn: false,
+          fix: hasDirectIntroAnswer || !kw ? undefined : {
+            tip: `Start your first paragraph with "${kw}" so AI tools can identify and quote your content. Add this sentence at the very top:`,
+            copy: `${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is a powerful approach that helps businesses grow faster and more efficiently. In this guide, we cover everything you need to know about ${kwSuggested} — from the basics to advanced strategies.`,
+            insertInContent: `<p>${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is a powerful approach that helps businesses grow faster and more efficiently. In this guide, we cover everything you need to know about ${kwSuggested}.</p>`,
+          },
+        },
+        {
+          key: "eeat-first-person",
+          label: hasFirstPerson ? "Content uses first-person language — strong E-E-A-T Experience signal." : "Content lacks first-person language (I/We/Our) — reduces E-E-A-T Experience score.",
+          pass: hasFirstPerson, warn: !hasFirstPerson,
+          fix: hasFirstPerson ? undefined : {
+            tip: "Share personal experience using 'I' or 'We'. Google rewards content with lived expertise over generic information. Add a sentence like:",
+            copy: `In my experience working with clients on ${kwSuggested}, the biggest difference-maker is consistency. We've seen businesses grow 3x faster simply by applying these principles.`,
+            insertInContent: `<p>In my experience working with clients on ${kwSuggested}, the biggest difference-maker is consistency. We've seen businesses grow 3x faster simply by applying these principles.</p>`,
+          },
+        },
+        {
+          key: "eeat-citations",
+          label: hasCitations ? "Content links to external sources — strong Trustworthiness signal." : "No external citations found — reduces E-E-A-T Trustworthiness.",
+          pass: hasCitations, warn: !hasCitations,
+          fix: hasCitations ? undefined : {
+            tip: "Reference a reputable external source (study, industry report, or authority site). Add a line like this in your content:",
+            copy: `According to recent industry research, businesses that implement ${kwSuggested} see an average of 40% improvement in key metrics. <a href="https://www.source.com" rel="noopener noreferrer">Source</a>`,
+            insertInContent: `<p>According to recent industry research, businesses that implement ${kwSuggested} see an average of 40% improvement in key metrics. (<a href="https://www.source.com" rel="noopener noreferrer">Source</a>)</p>`,
+          },
+        },
+        {
+          key: "visual-alt",
+          label: imgs.length === 0 ? "No images found — add images with descriptive alt text." : allImgsHaveAlt ? `All ${imgs.length} images have alt text.` : `${missingAltImgs.length} image(s) are missing alt text.`,
+          pass: allImgsHaveAlt && imgs.length > 0, warn: imgs.length === 0,
+          fix: (allImgsHaveAlt && imgs.length > 0) ? undefined : imgs.length === 0 ? {
+            tip: "Add at least one image to your post. Images with descriptive alt text boost accessibility and image search traffic:",
+            copy: `<img src="/uploads/image-name.jpg" alt="${kwSuggested} guide and tips" width="800" height="450" />`,
+          } : {
+            tip: `${missingAltImgs.length} image(s) are missing alt text. Edit each <img> tag to include a descriptive alt attribute. Example:`,
+            copy: `<img src="/uploads/image.jpg" alt="${kwSuggested} — detailed guide" width="800" height="450" />`,
+          },
+        },
+        {
+          key: "voice-faq",
+          label: hasFAQSection ? "FAQ section found — excellent for voice search and PAA." : "No FAQ section — missing a key voice search and PAA ranking opportunity.",
+          pass: hasFAQSection, warn: !hasFAQSection,
+          fix: hasFAQSection ? undefined : {
+            tip: `Add an FAQ section at the bottom of your post. Voice assistants directly read FAQ answers, and Google uses them for People Also Ask boxes. Copy this template:`,
+            copy: `<h2>Frequently Asked Questions About ${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)}</h2>\n<h3>What is ${kwSuggested}?</h3>\n<p>${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is a method/strategy that helps you achieve specific goals by following a structured approach.</p>\n<h3>How long does ${kwSuggested} take?</h3>\n<p>Most people start seeing results within 4-8 weeks of consistently applying these strategies.</p>\n<h3>Is ${kwSuggested} right for my business?</h3>\n<p>Yes — ${kwSuggested} works for businesses of all sizes. Whether you're a solopreneur or a growing team, the core principles apply.</p>`,
+            insertInContent: `<h2>Frequently Asked Questions About ${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)}</h2>\n<h3>What is ${kwSuggested}?</h3>\n<p>${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is a method that helps you achieve specific goals through a structured approach.</p>\n<h3>How long does ${kwSuggested} take?</h3>\n<p>Most people see results within 4-8 weeks of consistently applying these strategies.</p>`,
+          },
+        },
+        {
+          key: "voice-q-headings",
+          label: hasQuestionHeadings ? "Question-style headings found — good for voice search." : "No question-style headings — missing voice search and PAA clicks.",
+          pass: hasQuestionHeadings, warn: !hasQuestionHeadings,
+          fix: hasQuestionHeadings ? undefined : {
+            tip: "Rephrase at least one H2/H3 as a question. Google and voice assistants match questions to question-style headings. Try these:",
+            copy: `<h2>What is ${kwSuggested} and How Does It Work?</h2>\n<h2>How Long Does ${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} Take to Show Results?</h2>\n<h2>Is ${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} Right for Your Business?</h2>`,
+            insertInContent: `<h2>What is ${kwSuggested} and How Does It Work?</h2>\n<p>Content here...</p>`,
+          },
+        },
+        {
+          key: "geo-definition",
+          label: hasDefinitionPattern ? "Definition-style sentence found in intro — great for featured snippets." : "No definition pattern in intro — reduces featured snippet chances.",
+          pass: hasDefinitionPattern, warn: !hasDefinitionPattern,
+          fix: hasDefinitionPattern ? undefined : {
+            tip: `Add a clear definition of "${kwSuggested}" in the first 100 words. Google uses these for featured snippets and AI Overviews:`,
+            copy: `${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is defined as a strategic approach that helps businesses and individuals achieve consistent results by focusing on the right actions, in the right order, with measurable outcomes.`,
+            insertInContent: `<p>${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is defined as a strategic approach that helps businesses achieve consistent results by focusing on the right actions in the right order.</p>`,
+          },
+        },
+        {
+          key: "paa-list",
+          label: hasNumberedList ? "Numbered list found — strong signal for AI Overviews and PAA." : "No numbered list found — add one to increase snippet eligibility.",
+          pass: hasNumberedList, warn: !hasNumberedList,
+          fix: hasNumberedList ? undefined : {
+            tip: "Numbered lists are the most-cited content in Google AI Overviews. Add a step-by-step list or top-N list. Copy this template:",
+            copy: `<h2>How to Get Started with ${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} (Step by Step)</h2>\n<ol>\n  <li><strong>Step 1: Define your goal</strong> — Start by identifying what you want to achieve with ${kwSuggested}.</li>\n  <li><strong>Step 2: Research your audience</strong> — Understand who you're trying to reach and what they need.</li>\n  <li><strong>Step 3: Create your strategy</strong> — Map out your approach based on your goals and audience insights.</li>\n  <li><strong>Step 4: Execute consistently</strong> — Take action every day and track your results.</li>\n  <li><strong>Step 5: Optimise and scale</strong> — Analyse what's working and double down on your best-performing actions.</li>\n</ol>`,
+            insertInContent: `<h2>How to Get Started with ${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} (Step by Step)</h2>\n<ol>\n  <li><strong>Step 1: Define your goal</strong> — Identify what success looks like for you.</li>\n  <li><strong>Step 2: Research your audience</strong> — Understand what they need.</li>\n  <li><strong>Step 3: Create your strategy</strong> — Map out your approach.</li>\n  <li><strong>Step 4: Execute consistently</strong> — Take action and track results.</li>\n  <li><strong>Step 5: Optimise and scale</strong> — Double down on what works.</li>\n</ol>`,
+          },
+        },
       ];
     })(),
   };
@@ -461,6 +713,38 @@ function PostEditor({
   const [aiAnalysis, setAiAnalysis] = useState<AiAnalysis | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
+  const [expandedFix, setExpandedFix] = useState<string | null>(null);
+  const [copiedFix, setCopiedFix] = useState<string | null>(null);
+
+  function copyFix(key: string, text: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedFix(key);
+      setTimeout(() => setCopiedFix(null), 2000);
+    });
+  }
+
+  function insertFix(html: string) {
+    if (editorRef.current) {
+      editorRef.current.focus();
+      const sel = window.getSelection();
+      if (sel) sel.collapse(editorRef.current, editorRef.current.childNodes.length);
+      document.execCommand("insertHTML", false, html);
+      setField("content", editorRef.current.innerHTML);
+      showToast("Content added to editor", "success");
+    }
+  }
+
+  function applyFix(field: string, value: string) {
+    if (field === "slug") {
+      setField("slug", value);
+    } else if (field === "focusKeyword") {
+      setSeoField("focusKeyword", value);
+    } else {
+      setSeoField(field as keyof PostSeo, value);
+    }
+    showToast("Fix applied", "success");
+    setExpandedFix(null);
+  }
 
   function showToast(msg: string, type: "success" | "error" | "info" = "success") {
     const id = Date.now();
@@ -637,6 +921,65 @@ function PostEditor({
   const seoTitleDisplay = seo.seoTitle || data.title;
   const metaDescDisplay = seo.metaDescription || data.excerpt;
   const yoast = yoastChecks(data, liveContent, seo, allPosts);
+
+  function renderCheck(c: CheckItem) {
+    const isOpen = expandedFix === c.key;
+    const hasFix = !c.pass && !!c.fix;
+    return (
+      <div key={c.key} className="rounded-xl border border-[#0B0B0B]/6 overflow-hidden">
+        <div className="flex items-start gap-2.5 px-3 py-2.5 bg-white">
+          {c.pass
+            ? <CheckCircle size={15} className="text-emerald-500 shrink-0 mt-0.5" />
+            : c.warn
+              ? <AlertCircle size={15} className="text-amber-500 shrink-0 mt-0.5" />
+              : <XCircle size={15} className="text-red-400 shrink-0 mt-0.5" />}
+          <p className="text-[12.5px] text-[#0B0B0B]/70 leading-snug flex-1">{c.label}</p>
+          {hasFix && (
+            <button
+              onClick={() => setExpandedFix(isOpen ? null : c.key)}
+              className={`shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-md transition-colors border ${isOpen ? "bg-[#0B0B0B] text-white border-[#0B0B0B]" : "bg-[#0B0B0B]/6 text-[#0B0B0B]/60 border-[#0B0B0B]/12 hover:bg-[#0B0B0B]/10"}`}
+            >
+              {isOpen ? "Close" : "Fix"}
+            </button>
+          )}
+        </div>
+        {hasFix && isOpen && c.fix && (
+          <div className="bg-[#fffbf0] border-t border-amber-200/60 px-3 py-3 space-y-2.5">
+            <p className="text-[11.5px] text-[#0B0B0B]/65 leading-snug">{c.fix.tip}</p>
+            {c.fix.copy && (
+              <div className="relative">
+                <pre className="text-[10.5px] text-[#0B0B0B]/60 bg-white border border-[#0B0B0B]/10 rounded-lg px-3 py-2.5 font-mono leading-relaxed overflow-x-auto whitespace-pre-wrap">{c.fix.copy}</pre>
+                <button
+                  onClick={() => copyFix(c.key, c.fix!.copy!)}
+                  className="absolute top-1.5 right-1.5 text-[9px] font-bold px-2 py-0.5 rounded-md bg-white border border-[#0B0B0B]/15 text-[#0B0B0B]/55 hover:bg-[#0B0B0B]/6 transition-colors"
+                >
+                  {copiedFix === c.key ? "Copied!" : "Copy"}
+                </button>
+              </div>
+            )}
+            <div className="flex items-center gap-2 flex-wrap">
+              {c.fix.applyField && c.fix.applyValue && (
+                <button
+                  onClick={() => applyFix(c.fix!.applyField!, c.fix!.applyValue!)}
+                  className="text-[11px] font-bold bg-[#0B0B0B] text-white px-3 py-1.5 rounded-lg hover:bg-[#0B0B0B]/85 transition-colors"
+                >
+                  Apply Fix
+                </button>
+              )}
+              {c.fix.insertInContent && (
+                <button
+                  onClick={() => { insertFix(c.fix!.insertInContent!); setExpandedFix(null); }}
+                  className="text-[11px] font-bold bg-emerald-600 text-white px-3 py-1.5 rounded-lg hover:bg-emerald-700 transition-colors"
+                >
+                  Insert into Editor
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   const [kwTagInput, setKwTagInput] = useState("");
   const kwTags: string[] = [
@@ -839,13 +1182,13 @@ function PostEditor({
                     {aiLoading
                       ? <RefreshCw size={11} className="animate-spin" />
                       : <Sparkles size={11} />}
-                    {aiLoading ? "Analyzing..." : aiAnalysis ? "Re-analyze" : "Analyze with AI"}
+                    {aiLoading ? "Analyzing..." : aiAnalysis ? "Re-analyze" : "Deep Analyze"}
                   </button>
                 </div>
 
                 {!aiAnalysis && !aiLoading && !aiError && (
                   <p className="text-[12px] text-white/30 leading-relaxed text-center py-3">
-                    AI-powered score, intent detection, content gaps, semantic keywords, title variations, and internal link suggestions.
+                    GEO score, E-E-A-T signals, voice search readiness, PAA questions, topic cluster plan, intent detection, semantic keywords, and title variations.
                   </p>
                 )}
                 {aiLoading && (
@@ -1234,22 +1577,25 @@ function PostEditor({
                 const errors = yoast.basic.filter(c => !c.pass && !c.warn).length;
                 const warns = yoast.basic.filter(c => c.warn).length;
                 const allGood = errors === 0 && warns === 0;
+                const fixable = yoast.basic.filter(c => !c.pass && c.fix?.applyField);
                 return (
                   <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl p-5 shadow-sm">
-                    <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center gap-3 mb-1">
                       <h3 className="text-[14px] font-semibold text-[#0B0B0B]">Basic SEO</h3>
                       <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${allGood ? "bg-emerald-100 text-emerald-700" : errors > 0 ? "bg-red-100 text-red-600" : "bg-amber-100 text-amber-700"}`}>
                         {allGood ? "All Good" : errors > 0 ? `${errors} Error${errors > 1 ? "s" : ""}` : `${warns} Warning${warns > 1 ? "s" : ""}`}
                       </span>
+                      {fixable.length > 0 && (
+                        <button
+                          onClick={() => { fixable.forEach(c => applyFix(c.fix!.applyField!, c.fix!.applyValue!)); }}
+                          className="ml-auto text-[10px] font-bold bg-emerald-600 text-white px-2.5 py-1 rounded-lg hover:bg-emerald-700 transition-colors"
+                        >
+                          Fix All ({fixable.length})
+                        </button>
+                      )}
                     </div>
-                    <div className="space-y-3">
-                      {yoast.basic.map(c => (
-                        <div key={c.key} className="flex items-start gap-2.5">
-                          {c.pass ? <CheckCircle size={15} className="text-emerald-500 shrink-0 mt-0.5" /> : c.warn ? <AlertCircle size={15} className="text-amber-500 shrink-0 mt-0.5" /> : <XCircle size={15} className="text-red-400 shrink-0 mt-0.5" />}
-                          <p className="text-[12.5px] text-[#0B0B0B]/70 leading-snug">{c.label}</p>
-                        </div>
-                      ))}
-                    </div>
+                    <p className="text-[11px] text-[#0B0B0B]/35 mb-4">Click <strong>Fix</strong> on any failed check for exact suggestions and one-click fixes.</p>
+                    <div className="space-y-2">{yoast.basic.map(c => renderCheck(c))}</div>
                   </div>
                 );
               })()}
@@ -1259,22 +1605,23 @@ function PostEditor({
                 const errors = yoast.additional.filter(c => !c.pass && !c.warn).length;
                 const warns = yoast.additional.filter(c => c.warn).length;
                 const allGood = errors === 0 && warns === 0;
+                const fixable = yoast.additional.filter(c => !c.pass && c.fix?.applyField);
                 return (
                   <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl p-5 shadow-sm">
-                    <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center gap-3 mb-1">
                       <h3 className="text-[14px] font-semibold text-[#0B0B0B]">Additional</h3>
                       <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${allGood ? "bg-emerald-100 text-emerald-700" : errors > 0 ? "bg-red-100 text-red-600" : "bg-amber-100 text-amber-700"}`}>
                         {allGood ? "All Good" : errors > 0 ? `${errors} Error${errors > 1 ? "s" : ""}` : `${warns} Warning${warns > 1 ? "s" : ""}`}
                       </span>
+                      {fixable.length > 0 && (
+                        <button onClick={() => fixable.forEach(c => applyFix(c.fix!.applyField!, c.fix!.applyValue!))}
+                          className="ml-auto text-[10px] font-bold bg-emerald-600 text-white px-2.5 py-1 rounded-lg hover:bg-emerald-700 transition-colors">
+                          Fix All ({fixable.length})
+                        </button>
+                      )}
                     </div>
-                    <div className="space-y-3">
-                      {yoast.additional.map(c => (
-                        <div key={c.key} className="flex items-start gap-2.5">
-                          {c.pass ? <CheckCircle size={15} className="text-emerald-500 shrink-0 mt-0.5" /> : c.warn ? <AlertCircle size={15} className="text-amber-500 shrink-0 mt-0.5" /> : <XCircle size={15} className="text-red-400 shrink-0 mt-0.5" />}
-                          <p className="text-[12.5px] text-[#0B0B0B]/70 leading-snug">{c.label}</p>
-                        </div>
-                      ))}
-                    </div>
+                    <p className="text-[11px] text-[#0B0B0B]/35 mb-4">Click <strong>Fix</strong> on any failed check for exact suggestions and one-click fixes.</p>
+                    <div className="space-y-2">{yoast.additional.map(c => renderCheck(c))}</div>
                   </div>
                 );
               })()}
@@ -1284,22 +1631,23 @@ function PostEditor({
                 const errors = yoast.title.filter(c => !c.pass && !c.warn).length;
                 const warns = yoast.title.filter(c => c.warn).length;
                 const allGood = errors === 0 && warns === 0;
+                const fixable = yoast.title.filter(c => !c.pass && c.fix?.applyField);
                 return (
                   <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl p-5 shadow-sm">
-                    <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center gap-3 mb-1">
                       <h3 className="text-[14px] font-semibold text-[#0B0B0B]">Title Readability</h3>
                       <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${allGood ? "bg-emerald-100 text-emerald-700" : errors > 0 ? "bg-red-100 text-red-600" : "bg-amber-100 text-amber-700"}`}>
                         {allGood ? "All Good" : errors > 0 ? `${errors} Error${errors > 1 ? "s" : ""}` : `${warns} Warning${warns > 1 ? "s" : ""}`}
                       </span>
+                      {fixable.length > 0 && (
+                        <button onClick={() => fixable.forEach(c => applyFix(c.fix!.applyField!, c.fix!.applyValue!))}
+                          className="ml-auto text-[10px] font-bold bg-emerald-600 text-white px-2.5 py-1 rounded-lg hover:bg-emerald-700 transition-colors">
+                          Fix All ({fixable.length})
+                        </button>
+                      )}
                     </div>
-                    <div className="space-y-3">
-                      {yoast.title.map(c => (
-                        <div key={c.key} className="flex items-start gap-2.5">
-                          {c.pass ? <CheckCircle size={15} className="text-emerald-500 shrink-0 mt-0.5" /> : c.warn ? <AlertCircle size={15} className="text-amber-500 shrink-0 mt-0.5" /> : <XCircle size={15} className="text-red-400 shrink-0 mt-0.5" />}
-                          <p className="text-[12.5px] text-[#0B0B0B]/70 leading-snug">{c.label}</p>
-                        </div>
-                      ))}
-                    </div>
+                    <p className="text-[11px] text-[#0B0B0B]/35 mb-4">Click <strong>Fix</strong> on any failed check for exact suggestions and one-click fixes.</p>
+                    <div className="space-y-2">{yoast.title.map(c => renderCheck(c))}</div>
                   </div>
                 );
               })()}
@@ -1311,20 +1659,14 @@ function PostEditor({
                 const allGood = errors === 0 && warns === 0;
                 return (
                   <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl p-5 shadow-sm">
-                    <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center gap-3 mb-1">
                       <h3 className="text-[14px] font-semibold text-[#0B0B0B]">Content Readability</h3>
                       <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${allGood ? "bg-emerald-100 text-emerald-700" : errors > 0 ? "bg-red-100 text-red-600" : "bg-amber-100 text-amber-700"}`}>
                         {allGood ? "All Good" : errors > 0 ? `${errors} Error${errors > 1 ? "s" : ""}` : `${warns} Warning${warns > 1 ? "s" : ""}`}
                       </span>
                     </div>
-                    <div className="space-y-3">
-                      {yoast.readability.map(c => (
-                        <div key={c.key} className="flex items-start gap-2.5">
-                          {c.pass ? <CheckCircle size={15} className="text-emerald-500 shrink-0 mt-0.5" /> : c.warn ? <AlertCircle size={15} className="text-amber-500 shrink-0 mt-0.5" /> : <XCircle size={15} className="text-red-400 shrink-0 mt-0.5" />}
-                          <p className="text-[12.5px] text-[#0B0B0B]/70 leading-snug">{c.label}</p>
-                        </div>
-                      ))}
-                    </div>
+                    <p className="text-[11px] text-[#0B0B0B]/35 mb-4">Click <strong>Fix</strong> on any failed check for exact suggestions and one-click fixes.</p>
+                    <div className="space-y-2">{yoast.readability.map(c => renderCheck(c))}</div>
                   </div>
                 );
               })()}
@@ -1335,6 +1677,7 @@ function PostEditor({
                 const passed = checks.filter(c => c.pass).length;
                 const warned = checks.filter(c => !c.pass && c.warn).length;
                 const failed = checks.filter(c => !c.pass && !c.warn).length;
+                const fixable = checks.filter(c => !c.pass && c.fix?.applyField);
                 return (
                   <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl p-5 shadow-sm">
                     <div className="flex items-center gap-3 mb-1">
@@ -1342,17 +1685,16 @@ function PostEditor({
                       <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${failed === 0 && warned === 0 ? "bg-emerald-100 text-emerald-700" : failed > 0 ? "bg-red-100 text-red-600" : "bg-amber-100 text-amber-700"}`}>
                         {failed === 0 && warned === 0 ? "All Good" : failed > 0 ? `${failed} Failed` : `${warned} Warning${warned > 1 ? "s" : ""}`}
                       </span>
-                      <span className="text-[10px] text-[#0B0B0B]/35 ml-auto">{passed}/{checks.length} passed</span>
+                      <span className="text-[10px] text-[#0B0B0B]/35">{passed}/{checks.length} passed</span>
+                      {fixable.length > 0 && (
+                        <button onClick={() => fixable.forEach(c => applyFix(c.fix!.applyField!, c.fix!.applyValue!))}
+                          className="ml-auto text-[10px] font-bold bg-emerald-600 text-white px-2.5 py-1 rounded-lg hover:bg-emerald-700 transition-colors">
+                          Fix All ({fixable.length})
+                        </button>
+                      )}
                     </div>
-                    <p className="text-[11px] text-[#0B0B0B]/40 mb-4">GEO / AI Overviews · E-E-A-T · Voice Search · Visual SEO · PAA targeting</p>
-                    <div className="space-y-3">
-                      {checks.map(c => (
-                        <div key={c.key} className="flex items-start gap-2.5">
-                          {c.pass ? <CheckCircle size={15} className="text-emerald-500 shrink-0 mt-0.5" /> : c.warn ? <AlertCircle size={15} className="text-amber-500 shrink-0 mt-0.5" /> : <XCircle size={15} className="text-red-400 shrink-0 mt-0.5" />}
-                          <p className="text-[12.5px] text-[#0B0B0B]/70 leading-snug">{c.label}</p>
-                        </div>
-                      ))}
-                    </div>
+                    <p className="text-[11px] text-[#0B0B0B]/40 mb-4">GEO / AI Overviews · E-E-A-T · Voice Search · Visual SEO · PAA targeting. Click <strong>Fix</strong> for exact suggestions.</p>
+                    <div className="space-y-2">{checks.map(c => renderCheck(c))}</div>
                   </div>
                 );
               })()}
