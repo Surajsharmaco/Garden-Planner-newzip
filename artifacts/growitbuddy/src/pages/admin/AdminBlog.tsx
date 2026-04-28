@@ -312,10 +312,12 @@ function yoastChecks(post: BlogPost, content: string, seo: PostSeo, allPosts: Bl
     basic: [
       {
         key: "title-kw",
-        label: kwInSeoTitle ? "Focus keyword used in SEO title." : `SEO title is missing the focus keyword "${kw}".`,
+        label: kwInSeoTitle
+          ? `Your topic word "${kw}" is in the page title.`
+          : `Your topic word is missing from the page title.`,
         pass: kwInSeoTitle, warn: false,
         fix: kwInSeoTitle || !kw ? undefined : {
-          tip: `Add "${kw}" to the start of your SEO title. Below is a ready-made version — click Apply to use it.`,
+          tip: `The page title is the big blue text people see when your post shows up in Google. Adding your topic word "${kw}" there tells Google exactly what your post is about. Click "Apply Fix" — it's done in one click.`,
           copy: titleSuggested,
           applyField: "seoTitle",
           applyValue: titleSuggested,
@@ -323,10 +325,12 @@ function yoastChecks(post: BlogPost, content: string, seo: PostSeo, allPosts: Bl
       },
       {
         key: "meta-kw",
-        label: kwInMetaDesc ? "Focus keyword used in meta description." : `Meta description is missing the focus keyword "${kw}".`,
+        label: kwInMetaDesc
+          ? `Your topic word "${kw}" is in the Google preview description.`
+          : `Your topic word is missing from the Google preview description.`,
         pass: kwInMetaDesc, warn: false,
         fix: kwInMetaDesc || !kw ? undefined : {
-          tip: `Your meta description must naturally contain "${kw}". Below is a suggested one — click Apply to use it.`,
+          tip: `The Google preview description is the small grey text that appears under your title in search results. It helps people decide if they want to click your post. Click "Apply Fix" to add a ready-made description with your topic word.`,
           copy: metaSuggested,
           applyField: "metaDescription",
           applyValue: metaSuggested,
@@ -334,10 +338,12 @@ function yoastChecks(post: BlogPost, content: string, seo: PostSeo, allPosts: Bl
       },
       {
         key: "slug-kw",
-        label: kwInSlug ? "Focus keyword used in the URL." : `URL slug is missing the focus keyword "${kw}".`,
+        label: kwInSlug
+          ? `Your web address (URL) includes your topic word.`
+          : `Your web address (URL) doesn't include your topic word.`,
         pass: kwInSlug, warn: false,
         fix: kwInSlug || !kw ? undefined : {
-          tip: `Update your URL slug to include "${kw}". Suggested slug:`,
+          tip: `Your URL is the website address shown in the browser — like yoursite.com/your-topic. A short, clean URL with your topic word helps Google rank your post better. Click "Apply Fix" to update it automatically.`,
           copy: slugSuggested,
           applyField: "slug",
           applyValue: slugSuggested,
@@ -345,29 +351,37 @@ function yoastChecks(post: BlogPost, content: string, seo: PostSeo, allPosts: Bl
       },
       {
         key: "first10",
-        label: kwInFirst ? "Focus keyword appears in the first 10% of content." : `Focus keyword "${kw}" is missing from the opening paragraph.`,
+        label: kwInFirst
+          ? `Your topic word appears in the very first paragraph.`
+          : `Your topic word doesn't appear in the first paragraph.`,
         pass: kwInFirst, warn: false,
         fix: kwInFirst || !kw ? undefined : {
-          tip: `Start your first paragraph with "${kw}" — this signals relevance to search engines immediately. Add this sentence to your intro:`,
+          tip: `Google reads your first paragraph first to understand what the post is about. Mentioning your topic "${kwSuggested}" right at the start makes a big difference. Click "Insert into Editor" to add a ready-made opening sentence.`,
           copy: `${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is one of the most effective strategies for growing your business online. In this guide, we'll walk through everything you need to know about ${kwSuggested}.`,
           insertInContent: `<p>${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is one of the most effective strategies for growing your business online. In this guide, we'll walk through everything you need to know about ${kwSuggested}.</p>`,
         },
       },
       {
         key: "content-kw",
-        label: kwInContent ? "Focus keyword found in the content." : `Focus keyword "${kw}" not found anywhere in the content.`,
+        label: kwInContent
+          ? `Your topic word appears in the article.`
+          : `Your topic word doesn't appear anywhere in the article.`,
         pass: kwInContent, warn: false,
         fix: kwInContent || !kw ? undefined : {
-          tip: `"${kw}" doesn't appear anywhere in your post body. Use it naturally 3-5 times. Add a sentence like:`,
-          copy: `Understanding ${kwSuggested} is essential for anyone looking to improve their results. The key principles of ${kwSuggested} include consistency, data-driven decisions, and a clear strategy.`,
+          tip: `Google matches your post to what people search by reading the words in your article. If your topic word isn't there, Google won't know what your post is about. Copy and paste this example paragraph into your article to get started:`,
+          copy: `Understanding ${kwSuggested} is essential for anyone looking to improve their results. The key principles of ${kwSuggested} include consistency, a clear plan, and taking action every day.`,
         },
       },
       {
         key: "word-count",
-        label: `Content is ${wc} words long.${wc >= 600 ? " Good job!" : ` Aim for 600+ words (${wordsNeeded} more needed).`}`,
+        label: wc >= 600
+          ? `Your post is ${wc} words long — good length!`
+          : wc >= 300
+            ? `Your post is ${wc} words — a bit short. Add ${wordsNeeded} more words.`
+            : `Your post is only ${wc} words — too short. Add at least ${wordsNeeded} more words.`,
         pass: wcGood, warn: wc >= 300 && wc < 600,
         fix: wcGood ? undefined : {
-          tip: `Add ${wordsNeeded} more words. Expand your content by adding these sections as H2 headings:`,
+          tip: `Short posts usually don't rank well because they don't fully cover a topic. You need ${wordsNeeded} more words. Click "Insert into Editor" to add 3 ready-made sections straight into your post — then just fill in your own content.`,
           copy: `<h2>Common Mistakes to Avoid with ${kwSuggested}</h2>\n<p>Many people make the mistake of...</p>\n\n<h2>Step-by-Step Guide to ${kwSuggested}</h2>\n<p>Follow these steps to get started:</p>\n<ol><li>Step one...</li><li>Step two...</li><li>Step three...</li></ol>\n\n<h2>Frequently Asked Questions</h2>\n<h3>What is ${kwSuggested}?</h3>\n<p>${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is...</p>`,
           insertInContent: `<h2>Common Mistakes to Avoid with ${kwSuggested}</h2>\n<p>Many people make the mistake of...</p>\n\n<h2>Step-by-Step Guide to ${kwSuggested}</h2>\n<p>Follow these steps to get started:</p>\n<ol><li>Step one...</li><li>Step two...</li><li>Step three...</li></ol>`,
         },
@@ -376,39 +390,47 @@ function yoastChecks(post: BlogPost, content: string, seo: PostSeo, allPosts: Bl
     additional: [
       {
         key: "sub-kw",
-        label: kwInSub ? "Focus keyword found in the subheading(s)." : `Focus keyword "${kw}" not found in any H2/H3 heading.`,
+        label: kwInSub
+          ? `A section heading inside your post includes your topic word.`
+          : `None of your section headings include your topic word "${kw}".`,
         pass: kwInSub, warn: false,
         fix: kwInSub || !kw ? undefined : {
-          tip: `Add an H2 heading containing "${kw}". This helps search engines understand the main topic. Copy and insert this heading:`,
+          tip: `Section headings are the bold titles inside your post (like "What is X?" or "How X Works"). Having your topic word "${kwSuggested}" in at least one heading helps Google understand your post. Click "Insert into Editor" to add one.`,
           copy: `<h2>What is ${kwSuggested} and Why Does It Matter?</h2>`,
           insertInContent: `<h2>What is ${kwSuggested} and Why Does It Matter?</h2>\n<p>Understanding ${kwSuggested} is the first step to achieving real results. Here's everything you need to know.</p>`,
         },
       },
       {
         key: "img-kw",
-        label: hasImages ? "Images found in content." : "No images found in content.",
+        label: hasImages ? "Your post has images." : "Your post has no images.",
         pass: hasImages, warn: false,
         fix: hasImages ? undefined : {
-          tip: "Add at least one relevant image with a descriptive alt text. Use the Image button in the toolbar, or copy this HTML snippet and replace the src:",
+          tip: `Posts with images get far more readers and stay higher in search results. Use the image button (the mountain icon in the toolbar above the editor) to upload a photo. Even one image makes a big difference.`,
           copy: `<img src="/uploads/your-image.jpg" alt="${kwSuggested} guide" width="800" height="450" />`,
         },
       },
       {
         key: "density",
-        label: `Keyword density is ${density}%.${densityOk ? " Good." : density > 3 ? " Too high — reduce usage to avoid over-optimisation." : ` Too low — use "${kw}" more often.`}`,
+        label: densityOk
+          ? `You use your topic word the right amount (${density}%).`
+          : density > 3
+            ? `You use your topic word too many times (${density}%) — it looks spammy.`
+            : `You barely use your topic word (${density}%) — mention it more.`,
         pass: densityOk, warn: density > 3,
         fix: densityOk ? undefined : density > 3 ? {
-          tip: `Keyword density is ${density}% — over the 3% threshold. Remove or vary some instances of "${kw}" with synonyms or related phrases to keep content natural.`,
+          tip: `You've mentioned "${kw}" so often it may look like spam to Google. Try replacing some uses with related phrases or just remove a few. Write naturally — don't repeat the same word over and over.`,
         } : {
-          tip: `Keyword density is only ${density}%. Aim for 1-2%. Add "${kw}" ${Math.max(1, Math.ceil(wc * 0.01) - (content.match(new RegExp(kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi")) || []).length)} more times naturally in your body text.`,
+          tip: `Your topic word "${kw}" only appears a tiny amount in your post. Naturally mention it a few more times as you write about your topic. There's no need to force it — just write clearly about what the post is about.`,
         },
       },
       {
         key: "url-len",
-        label: `URL is ${slug.length} characters long.${urlShort ? " Great!" : " Try to keep it under 75 characters."}`,
+        label: urlShort
+          ? `Your web address (URL) is a good length (${slug.length} characters).`
+          : `Your web address (URL) is too long (${slug.length} characters).`,
         pass: urlShort, warn: false,
         fix: urlShort ? undefined : {
-          tip: `Your slug is too long. Shorten it to the most important keywords only:`,
+          tip: `Short URLs are much easier to read and share. Keep your URL to just 3-5 key words. Click "Apply Fix" to shorten it automatically.`,
           copy: slugSuggested.split("-").slice(0, 5).join("-"),
           applyField: "slug",
           applyValue: slugSuggested.split("-").slice(0, 5).join("-"),
@@ -416,19 +438,23 @@ function yoastChecks(post: BlogPost, content: string, seo: PostSeo, allPosts: Bl
       },
       {
         key: "internal",
-        label: hasInternal ? "Post links to other content on this site." : "Post has no internal links to other pages.",
+        label: hasInternal
+          ? "Your post links to other pages on your website."
+          : "Your post doesn't link to any other pages on your website.",
         pass: hasInternal, warn: false,
         fix: hasInternal ? undefined : {
-          tip: "Add 2-3 internal links to related posts on your site. Internal links improve crawlability and keep readers engaged. Example snippet to copy:",
+          tip: `Linking to your other blog posts keeps readers on your site longer and helps Google discover all your content. Select some text in your post, then use the link button in the toolbar to add a link to another one of your posts.`,
           copy: `<a href="/blog/related-post-slug">Learn more about this topic</a>`,
         },
       },
       {
         key: "kw-unique",
-        label: kwUsedElsewhere ? `Another post already uses "${kw}" as focus keyword — keyword cannibalisation risk.` : "Focus keyword is unique across all posts.",
+        label: kwUsedElsewhere
+          ? `Another one of your posts already targets the same topic word — they'll compete with each other.`
+          : "Your topic word is unique — no other post uses the same one.",
         pass: !kwUsedElsewhere, warn: kwUsedElsewhere,
         fix: kwUsedElsewhere ? {
-          tip: `Two posts targeting the same keyword compete against each other and can hurt both rankings. Add a qualifier to differentiate: try adding a year, location, or modifier.`,
+          tip: `When two of your posts fight for the same keyword, both of them rank lower. Try adding "${year}" or a word like "beginners" or "guide" to make this one different. Click "Apply Fix" to add the year automatically.`,
           copy: `${kw} ${year}`,
           applyField: "focusKeyword",
           applyValue: `${kw} ${year}`,
@@ -438,10 +464,12 @@ function yoastChecks(post: BlogPost, content: string, seo: PostSeo, allPosts: Bl
     title: [
       {
         key: "kw-start",
-        label: kwAtStart ? "Focus keyword is at the beginning of the SEO title." : `Focus keyword "${kw}" is not at the start of the SEO title.`,
+        label: kwAtStart
+          ? `Your topic word is at the very beginning of the title.`
+          : `Your topic word is not at the beginning of the title.`,
         pass: kwAtStart, warn: false,
         fix: kwAtStart || !kw ? undefined : {
-          tip: `Move "${kw}" to the very beginning of your SEO title. Google weights words at the start of a title more heavily.`,
+          tip: `Google pays more attention to the first words in a title. Moving your topic word to the very start can boost your ranking. Click "Apply Fix" — it'll rearrange your title automatically.`,
           copy: titleSuggested,
           applyField: "seoTitle",
           applyValue: titleSuggested,
@@ -449,10 +477,12 @@ function yoastChecks(post: BlogPost, content: string, seo: PostSeo, allPosts: Bl
       },
       {
         key: "power",
-        label: titleHasPowerWord ? "Title contains a power word. Good!" : "Title is missing a power word (boosts click-through rate).",
+        label: titleHasPowerWord
+          ? "Your title has a strong hook word — great for clicks!"
+          : `Your title doesn't have a hook word to encourage people to click.`,
         pass: titleHasPowerWord, warn: false,
         fix: titleHasPowerWord ? undefined : {
-          tip: "Power words like Ultimate, Proven, Complete, Expert, Step-by-Step dramatically increase click-through rates. Try one of these title variations:",
+          tip: `Words like "Ultimate", "Proven", "Simple", "Complete", or "Step-by-Step" make people far more likely to click your post when they see it in Google. Click "Apply Fix" to add one to your title now.`,
           copy: `The Ultimate Guide to ${rawTitle} (${year})`,
           applyField: "seoTitle",
           applyValue: `The Ultimate Guide to ${rawTitle} (${year})`,
@@ -460,10 +490,12 @@ function yoastChecks(post: BlogPost, content: string, seo: PostSeo, allPosts: Bl
       },
       {
         key: "number",
-        label: titleHasNumber ? "SEO title contains a number." : "SEO title doesn't contain a number — numbers boost CTR.",
+        label: titleHasNumber
+          ? "Your title has a number in it — good for clicks!"
+          : "Your title doesn't have a number — adding one gets more clicks.",
         pass: titleHasNumber, warn: !titleHasNumber,
         fix: titleHasNumber ? undefined : {
-          tip: "Titles with numbers get 36% more clicks. Add a number to your title:",
+          tip: `Titles with numbers like "7 Tips" or "5 Ways" get clicked much more often. People love knowing exactly how many things they'll learn. Click "Apply Fix" to add a number to your title.`,
           copy: `7 ${rawTitle} Strategies That Actually Work`,
           applyField: "seoTitle",
           applyValue: `7 ${rawTitle} Strategies That Actually Work`,
@@ -473,27 +505,33 @@ function yoastChecks(post: BlogPost, content: string, seo: PostSeo, allPosts: Bl
     readability: [
       {
         key: "short-para",
-        label: shortParas ? "You are using short paragraphs." : "Some paragraphs are too long (over 150 words).",
+        label: shortParas
+          ? "Your paragraphs are short and easy to read."
+          : "Some paragraphs are too long and hard to read.",
         pass: shortParas, warn: false,
         fix: shortParas ? undefined : {
-          tip: "Break long paragraphs into 2-3 sentence chunks. Long blocks of text increase bounce rate. Rule of thumb: max 3 sentences per paragraph.",
+          tip: `Long walls of text are hard to read and make people leave your page. Break your writing into short chunks — aim for 2-3 sentences per paragraph. Press Enter more often to create breathing room between your ideas.`,
         },
       },
       {
         key: "media",
-        label: hasMedia ? "Content contains images and/or videos." : "No images or videos found in content.",
+        label: hasMedia
+          ? "Your post has images or videos."
+          : "Your post has no photos or videos.",
         pass: hasMedia, warn: false,
         fix: hasMedia ? undefined : {
-          tip: "Posts with images get 94% more views. Add at least one image using the Image button in the toolbar, or copy this HTML:",
+          tip: `Posts with images or videos keep readers engaged much longer. Use the image button (mountain icon) in the writing toolbar above to add a photo. Even one image makes your post feel much more professional.`,
           copy: `<img src="/uploads/your-image.jpg" alt="${kwSuggested}" width="800" height="450" />`,
         },
       },
       {
         key: "subheadings",
-        label: hasSubheadings ? "Content uses subheadings (H2/H3)." : "Content has no H2/H3 subheadings.",
+        label: hasSubheadings
+          ? "Your post has section headings to guide the reader."
+          : "Your post has no section headings.",
         pass: hasSubheadings, warn: false,
         fix: hasSubheadings ? undefined : {
-          tip: "Break your content into sections with H2 headings. This improves readability, SEO, and dwell time. Copy these starter headings:",
+          tip: `Section headings are bold titles inside your post that break it into chunks — like chapters in a book. They make your post much easier to read, and they help Google understand what each part covers. Click "Insert into Editor" to add 4 ready-made headings.`,
           copy: `<h2>What is ${kwSuggested}?</h2>\n<h2>How ${kwSuggested} Works</h2>\n<h2>Key Benefits of ${kwSuggested}</h2>\n<h2>Getting Started with ${kwSuggested}</h2>`,
           insertInContent: `<h2>What is ${kwSuggested}?</h2>\n<p>Content here...</p>\n<h2>How ${kwSuggested} Works</h2>\n<p>Content here...</p>`,
         },
@@ -516,84 +554,102 @@ function yoastChecks(post: BlogPost, content: string, seo: PostSeo, allPosts: Bl
       return [
         {
           key: "geo-intro",
-          label: hasDirectIntroAnswer ? `Focus keyword "${kw}" found in opening paragraph — strong GEO signal.` : `Opening paragraph missing "${kw}" — weakens AI overview citation chances.`,
+          label: hasDirectIntroAnswer
+            ? `Your topic word appears in the very first paragraph — Google and AI tools can find it easily.`
+            : `Your topic word is missing from the very first paragraph.`,
           pass: hasDirectIntroAnswer, warn: false,
           fix: hasDirectIntroAnswer || !kw ? undefined : {
-            tip: `Start your first paragraph with "${kw}" so AI tools can identify and quote your content. Add this sentence at the very top:`,
-            copy: `${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is a powerful approach that helps businesses grow faster and more efficiently. In this guide, we cover everything you need to know about ${kwSuggested} — from the basics to advanced strategies.`,
+            tip: `Google's AI assistant reads your first paragraph to give quick answers to searchers. If your topic isn't mentioned right away, your post might get skipped. Click "Insert into Editor" to add a ready-made first sentence that includes your topic.`,
+            copy: `${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is a powerful approach that helps businesses grow faster and more efficiently. In this guide, we cover everything you need to know about ${kwSuggested}.`,
             insertInContent: `<p>${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is a powerful approach that helps businesses grow faster and more efficiently. In this guide, we cover everything you need to know about ${kwSuggested}.</p>`,
           },
         },
         {
           key: "eeat-first-person",
-          label: hasFirstPerson ? "Content uses first-person language — strong E-E-A-T Experience signal." : "Content lacks first-person language (I/We/Our) — reduces E-E-A-T Experience score.",
+          label: hasFirstPerson
+            ? "Your post mentions personal experience (I/We/Our) — builds reader trust."
+            : `Your post doesn't mention any personal experience.`,
           pass: hasFirstPerson, warn: !hasFirstPerson,
           fix: hasFirstPerson ? undefined : {
-            tip: "Share personal experience using 'I' or 'We'. Google rewards content with lived expertise over generic information. Add a sentence like:",
+            tip: `Google trusts posts more when the author shares their own real experience. Adding just one or two sentences with "I" or "We" makes your post feel much more credible and human. Click "Insert into Editor" for a ready-made example.`,
             copy: `In my experience working with clients on ${kwSuggested}, the biggest difference-maker is consistency. We've seen businesses grow 3x faster simply by applying these principles.`,
             insertInContent: `<p>In my experience working with clients on ${kwSuggested}, the biggest difference-maker is consistency. We've seen businesses grow 3x faster simply by applying these principles.</p>`,
           },
         },
         {
           key: "eeat-citations",
-          label: hasCitations ? "Content links to external sources — strong Trustworthiness signal." : "No external citations found — reduces E-E-A-T Trustworthiness.",
+          label: hasCitations
+            ? "Your post links to an outside source — builds reader and Google trust."
+            : "Your post doesn't link to any outside websites as proof or references.",
           pass: hasCitations, warn: !hasCitations,
           fix: hasCitations ? undefined : {
-            tip: "Reference a reputable external source (study, industry report, or authority site). Add a line like this in your content:",
+            tip: `Linking to a well-known website, research study, or industry publication makes your post look more trustworthy to Google and to your readers. Add one sentence that references an outside source. Click "Insert into Editor" for a ready-made example.`,
             copy: `According to recent industry research, businesses that implement ${kwSuggested} see an average of 40% improvement in key metrics. <a href="https://www.source.com" rel="noopener noreferrer">Source</a>`,
             insertInContent: `<p>According to recent industry research, businesses that implement ${kwSuggested} see an average of 40% improvement in key metrics. (<a href="https://www.source.com" rel="noopener noreferrer">Source</a>)</p>`,
           },
         },
         {
           key: "visual-alt",
-          label: imgs.length === 0 ? "No images found — add images with descriptive alt text." : allImgsHaveAlt ? `All ${imgs.length} images have alt text.` : `${missingAltImgs.length} image(s) are missing alt text.`,
+          label: imgs.length === 0
+            ? "Your post has no images — add at least one with a description."
+            : allImgsHaveAlt
+              ? `All ${imgs.length} image(s) have descriptions (alt text).`
+              : `${missingAltImgs.length} image(s) are missing a description (alt text).`,
           pass: allImgsHaveAlt && imgs.length > 0, warn: imgs.length === 0,
           fix: (allImgsHaveAlt && imgs.length > 0) ? undefined : imgs.length === 0 ? {
-            tip: "Add at least one image to your post. Images with descriptive alt text boost accessibility and image search traffic:",
+            tip: `Adding an image makes your post more engaging and helps it appear in Google Image Search. Upload one using the image button in the toolbar above, or copy this HTML and replace the file path.`,
             copy: `<img src="/uploads/image-name.jpg" alt="${kwSuggested} guide and tips" width="800" height="450" />`,
           } : {
-            tip: `${missingAltImgs.length} image(s) are missing alt text. Edit each <img> tag to include a descriptive alt attribute. Example:`,
-            copy: `<img src="/uploads/image.jpg" alt="${kwSuggested} — detailed guide" width="800" height="450" />`,
+            tip: `Alt text is a short description you add to each image — it tells Google what the image shows. Without it, Google ignores the image. Every <img> tag needs an alt="..." part. Here's how it looks:`,
+            copy: `<img src="/uploads/image.jpg" alt="${kwSuggested} — step by step guide" width="800" height="450" />`,
           },
         },
         {
           key: "voice-faq",
-          label: hasFAQSection ? "FAQ section found — excellent for voice search and PAA." : "No FAQ section — missing a key voice search and PAA ranking opportunity.",
+          label: hasFAQSection
+            ? "Your post has a FAQ section — great for voice search and Google answer boxes."
+            : "Your post is missing a FAQ (Questions & Answers) section.",
           pass: hasFAQSection, warn: !hasFAQSection,
           fix: hasFAQSection ? undefined : {
-            tip: `Add an FAQ section at the bottom of your post. Voice assistants directly read FAQ answers, and Google uses them for People Also Ask boxes. Copy this template:`,
-            copy: `<h2>Frequently Asked Questions About ${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)}</h2>\n<h3>What is ${kwSuggested}?</h3>\n<p>${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is a method/strategy that helps you achieve specific goals by following a structured approach.</p>\n<h3>How long does ${kwSuggested} take?</h3>\n<p>Most people start seeing results within 4-8 weeks of consistently applying these strategies.</p>\n<h3>Is ${kwSuggested} right for my business?</h3>\n<p>Yes — ${kwSuggested} works for businesses of all sizes. Whether you're a solopreneur or a growing team, the core principles apply.</p>`,
+            tip: `When someone asks Siri, Alexa, or Google Assistant a question out loud, it reads answers directly from FAQ sections of blog posts. Google also shows FAQ content in the "People Also Ask" boxes. Click "Insert into Editor" to add a complete FAQ section instantly.`,
+            copy: `<h2>Frequently Asked Questions About ${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)}</h2>\n<h3>What is ${kwSuggested}?</h3>\n<p>${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is a method that helps you achieve specific goals by following a structured approach.</p>\n<h3>How long does ${kwSuggested} take?</h3>\n<p>Most people start seeing results within 4-8 weeks of consistently applying these strategies.</p>\n<h3>Is ${kwSuggested} right for my business?</h3>\n<p>Yes — ${kwSuggested} works for businesses of all sizes. Whether you're just starting out or running a growing team, the core principles apply.</p>`,
             insertInContent: `<h2>Frequently Asked Questions About ${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)}</h2>\n<h3>What is ${kwSuggested}?</h3>\n<p>${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is a method that helps you achieve specific goals through a structured approach.</p>\n<h3>How long does ${kwSuggested} take?</h3>\n<p>Most people see results within 4-8 weeks of consistently applying these strategies.</p>`,
           },
         },
         {
           key: "voice-q-headings",
-          label: hasQuestionHeadings ? "Question-style headings found — good for voice search." : "No question-style headings — missing voice search and PAA clicks.",
+          label: hasQuestionHeadings
+            ? "Some of your headings are written as questions — great for search."
+            : "None of your section headings are written as questions.",
           pass: hasQuestionHeadings, warn: !hasQuestionHeadings,
           fix: hasQuestionHeadings ? undefined : {
-            tip: "Rephrase at least one H2/H3 as a question. Google and voice assistants match questions to question-style headings. Try these:",
-            copy: `<h2>What is ${kwSuggested} and How Does It Work?</h2>\n<h2>How Long Does ${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} Take to Show Results?</h2>\n<h2>Is ${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} Right for Your Business?</h2>`,
+            tip: `Headings that are written as questions (like "How does X work?") match exactly what people type into Google. These headings also appear in Google's "People Also Ask" boxes, which can send you a lot of extra traffic. Click "Insert into Editor" for 3 ready-made question headings.`,
+            copy: `<h2>What is ${kwSuggested} and How Does It Work?</h2>\n<h2>How Long Does It Take to See Results with ${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)}?</h2>\n<h2>Is ${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} Right for Your Business?</h2>`,
             insertInContent: `<h2>What is ${kwSuggested} and How Does It Work?</h2>\n<p>Content here...</p>`,
           },
         },
         {
           key: "geo-definition",
-          label: hasDefinitionPattern ? "Definition-style sentence found in intro — great for featured snippets." : "No definition pattern in intro — reduces featured snippet chances.",
+          label: hasDefinitionPattern
+            ? `Your post explains what your topic is in the intro — great for Google answer boxes.`
+            : "Your post doesn't explain what your topic is at the beginning.",
           pass: hasDefinitionPattern, warn: !hasDefinitionPattern,
           fix: hasDefinitionPattern ? undefined : {
-            tip: `Add a clear definition of "${kwSuggested}" in the first 100 words. Google uses these for featured snippets and AI Overviews:`,
-            copy: `${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is defined as a strategic approach that helps businesses and individuals achieve consistent results by focusing on the right actions, in the right order, with measurable outcomes.`,
-            insertInContent: `<p>${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is defined as a strategic approach that helps businesses achieve consistent results by focusing on the right actions in the right order.</p>`,
+            tip: `Google loves posts that start with a clear, simple explanation of the topic — like a dictionary definition. Adding one sentence near the top like "[Topic] is..." can get your post shown in Google's featured answer boxes. Click "Insert into Editor" to add a ready-made definition.`,
+            copy: `${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is a strategic approach that helps businesses and individuals achieve consistent results by focusing on the right actions, in the right order.`,
+            insertInContent: `<p>${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} is a strategic approach that helps businesses achieve consistent results by focusing on the right actions in the right order.</p>`,
           },
         },
         {
           key: "paa-list",
-          label: hasNumberedList ? "Numbered list found — strong signal for AI Overviews and PAA." : "No numbered list found — add one to increase snippet eligibility.",
+          label: hasNumberedList
+            ? "Your post has a numbered list — great for appearing in Google search results."
+            : "Your post has no numbered step-by-step list.",
           pass: hasNumberedList, warn: !hasNumberedList,
           fix: hasNumberedList ? undefined : {
-            tip: "Numbered lists are the most-cited content in Google AI Overviews. Add a step-by-step list or top-N list. Copy this template:",
-            copy: `<h2>How to Get Started with ${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} (Step by Step)</h2>\n<ol>\n  <li><strong>Step 1: Define your goal</strong> — Start by identifying what you want to achieve with ${kwSuggested}.</li>\n  <li><strong>Step 2: Research your audience</strong> — Understand who you're trying to reach and what they need.</li>\n  <li><strong>Step 3: Create your strategy</strong> — Map out your approach based on your goals and audience insights.</li>\n  <li><strong>Step 4: Execute consistently</strong> — Take action every day and track your results.</li>\n  <li><strong>Step 5: Optimise and scale</strong> — Analyse what's working and double down on your best-performing actions.</li>\n</ol>`,
-            insertInContent: `<h2>How to Get Started with ${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} (Step by Step)</h2>\n<ol>\n  <li><strong>Step 1: Define your goal</strong> — Identify what success looks like for you.</li>\n  <li><strong>Step 2: Research your audience</strong> — Understand what they need.</li>\n  <li><strong>Step 3: Create your strategy</strong> — Map out your approach.</li>\n  <li><strong>Step 4: Execute consistently</strong> — Take action and track results.</li>\n  <li><strong>Step 5: Optimise and scale</strong> — Double down on what works.</li>\n</ol>`,
+            tip: `Numbered step-by-step lists are the most common type of content that Google highlights directly in search results. If your post has any tips, steps, or a process — format them as a numbered list. Click "Insert into Editor" to add a complete 5-step list instantly.`,
+            copy: `<h2>How to Get Started with ${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} (Step by Step)</h2>\n<ol>\n  <li><strong>Step 1: Define your goal</strong> — Start by writing down exactly what you want to achieve.</li>\n  <li><strong>Step 2: Research your audience</strong> — Find out who you're trying to help and what they need.</li>\n  <li><strong>Step 3: Create your plan</strong> — Map out your approach based on your goals.</li>\n  <li><strong>Step 4: Take action every day</strong> — Consistency is the most important factor.</li>\n  <li><strong>Step 5: Track and improve</strong> — See what works and do more of it.</li>\n</ol>`,
+            insertInContent: `<h2>How to Get Started with ${kwSuggested.charAt(0).toUpperCase() + kwSuggested.slice(1)} (Step by Step)</h2>\n<ol>\n  <li><strong>Step 1: Define your goal</strong> — Write down exactly what you want to achieve.</li>\n  <li><strong>Step 2: Research your audience</strong> — Find out what they need.</li>\n  <li><strong>Step 3: Create your plan</strong> — Map out your approach.</li>\n  <li><strong>Step 4: Take action every day</strong> — Consistency is key.</li>\n  <li><strong>Step 5: Track and improve</strong> — See what works and do more of it.</li>\n</ol>`,
           },
         },
       ];
@@ -1594,7 +1650,7 @@ function PostEditor({
                         </button>
                       )}
                     </div>
-                    <p className="text-[11px] text-[#0B0B0B]/35 mb-4">Click <strong>Fix</strong> on any failed check for exact suggestions and one-click fixes.</p>
+                    <p className="text-[11px] text-[#0B0B0B]/35 mb-4">Tap <strong>Fix</strong> on anything that failed (red or yellow) for step-by-step help and ready-made text you can add in one click.</p>
                     <div className="space-y-2">{yoast.basic.map(c => renderCheck(c))}</div>
                   </div>
                 );
@@ -1620,7 +1676,7 @@ function PostEditor({
                         </button>
                       )}
                     </div>
-                    <p className="text-[11px] text-[#0B0B0B]/35 mb-4">Click <strong>Fix</strong> on any failed check for exact suggestions and one-click fixes.</p>
+                    <p className="text-[11px] text-[#0B0B0B]/35 mb-4">Tap <strong>Fix</strong> on anything that failed (red or yellow) for step-by-step help and ready-made text you can add in one click.</p>
                     <div className="space-y-2">{yoast.additional.map(c => renderCheck(c))}</div>
                   </div>
                 );
@@ -1646,7 +1702,7 @@ function PostEditor({
                         </button>
                       )}
                     </div>
-                    <p className="text-[11px] text-[#0B0B0B]/35 mb-4">Click <strong>Fix</strong> on any failed check for exact suggestions and one-click fixes.</p>
+                    <p className="text-[11px] text-[#0B0B0B]/35 mb-4">Tap <strong>Fix</strong> on anything that failed (red or yellow) for step-by-step help and ready-made text you can add in one click.</p>
                     <div className="space-y-2">{yoast.title.map(c => renderCheck(c))}</div>
                   </div>
                 );
@@ -1665,7 +1721,7 @@ function PostEditor({
                         {allGood ? "All Good" : errors > 0 ? `${errors} Error${errors > 1 ? "s" : ""}` : `${warns} Warning${warns > 1 ? "s" : ""}`}
                       </span>
                     </div>
-                    <p className="text-[11px] text-[#0B0B0B]/35 mb-4">Click <strong>Fix</strong> on any failed check for exact suggestions and one-click fixes.</p>
+                    <p className="text-[11px] text-[#0B0B0B]/35 mb-4">Tap <strong>Fix</strong> on anything that failed (red or yellow) for step-by-step help and ready-made text you can add in one click.</p>
                     <div className="space-y-2">{yoast.readability.map(c => renderCheck(c))}</div>
                   </div>
                 );
@@ -1693,7 +1749,7 @@ function PostEditor({
                         </button>
                       )}
                     </div>
-                    <p className="text-[11px] text-[#0B0B0B]/40 mb-4">GEO / AI Overviews · E-E-A-T · Voice Search · Visual SEO · PAA targeting. Click <strong>Fix</strong> for exact suggestions.</p>
+                    <p className="text-[11px] text-[#0B0B0B]/40 mb-4">Checks for voice search, Google answer boxes, reader trust, and content structure. Tap <strong>Fix</strong> on anything that failed for step-by-step help.</p>
                     <div className="space-y-2">{checks.map(c => renderCheck(c))}</div>
                   </div>
                 );
