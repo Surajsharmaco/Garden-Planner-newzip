@@ -314,6 +314,38 @@ function yoastChecks(post: BlogPost, content: string, seo: PostSeo, allPosts: Bl
       { key: "media", label: "Content contains images and/or videos.", pass: hasMedia, warn: false },
       { key: "subheadings", label: "Content uses subheadings (H2/H3).", pass: hasSubheadings, warn: false },
     ],
+    seo2026: (() => {
+      const textFull = stripHtml(content).toLowerCase();
+      // GEO: direct answer in intro
+      const hasDirectIntroAnswer = kw ? textFull.slice(0, 300).includes(kw) : false;
+      // E-E-A-T: first-person experience
+      const hasFirstPerson = /\b(i |we |our |my |i've|we've)\b/.test(textFull);
+      // E-E-A-T: external citations
+      const hasCitations = /<a\s[^>]*href=["']https?:\/\/(?!growitbuddy)/i.test(content);
+      // Visual SEO: all images have alt text
+      const imgs = content.match(/<img[^>]*>/gi) || [];
+      const allImgsHaveAlt = imgs.length === 0 || imgs.every(img => /alt=["'][^"']+["']/i.test(img));
+      // Voice: FAQ section present
+      const hasFAQSection = /\b(faq|frequently asked|q:|\bq\.)\b/i.test(textFull);
+      // Voice: question-style headings
+      const heads = content.match(/<h[2-4][^>]*>(.*?)<\/h[2-4]>/gi) || [];
+      const hasQuestionHeadings = heads.some(h => /\?/i.test(stripHtml(h)));
+      // PAA: numbered list or list present (structured for snippets)
+      const hasNumberedList = /<ol/i.test(content);
+      // GEO: uses definitions
+      const hasDefinitionPattern = /\b(is\s+a|are\s+a|refers to|is defined as|means)\b/i.test(textFull.slice(0, 500));
+
+      return [
+        { key: "geo-intro", label: kw ? `Focus keyword "${kw}" appears in the first paragraph for GEO/AI snippet targeting.` : "Set a focus keyword to check GEO intro optimization.", pass: hasDirectIntroAnswer, warn: false },
+        { key: "eeat-first-person", label: `Content uses first-person language (I/We/Our) to signal lived experience.${hasFirstPerson ? "" : " Add personal experience to boost E-E-A-T."}`, pass: hasFirstPerson, warn: !hasFirstPerson },
+        { key: "eeat-citations", label: `Content links to external authoritative sources for trust signals.${hasCitations ? "" : " Add 1-2 outbound links to reputable sources."}`, pass: hasCitations, warn: !hasCitations },
+        { key: "visual-alt", label: imgs.length === 0 ? "No images found — add at least one image with descriptive alt text." : `${imgs.filter(img => /alt=["'][^"']+["']/i.test(img)).length}/${imgs.length} images have alt text.`, pass: allImgsHaveAlt && imgs.length > 0, warn: imgs.length === 0 },
+        { key: "voice-faq", label: `Content ${hasFAQSection ? "includes" : "is missing"} an FAQ section. FAQs are used by voice assistants and PAA boxes.`, pass: hasFAQSection, warn: !hasFAQSection },
+        { key: "voice-q-headings", label: `${hasQuestionHeadings ? "Some headings are phrased as questions" : "No question-style headings found"} — question headings capture voice search traffic.`, pass: hasQuestionHeadings, warn: !hasQuestionHeadings },
+        { key: "geo-definition", label: `Content ${hasDefinitionPattern ? "uses" : "lacks"} a definition or 'is a' pattern in the intro — used by AI Overviews for featured snippets.`, pass: hasDefinitionPattern, warn: !hasDefinitionPattern },
+        { key: "paa-list", label: `Numbered list ${hasNumberedList ? "found" : "not found"} — ordered lists are cited verbatim in AI Overviews and PAA boxes.`, pass: hasNumberedList, warn: !hasNumberedList },
+      ];
+    })(),
   };
 }
 
@@ -396,6 +428,16 @@ type AiAnalysis = {
   improvements: string[];
   advanced: string[];
   internalLinkSuggestions: Array<{ slug: string; title: string; anchorText: string; reason: string }>;
+  // 2026 SEO
+  geoScore: number;
+  geoTips: string[];
+  paaQuestions: string[];
+  eeatSignals: Array<{ signal: string; found: boolean; tip: string; category: string }>;
+  voiceScore: number;
+  voiceTips: string[];
+  visualSeoChecks: Array<{ check: string; pass: boolean; tip: string }>;
+  topicCluster: Array<{ subtopic: string; type: "pillar" | "cluster"; priority: "high" | "medium" | "low" }>;
+  faqSuggestions: string[];
 };
 
 function PostEditor({
@@ -786,8 +828,8 @@ function PostEditor({
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <Sparkles size={14} className="text-amber-400" />
-                    <h3 className="text-[13px] font-bold text-white">AI Intelligence</h3>
-                    <span className="text-[9px] font-semibold text-white/25 border border-white/12 px-1.5 py-0.5 rounded-full uppercase tracking-wide">GPT</span>
+                    <h3 className="text-[13px] font-bold text-white">AI SEO Analyzer</h3>
+                    <span className="text-[9px] font-semibold text-amber-400/70 border border-amber-400/25 px-1.5 py-0.5 rounded-full uppercase tracking-wide">2026</span>
                   </div>
                   <button
                     onClick={runAiAnalysis}
@@ -985,18 +1027,147 @@ function PostEditor({
 
                       {/* Advanced */}
                       {a.advanced.length > 0 && (
-                        <div>
-                          <p className="text-[9px] font-bold text-white/35 uppercase tracking-widest mb-2">Advanced</p>
+                        <div className="mb-4">
+                          <p className="text-[9px] font-bold text-white/35 uppercase tracking-widest mb-2">Advanced Tips</p>
                           <div className="space-y-1.5">
                             {a.advanced.map((tip, i) => (
                               <div key={i} className="flex items-start gap-2">
-                                <Zap size={10} className="text-white/20 shrink-0 mt-0.5" />
-                                <p className="text-[11px] text-white/40 leading-snug">{tip}</p>
+                                <Zap size={10} className="text-amber-400/50 shrink-0 mt-0.5" />
+                                <p className="text-[11px] text-white/50 leading-snug">{tip}</p>
                               </div>
                             ))}
                           </div>
                         </div>
                       )}
+
+                      {/* ── GEO: Generative Engine Optimization ── */}
+                      <div className="mb-4 border-t border-white/8 pt-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-[9px] font-bold text-sky-400 uppercase tracking-widest">GEO Score</span>
+                          <div className="flex-1 h-1 bg-white/8 rounded-full overflow-hidden">
+                            <div className={`h-full rounded-full ${a.geoScore >= 75 ? "bg-sky-400" : a.geoScore >= 50 ? "bg-amber-400" : "bg-red-400"}`} style={{ width: `${a.geoScore}%` }} />
+                          </div>
+                          <span className={`text-[11px] font-bold ${a.geoScore >= 75 ? "text-sky-400" : a.geoScore >= 50 ? "text-amber-400" : "text-red-400"}`}>{a.geoScore}/100</span>
+                        </div>
+                        <p className="text-[10px] text-white/30 leading-snug mb-2">Generative Engine Optimization — how well AI tools like Google AI Overviews, Perplexity, and ChatGPT will summarize and cite your content.</p>
+                        {a.geoTips.length > 0 && (
+                          <div className="space-y-1.5">
+                            {a.geoTips.map((tip, i) => (
+                              <div key={i} className="flex items-start gap-2 bg-sky-500/6 border border-sky-500/12 rounded-lg px-3 py-2">
+                                <span className="text-sky-400 text-[10px] shrink-0 mt-0.5 font-bold">→</span>
+                                <p className="text-[11px] text-white/55 leading-snug">{tip}</p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        {a.geoTips.length === 0 && <p className="text-[11px] text-sky-400 font-medium">Excellent GEO optimization! Your content is well-structured for AI citation.</p>}
+                      </div>
+
+                      {/* ── E-E-A-T Signals ── */}
+                      <div className="mb-4 border-t border-white/8 pt-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-[9px] font-bold text-violet-400 uppercase tracking-widest">E-E-A-T Signals</span>
+                          <span className="text-[9px] text-white/25">Experience · Expertise · Authoritativeness · Trust</span>
+                        </div>
+                        <div className="space-y-1.5">
+                          {a.eeatSignals.map((sig, i) => (
+                            <div key={i} className="flex items-start gap-2">
+                              {sig.found
+                                ? <CheckCircle size={12} className="text-emerald-400 shrink-0 mt-0.5" />
+                                : <XCircle size={12} className="text-white/25 shrink-0 mt-0.5" />}
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-1.5">
+                                  <p className={`text-[11px] leading-snug ${sig.found ? "text-white/65" : "text-white/35"}`}>{sig.signal}</p>
+                                  <span className="text-[8px] text-white/18 shrink-0 border border-white/10 px-1.5 py-0.5 rounded-full">{sig.category}</span>
+                                </div>
+                                {!sig.found && <p className="text-[10px] text-white/28 leading-snug mt-0.5 italic">{sig.tip}</p>}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* ── Voice Search ── */}
+                      <div className="mb-4 border-t border-white/8 pt-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-[9px] font-bold text-pink-400 uppercase tracking-widest">Voice &amp; Multimodal Search</span>
+                          <div className="flex-1 h-1 bg-white/8 rounded-full overflow-hidden">
+                            <div className={`h-full rounded-full ${a.voiceScore >= 75 ? "bg-pink-400" : a.voiceScore >= 50 ? "bg-amber-400" : "bg-red-400"}`} style={{ width: `${a.voiceScore}%` }} />
+                          </div>
+                          <span className={`text-[11px] font-bold ${a.voiceScore >= 75 ? "text-pink-400" : a.voiceScore >= 50 ? "text-amber-400" : "text-red-400"}`}>{a.voiceScore}/100</span>
+                        </div>
+                        <p className="text-[10px] text-white/30 leading-snug mb-2">How well this content will perform when read aloud by voice assistants (Siri, Alexa, Google) or cited in multimodal AI search.</p>
+                        {a.voiceTips.length > 0
+                          ? <div className="space-y-1.5">{a.voiceTips.map((tip, i) => (
+                              <div key={i} className="flex items-start gap-2 bg-pink-500/6 border border-pink-500/12 rounded-lg px-3 py-2">
+                                <span className="text-pink-400 text-[10px] shrink-0 mt-0.5 font-bold">→</span>
+                                <p className="text-[11px] text-white/55 leading-snug">{tip}</p>
+                              </div>
+                            ))}</div>
+                          : <p className="text-[11px] text-pink-400 font-medium">Great voice search optimization! Conversational and structured.</p>}
+                      </div>
+
+                      {/* ── Visual SEO ── */}
+                      <div className="mb-4 border-t border-white/8 pt-4">
+                        <p className="text-[9px] font-bold text-teal-400 uppercase tracking-widest mb-2">Visual SEO</p>
+                        <p className="text-[10px] text-white/30 leading-snug mb-2">Images, alt text, and visual content signals that boost engagement and image search traffic.</p>
+                        <div className="space-y-1.5">
+                          {a.visualSeoChecks.map((chk, i) => (
+                            <div key={i} className="flex items-start gap-2">
+                              {chk.pass
+                                ? <CheckCircle size={12} className="text-teal-400 shrink-0 mt-0.5" />
+                                : <XCircle size={12} className="text-white/25 shrink-0 mt-0.5" />}
+                              <div className="flex-1 min-w-0">
+                                <p className={`text-[11px] leading-snug ${chk.pass ? "text-white/65" : "text-white/35"}`}>{chk.check}</p>
+                                {!chk.pass && <p className="text-[10px] text-white/28 leading-snug mt-0.5 italic">{chk.tip}</p>}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* ── PAA: People Also Ask ── */}
+                      <div className="mb-4 border-t border-white/8 pt-4">
+                        <p className="text-[9px] font-bold text-orange-400 uppercase tracking-widest mb-1">People Also Ask (PAA)</p>
+                        <p className="text-[10px] text-white/30 leading-snug mb-2">Target these questions in your H2/H3 headings and FAQ section. Answering PAA questions earns featured snippets.</p>
+                        <div className="space-y-1.5">
+                          {a.paaQuestions.map((q, i) => (
+                            <div key={i} className="flex items-start gap-2 bg-orange-500/6 border border-orange-500/12 rounded-lg px-3 py-1.5">
+                              <span className="text-[9px] text-orange-400 shrink-0 font-bold mt-0.5">Q</span>
+                              <p className="text-[11px] text-white/55 leading-snug">{q}</p>
+                            </div>
+                          ))}
+                        </div>
+                        {a.faqSuggestions.length > 0 && (
+                          <div className="mt-2">
+                            <p className="text-[9px] text-white/20 uppercase tracking-widest mb-1.5">Suggested FAQ answers to add</p>
+                            <div className="flex flex-wrap gap-1">
+                              {a.faqSuggestions.map((q, i) => (
+                                <span key={i} className="text-[10px] text-orange-300/70 bg-orange-400/6 border border-orange-400/12 px-2 py-0.5 rounded-md">{q}</span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* ── Topic Cluster ── */}
+                      <div className="border-t border-white/8 pt-4">
+                        <p className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest mb-1">Topic Cluster &amp; Content Hub</p>
+                        <p className="text-[10px] text-white/30 leading-snug mb-2">Build topical authority by creating these related posts and linking them to this one. Clusters signal depth to Google.</p>
+                        <div className="space-y-1.5">
+                          {a.topicCluster.map((item, i) => (
+                            <div key={i} className="flex items-center gap-2 bg-white/4 border border-white/8 rounded-xl px-3 py-2">
+                              <div className={`text-[8px] font-bold px-1.5 py-0.5 rounded shrink-0 ${item.type === "pillar" ? "bg-emerald-500/20 text-emerald-400" : "bg-white/8 text-white/30"}`}>
+                                {item.type === "pillar" ? "PILLAR" : "CLUSTER"}
+                              </div>
+                              <p className="text-[11px] text-white/60 flex-1 leading-snug">{item.subtopic}</p>
+                              <span className={`text-[8px] font-semibold shrink-0 ${item.priority === "high" ? "text-red-400" : item.priority === "medium" ? "text-amber-400" : "text-white/25"}`}>
+                                {item.priority}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </>
                   );
                 })()}
@@ -1148,6 +1319,34 @@ function PostEditor({
                     </div>
                     <div className="space-y-3">
                       {yoast.readability.map(c => (
+                        <div key={c.key} className="flex items-start gap-2.5">
+                          {c.pass ? <CheckCircle size={15} className="text-emerald-500 shrink-0 mt-0.5" /> : c.warn ? <AlertCircle size={15} className="text-amber-500 shrink-0 mt-0.5" /> : <XCircle size={15} className="text-red-400 shrink-0 mt-0.5" />}
+                          <p className="text-[12.5px] text-[#0B0B0B]/70 leading-snug">{c.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* 2026 SEO Checks */}
+              {(() => {
+                const checks = yoast.seo2026;
+                const passed = checks.filter(c => c.pass).length;
+                const warned = checks.filter(c => !c.pass && c.warn).length;
+                const failed = checks.filter(c => !c.pass && !c.warn).length;
+                return (
+                  <div className="bg-white border border-[#0B0B0B]/10 rounded-2xl p-5 shadow-sm">
+                    <div className="flex items-center gap-3 mb-1">
+                      <h3 className="text-[14px] font-semibold text-[#0B0B0B]">2026 SEO Checks</h3>
+                      <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${failed === 0 && warned === 0 ? "bg-emerald-100 text-emerald-700" : failed > 0 ? "bg-red-100 text-red-600" : "bg-amber-100 text-amber-700"}`}>
+                        {failed === 0 && warned === 0 ? "All Good" : failed > 0 ? `${failed} Failed` : `${warned} Warning${warned > 1 ? "s" : ""}`}
+                      </span>
+                      <span className="text-[10px] text-[#0B0B0B]/35 ml-auto">{passed}/{checks.length} passed</span>
+                    </div>
+                    <p className="text-[11px] text-[#0B0B0B]/40 mb-4">GEO / AI Overviews · E-E-A-T · Voice Search · Visual SEO · PAA targeting</p>
+                    <div className="space-y-3">
+                      {checks.map(c => (
                         <div key={c.key} className="flex items-start gap-2.5">
                           {c.pass ? <CheckCircle size={15} className="text-emerald-500 shrink-0 mt-0.5" /> : c.warn ? <AlertCircle size={15} className="text-amber-500 shrink-0 mt-0.5" /> : <XCircle size={15} className="text-red-400 shrink-0 mt-0.5" />}
                           <p className="text-[12.5px] text-[#0B0B0B]/70 leading-snug">{c.label}</p>
