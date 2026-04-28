@@ -10,7 +10,9 @@ import { readdir, mkdir } from "fs/promises";
 import { existsSync } from "fs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const UPLOADS_DIR = path.resolve(__dirname, "../../uploads");
+const UPLOADS_DIR = process.env.UPLOADS_DIR
+  ? path.resolve(process.env.UPLOADS_DIR)
+  : path.resolve(__dirname, "../../uploads");
 
 if (!existsSync(UPLOADS_DIR)) {
   await mkdir(UPLOADS_DIR, { recursive: true });
