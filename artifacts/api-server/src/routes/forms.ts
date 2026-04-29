@@ -4,7 +4,12 @@ import { logger } from "../lib/logger";
 import { db, leads } from "@workspace/db";
 
 const router = Router();
-const resend = new Resend(process.env.RESEND_API_KEY);
+
+function getResend() {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return null;
+  return new Resend(key);
+}
 
 const FROM = "GrowitBuddy <onboarding@resend.dev>";
 const TO = process.env.NOTIFY_EMAIL || "hello@growitbuddy.com";
@@ -57,7 +62,7 @@ router.post("/contact", async (req, res) => {
   await saveLead("contact", name, email, { name, email, company, message });
 
   try {
-    await resend.emails.send({
+    await getResend()?.emails.send({
       from: FROM,
       to: TO,
       subject: `New Contact: ${name}`,
@@ -89,7 +94,7 @@ router.post("/creators", async (req, res) => {
   await saveLead("creator", name, email, { name, email, phone, niche, handle, monthlyViews, goals });
 
   try {
-    await resend.emails.send({
+    await getResend()?.emails.send({
       from: FROM,
       to: TO,
       subject: `New Creator Application: ${name}`,
@@ -127,7 +132,7 @@ router.post("/page-owner", async (req, res) => {
   await saveLead("page", name, email, { name, email, phone, niche, monthlyViews, pageCount, pages: pagesArr });
 
   try {
-    await resend.emails.send({
+    await getResend()?.emails.send({
       from: FROM,
       to: TO,
       subject: `New Page Owner Application: ${name}`,
@@ -163,7 +168,7 @@ router.post("/freelancers", async (req, res) => {
   await saveLead("freelancer", name, email, { name, email, phone, skills: skillsList, otherSkill, experience, portfolioUrl });
 
   try {
-    await resend.emails.send({
+    await getResend()?.emails.send({
       from: FROM,
       to: TO,
       subject: `New Freelancer Application: ${name}`,
@@ -199,7 +204,7 @@ router.post("/full-time", async (req, res) => {
   await saveLead("full-time", name, email, { name, email, phone, role: roleDisplay, experience, linkedinUrl, coverNote });
 
   try {
-    await resend.emails.send({
+    await getResend()?.emails.send({
       from: FROM,
       to: TO,
       subject: `New Full-Time Application: ${name} — ${roleDisplay}`,
@@ -234,7 +239,7 @@ router.post("/internship", async (req, res) => {
   await saveLead("internship", name, email, { name, email, phone: phone || null, role, experience, portfolioUrl: portfolioUrl || null, whyJoin: whyJoin || null });
 
   try {
-    await resend.emails.send({
+    await getResend()?.emails.send({
       from: FROM,
       to: TO,
       subject: `New Internship Application: ${name} — ${role}`,
@@ -269,7 +274,7 @@ router.post("/newsletter", async (req, res) => {
   await saveLead("newsletter", undefined, email, { email, source: source || "Authority Audit" });
 
   try {
-    await resend.emails.send({
+    await getResend()?.emails.send({
       from: FROM,
       to: TO,
       subject: `New Newsletter Signup: ${email}`,
