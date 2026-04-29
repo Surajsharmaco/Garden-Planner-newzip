@@ -182,12 +182,25 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
   const saveContent = useCallback(
     async (section: string, data: Record<string, unknown>) => {
-      const r = await authFetch(`${API_BASE}/admin/content/${section}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data }),
-      });
-      if (!r.ok) throw new Error("Save failed");
+      let r: Response;
+      try {
+        r = await authFetch(`${API_BASE}/admin/content/${section}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ data }),
+        });
+      } catch {
+        throw new Error("Could not reach the server. Please check your connection and try again.");
+      }
+      if (!r.ok) {
+        const text = await r.text().catch(() => "");
+        let msg = `Save failed (${r.status})`;
+        try {
+          const json = JSON.parse(text);
+          if (json?.error) msg = json.error;
+        } catch { /* not JSON */ }
+        throw new Error(msg);
+      }
     },
     [authFetch],
   );
