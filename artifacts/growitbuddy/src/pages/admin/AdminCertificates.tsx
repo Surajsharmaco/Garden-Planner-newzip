@@ -5,6 +5,11 @@ import { Plus, Trash2, ChevronDown, ChevronUp, ShieldCheck, ShieldX, Copy, Exter
 
 const API_BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
 
+async function safeJson(r: Response) {
+  const text = await r.text();
+  try { return JSON.parse(text); } catch { return null; }
+}
+
 interface Certificate {
   id: number;
   certificateId: string;
@@ -61,12 +66,12 @@ function CertRow({
         }),
       });
       if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
+        const err = await safeJson(res) ?? {};
         alert(err.error || "Save failed");
         return;
       }
-      const updated = await res.json();
-      onUpdate(updated);
+      const updated = await safeJson(res);
+      if (updated) onUpdate(updated);
       setSaved(true);
     } finally {
       setSaving(false);
@@ -205,7 +210,7 @@ export default function AdminCertificates() {
 
   useEffect(() => {
     authFetch(`${API_BASE}/admin/certificates`)
-      .then((r) => r.json())
+      .then((r) => safeJson(r))
       .then((data) => {
         if (Array.isArray(data)) setCerts(data);
       })
@@ -224,9 +229,9 @@ export default function AdminCertificates() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newForm),
       });
-      const data = await res.json();
-      if (!res.ok) { alert(data.error || "Creation failed"); return; }
-      setCerts((p) => [data, ...p]);
+      const data = await safeJson(res);
+      if (!res.ok) { alert(data?.error || "Creation failed"); return; }
+      if (data) setCerts((p) => [data, ...p]);
       setShowNew(false);
       setNewForm({ certificateId: generateId(), name: "", email: "", role: "", issueDate: "", status: "verified" });
     } finally {
