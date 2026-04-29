@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { randomBytes, createHmac, timingSafeEqual, scrypt } from "crypto";
-import { db, siteContent, leads, certificates, teamMembers } from "@workspace/db";
-import { eq, desc } from "drizzle-orm";
+import { db, pool, siteContent, leads, certificates, teamMembers } from "@workspace/db";
+import { eq, desc, count } from "drizzle-orm";
 import { logger } from "../lib/logger";
 import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
-import { readdir, mkdir } from "fs/promises";
+import { readdir, mkdir, stat } from "fs/promises";
 import { existsSync } from "fs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -503,6 +503,131 @@ router.delete("/certificates/:id", authMiddleware, async (req, res) => {
   await db.delete(certificates).where(eq(certificates.id, id));
   logger.info({ id }, "Certificate deleted");
   res.json({ success: true });
+});
+
+// ── Optimize ──
+
+let optimizeRunning = false;
+
+router.get("/optimize/lock", authMiddleware, superAdminOnly, (_req, res) => {
+  res.json({ running: optimizeRunning });
+});
+
+router.post("/optimize/precheck", authMiddleware, superAdminOnly, async (_req, res) => {
+  const checks: { server: boolean; database: boolean; storage: boolean } = {
+    server: true,
+    database: false,
+    storage: false,
+  };
+  const issues: string[] = [];
+
+  try {
+    await pool.query("SELECT 1");
+    checks.database = true;
+  } catch {
+    issues.push("Database connection failed");
+  }
+
+  try {
+    await stat(UPLOADS_DIR);
+    checks.storage = true;
+  } catch {
+    try {
+      await mkdir(UPLOADS_DIR, { recursive: true });
+      checks.storage = true;
+    } catch {
+      issues.push("Storage directory not accessible");
+    }
+  }
+
+  res.json({ ok: issues.length === 0, checks, issues });
+});
+
+router.post("/optimize/db-analyze", authMiddleware, superAdminOnly, async (req, res) => {
+  if (optimizeRunning) { res.status(409).json({ error: "Optimization already in progress" }); return; }
+  optimizeRunning = true;
+  const { mode = "safe" } = req.body as { mode?: "safe" | "advanced" };
+  try {
+    if (mode === "advanced") {
+      await pool.query("VACUUM ANALYZE");
+      res.json({ ok: true, detail: "All tables vacuumed and analyzed" });
+    } else {
+      await pool.query("ANALYZE");
+      res.json({ ok: true, detail: "Query planner statistics refreshed" });
+    }
+  } catch (err) {
+    res.status(500).json({ ok: false, error: "Database analysis failed" });
+  } finally {
+    optimizeRunning = false;
+  }
+});
+
+router.post("/optimize/cache-clear", authMiddleware, superAdminOnly, (_req, res) => {
+  const tokenCount = revokedTokens.size;
+  revokedTokens.clear();
+  res.json({ ok: true, detail: `${tokenCount} expired session token${tokenCount === 1 ? "" : "s"} cleared` });
+});
+
+router.post("/optimize/db-stats", authMiddleware, superAdminOnly, async (_req, res) => {
+  try {
+    const [contentRows, leadsRows, certRows, teamRows] = await Promise.all([
+      db.select({ n: count() }).from(siteContent).then((r) => Number(r[0]?.n ?? 0)),
+      db.select({ n: count() }).from(leads).then((r) => Number(r[0]?.n ?? 0)),
+      db.select({ n: count() }).from(certificates).then((r) => Number(r[0]?.n ?? 0)),
+      db.select({ n: count() }).from(teamMembers).then((r) => Number(r[0]?.n ?? 0)),
+    ]);
+
+    const sizeRows = await pool.query<{ table_name: string; total_size: string }>(
+      `SELECT relname AS table_name,
+              pg_size_pretty(pg_total_relation_size(relid)) AS total_size
+         FROM pg_catalog.pg_statio_user_tables
+        ORDER BY pg_total_relation_size(relid) DESC`
+    );
+
+    res.json({
+      ok: true,
+      tables: {
+        site_content: contentRows,
+        leads: leadsRows,
+        certificates: certRows,
+        team_members: teamRows,
+      },
+      sizes: sizeRows.rows,
+    });
+  } catch {
+    res.status(500).json({ ok: false, error: "Could not fetch database stats" });
+  }
+});
+
+router.post("/optimize/media-audit", authMiddleware, superAdminOnly, async (_req, res) => {
+  try {
+    let files: string[] = [];
+    let totalBytes = 0;
+
+    try {
+      files = await readdir(UPLOADS_DIR);
+      const IMAGE_RE = /\.(jpg|jpeg|png|gif|webp|svg|avif)$/i;
+      const imageFiles = files.filter((f) => IMAGE_RE.test(f));
+
+      for (const f of imageFiles) {
+        try {
+          const s = await stat(path.join(UPLOADS_DIR, f));
+          totalBytes += s.size;
+        } catch { /* skip */ }
+      }
+
+      res.json({
+        ok: true,
+        count: imageFiles.length,
+        totalKb: Math.round(totalBytes / 1024),
+        detail: `${imageFiles.length} media file${imageFiles.length === 1 ? "" : "s"} (${Math.round(totalBytes / 1024)} KB total)`,
+      });
+    } catch {
+      res.json({ ok: true, count: 0, totalKb: 0, detail: "No media files found" });
+    }
+  } catch {
+    res.status(500).json({ ok: false, error: "Media audit failed" });
+  }
 });
 
 export { authMiddleware };

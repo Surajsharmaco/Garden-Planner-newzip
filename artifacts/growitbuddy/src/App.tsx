@@ -54,6 +54,7 @@ import AdminAuthorityAudit from "@/pages/admin/AdminAuthorityAudit";
 import AdminResources from "@/pages/admin/AdminResources";
 import AdminMediaLibrary from "@/pages/admin/AdminMediaLibrary";
 import AdminTeamMembers from "@/pages/admin/AdminTeamMembers";
+import AdminOptimize from "@/pages/admin/AdminOptimize";
 
 function AdminGuard({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, verifying } = useAdmin();
@@ -140,6 +141,9 @@ function AdminRoutes() {
       </Route>
       <Route path="/admin/team">
         {() => <AdminGuard><AdminTeamMembers /></AdminGuard>}
+      </Route>
+      <Route path="/admin/optimize">
+        {() => <AdminGuard><AdminOptimize /></AdminGuard>}
       </Route>
       <Route path="/admin">
         {() => <AdminGuard><AdminDashboard /></AdminGuard>}

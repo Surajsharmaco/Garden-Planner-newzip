@@ -1,0 +1,216 @@
+Act as a senior full-stack developer, DevOps engineer, and performance optimization expert.
+
+Your task is to build a **Safe Smart Optimize Engine** inside the Admin Panel.
+
+IMPORTANT:
+
+* This system MUST NEVER break the website
+* Safety and stability are the top priority
+* Optimization should be controlled, reversible, and monitored
+
+---
+
+# 🎯 GOAL
+
+Create a button:
+
+👉 "Optimize Website"
+
+This should improve performance WITHOUT any risk to functionality.
+
+---
+
+---
+
+# 🧩 STEP 1: PRE-CHECK SYSTEM (MANDATORY)
+
+Before running optimization:
+
+* Check server status
+* Check database health
+* Check storage availability
+
+If any issue found:
+
+👉 STOP optimization
+👉 Show warning message
+
+---
+
+---
+
+# 🧩 STEP 2: AUTO BACKUP (CRITICAL)
+
+Before any action:
+
+* Create backup of:
+
+  * database
+  * key files
+
+Store temporarily
+
+---
+
+👉 If anything fails → auto restore
+
+---
+
+---
+
+# 🧩 STEP 3: SAFE OPTIMIZATION TASKS
+
+Run only safe, non-destructive actions:
+
+---
+
+## 🔹 CACHE CLEANUP
+
+* clear cache safely
+* regenerate fresh cache
+
+---
+
+## 🔹 DATABASE CLEANUP
+
+* remove temporary data only
+* DO NOT delete important records
+
+---
+
+## 🔹 IMAGE OPTIMIZATION
+
+* compress images safely
+* no quality loss
+
+---
+
+## 🔹 FILE OPTIMIZATION
+
+* minify CSS/JS safely
+* DO NOT remove critical scripts
+
+---
+
+## 🔹 PERFORMANCE BOOST
+
+* optimize loading order
+* enable lazy loading
+* preload critical assets
+
+---
+
+---
+
+# 🧩 STEP 4: PROGRESS SYSTEM
+
+Show real-time steps:
+
+* Checking system...
+* Creating backup...
+* Cleaning cache...
+* Optimizing files...
+
+---
+
+---
+
+# 🧩 STEP 5: ERROR HANDLING (VERY IMPORTANT)
+
+If any step fails:
+
+* STOP immediately
+* Restore backup
+* Show error message:
+
+"Optimization stopped to prevent issues"
+
+---
+
+---
+
+# 🧩 STEP 6: RESULT SUMMARY
+
+After completion show:
+
+* Speed improved (estimated)
+* Cache cleared
+* Files optimized
+
+---
+
+---
+
+# 🧩 STEP 7: SAFE MODE (DEFAULT)
+
+Enable default mode:
+
+👉 SAFE OPTIMIZATION
+
+No aggressive actions allowed
+
+---
+
+---
+
+# 🧩 STEP 8: ADVANCED MODE (OPTIONAL)
+
+Toggle:
+
+👉 Advanced Optimize
+
+Includes:
+
+* deeper cleanup
+* stronger compression
+
+---
+
+Show warning before enabling
+
+---
+
+---
+
+# 🧩 STEP 9: SCHEDULER
+
+Add option:
+
+* Run optimization weekly automatically
+
+---
+
+---
+
+# 🧩 STEP 10: LOCK SYSTEM
+
+Prevent:
+
+* multiple clicks
+* concurrent optimization runs
+
+---
+
+---
+
+# 🎯 FINAL OUTPUT
+
+A system that:
+
+* improves performance
+* never breaks website
+* always protects data
+* runs smoothly every time
+
+---
+
+⚠️ NON-NEGOTIABLE RULES
+
+* No data loss
+* No UI break
+* No functionality break
+* Must be reversible
+
+---
+
+---
