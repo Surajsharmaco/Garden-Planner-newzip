@@ -1,5 +1,8 @@
+import { useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Switch, Route, Router as WouterRouter, Redirect } from "wouter";
+import { prefetchSections } from "@/hooks/usePublicContent";
+import { prefetchInfluencers } from "@/hooks/useLiveInfluencers";
 import Home from "@/pages/Home";
 import Services from "@/pages/Services";
 import Work from "@/pages/Work";
@@ -145,7 +148,22 @@ function AdminRoutes() {
   );
 }
 
+const ALL_SECTIONS = [
+  "home", "about", "contact", "framework", "services", "work",
+  "resources", "joinnetwork", "freelancers", "fulltime",
+  "influencer-explore", "authority-audit", "distribution-network",
+  "distribution-pages", "blog",
+];
+
 function App() {
+  // Fire all content fetches immediately on app load.
+  // By the time the user navigates to any page, the cache is warm
+  // and pages render with real data from the very first paint.
+  useEffect(() => {
+    prefetchSections(ALL_SECTIONS);
+    prefetchInfluencers();
+  }, []);
+
   return (
     <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
       <AdminProvider>
