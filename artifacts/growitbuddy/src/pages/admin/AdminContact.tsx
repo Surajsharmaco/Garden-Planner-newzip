@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { PageHeader, Card, SectionTitle, Input, Textarea, SaveBar } from "@/components/admin/AdminField";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, ExternalLink } from "lucide-react";
 
 interface InfoItem {
   label: string;
@@ -14,6 +14,7 @@ interface ContactData {
   heroSubtext: string;
   bookingLabel: string;
   bookingHeadline: string;
+  calLink: string;
   formHeadline: string;
   formSubtext: string;
   formSuccessHeadline: string;
@@ -26,6 +27,7 @@ const DEFAULTS: ContactData = {
   heroSubtext: "We partner with ambitious founders and creators who are serious about authority. One strategy call is all it takes to get started.",
   bookingLabel: "Book a call",
   bookingHeadline: "Pick a time that works for you.",
+  calLink: "growitbuddy.com/growth-strategy-call",
   formHeadline: "Send us a message",
   formSubtext: "We respond to every inquiry within 24 hours.",
   formSuccessHeadline: "Message sent!",
@@ -100,6 +102,41 @@ export default function AdminContact() {
           <div className="space-y-3">
             <Input label="Section Label (small caps above heading)" value={data.bookingLabel} onChange={(e) => set("bookingLabel", e.target.value)} />
             <Input label="Heading" value={data.bookingHeadline} onChange={(e) => set("bookingHeadline", e.target.value)} />
+          </div>
+        </Card>
+
+        <Card>
+          <SectionTitle>Cal.com Calendar Link</SectionTitle>
+          <p className="text-[11px] text-[#0B0B0B]/45 mb-4 leading-relaxed">
+            This is the booking page that appears in the calendar embed on the contact page. To find your link, go to your Cal.com dashboard, open the event you want to embed, and copy the part after <span className="font-mono bg-[#0B0B0B]/5 px-1 py-0.5 rounded text-[10px]">cal.com/</span> in the URL.
+          </p>
+          <div className="space-y-3">
+            <div>
+              <Input
+                label="Cal.com Link"
+                value={data.calLink}
+                onChange={(e) => set("calLink", e.target.value.replace(/^https?:\/\/(app\.)?cal\.com\//i, ""))}
+                placeholder="yourname/event-type"
+              />
+              <p className="text-[10.5px] text-[#0B0B0B]/35 mt-1.5">
+                Format: <span className="font-mono text-[#0B0B0B]/55">username/event-name</span> or <span className="font-mono text-[#0B0B0B]/55">organization.com/event-name</span>
+              </p>
+            </div>
+            {data.calLink && (
+              <div className="flex items-center gap-2 bg-[#0B0B0B]/4 rounded-xl px-3 py-2.5">
+                <span className="text-[11px] text-[#0B0B0B]/50 font-mono flex-1 truncate">
+                  https://cal.com/{data.calLink}
+                </span>
+                <a
+                  href={`https://cal.com/${data.calLink}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-[10.5px] font-semibold text-[#0B0B0B]/55 hover:text-[#0B0B0B] transition-colors shrink-0"
+                >
+                  Preview <ExternalLink size={11} />
+                </a>
+              </div>
+            )}
           </div>
         </Card>
 

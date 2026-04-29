@@ -14,6 +14,7 @@ interface ContactPageData {
   heroSubtext: string;
   bookingLabel: string;
   bookingHeadline: string;
+  calLink: string;
   formHeadline: string;
   formSubtext: string;
   formSuccessHeadline: string;
@@ -26,6 +27,7 @@ const CONTACT_DEFAULTS: ContactPageData = {
   heroSubtext: "We partner with ambitious founders and creators who are serious about authority. One strategy call is all it takes to get started.",
   bookingLabel: "Book a call",
   bookingHeadline: "Pick a time that works for you.",
+  calLink: "growitbuddy.com/growth-strategy-call",
   formHeadline: "Send us a message",
   formSubtext: "We respond to every inquiry within 24 hours.",
   formSuccessHeadline: "Message sent!",
@@ -38,19 +40,21 @@ const CONTACT_DEFAULTS: ContactPageData = {
   ],
 };
 
-function CalEmbed() {
+const CAL_NS = "gb-booking";
+const CAL_ELEMENT_ID = "gb-cal-inline";
+
+function CalEmbed({ calLink }: { calLink: string }) {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
+    if (!calLink) return;
     const w = window as any;
 
-    // Prevent re-initialization across HMR reloads
-    if (w.__gbCalDone) return;
+    // Key the guard by calLink so changing the link in admin re-initializes
+    const doneKey = `__gbCalDone_${calLink}`;
+    if (w[doneKey]) return;
 
     try {
-      // Run the exact Cal.com bootstrap IIFE — sets up window.Cal as a
-      // queue accumulator and injects embed.js which processes it on load.
-      // Using new Function to avoid TS strict-mode issues with `arguments`.
       if (!w.Cal) {
         // eslint-disable-next-line no-new-func
         new Function("window", `
@@ -58,22 +62,21 @@ function CalEmbed() {
         `)(window);
       }
 
-      w.Cal("init", "growth-strategy-call", { origin: "https://app.cal.com" });
-      w.Cal.ns["growth-strategy-call"]("inline", {
-        elementOrSelector: "#my-cal-inline-growth-strategy-call",
+      w.Cal("init", CAL_NS, { origin: "https://app.cal.com" });
+      w.Cal.ns[CAL_NS]("inline", {
+        elementOrSelector: `#${CAL_ELEMENT_ID}`,
         config: { layout: "month_view", useSlotsViewOnSmallScreen: true },
-        calLink: "growitbuddy.com/growth-strategy-call",
+        calLink,
       });
-      w.Cal.ns["growth-strategy-call"]("ui", {
+      w.Cal.ns[CAL_NS]("ui", {
         hideEventTypeDetails: false,
         layout: "month_view",
         styles: { branding: { brandColor: "#0B0B0B" } },
       });
 
-      w.__gbCalDone = true;
+      w[doneKey] = true;
 
-      // Detect when Cal injects its iframe and mark as loaded
-      const target = document.getElementById("my-cal-inline-growth-strategy-call");
+      const target = document.getElementById(CAL_ELEMENT_ID);
       if (target) {
         const observer = new MutationObserver(() => {
           if (target.querySelector("iframe")) {
@@ -90,7 +93,7 @@ function CalEmbed() {
       setLoaded(true);
       return undefined;
     }
-  }, []);
+  }, [calLink]);
 
   return (
     <div style={{ position: "relative", borderRadius: 16, overflow: "hidden", minHeight: 600 }}>
@@ -117,7 +120,7 @@ function CalEmbed() {
         </div>
       )}
       <div
-        id="my-cal-inline-growth-strategy-call"
+        id={CAL_ELEMENT_ID}
         style={{ width: "100%", minHeight: 600 }}
       />
     </div>
@@ -199,7 +202,7 @@ export default function Contact() {
           <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 3vw, 40px)", letterSpacing: "-0.04em", color: "#0B0B0B", marginBottom: 40, lineHeight: 1.1 }}>
             {cms.bookingHeadline}
           </h2>
-          <CalEmbed />
+          <CalEmbed calLink={cms.calLink || CONTACT_DEFAULTS.calLink} />
         </div>
       </section>
 
