@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ShieldCheck, ShieldX, Search, AlertCircle, ArrowRight } from "lucide-react";
 import SEOMeta from "@/components/SEOMeta";
 
-const API_BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
+import { API_BASE } from "../lib/config";
 
 interface CertResult {
   certificateId: string;

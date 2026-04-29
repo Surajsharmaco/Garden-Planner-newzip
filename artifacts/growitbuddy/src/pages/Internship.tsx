@@ -7,6 +7,7 @@ import { Check } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import SEOMeta from "@/components/SEOMeta";
+import { API_BASE } from "../lib/config";
 
 const ROLES = [
   "Content Editor",
@@ -32,8 +33,6 @@ const schema = z.object({
   whyJoin: z.string().min(20, "Please write at least 20 characters").max(1000, "Max 1000 characters"),
 });
 type F = z.infer<typeof schema>;
-
-const API_BASE = `${import.meta.env.BASE_URL}api`.replace(/\/\//g, "/");
 
 export default function Internship() {
   const { toast } = useToast();

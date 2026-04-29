@@ -7,7 +7,7 @@ import {
   HardDrive, FolderOpen, Server, Clock,
 } from "lucide-react";
 
-const API_BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
+import { API_BASE } from "../../lib/config";
 
 type StepStatus = "idle" | "running" | "ok" | "error" | "skipped";
 type Mode = "safe" | "advanced";

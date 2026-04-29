@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useAdmin, ALL_PERMISSIONS } from "@/context/AdminContext";
 import { UserPlus, Trash2, Edit2, Check, X, Eye, EyeOff, Shield, Users, ChevronDown, ChevronUp } from "lucide-react";
 
-const API_BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
+import { API_BASE } from "../../lib/config";
 
 interface TeamMember {
   id: number;

@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef, type ReactNode } from "react";
-
-const API_BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
+import { API_BASE } from "../lib/config";
 const TOKEN_KEY = "gb_admin_token";
 
 export type AdminRole = "super" | "member";

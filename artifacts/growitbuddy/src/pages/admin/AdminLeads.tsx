@@ -3,7 +3,7 @@ import { useAdmin } from "@/context/AdminContext";
 import { PageHeader, Card } from "@/components/admin/AdminField";
 import { Trash2, Download, RefreshCw, Search, Mail, User, Clock } from "lucide-react";
 
-const API_BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
+import { API_BASE } from "../../lib/config";
 
 interface Lead {
   id: number;

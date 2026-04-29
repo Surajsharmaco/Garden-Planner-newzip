@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-
-const API_BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
+import { API_BASE } from "../lib/config";
 
 // Session-level cache — persists for the lifetime of the tab
 const cache = new Map<string, object>();

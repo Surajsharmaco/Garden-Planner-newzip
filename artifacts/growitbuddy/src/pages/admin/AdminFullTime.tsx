@@ -4,7 +4,7 @@ import { PageHeader, Card, SectionTitle, Input, Textarea, SaveBar } from "@/comp
 import { Plus, Trash2, Download, RefreshCw, ChevronDown, ChevronUp, Briefcase } from "lucide-react";
 import * as XLSX from "xlsx";
 
-const API_BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
+import { API_BASE } from "../../lib/config";
 
 interface Lead {
   id: number;

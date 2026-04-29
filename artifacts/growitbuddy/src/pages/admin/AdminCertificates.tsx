@@ -3,7 +3,7 @@ import { useAdmin } from "@/context/AdminContext";
 import { PageHeader, Card, SectionTitle, Input, SaveBar } from "@/components/admin/AdminField";
 import { Plus, Trash2, ChevronDown, ChevronUp, ShieldCheck, ShieldX, Copy, ExternalLink, Download } from "lucide-react";
 
-const API_BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
+import { API_BASE } from "../../lib/config";
 
 async function safeJson(r: Response) {
   const text = await r.text();

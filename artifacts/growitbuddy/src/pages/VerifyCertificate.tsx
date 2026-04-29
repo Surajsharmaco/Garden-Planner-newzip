@@ -5,7 +5,7 @@ import { ShieldCheck, ShieldX, AlertCircle, ArrowLeft } from "lucide-react";
 import { Link } from "wouter";
 import SEOMeta from "@/components/SEOMeta";
 
-const API_BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
+import { API_BASE } from "../lib/config";
 
 interface CertResult {
   certificateId: string;

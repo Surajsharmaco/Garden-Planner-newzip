@@ -6,7 +6,7 @@ import {
   type Influencer,
 } from "@/data/influencers";
 
-const API_BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
+import { API_BASE } from "../lib/config";
 
 interface InfluencerCache {
   items: Influencer[];

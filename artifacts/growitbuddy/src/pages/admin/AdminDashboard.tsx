@@ -8,7 +8,7 @@ import {
   CheckCircle2, Clock, Network, Share2, BarChart2, BookOpen, Image,
 } from "lucide-react";
 
-const API_BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
+import { API_BASE } from "../../lib/config";
 
 interface SectionStatus { section: string; updatedAt: string; }
 
